@@ -1,0 +1,14 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/corestory-openapi-original.json
+summary:
+  types:
+  - http
+schemes:
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: Enter the Bearer token from Clerk authentication
+  sources:
+  - openapi/corestory-openapi-original.json
