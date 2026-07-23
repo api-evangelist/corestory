@@ -1,0 +1,1019 @@
+openapi: 3.1.0
+info:
+  title: Crowdbotics API Documentation admin vector_store API
+  description: "# CoreStory API Overview\n\nThe CoreStory API provides programmatic access to structured insights derived from software source code. It is designed for engineering, architecture, and product teams who need to extract business logic, technical specifications, architectural relationships, and system-level context from complex or legacy codebases.\n\nBy interfacing directly with CoreStory API, users can:\n\n- Generate full Product Requirements Documents (PRDs) from a codebase\n- Extract detailed Technical Specifications for modernization or migration\n- Query a codebase using natural language to surface implementation details, logic paths, dependencies, and architectural insights\n- Construct and visualize knowledge graphs of systems, components, and relationships\n- Ingest, store, and retrieve content from a vector store for AI-powered retrieval-augmented generation (RAG) workflows\n\nCoreStory is especially valuable in contexts where:\n\n- Codebases are large, unstructured, or under-documented\n- Product and engineering teams are onboarding to unfamiliar systems\n- Technical stakeholders require visibility into system design or feature coverage\n- Modernization, replatforming, or M&A due diligence is underway\n\nThe API can be integrated into existing CI/CD pipelines, internal developer portals, architecture review boards, product planning processes, or documentation automation workflows.\n\nAll endpoints support secure authentication and are designed for high-availability, asynchronous workloads. Output formats include JSON, Markdown, and PDF, with flexible formatting options for downstream consumption.\n\nFor step-by-step usage instructions and workflows, refer to the [CoreStory API Quick Start Guide](#section/CoreStory-API-Quick-Start-Guide).\n\n## Features\n\n* **Document Generation**\n    * Generate complete Product Requirements Documents (PRD)\n    * Generate Technical Specifications\n    * Generate individual document sections (executive overview, user personas, etc.)\n    * Format documents in JSON or Markdown\n\n* **Vector Store Management**\n    * Ingest and manage documents in vector store\n    * Query and retrieve document content\n    * Manage document embeddings\n\n* **Context Management**\n    * Manage context for different document types\n    * Set and retrieve PRD context\n    * Support for future context types (technical specs, user stories, etc.)\n\n* **Knowledge Graph**\n    * Generate knowledge graphs from codebase queries\n    * Visualize relationships between code entities\n    * Analyze code structure and dependencies\n\n* **API Endpoints**\n    * `/api/documents/*` - Document generation and formatting\n    * `/api/generate/*` - Document formatting utilities\n    * `/api/vector-store/*` - Vector store management\n    * `/api/agents/*` - AI agent operations\n    * `/api/context/*` - Context management for documents\n    * `/api/graph/*` - Knowledge graph generation and analysis\n\nNote: JWT authentication support coming soon. All endpoints currently provide detailed OpenAPI documentation.\n\n* **Observability**\n    * OpenTelemetry instrumentation for distributed tracing\n    * Prometheus metrics endpoint at `/metrics`\n    * Comprehensive request/response tracking\n    * Custom business metrics\n\n\n\n# CoreStory System Architecture\n\nThis document provides a high-level overview of how the CoreStory platform ingests, analyzes, and serves structured software intelligence through its API. The system is designed to process codebases and related technical artifacts in order to generate product specifications, technical documents, and knowledge graph representations.\n\n---\n\n## Core Components\n\n### 1. **Ingestion Layer**\n\n- Accepts Git URLs, file uploads, or local archives\n- Extracts source files, documentation, and metadata\n- Initiates chunking and embedding via the vector store pipeline\n\n### 2. **Vector Store and Context Engine**\n\n- Stores chunked and embedded documents\n- Supports semantic search and document retrieval\n- Feeds LLMs with scoped context for generation and reasoning\n\n### 3. **LLM Orchestration Layer**\n\n- Fan-out to multiple large language models\n- Handles prompt templating, context injection, and result normalization\n- Evaluates and scores generated outputs\n\n### 4. **Document Generation Engine**\n\n- Produces:\n  - PRDs\n  - Technical Specs\n  - Individual document sections\n  - Markdown and PDF exports\n- Format-flexible output for portals, APIs, and documentation pipelines\n\n### 5. **Graph Construction Module**\n\n- Extracts static and dynamic code relationships\n- Builds DAGs and call graphs of components, services, and files\n- Allows natural-language queries that return graph subviews and LLM explanations\n\n### 6. **Query Engine**\n\n- Accepts free-form questions about codebases\n- Routes queries to code graph, document store, or LLMs\n- Returns structured JSON answers and explanatory text\n\n### 7. **API Gateway**\n\n- Authenticates and rate-limits clients\n- Routes requests to internal services\n- Serves all external-facing endpoints in REST format\n\n---\n\n## Security and Privacy\n\n- All data transfer is encrypted via HTTPS\n- API access is secured using provided auth credentials (JWT tokens coming soon)\n- Uploaded code is only used to generate customer-requested outputs and is not retained indefinitely\n\n---\n\n## Extensibility\n\nThe platform is modular. It can be extended to:\n\n- Add new LLMs for ensemble generation\n- Integrate alternative vector databases\n- Connect to internal developer portals or product management tools via webhook or export endpoints\n\nFor more information, see the Quick Start or contact the CoreStory team.\n\n\n# CoreStory API Quick Start Guide\n\nThe CoreStory API provides programmatic access to structured code intelligence, enabling your team to extract business and technical specifications directly from source code. You can use the API to integrate CoreStory-generated documents into existing workflows, support software modernization and maintenance efforts, or enrich internal platforms with architectural and feature-level metadata.\n\n---\n\n## Overview\n\nThe CoreStory API enables:\n\n- Ingestion of content into a **vector store** for LLM-driven analysis\n- Generation of **Product Requirements Documents (PRDs)** and **Technical Specifications** from code\n- Interrogation of your codebase via a natural language **query engine**\n- Construction of **knowledge graphs** describing code relationships and system architecture\n- Management of **custom document context** and **custom prompts** for improved output relevance and quality\n\nThese capabilities support SDLC workflows such as:\n\n- Application modernization, migration, and maintenance\n- Documentation and auditability of legacy systems\n- Alignment of product, engineering, and architecture teams and systems\n- Developer onboarding and code comprehension\n\n---\n\n**Note for POV customers:** If your codebase has already been ingested as part of a proof-of-value (POV) engagement, you can use your existing authentication credentials and skip step 2 (”Ingest a Codebase or Document Source) of this guide.\n\n## 1. Authentication\n\n```\nPOST /api/auth/login\n```\n\nObtain a JWT for future API calls.\n\n**Request:**\n\n```\n{\n  \"email\": \"you@example.com\",\n  \"password\": \"your-password\"\n}\n```\n\n**Response:**\n\n```\n{\n  \"access_token\": \"...\",\n  \"token_type\": \"bearer\"\n}\n```\n\nInclude this token in all subsequent requests:\n\n```\nAuthorization: Bearer <access_token>\n```\n\n---\n\n## 2. Ingest a Codebase or Document Source\n\n```\nPOST /api/vector-store/ingest\n```\n\nTrigger ingestion of code from a Git repo, ZIP file, or local document directory.\n\n**Example Payload (GitHub):**\n\n```\n{\n  \"source_type\": \"url\",\n  \"source\": \"https://github.com/example/repo.git\",\n  \"force\": true\n}\n```\n\nIngestion automatically chunks, embeds, and summarizes source files for downstream analysis.\n\n<details>\n<summary>Supported File Extensions</summary>\n\n### Programming Languages\n- Python: `.py`, `.pyw`, `.pyx`, `.pyi`\n- JavaScript/TypeScript: `.js`, `.mjs`, `.cjs`, `.ts`, `.jsx`, `.tsx`\n- Java: `.java`, `.class`, `.jar`\n- C/C++: `.c`, `.cpp`, `.cc`, `.cxx`, `.c++`, `.h`, `.hpp`, `.hh`, `.hxx`, `.h++`\n- .NET: `.cs`, `.csx`, `.vb`, `.fs`, `.fsx`, `.fsi`\n- PHP: `.php`, `.php3`, `.php4`, `.php5`, `.phtml`\n- Ruby: `.rb`, `.rbw`, `.rake`, `.gemspec`\n- Go: `.go`, `.mod`, `.sum`\n- Rust: `.rs`, `.rlib`\n- Swift: `.swift`\n- Kotlin: `.kt`, `.kts`, `.ktm`\n- Scala: `.scala`, `.sc`\n- Clojure: `.clj`, `.cljs`, `.cljc`, `.edn`\n- Haskell: `.hs`, `.lhs`\n- OCaml: `.ml`, `.mli`, `.mll`, `.mly`\n- R: `.r`, `.R`, `.rmd`, `.rnw`\n- Objective-C: `.m`, `.mm`\n- Perl: `.pl`, `.pm`, `.t`, `.pod`\n- Shell scripts: `.sh`, `.bash`, `.zsh`, `.fish`, `.ksh`, `.csh`, `.tcsh`\n- PowerShell: `.ps1`, `.psm1`, `.psd1`\n- Windows batch: `.bat`, `.cmd`\n- Lua: `.lua`\n- Dart: `.dart`\n- Elm: `.elm`\n- Elixir: `.ex`, `.exs`\n- Erlang: `.erl`, `.hrl`\n- Julia: `.jl`\n- Nim: `.nim`, `.nims`\n- Crystal: `.cr`\n- D: `.d`\n- Pascal: `.pas`, `.pp`, `.inc`\n- Fortran: `.f`, `.f90`, `.f95`, `.f03`, `.f08`, `.for`, `.ftn`, `.fpp`\n- COBOL: `.cob`, `.cbl`, `.cpy`, `.cobol`, `.bms`, `.ctl`, `.jcl`, `.proc`\n- IBM i (AS/400) RPG ILE: `.rpgle`, `.rpgleinc`\n- IBM i (AS/400) CLLE: `.clle`\n- IBM i (AS/400) DDS: `.pf`, `.lf`, `.dspf`\n- PowerBuilder: `.pbt`, `.pbs`, `.pbr`, `.srw`, `.srd`, `.sru`, `.sra`, `.srp`, `.srf`, `.srq`, `.srs`, `.srm`, `.srj`\n- Ada: `.ada`, `.adb`, `.ads`\n- Assembly: `.asm`, `.s`, `.S`\n- Verilog/SystemVerilog: `.v`, `.vh`, `.sv`, `.svh`\n- VHDL: `.vhd`, `.vhdl`\n- Tcl/Tk: `.tcl`, `.tk`\n- Groovy: `.groovy`, `.gvy`, `.gy`, `.gsh`\n- CoffeeScript: `.coffee`, `.litcoffee`\n- PureScript: `.purs`\n- ReasonML: `.reason`, `.re`, `.rei`\n- Racket/Scheme: `.rkt`, `.scm`, `.ss`\n- Lisp: `.lisp`, `.lsp`, `.l`, `.cl`, `.fasl`\n- Prolog: `.prolog`, `.pro`, `.P`\n- MATLAB: `.matlab`, `.fig`\n- Mathematica: `.mathematica`, `.nb`, `.wl`, `.wls`\n- SageMath: `.sage`, `.spyx`\n- Zig: `.zig`\n- Odin: `.odin`\n- V: `.v3`, `.v2`, `.v1`\n- Pony: `.pony`\n- Red: `.red`, `.reds`\n- Io: `.io`\n- Factor: `.factor`\n- Forth: `.forth`, `.fth`, `.4th`\n- J/K/Q/APL: `.j`, `.k`, `.q`, `.apl`\n- Chapel: `.chapel`, `.chpl`\n- X10: `.x10`\n- Arduino/Processing: `.pde`, `.ino`\n\n### Web Technologies\n- HTML: `.html`, `.htm`, `.xhtml`, `.shtml`\n- CSS/Preprocessors: `.css`, `.scss`, `.sass`, `.less`, `.styl`, `.stylus`\n- Frontend frameworks: `.vue`, `.svelte`\n- JSP: `.jsp`, `.jspx`, `.tag`, `.tagx`\n- ASP.NET: `.asp`, `.aspx`, `.ascx`, `.asax`, `.ashx`, `.asmx`\n- Ruby templates: `.erb`, `.haml`, `.slim`\n- PHP templates: `.twig`, `.blade`\n- Template engines: `.mustache`, `.hbs`, `.handlebars`, `.ejs`, `.pug`, `.jade`, `.liquid`, `.ftl`, `.ftlh`, `.vm`, `.vtl`, `.thymeleaf`\n\n### Configuration/Data\n- JSON: `.json`, `.json5`, `.jsonc`, `.jsonl`, `.ndjson`\n- XML: `.xml`, `.xsd`, `.xsl`, `.xslt`, `.dtd`, `.rng`, `.rnc`\n- YAML/TOML: `.yaml`, `.yml`, `.toml`\n- INI/Cfg/Conf: `.ini`, `.cfg`, `.conf`, `.config`, `.properties`\n- Environment: `.env`, `.envrc`, `.env.local`, `.env.development`, `.env.production`\n- Property lists: `.plist`\n- HOCON: `.hocon`\n- RON/HJSON/CSON: `.ron`, `.hjson`, `.cson`\n\n### Documentation/Text\n- Markdown: `.md`, `.markdown`, `.mdown`, `.mkd`, `.mkdn`\n- Plain text: `.txt`, `.text`\n- reStructuredText: `.rst`, `.rest`\n- AsciiDoc: `.asciidoc`, `.adoc`, `.asc`\n- LaTeX: `.tex`, `.latex`, `.ltx`, `.sty`, `.cls`, `.bib`\n- Org mode: `.org`\n- Wiki markup: `.wiki`, `.mediawiki`\n- Textile/Creole/RDoc: `.textile`, `.creole`, `.rdoc`\n\n### Data Formats\n- Delimited: `.csv`, `.tsv`, `.psv`\n- SQL: `.sql`, `.ddl`, `.dml`, `.plsql`, `.psql`, `.mysql`\n- GraphQL: `.graphql`, `.gql`\n- Protocols: `.proto`, `.protobuf`, `.avro`, `.avsc`, `.avdl`, `.thrift`, `.capnp`, `.fbs`\n- Columnar: `.parquet`, `.orc`, `.arrow`\n\n### Build/Dependency\n- Gradle: `.gradle`, `.gradle.kts`\n- Maven: `.maven`, `.mvn`\n- SBT: `.sbt`\n- CMake: `.cmake`, `.cmake.in`\n- Make: `.make`, `.mk`, `.mak`\n- Docker: `.dockerfile`, `.containerfile`, `.dockerignore`\n- Git: `.gitignore`, `.gitattributes`, `.gitmodules`, `.gitkeep`\n- Mercurial/Subversion/Bazaar: `.hgignore`, `.hgrc`, `.svnignore`, `.bzrignore`\n- EditorConfig: `.editorconfig`\n- Linters/Formatters: `.eslintrc`, `.eslintignore`, `.prettierrc`, `.prettierignore`, `.babelrc`, `.babelignore`\n- Node.js: `.npmrc`, `.npmignore`, `.yarnrc`, `.yarnignore`\n- Python: `.pipfile`, `.pipfile.lock`, `.requirements`, `.requirements.txt`, `.poetry.lock`, `.pyproject.toml`, `.setup.py`, `.setup.cfg`, `.manifest.in`, `.tox.ini`, `.noxfile.py`, `.pre-commit-config.yaml`\n- CI/CD: `.github`, `.gitlab-ci.yml`, `.travis.yml`, `.appveyor.yml`, `.circleci`, `.jenkins`, `.jenkinsfile`, `.azure-pipelines.yml`, `.buildkite.yml`\n- Package Managers: `package.json`, `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `composer.json`, `composer.lock`, `gemfile`, `gemfile.lock`, `cargo.toml`, `cargo.lock`, `go.mod`, `go.sum`, `requirements.txt`, `pipfile`, `pipfile.lock`, `poetry.lock`, `pyproject.toml`, `build.gradle`, `build.gradle.kts`, `settings.gradle`, `gradle.properties`, `pom.xml`, `settings.xml`, `build.sbt`, `plugins.sbt`, `makefile`, `gnumakefile`, `makefile.am`, `makefile.in`, `dockerfile`, `containerfile`, `vagrantfile`, `rakefile`, `guardfile`, `capfile`, `gulpfile.js`, `gruntfile.js`, `webpack.config.js`, `rollup.config.js`, `tsconfig.json`, `jsconfig.json`, `deno.json`, `deno.jsonc`, `mix.exs`, `mix.lock`, `rebar.config`, `rebar.lock`, `project.clj`, `deps.edn`, `stack.yaml`, `cabal.config`, `setup.hs`, `dub.json`, `dub.sdl`, `nimble`, `config.nims`, `shard.yml`, `shard.lock`, `pubspec.yaml`, `pubspec.lock`, `elm.json`, `elm-package.json`, `project.json`, `global.json`, `nuget.config`, `packages.config`, `paket.dependencies`, `paket.lock`, `.log`, `.lock`, `.pid`, `.tmp`, `.temp`, `.patch`, `.diff`, `.spec`, `.rpm`, `.deb`, `.control`, `.pkgbuild`, `.ebuild`, `.formula`, `.port`, `.portfile`, `.nix`, `.bzl`, `.bazel`, `.workspace`, `.buck`, `.buckconfig`, `.pants`, `.pants.ini`, `.please`, `.plzconfig`, `.gn`, `.gni`, `.ninja`, `.waf`, `.wscript`, `.scons`, `.sconstruct`, `.sconscript`\n\n</details>\n\n<details>\n<summary>Configuration Files</summary>\n\n- `requirements.txt`\n- `.gitignore`\n- `.dockerignore`\n- `.editorconfig`\n- `.eslintrc.js`\n- `.eslintrc.json`\n- `.prettierrc.js`\n- `.prettierrc.json`\n- `.babelrc.js`\n- `.babelrc.json`\n\n</details>\n\n---\n\n## 3. Generate a Product Requirements Document (PRD)\n\n**Note**: Generating a PRD or technical specification will replace the existing PRD or technical specification. The new outputs will document your codebase as it was when it was most recently ingested.\n\n```\nPOST /api/documents/prd?format=json\n```\n\nGenerates a structured PRD with:\n\n- Executive Overview\n- User Personas\n- High-Level Requirements\n- User Stories\n- Business Value\n\n**Example Response (truncated):**\n\n```\n{\n  \"content\": {\n    \"executive_overview\": \"Modernize internal authentication platform\",\n    \"user_personas\": [...],\n    \"user_stories\": [...]\n  }\n}\n```\n\n**Tip:** For PRDs or technical specs, use `format=markdown` to return a Markdown-formatted document instead.\n\n---\n\n## 4. Generate a Technical Specification\n\n```\nPOST /api/documents/technical-spec?format=json\n```\n\nReturns system-level implementation details including:\n\n- Architecture and Components\n- Data Models and Relationships\n- User Interface Screens and Components\n- APIs and Integration Points\n- System Interfaces and Specifications\n- Security Considerations\n- Implementation and Deployment Strategy\n\n---\n\n## 5. Query Your Code\n\n```\nPOST /api/graph/query-engine\n```\n\nAsk natural language questions about your codebase to return a structured graph of relationships.\n\n**Example Query:**\n\n```\n{\n  \"query\": \"How does the system determine whether a user has admin privileges when accessing the audit log?\"\n}\n```\n\n**Response (truncated):**\n\n```\n{\n  \"summary\": \"When a user requests access to the audit log, the system checks their assigned roles in `AuthService.getUserRoles`. If 'admin' is present, access is granted. This check occurs in `AuditLogController` before querying the log database. The middleware `CheckPermissions` is also invoked on this route.\"\n}\n```\n\n---\n\n## 6. Format and Retrieve Document Sections\n\nUse these endpoints to extract or reformat specific document sections:\n\n- `/api/documents/sections/{doc_type}` → generate a specific section\n- `/api/documents/format/markdown-output/{doc_type}` → format JSON as Markdown\n- `/api/documents/format/pdf-output/{doc_type}` → export PDF\n\nExample section names:\n\n- `executive-overview`\n- `data-models`\n- `system-architecture`\n- `integration-points`\n\n---\n\n## Questions?\n\nAfter reviewing this guide and the API docs, we recommend scheduling a short Q&A call if you have integration-specific needs or want assistance mapping this to your environment.\n"
+  version: 1.26.2
+servers:
+- url: /
+  description: Current server
+security:
+- BearerAuth: []
+tags:
+- name: vector_store
+paths:
+  /api/vector-store/{project_id}/clear:
+    post:
+      tags:
+      - vector_store
+      summary: Clear the vector store
+      operationId: clear_vector_store
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      responses:
+        '200':
+          description: Confirmation that the vector store was cleared
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VectorStoreResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+  /api/vector-store/{project_id}/latest-index:
+    post:
+      tags:
+      - vector_store
+      summary: Build the latest-filtered partial HNSW index for a project
+      description: 'Schedule a per-project build of the partial HNSW index scoped to
+
+        ``latest=''true''`` (COR-3016).
+
+
+        The build runs ``CONCURRENTLY`` in the background — it can take minutes on
+
+        large tables and we don''t want to block the request or hold a lock — so this
+
+        returns ``202`` immediately. It''s idempotent (``IF NOT EXISTS``), so
+
+        re-hitting the endpoint is safe.'
+      operationId: build_latest_partial_index
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      responses:
+        '202':
+          description: Confirmation that the index build was scheduled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VectorStoreResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+  /api/vector-store/{project_id}/ingest:
+    post:
+      tags:
+      - vector_store
+      summary: Ingest data into the vector store
+      description: Ingest data from a specified source into the vector store
+      operationId: ingest_vector_data
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IngestRequest'
+            examples:
+              Minimum:
+                summary: Minimum required params
+                value:
+                  source_type: url
+                  source: https://github.com/some/path/to/repo.git
+              Full:
+                summary: All parameters
+                value:
+                  source_type: git_clone
+                  source: https://example.com/repo.git
+                  num_questions: 2
+                  num_summaries: 1
+                  run_in_background: true
+                  summary_types:
+                  - self
+                  force: false
+              Custom summary and questions:
+                summary: Custom summary and questions
+                value:
+                  source_type: default
+                  force: true
+                  num_summaries: 2
+                  summary_types:
+                  - self
+                  - next
+                  num_questions: 3
+                  run_in_background: false
+              Local directory with custom settings:
+                summary: Local directory with custom settings
+                value:
+                  source_type: directory
+                  source: /path/to/documents
+                  force: true
+                  num_summaries: 3
+                  summary_types:
+                  - self
+                  - prev
+                  - next
+                  num_questions: 4
+              Azure Blob Storage with custom settings:
+                summary: Azure Blob Storage with custom settings
+                value:
+                  source_type: azure_blob
+                  source: eastus/kenobi-test-app/blob-name.zip
+                  force: true
+                  num_summaries: 1
+                  summary_types:
+                  - self
+                  num_questions: 2
+              GitHub Repository using GitHub App:
+                summary: GitHub Repository using GitHub App
+                value:
+                  source_type: repo_full_name
+                  source: owner/repo-name
+                  github_app_installation_id: 1234
+                  force: true
+                  num_summaries: 1
+                  summary_types:
+                  - self
+                  num_questions: 2
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestResponseSchema'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+  /api/vector-store/{project_id}/status:
+    get:
+      tags:
+      - vector_store
+      summary: Get Vector Store Status
+      description: Get the status of the vector store
+      operationId: get_vector_store_status
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Get Vector Store Status
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+  /api/vector-store/{project_id}/side-load:
+    post:
+      tags:
+      - vector_store
+      summary: Side-load vectors directly into the database
+      description: "Insert vector records directly into the PostgreSQL vector store database.\n\n    This endpoint allows you to:\n    * Insert pre-computed vectors with text and metadata\n    * Automatically compute embeddings for text if vectors are not provided\n    * Batch process multiple records for efficiency\n    * Specify custom document IDs or auto-generate UUIDs\n\n    This is useful for:\n    * Migrating data from other vector stores\n    * Bulk loading pre-processed data\n    * Testing with specific vector data\n    * Integration with external embedding pipelines\n\n    **Note**: This bypasses the normal document ingestion pipeline and directly\n    inserts into the database. Use with caution in production environments."
+      operationId: side_load_vectors
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SideLoadRequest'
+              description: "\n        Side-load request containing vector records to insert.\n\n        Example:\n        ```json\n        {\n            \"records\": [\n                {\n                    \"text\": \"This is sample text content\",\n                    \"vector\": [0.1, 0.2, 0.3, ...],  // Optional: 1536-dimensional vector\n                    \"metadata\": {\"source\": \"manual\", \"category\": \"test\"},\n                    \"document_id\": \"doc_001\"  // Optional: will generate UUID if not provided\n                },\n                {\n                    \"text\": \"Another piece of content\",\n                    \"metadata\": {\"source\": \"import\", \"priority\": \"high\"}\n                    // vector and document_id will be auto-generated\n                }\n            ],\n            \"batch_size\": 50\n        }\n        ```\n        "
+      responses:
+        '200':
+          description: Status of the side-loading operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SideLoadResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+  /api/vector-store/{project_id}/add-documents:
+    post:
+      tags:
+      - vector_store
+      summary: Add documents to the vector store
+      description: "Adds new documents to the existing vector store.\n\n    This endpoint allows uploading files that will be:\n    * Processed and split into chunks\n    * Embedded using the configured embedding model\n    * Added to the existing vector store\n\n    Supported file types: PDF, TXT, MD, HTML, JSON"
+      operationId: add_vector_documents
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_add_vector_documents'
+      responses:
+        '200':
+          description: Confirmation of successful document addition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddDocumentsResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+  /api/vector-store/{project_id}/schema:
+    get:
+      tags:
+      - vector_store
+      summary: Get vector table schema information
+      description: "Inspect the structure of the vector store table to understand column names and types.\n\n    This is useful for:\n    * Understanding the exact table structure before side-loading\n    * Debugging database issues\n    * Verifying table creation\n    * Understanding what columns are available for queries"
+      operationId: get_vector_table_schema
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      responses:
+        '200':
+          description: Table schema information including column names and types
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Get Vector Table Schema
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+  /api/vector-store/{project_id}/export:
+    get:
+      tags:
+      - vector_store
+      summary: Export all vectors from the database
+      description: "Export all vector records from the PostgreSQL vector store for backup or migration purposes.\n\n    This endpoint:\n    * Retrieves all records from the vector table\n    * Returns them in the same format used by the side-load endpoint\n    * Supports pagination for large datasets\n    * Includes full vector embeddings and metadata\n    * Provides statistics about the export operation\n\n    **Use cases:**\n    * Backup vector data before system changes\n    * Migrate data to another vector store\n    * Analyze vector data externally\n    * Create test datasets for development\n\n    **Performance notes:**\n    * Large datasets may take time to export\n    * Consider using limit and offset for very large tables\n    * Vector data can be substantial in size"
+      operationId: export_vectors
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: limit
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+            maximum: 10000
+            minimum: 1
+          - type: 'null'
+          description: Maximum number of records to export. If not specified, exports all records.
+          title: Limit
+        description: Maximum number of records to export. If not specified, exports all records.
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Number of records to skip (for pagination)
+          default: 0
+          title: Offset
+        description: Number of records to skip (for pagination)
+      - name: include_vectors
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Whether to include vector embeddings in the export (set to false to reduce size)
+          default: true
+          title: Include Vectors
+        description: Whether to include vector embeddings in the export (set to false to reduce size)
+      responses:
+        '200':
+          description: All vector records in side-load compatible format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportVectorsResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+  /api/vector-store/{project_id}/export/stream:
+    get:
+      tags:
+      - vector_store
+      summary: Stream export all vectors as JSONL
+      description: "Stream export all vector records as newline-delimited JSON (JSONL) for memory-efficient processing of large datasets.\n\n    This endpoint:\n    * Streams records one at a time to minimize memory usage\n    * Returns JSONL format (one JSON object per line)\n    * Processes records in batches to avoid database timeouts\n    * Suitable for very large vector stores\n    * Can be imported directly using the side-load endpoint\n\n    **Format:** Each line is a complete VectorRecord JSON object.\n    **Use cases:**\n    * Export very large vector databases without memory issues\n    * Streaming backup for continuous processing\n    * ETL pipelines that process data incrementally\n\n    **Performance notes:**\n    * Much more memory efficient than the regular export endpoint\n    * Streams data as it's retrieved from the database\n    * Suitable for datasets of any size"
+      operationId: export_vectors_stream
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: batch_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 5000
+          minimum: 100
+          description: Number of records to fetch per database query batch
+          default: 1000
+          title: Batch Size
+        description: Number of records to fetch per database query batch
+      - name: include_vectors
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Whether to include vector embeddings in the export
+          default: true
+          title: Include Vectors
+        description: Whether to include vector embeddings in the export
+      responses:
+        '200':
+          description: Stream of JSONL records
+          content:
+            application/x-jsonlines: {}
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+  /api/vector-store/{project_id}/import/stream:
+    post:
+      tags:
+      - vector_store
+      summary: Import vectors from JSONL file
+      description: "Import vector records from a JSONL (JSON Lines) file, typically exported from the export/stream endpoint.\n\n    This endpoint:\n    * Processes JSONL files line by line for memory efficiency\n    * Handles both records with pre-computed vectors and text-only records\n    * Automatically computes embeddings for records without vectors\n    * Processes data in configurable batches for performance\n    * Skips metadata lines (non-record JSON objects)\n    * Provides detailed import statistics and error reporting\n\n    **Supported file format:**\n    * JSONL (JSON Lines) - one JSON object per line\n    * Each line should be a VectorRecord object or metadata\n    * Compatible with files exported from the export/stream endpoint\n\n    **Use cases:**\n    * Restore data from backups\n    * Migrate data between environments\n    * Import data from external systems\n    * Batch processing of vector data\n\n    **Performance notes:**\n    * Memory efficient streaming processing\n    * Configurable batch sizes for database operations\n    * Automatic error recovery for individual record failures"
+      operationId: import_vectors_stream
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: batch_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 10
+          description: Number of records to process in each database batch
+          default: 100
+          title: Batch Size
+        description: Number of records to process in each database batch
+      - name: skip_existing
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Skip records that already exist (based on document_id/node_id)
+          default: true
+          title: Skip Existing
+        description: Skip records that already exist (based on document_id/node_id)
+      - name: compute_missing_embeddings
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Automatically compute embeddings for records without vectors
+          default: true
+          title: Compute Missing Embeddings
+        description: Automatically compute embeddings for records without vectors
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_import_vectors_stream'
+      responses:
+        '200':
+          description: Import statistics and operation results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportStreamResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+  /api/vector-store/{project_id}/cancel-ingest:
+    post:
+      tags:
+      - vector_store
+      summary: Cancel ongoing data ingestion
+      description: Flip the active ingestion SOTJ job for the project to CANCELLED.
+      operationId: cancel_vector_ingestion
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelIngestionResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+  /api/vector-store/{project_id}/update-metadata:
+    post:
+      tags:
+      - vector_store
+      summary: Update metadata for all records in the vector store
+      description: "Update metadata for all records in the vector store for a specific project.\n\n    This endpoint:\n    * Updates metadata for all existing records in the project's vector store\n    * Adds standard metadata fields like updated_at timestamp\n    * Preserves existing metadata while adding new fields\n    * Processes records in batches for performance\n\n    **Use cases:**\n    * Add tracking information to existing records\n    * Update metadata after system changes\n    * Standardize metadata across all records\n    * Add project-specific metadata fields"
+      operationId: update_vector_metadata
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: action
+        in: query
+        required: false
+        schema:
+          enum:
+          - file_relationships
+          - update_metadata
+          type: string
+          default: file_relationships
+          title: Action
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/FilesMetadataUpdate'
+              - type: 'null'
+              description: File paths to update metadata for
+              title: File To Update
+      responses:
+        '200':
+          description: Status of the metadata update operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateMetadataResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    AddDocumentsResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+          description: Operation status message
+        document_count:
+          type: integer
+          title: Document Count
+          description: Number of documents added
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+          description: Additional operation metadata
+      type: object
+      required:
+      - message
+      - document_count
+      title: AddDocumentsResponse
+      description: Response model for adding documents to vector store
+    SideLoadRequest:
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/VectorRecord'
+          type: array
+          title: Records
+          description: List of vector records to insert into the database
+        batch_size:
+          type: integer
+          maximum: 1000.0
+          minimum: 1.0
+          title: Batch Size
+          description: 'Number of records to process in each batch (default: 100)'
+          default: 100
+      type: object
+      required:
+      - records
+      title: SideLoadRequest
+      description: Request model for side-loading vectors directly into the database
+    FilesMetadataUpdate:
+      properties:
+        file_path:
+          type: string
+          title: File Path
+          description: Path to the file
+        extractors:
+          items:
+            type: string
+            enum:
+            - data_models
+            - api_specifications
+            - classes_and_functions
+            - user_interfaces
+            - imports_exports
+          type: array
+          title: Extractors
+          description: List of extractors to update metadata for
+        comment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Comment
+          description: User provided comment for the update operation
+      type: object
+      required:
+      - file_path
+      - extractors
+      title: FilesMetadataUpdate
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    IngestRequest:
+      properties:
+        source_type:
+          $ref: '#/components/schemas/SourceType'
+          description: 'Type of source to ingest from. Allowed: url, directory, git_clone, azure_blob (or default for legacy).'
+        source:
+          anyOf:
+          - type: string
+            maxLength: 2083
+            minLength: 1
+            format: uri
+          - type: string
+          - type: 'null'
+          title: Source
+          description: Source URL or directory path. If not provided, uses the configured default source.
+        force:
+          type: boolean
+          title: Force
+          description: Force re-ingestion of all documents, even if they already exist
+          default: false
+        num_summaries:
+          type: integer
+          maximum: 3.0
+          minimum: 0.0
+          title: Num Summaries
+          description: 'Number of summaries to generate per document (default: 1, 0 to disable summaries)'
+          default: 1
+        summary_types:
+          items:
+            type: string
+          type: array
+          maxItems: 3
+          title: Summary Types
+          description: 'Types of summaries to generate (default: [''self'']). Options: [''self'', ''prev'', ''next'']. Ignored if num_summaries is 0.'
+          default:
+          - self
+        num_questions:
+          type: integer
+          maximum: 5.0
+          minimum: 0.0
+          title: Num Questions
+          description: 'Number of questions to generate per document (default: 2)'
+          default: 2
+        run_in_background:
+          type: boolean
+          title: Run In Background
+          description: 'Run the ingestion process in the background (default: true). Set to false for synchronous processing.'
+          default: true
+        github_app_installation_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Github App Installation Id
+          description: GitHub App installation ID for private repository access
+      type: object
+      required:
+      - source_type
+      title: IngestRequest
+      description: "Request model for vector store ingestion.\n\nMINIMUM REQUIRED PARAMETERS EXAMPLE:\n{\n    \"source_type\": \"url\",\n    \"source\": \"https://github.com/some/path/to/repo.git\",\n}"
+    Body_import_vectors_stream:
+      properties:
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+          description: JSONL file containing vector records to import
+      type: object
+      required:
+      - file
+      title: Body_import_vectors_stream
+    VectorStoreResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+          description: Operation status message
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+          description: Additional operation metadata
+      type: object
+      required:
+      - message
+      title: VectorStoreResponse
+      description: Response model for vector store operations
+    VectorRecord:
+      properties:
+        text:
+          type: string
+          title: Text
+          description: The text content to be stored
+        vector:
+          anyOf:
+          - items:
+              type: number
+            type: array
+          - type: 'null'
+          title: Vector
+          description: Pre-computed vector embedding. If not provided, will be computed from text using the configured embedding model
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+          description: Additional metadata to store with the vector
+        document_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Document Id
+          description: Document identifier. If not provided, a UUID will be generated
+      type: object
+      required:
+      - text
+      title: VectorRecord
+      description: Model for a single vector record to be side-loaded
+    Body_add_vector_documents:
+      properties:
+        files:
+          items:
+            type: string
+            contentMediaType: application/octet-stream
+          type: array
+          title: Files
+          description: Documents to add to the vector store
+      type: object
+      required:
+      - files
+      title: Body_add_vector_documents
+    ExportVectorsResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+          description: Export operation status message
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records exported
+        records:
+          items:
+            $ref: '#/components/schemas/VectorRecord'
+          type: array
+          title: Records
+          description: List of exported vector records
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+          description: Additional export metadata including table info and export parameters
+      type: object
+      required:
+      - message
+      - total_records
+      - records
+      title: ExportVectorsResponse
+      description: Response model for exporting vectors
+    IngestResponseSchema:
+      properties:
+        message:
+          type: string
+          title: Message
+          description: Status message
+        document_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Document Count
+          description: Number of documents ingested
+      type: object
+      required:
+      - message
+      title: IngestResponseSchema
+      description: Schema for data ingestion response
+    SideLoadResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+          description: Operation status message
+        records_processed:
+          type: integer
+          title: Records Processed
+          description: Number of records successfully processed
+        records_failed:
+          type: integer
+          title: Records Failed
+          description: Number of records that failed to process
+        embeddings_computed:
+          type: integer
+          title: Embeddings Computed
+          description: Number of embeddings that were computed (vs pre-provided)
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+          description: Additional operation metadata
+      type: object
+      required:
+      - message
+      - records_processed
+      - records_failed
+      - embeddings_computed
+      title: SideLoadResponse
+      description: Response model for side-loading vectors
+    CancelIngestionResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+          description: Operation status message
+        job_id:
+          type: string
+          title: Job Id
+          description: The SOTJ job id that was flipped to CANCELLED
+      type: object
+      required:
+      - message
+      - job_id
+      title: CancelIngestionResponse
+      description: Response model for cancelling an active ingestion job.
+    UpdateMetadataResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+          description: Operation status message
+        records_updated:
+          type: integer
+          title: Records Updated
+          description: Number of records updated
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+          description: Additional operation metadata
+      type: object
+      required:
+      - message
+      - records_updated
+      title: UpdateMetadataResponse
+      description: Response model for updating metadata in vector store
+    SourceType:
+      type: string
+      enum:
+      - git_clone
+      - url
+      - default
+      - azure_blob
+      - repo_full_name
+      title: SourceType
+      description: Enum-like class for source types.
+    ImportStreamResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+          description: Import operation status message
+        total_lines_processed:
+          type: integer
+          title: Total Lines Processed
+          description: Total number of lines processed from the JSONL file
+        records_imported:
+          type: integer
+          title: Records Imported
+          description: Number of vector records successfully imported
+        records_failed:
+          type: integer
+          title: Records Failed
+          description: Number of records that failed to import
+        metadata_lines:
+          type: integer
+          title: Metadata Lines
+          description: Number of metadata lines encountered (non-record lines)
+        embeddings_computed:
+          type: integer
+          title: Embeddings Computed
+          description: Number of embeddings computed for records without vectors
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+          description: Additional import metadata and statistics
+      type: object
+      required:
+      - message
+      - total_lines_processed
+      - records_imported
+      - records_failed
+      - metadata_lines
+      - embeddings_computed
+      title: ImportStreamResponse
+      description: Response model for streaming import of JSONL files
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Enter the Bearer token from Clerk authentication
+x-tagGroups:
+- name: Ingest Your Codebase
+  tags:
+  - vector_store
+  - projects
+  - pre_ingestion
+  - reingestion
+- name: Generate Code Intelligence
+  tags:
+  - documents
+  - document_generation
+  - document_formatters
+  - prd
+  - prd_version
+  - tech_spec
+  - quality_metrics
+  - sample_projects
+- name: Query Your Codebase
+  tags:
+  - conversations
+  - workflows
+  - discovery
+  - context
+  - artifacts
+- name: Manage and Inspect Intelligence
+  tags:
+  - api_debugging
+  - events
+  - version
+  - files
+  - cache
+  - token_tracking
+- name: Authenticate and Manage Access
+  tags:
+  - clerk_authentication
+  - github_webhooks
+  - github_integration
+  - organizations
+  - api_key_management
+  - mcp_token_management
+  - user
+- name: (Advanced) Prompt Tuning
+  tags:
+  - prompts
+- name: MCP Protocol
+  tags:
+  - mcp_protocol
+- name: Administration
+  tags:
+  - admin

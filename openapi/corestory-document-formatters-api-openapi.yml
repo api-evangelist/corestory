@@ -1,0 +1,744 @@
+openapi: 3.1.0
+info:
+  title: Crowdbotics API Documentation admin document_formatters API
+  description: "# CoreStory API Overview\n\nThe CoreStory API provides programmatic access to structured insights derived from software source code. It is designed for engineering, architecture, and product teams who need to extract business logic, technical specifications, architectural relationships, and system-level context from complex or legacy codebases.\n\nBy interfacing directly with CoreStory API, users can:\n\n- Generate full Product Requirements Documents (PRDs) from a codebase\n- Extract detailed Technical Specifications for modernization or migration\n- Query a codebase using natural language to surface implementation details, logic paths, dependencies, and architectural insights\n- Construct and visualize knowledge graphs of systems, components, and relationships\n- Ingest, store, and retrieve content from a vector store for AI-powered retrieval-augmented generation (RAG) workflows\n\nCoreStory is especially valuable in contexts where:\n\n- Codebases are large, unstructured, or under-documented\n- Product and engineering teams are onboarding to unfamiliar systems\n- Technical stakeholders require visibility into system design or feature coverage\n- Modernization, replatforming, or M&A due diligence is underway\n\nThe API can be integrated into existing CI/CD pipelines, internal developer portals, architecture review boards, product planning processes, or documentation automation workflows.\n\nAll endpoints support secure authentication and are designed for high-availability, asynchronous workloads. Output formats include JSON, Markdown, and PDF, with flexible formatting options for downstream consumption.\n\nFor step-by-step usage instructions and workflows, refer to the [CoreStory API Quick Start Guide](#section/CoreStory-API-Quick-Start-Guide).\n\n## Features\n\n* **Document Generation**\n    * Generate complete Product Requirements Documents (PRD)\n    * Generate Technical Specifications\n    * Generate individual document sections (executive overview, user personas, etc.)\n    * Format documents in JSON or Markdown\n\n* **Vector Store Management**\n    * Ingest and manage documents in vector store\n    * Query and retrieve document content\n    * Manage document embeddings\n\n* **Context Management**\n    * Manage context for different document types\n    * Set and retrieve PRD context\n    * Support for future context types (technical specs, user stories, etc.)\n\n* **Knowledge Graph**\n    * Generate knowledge graphs from codebase queries\n    * Visualize relationships between code entities\n    * Analyze code structure and dependencies\n\n* **API Endpoints**\n    * `/api/documents/*` - Document generation and formatting\n    * `/api/generate/*` - Document formatting utilities\n    * `/api/vector-store/*` - Vector store management\n    * `/api/agents/*` - AI agent operations\n    * `/api/context/*` - Context management for documents\n    * `/api/graph/*` - Knowledge graph generation and analysis\n\nNote: JWT authentication support coming soon. All endpoints currently provide detailed OpenAPI documentation.\n\n* **Observability**\n    * OpenTelemetry instrumentation for distributed tracing\n    * Prometheus metrics endpoint at `/metrics`\n    * Comprehensive request/response tracking\n    * Custom business metrics\n\n\n\n# CoreStory System Architecture\n\nThis document provides a high-level overview of how the CoreStory platform ingests, analyzes, and serves structured software intelligence through its API. The system is designed to process codebases and related technical artifacts in order to generate product specifications, technical documents, and knowledge graph representations.\n\n---\n\n## Core Components\n\n### 1. **Ingestion Layer**\n\n- Accepts Git URLs, file uploads, or local archives\n- Extracts source files, documentation, and metadata\n- Initiates chunking and embedding via the vector store pipeline\n\n### 2. **Vector Store and Context Engine**\n\n- Stores chunked and embedded documents\n- Supports semantic search and document retrieval\n- Feeds LLMs with scoped context for generation and reasoning\n\n### 3. **LLM Orchestration Layer**\n\n- Fan-out to multiple large language models\n- Handles prompt templating, context injection, and result normalization\n- Evaluates and scores generated outputs\n\n### 4. **Document Generation Engine**\n\n- Produces:\n  - PRDs\n  - Technical Specs\n  - Individual document sections\n  - Markdown and PDF exports\n- Format-flexible output for portals, APIs, and documentation pipelines\n\n### 5. **Graph Construction Module**\n\n- Extracts static and dynamic code relationships\n- Builds DAGs and call graphs of components, services, and files\n- Allows natural-language queries that return graph subviews and LLM explanations\n\n### 6. **Query Engine**\n\n- Accepts free-form questions about codebases\n- Routes queries to code graph, document store, or LLMs\n- Returns structured JSON answers and explanatory text\n\n### 7. **API Gateway**\n\n- Authenticates and rate-limits clients\n- Routes requests to internal services\n- Serves all external-facing endpoints in REST format\n\n---\n\n## Security and Privacy\n\n- All data transfer is encrypted via HTTPS\n- API access is secured using provided auth credentials (JWT tokens coming soon)\n- Uploaded code is only used to generate customer-requested outputs and is not retained indefinitely\n\n---\n\n## Extensibility\n\nThe platform is modular. It can be extended to:\n\n- Add new LLMs for ensemble generation\n- Integrate alternative vector databases\n- Connect to internal developer portals or product management tools via webhook or export endpoints\n\nFor more information, see the Quick Start or contact the CoreStory team.\n\n\n# CoreStory API Quick Start Guide\n\nThe CoreStory API provides programmatic access to structured code intelligence, enabling your team to extract business and technical specifications directly from source code. You can use the API to integrate CoreStory-generated documents into existing workflows, support software modernization and maintenance efforts, or enrich internal platforms with architectural and feature-level metadata.\n\n---\n\n## Overview\n\nThe CoreStory API enables:\n\n- Ingestion of content into a **vector store** for LLM-driven analysis\n- Generation of **Product Requirements Documents (PRDs)** and **Technical Specifications** from code\n- Interrogation of your codebase via a natural language **query engine**\n- Construction of **knowledge graphs** describing code relationships and system architecture\n- Management of **custom document context** and **custom prompts** for improved output relevance and quality\n\nThese capabilities support SDLC workflows such as:\n\n- Application modernization, migration, and maintenance\n- Documentation and auditability of legacy systems\n- Alignment of product, engineering, and architecture teams and systems\n- Developer onboarding and code comprehension\n\n---\n\n**Note for POV customers:** If your codebase has already been ingested as part of a proof-of-value (POV) engagement, you can use your existing authentication credentials and skip step 2 (”Ingest a Codebase or Document Source) of this guide.\n\n## 1. Authentication\n\n```\nPOST /api/auth/login\n```\n\nObtain a JWT for future API calls.\n\n**Request:**\n\n```\n{\n  \"email\": \"you@example.com\",\n  \"password\": \"your-password\"\n}\n```\n\n**Response:**\n\n```\n{\n  \"access_token\": \"...\",\n  \"token_type\": \"bearer\"\n}\n```\n\nInclude this token in all subsequent requests:\n\n```\nAuthorization: Bearer <access_token>\n```\n\n---\n\n## 2. Ingest a Codebase or Document Source\n\n```\nPOST /api/vector-store/ingest\n```\n\nTrigger ingestion of code from a Git repo, ZIP file, or local document directory.\n\n**Example Payload (GitHub):**\n\n```\n{\n  \"source_type\": \"url\",\n  \"source\": \"https://github.com/example/repo.git\",\n  \"force\": true\n}\n```\n\nIngestion automatically chunks, embeds, and summarizes source files for downstream analysis.\n\n<details>\n<summary>Supported File Extensions</summary>\n\n### Programming Languages\n- Python: `.py`, `.pyw`, `.pyx`, `.pyi`\n- JavaScript/TypeScript: `.js`, `.mjs`, `.cjs`, `.ts`, `.jsx`, `.tsx`\n- Java: `.java`, `.class`, `.jar`\n- C/C++: `.c`, `.cpp`, `.cc`, `.cxx`, `.c++`, `.h`, `.hpp`, `.hh`, `.hxx`, `.h++`\n- .NET: `.cs`, `.csx`, `.vb`, `.fs`, `.fsx`, `.fsi`\n- PHP: `.php`, `.php3`, `.php4`, `.php5`, `.phtml`\n- Ruby: `.rb`, `.rbw`, `.rake`, `.gemspec`\n- Go: `.go`, `.mod`, `.sum`\n- Rust: `.rs`, `.rlib`\n- Swift: `.swift`\n- Kotlin: `.kt`, `.kts`, `.ktm`\n- Scala: `.scala`, `.sc`\n- Clojure: `.clj`, `.cljs`, `.cljc`, `.edn`\n- Haskell: `.hs`, `.lhs`\n- OCaml: `.ml`, `.mli`, `.mll`, `.mly`\n- R: `.r`, `.R`, `.rmd`, `.rnw`\n- Objective-C: `.m`, `.mm`\n- Perl: `.pl`, `.pm`, `.t`, `.pod`\n- Shell scripts: `.sh`, `.bash`, `.zsh`, `.fish`, `.ksh`, `.csh`, `.tcsh`\n- PowerShell: `.ps1`, `.psm1`, `.psd1`\n- Windows batch: `.bat`, `.cmd`\n- Lua: `.lua`\n- Dart: `.dart`\n- Elm: `.elm`\n- Elixir: `.ex`, `.exs`\n- Erlang: `.erl`, `.hrl`\n- Julia: `.jl`\n- Nim: `.nim`, `.nims`\n- Crystal: `.cr`\n- D: `.d`\n- Pascal: `.pas`, `.pp`, `.inc`\n- Fortran: `.f`, `.f90`, `.f95`, `.f03`, `.f08`, `.for`, `.ftn`, `.fpp`\n- COBOL: `.cob`, `.cbl`, `.cpy`, `.cobol`, `.bms`, `.ctl`, `.jcl`, `.proc`\n- IBM i (AS/400) RPG ILE: `.rpgle`, `.rpgleinc`\n- IBM i (AS/400) CLLE: `.clle`\n- IBM i (AS/400) DDS: `.pf`, `.lf`, `.dspf`\n- PowerBuilder: `.pbt`, `.pbs`, `.pbr`, `.srw`, `.srd`, `.sru`, `.sra`, `.srp`, `.srf`, `.srq`, `.srs`, `.srm`, `.srj`\n- Ada: `.ada`, `.adb`, `.ads`\n- Assembly: `.asm`, `.s`, `.S`\n- Verilog/SystemVerilog: `.v`, `.vh`, `.sv`, `.svh`\n- VHDL: `.vhd`, `.vhdl`\n- Tcl/Tk: `.tcl`, `.tk`\n- Groovy: `.groovy`, `.gvy`, `.gy`, `.gsh`\n- CoffeeScript: `.coffee`, `.litcoffee`\n- PureScript: `.purs`\n- ReasonML: `.reason`, `.re`, `.rei`\n- Racket/Scheme: `.rkt`, `.scm`, `.ss`\n- Lisp: `.lisp`, `.lsp`, `.l`, `.cl`, `.fasl`\n- Prolog: `.prolog`, `.pro`, `.P`\n- MATLAB: `.matlab`, `.fig`\n- Mathematica: `.mathematica`, `.nb`, `.wl`, `.wls`\n- SageMath: `.sage`, `.spyx`\n- Zig: `.zig`\n- Odin: `.odin`\n- V: `.v3`, `.v2`, `.v1`\n- Pony: `.pony`\n- Red: `.red`, `.reds`\n- Io: `.io`\n- Factor: `.factor`\n- Forth: `.forth`, `.fth`, `.4th`\n- J/K/Q/APL: `.j`, `.k`, `.q`, `.apl`\n- Chapel: `.chapel`, `.chpl`\n- X10: `.x10`\n- Arduino/Processing: `.pde`, `.ino`\n\n### Web Technologies\n- HTML: `.html`, `.htm`, `.xhtml`, `.shtml`\n- CSS/Preprocessors: `.css`, `.scss`, `.sass`, `.less`, `.styl`, `.stylus`\n- Frontend frameworks: `.vue`, `.svelte`\n- JSP: `.jsp`, `.jspx`, `.tag`, `.tagx`\n- ASP.NET: `.asp`, `.aspx`, `.ascx`, `.asax`, `.ashx`, `.asmx`\n- Ruby templates: `.erb`, `.haml`, `.slim`\n- PHP templates: `.twig`, `.blade`\n- Template engines: `.mustache`, `.hbs`, `.handlebars`, `.ejs`, `.pug`, `.jade`, `.liquid`, `.ftl`, `.ftlh`, `.vm`, `.vtl`, `.thymeleaf`\n\n### Configuration/Data\n- JSON: `.json`, `.json5`, `.jsonc`, `.jsonl`, `.ndjson`\n- XML: `.xml`, `.xsd`, `.xsl`, `.xslt`, `.dtd`, `.rng`, `.rnc`\n- YAML/TOML: `.yaml`, `.yml`, `.toml`\n- INI/Cfg/Conf: `.ini`, `.cfg`, `.conf`, `.config`, `.properties`\n- Environment: `.env`, `.envrc`, `.env.local`, `.env.development`, `.env.production`\n- Property lists: `.plist`\n- HOCON: `.hocon`\n- RON/HJSON/CSON: `.ron`, `.hjson`, `.cson`\n\n### Documentation/Text\n- Markdown: `.md`, `.markdown`, `.mdown`, `.mkd`, `.mkdn`\n- Plain text: `.txt`, `.text`\n- reStructuredText: `.rst`, `.rest`\n- AsciiDoc: `.asciidoc`, `.adoc`, `.asc`\n- LaTeX: `.tex`, `.latex`, `.ltx`, `.sty`, `.cls`, `.bib`\n- Org mode: `.org`\n- Wiki markup: `.wiki`, `.mediawiki`\n- Textile/Creole/RDoc: `.textile`, `.creole`, `.rdoc`\n\n### Data Formats\n- Delimited: `.csv`, `.tsv`, `.psv`\n- SQL: `.sql`, `.ddl`, `.dml`, `.plsql`, `.psql`, `.mysql`\n- GraphQL: `.graphql`, `.gql`\n- Protocols: `.proto`, `.protobuf`, `.avro`, `.avsc`, `.avdl`, `.thrift`, `.capnp`, `.fbs`\n- Columnar: `.parquet`, `.orc`, `.arrow`\n\n### Build/Dependency\n- Gradle: `.gradle`, `.gradle.kts`\n- Maven: `.maven`, `.mvn`\n- SBT: `.sbt`\n- CMake: `.cmake`, `.cmake.in`\n- Make: `.make`, `.mk`, `.mak`\n- Docker: `.dockerfile`, `.containerfile`, `.dockerignore`\n- Git: `.gitignore`, `.gitattributes`, `.gitmodules`, `.gitkeep`\n- Mercurial/Subversion/Bazaar: `.hgignore`, `.hgrc`, `.svnignore`, `.bzrignore`\n- EditorConfig: `.editorconfig`\n- Linters/Formatters: `.eslintrc`, `.eslintignore`, `.prettierrc`, `.prettierignore`, `.babelrc`, `.babelignore`\n- Node.js: `.npmrc`, `.npmignore`, `.yarnrc`, `.yarnignore`\n- Python: `.pipfile`, `.pipfile.lock`, `.requirements`, `.requirements.txt`, `.poetry.lock`, `.pyproject.toml`, `.setup.py`, `.setup.cfg`, `.manifest.in`, `.tox.ini`, `.noxfile.py`, `.pre-commit-config.yaml`\n- CI/CD: `.github`, `.gitlab-ci.yml`, `.travis.yml`, `.appveyor.yml`, `.circleci`, `.jenkins`, `.jenkinsfile`, `.azure-pipelines.yml`, `.buildkite.yml`\n- Package Managers: `package.json`, `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `composer.json`, `composer.lock`, `gemfile`, `gemfile.lock`, `cargo.toml`, `cargo.lock`, `go.mod`, `go.sum`, `requirements.txt`, `pipfile`, `pipfile.lock`, `poetry.lock`, `pyproject.toml`, `build.gradle`, `build.gradle.kts`, `settings.gradle`, `gradle.properties`, `pom.xml`, `settings.xml`, `build.sbt`, `plugins.sbt`, `makefile`, `gnumakefile`, `makefile.am`, `makefile.in`, `dockerfile`, `containerfile`, `vagrantfile`, `rakefile`, `guardfile`, `capfile`, `gulpfile.js`, `gruntfile.js`, `webpack.config.js`, `rollup.config.js`, `tsconfig.json`, `jsconfig.json`, `deno.json`, `deno.jsonc`, `mix.exs`, `mix.lock`, `rebar.config`, `rebar.lock`, `project.clj`, `deps.edn`, `stack.yaml`, `cabal.config`, `setup.hs`, `dub.json`, `dub.sdl`, `nimble`, `config.nims`, `shard.yml`, `shard.lock`, `pubspec.yaml`, `pubspec.lock`, `elm.json`, `elm-package.json`, `project.json`, `global.json`, `nuget.config`, `packages.config`, `paket.dependencies`, `paket.lock`, `.log`, `.lock`, `.pid`, `.tmp`, `.temp`, `.patch`, `.diff`, `.spec`, `.rpm`, `.deb`, `.control`, `.pkgbuild`, `.ebuild`, `.formula`, `.port`, `.portfile`, `.nix`, `.bzl`, `.bazel`, `.workspace`, `.buck`, `.buckconfig`, `.pants`, `.pants.ini`, `.please`, `.plzconfig`, `.gn`, `.gni`, `.ninja`, `.waf`, `.wscript`, `.scons`, `.sconstruct`, `.sconscript`\n\n</details>\n\n<details>\n<summary>Configuration Files</summary>\n\n- `requirements.txt`\n- `.gitignore`\n- `.dockerignore`\n- `.editorconfig`\n- `.eslintrc.js`\n- `.eslintrc.json`\n- `.prettierrc.js`\n- `.prettierrc.json`\n- `.babelrc.js`\n- `.babelrc.json`\n\n</details>\n\n---\n\n## 3. Generate a Product Requirements Document (PRD)\n\n**Note**: Generating a PRD or technical specification will replace the existing PRD or technical specification. The new outputs will document your codebase as it was when it was most recently ingested.\n\n```\nPOST /api/documents/prd?format=json\n```\n\nGenerates a structured PRD with:\n\n- Executive Overview\n- User Personas\n- High-Level Requirements\n- User Stories\n- Business Value\n\n**Example Response (truncated):**\n\n```\n{\n  \"content\": {\n    \"executive_overview\": \"Modernize internal authentication platform\",\n    \"user_personas\": [...],\n    \"user_stories\": [...]\n  }\n}\n```\n\n**Tip:** For PRDs or technical specs, use `format=markdown` to return a Markdown-formatted document instead.\n\n---\n\n## 4. Generate a Technical Specification\n\n```\nPOST /api/documents/technical-spec?format=json\n```\n\nReturns system-level implementation details including:\n\n- Architecture and Components\n- Data Models and Relationships\n- User Interface Screens and Components\n- APIs and Integration Points\n- System Interfaces and Specifications\n- Security Considerations\n- Implementation and Deployment Strategy\n\n---\n\n## 5. Query Your Code\n\n```\nPOST /api/graph/query-engine\n```\n\nAsk natural language questions about your codebase to return a structured graph of relationships.\n\n**Example Query:**\n\n```\n{\n  \"query\": \"How does the system determine whether a user has admin privileges when accessing the audit log?\"\n}\n```\n\n**Response (truncated):**\n\n```\n{\n  \"summary\": \"When a user requests access to the audit log, the system checks their assigned roles in `AuthService.getUserRoles`. If 'admin' is present, access is granted. This check occurs in `AuditLogController` before querying the log database. The middleware `CheckPermissions` is also invoked on this route.\"\n}\n```\n\n---\n\n## 6. Format and Retrieve Document Sections\n\nUse these endpoints to extract or reformat specific document sections:\n\n- `/api/documents/sections/{doc_type}` → generate a specific section\n- `/api/documents/format/markdown-output/{doc_type}` → format JSON as Markdown\n- `/api/documents/format/pdf-output/{doc_type}` → export PDF\n\nExample section names:\n\n- `executive-overview`\n- `data-models`\n- `system-architecture`\n- `integration-points`\n\n---\n\n## Questions?\n\nAfter reviewing this guide and the API docs, we recommend scheduling a short Q&A call if you have integration-specific needs or want assistance mapping this to your environment.\n"
+  version: 1.26.2
+servers:
+- url: /
+  description: Current server
+security:
+- BearerAuth: []
+tags:
+- name: document_formatters
+paths:
+  /api/format/available-sections/{doc_type}:
+    get:
+      tags:
+      - document_formatters
+      summary: Get available sections for a document type
+      description: 'Get list of available sections for a document type.
+
+
+        This helps clients know what sections they can request.'
+      operationId: get_available_document_sections
+      parameters:
+      - name: doc_type
+        in: path
+        required: true
+        schema:
+          enum:
+          - prd
+          - technical-spec
+          - document-section
+          type: string
+          description: Document type
+          title: Doc Type
+        description: Document type
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Get Available Document Sections
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+  /api/format/table-of-contents:
+    post:
+      tags:
+      - document_formatters
+      summary: Format Table Of Contents
+      description: "Generate a table of contents for markdown content.\n\nArgs:\n    request: The request containing markdown content\n\nReturns:\n    DocumentFormatResponse: The markdown content with table of contents"
+      operationId: generate_table_of_contents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TableOfContentsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentFormatResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+  /api/format/markdown-output/{project_id}/{doc_type}:
+    get:
+      tags:
+      - document_formatters
+      summary: Retrieve and format stored document as markdown
+      description: "Retrieves a stored document (PRD, Technical Specification, or Document Section) from the database\n    and formats it into a clean, readable markdown document.\n\n    This endpoint fetches the latest PRD for the given project and formats it based on the doc_type.\n\n    Document types:\n    - prd: Full Product Requirements Document\n    - technical-spec: Full Technical Specification\n    - document-section: Individual document section (requires section query parameter)"
+      operationId: export_document_markdown
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          description: Project ID
+          title: Project Id
+        description: Project ID
+      - name: doc_type
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/app__models__enums__DocumentType'
+          description: Document type
+        description: Document type
+      - name: section_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/AllPRDStepsDashedEnum'
+          - type: 'null'
+          description: Section name for document-section type
+          title: Section Name
+        description: Section name for document-section type
+      - name: show_code_references
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Include code references in user stories
+          default: false
+          title: Show Code References
+        description: Include code references in user stories
+      - name: show_references
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Include reference sections
+          default: true
+          title: Show References
+        description: Include reference sections
+      - name: generate_toc
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Generate table of contents
+          default: false
+          title: Generate Toc
+        description: Generate table of contents
+      - name: epics
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+          - type: 'null'
+          description: Epic IDs
+          title: Epics
+        description: Epic IDs
+      - name: personas
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+          - type: 'null'
+          description: Persona IDs
+          title: Personas
+        description: Persona IDs
+      - name: main_features
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+          - type: 'null'
+          description: Main feature IDs
+          title: Main Features
+        description: Main feature IDs
+      - name: keywords
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Keyword list
+          title: Keywords
+        description: Keyword list
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Free-text; supports exact, "a or b", or "a and b"
+          title: Search
+        description: Free-text; supports exact, "a or b", or "a and b"
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number (1-based)
+          default: 1
+          title: Page
+        description: Page number (1-based)
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: 'Items per page (default: 999)'
+          default: 999
+          title: Size
+        description: 'Items per page (default: 999)'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentFormatResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+  /api/format/pdf-output:
+    post:
+      tags:
+      - document_formatters
+      summary: Export document as PDF from markdown input
+      description: "Exports a document as PDF from markdown content (e.g., from artifact download).\n\n    This endpoint accepts markdown content directly and converts it to PDF format.\n    It accepts pre-formatted markdown content and converts it directly to PDF.\n\n    The markdown should already be formatted (e.g., from a previous artifact download).\n\n    **Plan restriction:** Requires Pro or Enterprise plan. Free users receive a\n    403 error with PLAN_UPGRADE_REQUIRED."
+      operationId: export_pdf_from_markdown
+      parameters:
+      - name: doc_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/app__models__enums__DocumentType'
+          - type: 'null'
+          description: Optional document type for filename generation
+          title: Doc Type
+        description: Optional document type for filename generation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PDFOutputRequest'
+      responses:
+        '200':
+          description: Successful Response
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+  /api/format/document-async/{project_id}/{doc_type}:
+    post:
+      tags:
+      - document_formatters
+      summary: Initiate async PDF generation
+      description: "Initiates asynchronous PDF generation for a document.\n\n    Returns immediately with a job_id and URLs for tracking progress:\n    - stream_url: Real-time SSE updates (subscribe for progress events)\n    - result_url: Download the completed PDF\n\n    The PDF generation runs in the background via ARQ workers. Clients should:\n    1. Subscribe to stream_url for real-time progress via SSE\n    2. When status is 'completed', download the PDF from result_url\n\n    Document types:\n    - prd: Full Product Requirements Document\n    - technical-spec: Full Technical Specification\n    - document-section: Individual document section (requires section_name query parameter)\n\n    **Plan restriction:** Requires Pro or Enterprise plan. Free users receive a\n    403 error with PLAN_UPGRADE_REQUIRED."
+      operationId: start_async_pdf_generation
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          description: Project ID
+          title: Project Id
+        description: Project ID
+      - name: doc_type
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/app__models__enums__DocumentType'
+          description: Document type
+        description: Document type
+      - name: section_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/AllPRDStepsDashedEnum'
+          - type: 'null'
+          description: Section name for document-section type
+          title: Section Name
+        description: Section name for document-section type
+      - name: show_code_references
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Include code references in user stories
+          default: false
+          title: Show Code References
+        description: Include code references in user stories
+      - name: show_references
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Include reference sections
+          default: true
+          title: Show References
+        description: Include reference sections
+      - name: generate_toc
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Generate table of contents
+          default: false
+          title: Generate Toc
+        description: Generate table of contents
+      - name: epics
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+          - type: 'null'
+          description: Epic IDs
+          title: Epics
+        description: Epic IDs
+      - name: personas
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+          - type: 'null'
+          description: Persona IDs
+          title: Personas
+        description: Persona IDs
+      - name: main_features
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+          - type: 'null'
+          description: Main feature IDs
+          title: Main Features
+        description: Main feature IDs
+      - name: keywords
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Keyword list
+          title: Keywords
+        description: Keyword list
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Free-text; supports exact, "a or b", or "a and b"
+          title: Search
+        description: Free-text; supports exact, "a or b", or "a and b"
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number (1-based)
+          default: 1
+          title: Page
+        description: Page number (1-based)
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: 'Items per page (default: 999)'
+          default: 999
+          title: Size
+        description: 'Items per page (default: 999)'
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PDFAsyncResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+  /api/format/pdf-stream/{job_id}:
+    get:
+      tags:
+      - document_formatters
+      summary: Stream PDF generation progress via SSE
+      description: "Stream real-time progress updates for a PDF generation job using Server-Sent Events (SSE).\n\n    This endpoint provides live progress updates as the PDF is being generated, without\n    requiring polling. It uses Redis Pub/Sub to receive events from the ARQ worker,\n    making it work seamlessly across Kubernetes pods.\n\n    **Usage:**\n    ```javascript\n    const eventSource = new EventSource('/api/format/pdf-stream/abc-123');\n    eventSource.addEventListener('progress', (event) => {\n        const data = JSON.parse(event.data);\n        console.log(`${data.progress}% - ${data.message}`);\n        if (data.is_complete || data.is_error) {\n            eventSource.close();\n        }\n    });\n    ```\n\n    The stream automatically closes when:\n    - The job completes successfully (is_complete=true)\n    - The job fails (is_error=true)\n    - The client disconnects\n\n    Returns:\n        - 200: SSE stream of progress events\n        - 403: Access denied (job belongs to different organization)\n        - 404: Job not found"
+      operationId: stream_pdf_generation_progress
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The job identifier
+          title: Job Id
+        description: The job identifier
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+  /api/format/pdf-output-result/{job_id}:
+    get:
+      tags:
+      - document_formatters
+      summary: Download completed PDF
+      description: "Download the completed PDF for a finished job.\n\n    This endpoint returns the PDF binary content with appropriate headers\n    for browser download. After successful download, the PDF file is\n    deleted from storage, while the SOTJ job record is retained for audit purposes.\n\n    Clients should call this endpoint after the status endpoint returns\n    'completed' status.\n\n    Returns:\n        - 200: PDF binary content (application/pdf)\n        - 403: Access denied (job belongs to different organization)\n        - 404: Job not found\n        - 409: Job not yet completed (still pending/processing)\n        - 410: Job failed or result no longer available\n\n    **Authentication**: Requires user to be authenticated and have created the job."
+      operationId: download_pdf_result
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Job ID from the async initiation response
+          title: Job Id
+        description: Job ID from the async initiation response
+      responses:
+        '200':
+          description: Successful Response
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+  /api/format/docx-output:
+    post:
+      tags:
+      - document_formatters
+      summary: Export document as Word (.docx) from markdown input
+      description: "Exports a document as Word (.docx) from markdown content.\n\n    This endpoint accepts pre-formatted markdown content and converts it to a\n    Word document using Pandoc. Mermaid diagrams are rendered as embedded images.\n\n    **Plan restriction:** Requires Pro or Enterprise plan. Free users receive a\n    403 error with PLAN_UPGRADE_REQUIRED."
+      operationId: export_docx_from_markdown
+      parameters:
+      - name: doc_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/app__models__enums__DocumentType'
+          - type: 'null'
+          description: Optional document type for filename generation
+          title: Doc Type
+        description: Optional document type for filename generation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocxOutputRequest'
+      responses:
+        '200':
+          description: Successful Response
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    PDFAsyncResponse:
+      properties:
+        job_id:
+          type: string
+          maxLength: 64
+          title: Job Id
+          description: Unique job identifier
+        status:
+          $ref: '#/components/schemas/PDFJobStatus'
+          description: Current status (pending)
+        result_url:
+          type: string
+          title: Result Url
+          description: Download endpoint for completed PDF
+        stream_url:
+          type: string
+          title: Stream Url
+          description: SSE streaming endpoint for real-time progress
+        message:
+          type: string
+          title: Message
+          description: Human-readable message
+          default: PDF generation initiated
+      type: object
+      required:
+      - job_id
+      - status
+      - result_url
+      - stream_url
+      title: PDFAsyncResponse
+      description: Response for async PDF generation initiation.
+    PDFOutputRequest:
+      properties:
+        markdown:
+          type: string
+          title: Markdown
+          description: Markdown content to convert
+        project_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Project Id
+          description: Optional project ID for cache namespacing
+      type: object
+      required:
+      - markdown
+      title: PDFOutputRequest
+      description: Request model for PDF output from markdown input.
+      examples:
+      - markdown: '# My Document
+
+
+          This is markdown content from an artifact download.'
+    AllPRDStepsDashedEnum:
+      type: string
+      enum:
+      - executive-overview
+      - user-personas
+      - high-level-requirements
+      - user-stories
+      - security-requirements
+      - system-architecture
+      - data-models
+      - user-interface
+      - api-specifications
+      - interface-specifications
+      - integration-points
+      - security-considerations
+      - tech-user-stories
+      - implementation-strategy
+      - retriever-api-specification
+      - retriever-interface-specification
+      - retriever-data-models
+      - retriever-classes
+      - retriever-summary
+      title: AllPRDStepsDashedEnum
+      description: All PRD steps with dashed values.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    DocumentFormatResponse:
+      properties:
+        markdown:
+          type: string
+          title: Markdown
+          description: The formatted document in markdown format
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+          description: Additional metadata about the formatting operation
+      type: object
+      required:
+      - markdown
+      - metadata
+      title: DocumentFormatResponse
+      description: Response model for document formatting.
+    app__models__enums__DocumentType:
+      type: string
+      enum:
+      - prd
+      - technical-spec
+      - document-section
+      title: DocumentType
+      description: Enum for document types.
+    TableOfContentsRequest:
+      properties:
+        markdown:
+          type: string
+          title: Markdown
+          description: The markdown content to generate table of contents from
+      type: object
+      required:
+      - markdown
+      title: TableOfContentsRequest
+      description: Request model for table of contents generation.
+    DocxOutputRequest:
+      properties:
+        markdown:
+          type: string
+          title: Markdown
+          description: Markdown content to convert
+        project_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Project Id
+          description: Optional project ID for cache namespacing
+      type: object
+      required:
+      - markdown
+      title: DocxOutputRequest
+      description: Request model for Word document (.docx) output from markdown input.
+      examples:
+      - markdown: '# My Document
+
+
+          This is markdown content to export as Word.'
+    PDFJobStatus:
+      type: string
+      enum:
+      - pending
+      - processing
+      - completed
+      - failed
+      title: PDFJobStatus
+      description: Status of a PDF generation job.
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Enter the Bearer token from Clerk authentication
+x-tagGroups:
+- name: Ingest Your Codebase
+  tags:
+  - vector_store
+  - projects
+  - pre_ingestion
+  - reingestion
+- name: Generate Code Intelligence
+  tags:
+  - documents
+  - document_generation
+  - document_formatters
+  - prd
+  - prd_version
+  - tech_spec
+  - quality_metrics
+  - sample_projects
+- name: Query Your Codebase
+  tags:
+  - conversations
+  - workflows
+  - discovery
+  - context
+  - artifacts
+- name: Manage and Inspect Intelligence
+  tags:
+  - api_debugging
+  - events
+  - version
+  - files
+  - cache
+  - token_tracking
+- name: Authenticate and Manage Access
+  tags:
+  - clerk_authentication
+  - github_webhooks
+  - github_integration
+  - organizations
+  - api_key_management
+  - mcp_token_management
+  - user
+- name: (Advanced) Prompt Tuning
+  tags:
+  - prompts
+- name: MCP Protocol
+  tags:
+  - mcp_protocol
+- name: Administration
+  tags:
+  - admin

@@ -1,0 +1,1772 @@
+openapi: 3.1.0
+info:
+  title: Crowdbotics API Documentation admin organizations API
+  description: "# CoreStory API Overview\n\nThe CoreStory API provides programmatic access to structured insights derived from software source code. It is designed for engineering, architecture, and product teams who need to extract business logic, technical specifications, architectural relationships, and system-level context from complex or legacy codebases.\n\nBy interfacing directly with CoreStory API, users can:\n\n- Generate full Product Requirements Documents (PRDs) from a codebase\n- Extract detailed Technical Specifications for modernization or migration\n- Query a codebase using natural language to surface implementation details, logic paths, dependencies, and architectural insights\n- Construct and visualize knowledge graphs of systems, components, and relationships\n- Ingest, store, and retrieve content from a vector store for AI-powered retrieval-augmented generation (RAG) workflows\n\nCoreStory is especially valuable in contexts where:\n\n- Codebases are large, unstructured, or under-documented\n- Product and engineering teams are onboarding to unfamiliar systems\n- Technical stakeholders require visibility into system design or feature coverage\n- Modernization, replatforming, or M&A due diligence is underway\n\nThe API can be integrated into existing CI/CD pipelines, internal developer portals, architecture review boards, product planning processes, or documentation automation workflows.\n\nAll endpoints support secure authentication and are designed for high-availability, asynchronous workloads. Output formats include JSON, Markdown, and PDF, with flexible formatting options for downstream consumption.\n\nFor step-by-step usage instructions and workflows, refer to the [CoreStory API Quick Start Guide](#section/CoreStory-API-Quick-Start-Guide).\n\n## Features\n\n* **Document Generation**\n    * Generate complete Product Requirements Documents (PRD)\n    * Generate Technical Specifications\n    * Generate individual document sections (executive overview, user personas, etc.)\n    * Format documents in JSON or Markdown\n\n* **Vector Store Management**\n    * Ingest and manage documents in vector store\n    * Query and retrieve document content\n    * Manage document embeddings\n\n* **Context Management**\n    * Manage context for different document types\n    * Set and retrieve PRD context\n    * Support for future context types (technical specs, user stories, etc.)\n\n* **Knowledge Graph**\n    * Generate knowledge graphs from codebase queries\n    * Visualize relationships between code entities\n    * Analyze code structure and dependencies\n\n* **API Endpoints**\n    * `/api/documents/*` - Document generation and formatting\n    * `/api/generate/*` - Document formatting utilities\n    * `/api/vector-store/*` - Vector store management\n    * `/api/agents/*` - AI agent operations\n    * `/api/context/*` - Context management for documents\n    * `/api/graph/*` - Knowledge graph generation and analysis\n\nNote: JWT authentication support coming soon. All endpoints currently provide detailed OpenAPI documentation.\n\n* **Observability**\n    * OpenTelemetry instrumentation for distributed tracing\n    * Prometheus metrics endpoint at `/metrics`\n    * Comprehensive request/response tracking\n    * Custom business metrics\n\n\n\n# CoreStory System Architecture\n\nThis document provides a high-level overview of how the CoreStory platform ingests, analyzes, and serves structured software intelligence through its API. The system is designed to process codebases and related technical artifacts in order to generate product specifications, technical documents, and knowledge graph representations.\n\n---\n\n## Core Components\n\n### 1. **Ingestion Layer**\n\n- Accepts Git URLs, file uploads, or local archives\n- Extracts source files, documentation, and metadata\n- Initiates chunking and embedding via the vector store pipeline\n\n### 2. **Vector Store and Context Engine**\n\n- Stores chunked and embedded documents\n- Supports semantic search and document retrieval\n- Feeds LLMs with scoped context for generation and reasoning\n\n### 3. **LLM Orchestration Layer**\n\n- Fan-out to multiple large language models\n- Handles prompt templating, context injection, and result normalization\n- Evaluates and scores generated outputs\n\n### 4. **Document Generation Engine**\n\n- Produces:\n  - PRDs\n  - Technical Specs\n  - Individual document sections\n  - Markdown and PDF exports\n- Format-flexible output for portals, APIs, and documentation pipelines\n\n### 5. **Graph Construction Module**\n\n- Extracts static and dynamic code relationships\n- Builds DAGs and call graphs of components, services, and files\n- Allows natural-language queries that return graph subviews and LLM explanations\n\n### 6. **Query Engine**\n\n- Accepts free-form questions about codebases\n- Routes queries to code graph, document store, or LLMs\n- Returns structured JSON answers and explanatory text\n\n### 7. **API Gateway**\n\n- Authenticates and rate-limits clients\n- Routes requests to internal services\n- Serves all external-facing endpoints in REST format\n\n---\n\n## Security and Privacy\n\n- All data transfer is encrypted via HTTPS\n- API access is secured using provided auth credentials (JWT tokens coming soon)\n- Uploaded code is only used to generate customer-requested outputs and is not retained indefinitely\n\n---\n\n## Extensibility\n\nThe platform is modular. It can be extended to:\n\n- Add new LLMs for ensemble generation\n- Integrate alternative vector databases\n- Connect to internal developer portals or product management tools via webhook or export endpoints\n\nFor more information, see the Quick Start or contact the CoreStory team.\n\n\n# CoreStory API Quick Start Guide\n\nThe CoreStory API provides programmatic access to structured code intelligence, enabling your team to extract business and technical specifications directly from source code. You can use the API to integrate CoreStory-generated documents into existing workflows, support software modernization and maintenance efforts, or enrich internal platforms with architectural and feature-level metadata.\n\n---\n\n## Overview\n\nThe CoreStory API enables:\n\n- Ingestion of content into a **vector store** for LLM-driven analysis\n- Generation of **Product Requirements Documents (PRDs)** and **Technical Specifications** from code\n- Interrogation of your codebase via a natural language **query engine**\n- Construction of **knowledge graphs** describing code relationships and system architecture\n- Management of **custom document context** and **custom prompts** for improved output relevance and quality\n\nThese capabilities support SDLC workflows such as:\n\n- Application modernization, migration, and maintenance\n- Documentation and auditability of legacy systems\n- Alignment of product, engineering, and architecture teams and systems\n- Developer onboarding and code comprehension\n\n---\n\n**Note for POV customers:** If your codebase has already been ingested as part of a proof-of-value (POV) engagement, you can use your existing authentication credentials and skip step 2 (”Ingest a Codebase or Document Source) of this guide.\n\n## 1. Authentication\n\n```\nPOST /api/auth/login\n```\n\nObtain a JWT for future API calls.\n\n**Request:**\n\n```\n{\n  \"email\": \"you@example.com\",\n  \"password\": \"your-password\"\n}\n```\n\n**Response:**\n\n```\n{\n  \"access_token\": \"...\",\n  \"token_type\": \"bearer\"\n}\n```\n\nInclude this token in all subsequent requests:\n\n```\nAuthorization: Bearer <access_token>\n```\n\n---\n\n## 2. Ingest a Codebase or Document Source\n\n```\nPOST /api/vector-store/ingest\n```\n\nTrigger ingestion of code from a Git repo, ZIP file, or local document directory.\n\n**Example Payload (GitHub):**\n\n```\n{\n  \"source_type\": \"url\",\n  \"source\": \"https://github.com/example/repo.git\",\n  \"force\": true\n}\n```\n\nIngestion automatically chunks, embeds, and summarizes source files for downstream analysis.\n\n<details>\n<summary>Supported File Extensions</summary>\n\n### Programming Languages\n- Python: `.py`, `.pyw`, `.pyx`, `.pyi`\n- JavaScript/TypeScript: `.js`, `.mjs`, `.cjs`, `.ts`, `.jsx`, `.tsx`\n- Java: `.java`, `.class`, `.jar`\n- C/C++: `.c`, `.cpp`, `.cc`, `.cxx`, `.c++`, `.h`, `.hpp`, `.hh`, `.hxx`, `.h++`\n- .NET: `.cs`, `.csx`, `.vb`, `.fs`, `.fsx`, `.fsi`\n- PHP: `.php`, `.php3`, `.php4`, `.php5`, `.phtml`\n- Ruby: `.rb`, `.rbw`, `.rake`, `.gemspec`\n- Go: `.go`, `.mod`, `.sum`\n- Rust: `.rs`, `.rlib`\n- Swift: `.swift`\n- Kotlin: `.kt`, `.kts`, `.ktm`\n- Scala: `.scala`, `.sc`\n- Clojure: `.clj`, `.cljs`, `.cljc`, `.edn`\n- Haskell: `.hs`, `.lhs`\n- OCaml: `.ml`, `.mli`, `.mll`, `.mly`\n- R: `.r`, `.R`, `.rmd`, `.rnw`\n- Objective-C: `.m`, `.mm`\n- Perl: `.pl`, `.pm`, `.t`, `.pod`\n- Shell scripts: `.sh`, `.bash`, `.zsh`, `.fish`, `.ksh`, `.csh`, `.tcsh`\n- PowerShell: `.ps1`, `.psm1`, `.psd1`\n- Windows batch: `.bat`, `.cmd`\n- Lua: `.lua`\n- Dart: `.dart`\n- Elm: `.elm`\n- Elixir: `.ex`, `.exs`\n- Erlang: `.erl`, `.hrl`\n- Julia: `.jl`\n- Nim: `.nim`, `.nims`\n- Crystal: `.cr`\n- D: `.d`\n- Pascal: `.pas`, `.pp`, `.inc`\n- Fortran: `.f`, `.f90`, `.f95`, `.f03`, `.f08`, `.for`, `.ftn`, `.fpp`\n- COBOL: `.cob`, `.cbl`, `.cpy`, `.cobol`, `.bms`, `.ctl`, `.jcl`, `.proc`\n- IBM i (AS/400) RPG ILE: `.rpgle`, `.rpgleinc`\n- IBM i (AS/400) CLLE: `.clle`\n- IBM i (AS/400) DDS: `.pf`, `.lf`, `.dspf`\n- PowerBuilder: `.pbt`, `.pbs`, `.pbr`, `.srw`, `.srd`, `.sru`, `.sra`, `.srp`, `.srf`, `.srq`, `.srs`, `.srm`, `.srj`\n- Ada: `.ada`, `.adb`, `.ads`\n- Assembly: `.asm`, `.s`, `.S`\n- Verilog/SystemVerilog: `.v`, `.vh`, `.sv`, `.svh`\n- VHDL: `.vhd`, `.vhdl`\n- Tcl/Tk: `.tcl`, `.tk`\n- Groovy: `.groovy`, `.gvy`, `.gy`, `.gsh`\n- CoffeeScript: `.coffee`, `.litcoffee`\n- PureScript: `.purs`\n- ReasonML: `.reason`, `.re`, `.rei`\n- Racket/Scheme: `.rkt`, `.scm`, `.ss`\n- Lisp: `.lisp`, `.lsp`, `.l`, `.cl`, `.fasl`\n- Prolog: `.prolog`, `.pro`, `.P`\n- MATLAB: `.matlab`, `.fig`\n- Mathematica: `.mathematica`, `.nb`, `.wl`, `.wls`\n- SageMath: `.sage`, `.spyx`\n- Zig: `.zig`\n- Odin: `.odin`\n- V: `.v3`, `.v2`, `.v1`\n- Pony: `.pony`\n- Red: `.red`, `.reds`\n- Io: `.io`\n- Factor: `.factor`\n- Forth: `.forth`, `.fth`, `.4th`\n- J/K/Q/APL: `.j`, `.k`, `.q`, `.apl`\n- Chapel: `.chapel`, `.chpl`\n- X10: `.x10`\n- Arduino/Processing: `.pde`, `.ino`\n\n### Web Technologies\n- HTML: `.html`, `.htm`, `.xhtml`, `.shtml`\n- CSS/Preprocessors: `.css`, `.scss`, `.sass`, `.less`, `.styl`, `.stylus`\n- Frontend frameworks: `.vue`, `.svelte`\n- JSP: `.jsp`, `.jspx`, `.tag`, `.tagx`\n- ASP.NET: `.asp`, `.aspx`, `.ascx`, `.asax`, `.ashx`, `.asmx`\n- Ruby templates: `.erb`, `.haml`, `.slim`\n- PHP templates: `.twig`, `.blade`\n- Template engines: `.mustache`, `.hbs`, `.handlebars`, `.ejs`, `.pug`, `.jade`, `.liquid`, `.ftl`, `.ftlh`, `.vm`, `.vtl`, `.thymeleaf`\n\n### Configuration/Data\n- JSON: `.json`, `.json5`, `.jsonc`, `.jsonl`, `.ndjson`\n- XML: `.xml`, `.xsd`, `.xsl`, `.xslt`, `.dtd`, `.rng`, `.rnc`\n- YAML/TOML: `.yaml`, `.yml`, `.toml`\n- INI/Cfg/Conf: `.ini`, `.cfg`, `.conf`, `.config`, `.properties`\n- Environment: `.env`, `.envrc`, `.env.local`, `.env.development`, `.env.production`\n- Property lists: `.plist`\n- HOCON: `.hocon`\n- RON/HJSON/CSON: `.ron`, `.hjson`, `.cson`\n\n### Documentation/Text\n- Markdown: `.md`, `.markdown`, `.mdown`, `.mkd`, `.mkdn`\n- Plain text: `.txt`, `.text`\n- reStructuredText: `.rst`, `.rest`\n- AsciiDoc: `.asciidoc`, `.adoc`, `.asc`\n- LaTeX: `.tex`, `.latex`, `.ltx`, `.sty`, `.cls`, `.bib`\n- Org mode: `.org`\n- Wiki markup: `.wiki`, `.mediawiki`\n- Textile/Creole/RDoc: `.textile`, `.creole`, `.rdoc`\n\n### Data Formats\n- Delimited: `.csv`, `.tsv`, `.psv`\n- SQL: `.sql`, `.ddl`, `.dml`, `.plsql`, `.psql`, `.mysql`\n- GraphQL: `.graphql`, `.gql`\n- Protocols: `.proto`, `.protobuf`, `.avro`, `.avsc`, `.avdl`, `.thrift`, `.capnp`, `.fbs`\n- Columnar: `.parquet`, `.orc`, `.arrow`\n\n### Build/Dependency\n- Gradle: `.gradle`, `.gradle.kts`\n- Maven: `.maven`, `.mvn`\n- SBT: `.sbt`\n- CMake: `.cmake`, `.cmake.in`\n- Make: `.make`, `.mk`, `.mak`\n- Docker: `.dockerfile`, `.containerfile`, `.dockerignore`\n- Git: `.gitignore`, `.gitattributes`, `.gitmodules`, `.gitkeep`\n- Mercurial/Subversion/Bazaar: `.hgignore`, `.hgrc`, `.svnignore`, `.bzrignore`\n- EditorConfig: `.editorconfig`\n- Linters/Formatters: `.eslintrc`, `.eslintignore`, `.prettierrc`, `.prettierignore`, `.babelrc`, `.babelignore`\n- Node.js: `.npmrc`, `.npmignore`, `.yarnrc`, `.yarnignore`\n- Python: `.pipfile`, `.pipfile.lock`, `.requirements`, `.requirements.txt`, `.poetry.lock`, `.pyproject.toml`, `.setup.py`, `.setup.cfg`, `.manifest.in`, `.tox.ini`, `.noxfile.py`, `.pre-commit-config.yaml`\n- CI/CD: `.github`, `.gitlab-ci.yml`, `.travis.yml`, `.appveyor.yml`, `.circleci`, `.jenkins`, `.jenkinsfile`, `.azure-pipelines.yml`, `.buildkite.yml`\n- Package Managers: `package.json`, `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `composer.json`, `composer.lock`, `gemfile`, `gemfile.lock`, `cargo.toml`, `cargo.lock`, `go.mod`, `go.sum`, `requirements.txt`, `pipfile`, `pipfile.lock`, `poetry.lock`, `pyproject.toml`, `build.gradle`, `build.gradle.kts`, `settings.gradle`, `gradle.properties`, `pom.xml`, `settings.xml`, `build.sbt`, `plugins.sbt`, `makefile`, `gnumakefile`, `makefile.am`, `makefile.in`, `dockerfile`, `containerfile`, `vagrantfile`, `rakefile`, `guardfile`, `capfile`, `gulpfile.js`, `gruntfile.js`, `webpack.config.js`, `rollup.config.js`, `tsconfig.json`, `jsconfig.json`, `deno.json`, `deno.jsonc`, `mix.exs`, `mix.lock`, `rebar.config`, `rebar.lock`, `project.clj`, `deps.edn`, `stack.yaml`, `cabal.config`, `setup.hs`, `dub.json`, `dub.sdl`, `nimble`, `config.nims`, `shard.yml`, `shard.lock`, `pubspec.yaml`, `pubspec.lock`, `elm.json`, `elm-package.json`, `project.json`, `global.json`, `nuget.config`, `packages.config`, `paket.dependencies`, `paket.lock`, `.log`, `.lock`, `.pid`, `.tmp`, `.temp`, `.patch`, `.diff`, `.spec`, `.rpm`, `.deb`, `.control`, `.pkgbuild`, `.ebuild`, `.formula`, `.port`, `.portfile`, `.nix`, `.bzl`, `.bazel`, `.workspace`, `.buck`, `.buckconfig`, `.pants`, `.pants.ini`, `.please`, `.plzconfig`, `.gn`, `.gni`, `.ninja`, `.waf`, `.wscript`, `.scons`, `.sconstruct`, `.sconscript`\n\n</details>\n\n<details>\n<summary>Configuration Files</summary>\n\n- `requirements.txt`\n- `.gitignore`\n- `.dockerignore`\n- `.editorconfig`\n- `.eslintrc.js`\n- `.eslintrc.json`\n- `.prettierrc.js`\n- `.prettierrc.json`\n- `.babelrc.js`\n- `.babelrc.json`\n\n</details>\n\n---\n\n## 3. Generate a Product Requirements Document (PRD)\n\n**Note**: Generating a PRD or technical specification will replace the existing PRD or technical specification. The new outputs will document your codebase as it was when it was most recently ingested.\n\n```\nPOST /api/documents/prd?format=json\n```\n\nGenerates a structured PRD with:\n\n- Executive Overview\n- User Personas\n- High-Level Requirements\n- User Stories\n- Business Value\n\n**Example Response (truncated):**\n\n```\n{\n  \"content\": {\n    \"executive_overview\": \"Modernize internal authentication platform\",\n    \"user_personas\": [...],\n    \"user_stories\": [...]\n  }\n}\n```\n\n**Tip:** For PRDs or technical specs, use `format=markdown` to return a Markdown-formatted document instead.\n\n---\n\n## 4. Generate a Technical Specification\n\n```\nPOST /api/documents/technical-spec?format=json\n```\n\nReturns system-level implementation details including:\n\n- Architecture and Components\n- Data Models and Relationships\n- User Interface Screens and Components\n- APIs and Integration Points\n- System Interfaces and Specifications\n- Security Considerations\n- Implementation and Deployment Strategy\n\n---\n\n## 5. Query Your Code\n\n```\nPOST /api/graph/query-engine\n```\n\nAsk natural language questions about your codebase to return a structured graph of relationships.\n\n**Example Query:**\n\n```\n{\n  \"query\": \"How does the system determine whether a user has admin privileges when accessing the audit log?\"\n}\n```\n\n**Response (truncated):**\n\n```\n{\n  \"summary\": \"When a user requests access to the audit log, the system checks their assigned roles in `AuthService.getUserRoles`. If 'admin' is present, access is granted. This check occurs in `AuditLogController` before querying the log database. The middleware `CheckPermissions` is also invoked on this route.\"\n}\n```\n\n---\n\n## 6. Format and Retrieve Document Sections\n\nUse these endpoints to extract or reformat specific document sections:\n\n- `/api/documents/sections/{doc_type}` → generate a specific section\n- `/api/documents/format/markdown-output/{doc_type}` → format JSON as Markdown\n- `/api/documents/format/pdf-output/{doc_type}` → export PDF\n\nExample section names:\n\n- `executive-overview`\n- `data-models`\n- `system-architecture`\n- `integration-points`\n\n---\n\n## Questions?\n\nAfter reviewing this guide and the API docs, we recommend scheduling a short Q&A call if you have integration-specific needs or want assistance mapping this to your environment.\n"
+  version: 1.26.2
+servers:
+- url: /
+  description: Current server
+security:
+- BearerAuth: []
+tags:
+- name: organizations
+paths:
+  /api/organizations/schedule:
+    get:
+      tags:
+      - organizations
+      summary: Get the org update schedule
+      description: Return the org update schedule, or null if none exists.
+      operationId: get_update_schedule
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/UpdateScheduleResponse'
+                - type: 'null'
+                title: Response Get Update Schedule
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+    put:
+      tags:
+      - organizations
+      summary: Create or update the org update schedule
+      description: Create or update the org update schedule. Blocked while a run is in progress.
+      operationId: upsert_update_schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateScheduleUpsert'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateScheduleResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+  /api/organizations/projects/sync-status:
+    get:
+      tags:
+      - organizations
+      summary: List org projects with sync status
+      description: Return a paginated list of projects in the org with their sync mode and status.
+      operationId: list_project_sync_status
+      parameters:
+      - name: sync_mode
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/SyncMode'
+          - type: 'null'
+          description: Filter by sync mode
+          title: Sync Mode
+        description: Filter by sync mode
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          enum:
+          - name
+          - last_ingested_at
+          type: string
+          description: Sort field
+          default: name
+          title: Sort By
+        description: Sort field
+      - name: sort_order
+        in: query
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+          description: Sort direction
+          default: asc
+          title: Sort Order
+        description: Sort direction
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number (1-based)
+          default: 1
+          title: Page
+        description: Page number (1-based)
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: Items per page
+          default: 50
+          title: Size
+        description: Items per page
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncStatusResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+  /api/organizations/pinned-workspaces:
+    get:
+      tags:
+      - organizations
+      summary: List the org's pinned workspaces
+      description: Return pinned workspaces in pin order. Any org member may read; empty list if none.
+      operationId: list_pinned_workspaces
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/PinnedWorkspaceItem'
+                type: array
+                title: Response List Pinned Workspaces
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+    post:
+      tags:
+      - organizations
+      summary: Pin a workspace (admin only)
+      description: 'Pin a workspace for the org. Admin only. Enforces the per-org pin cap.
+
+
+        Returns the created pin with its derived sync status so the client can render
+
+        it without a follow-up list call.'
+      operationId: pin_workspace
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PinWorkspaceRequest'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PinnedWorkspaceItem'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+  /api/organizations/pinned-workspaces/{project_id}:
+    delete:
+      tags:
+      - organizations
+      summary: Unpin a workspace (admin only)
+      description: Remove a workspace pin. Admin only. 404 if the workspace wasn't pinned.
+      operationId: unpin_workspace
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      responses:
+        '204':
+          description: Successful Response
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+  /api/organizations/ingestion-config:
+    get:
+      tags:
+      - organizations
+      summary: Get ingestion configuration
+      description: Get the ingestion file type configuration for the current organization. Returns custom config if set, otherwise returns global defaults.
+      operationId: get_ingestion_config
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionConfigResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+    put:
+      tags:
+      - organizations
+      summary: Update ingestion configuration
+      description: Update the ingestion file type configuration for the current organization. Requires admin role. Provide supported_extensions and/or binary_extensions to override defaults.
+      operationId: update_ingestion_config
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IngestionConfigUpdate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionConfigResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+    delete:
+      tags:
+      - organizations
+      summary: Reset ingestion configuration
+      description: Reset ingestion configuration to global defaults. Requires admin role.
+      operationId: reset_ingestion_config
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionConfigResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+    patch:
+      tags:
+      - organizations
+      summary: Add extensions to ingestion configuration
+      description: Additively merge extensions into the current ingestion configuration. Provided extensions are added to the existing set (defaults or custom). Requires admin role.
+      operationId: patch_ingestion_config
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IngestionConfigPatch'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionConfigResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+  /api/organizations/my:
+    get:
+      tags:
+      - organizations
+      summary: List my organizations
+      description: List organizations the current user belongs to
+      operationId: list_my_organizations_api_organizations_my_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/OrganizationResponse'
+                type: array
+                title: Response List My Organizations Api Organizations My Get
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+  /api/organizations/{org_id}:
+    get:
+      tags:
+      - organizations
+      summary: Get organization
+      description: Get organization details by ID
+      operationId: get_organization_api_organizations__org_id__get
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Org Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+    patch:
+      tags:
+      - organizations
+      summary: Update organization
+      description: Update organization details (requires admin role)
+      operationId: update_organization_api_organizations__org_id__patch
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Org Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+    delete:
+      tags:
+      - organizations
+      summary: Delete organization
+      description: Delete an organization (requires owner role)
+      operationId: delete_organization_api_organizations__org_id__delete
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Org Id
+      responses:
+        '204':
+          description: Successful Response
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+  /api/organizations/{org_id}/members:
+    get:
+      tags:
+      - organizations
+      summary: Get organization with members
+      description: Get organization details including all members
+      operationId: get_organization_with_members_api_organizations__org_id__members_get
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Org Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationWithMembers'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+    post:
+      tags:
+      - organizations
+      summary: Add member to organization
+      description: Add a new member to the organization (requires admin role)
+      operationId: add_member_api_organizations__org_id__members_post
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Org Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddMemberRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrgMembershipResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+  /api/organizations/invitations:
+    post:
+      tags:
+      - organizations
+      summary: Invite member to organization
+      description: Send an organization invitation email via Clerk (requires admin role). The target organization is resolved from the caller's active org context (JWT). Supports a redirect_url so the invitee lands on a specific page after accepting.
+      operationId: invite_member
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InviteMemberRequest'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationInvitationResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+  /api/organizations/{org_id}/members/{user_id}:
+    patch:
+      tags:
+      - organizations
+      summary: Update member role
+      description: Update a member's role in the organization (requires admin role)
+      operationId: update_member_role_api_organizations__org_id__members__user_id__patch
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Org Id
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: User Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMemberRoleRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrgMembershipResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+    delete:
+      tags:
+      - organizations
+      summary: Remove member from organization
+      description: Remove a member from the organization (requires admin role)
+      operationId: remove_member_api_organizations__org_id__members__user_id__delete
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Org Id
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: User Id
+      responses:
+        '204':
+          description: Successful Response
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+  /api/organizations/{org_id}/set-personal:
+    post:
+      tags:
+      - organizations
+      summary: Mark organization as personal
+      description: 'Set is_personal: true in the organization''s Clerk public metadata.'
+      operationId: set_organization_personal
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Org Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetPersonalResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+  /api/organizations/sync:
+    post:
+      tags:
+      - organizations
+      summary: Sync organization from Clerk
+      description: Sync organization and members from Clerk
+      operationId: sync_from_clerk_api_organizations_sync_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyncFromClerkRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncFromClerkResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+  /api/organizations/{org_id}/provision-enterprise:
+    post:
+      tags:
+      - organizations
+      summary: Provision an organization onto a sales-managed plan (Business or Enterprise)
+      description: 'Manually provision an organization onto a sales-managed plan.
+
+
+        Superuser-only. Provisions the org onto the plan given by ``plan_slug``
+
+        (Business or any Enterprise variant; defaults to the largest Enterprise
+
+        bracket), allocating that plan''s CIU allowance, writing a ledger entry, and
+
+        syncing the plan family to Clerk metadata.
+
+
+        Idempotent: re-provisioning resets the balance to the plan''s allowance and
+
+        updates the renewal date.'
+      operationId: provision_enterprise
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Org Id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/EnterpriseProvisionRequest'
+              - type: 'null'
+              title: Body
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnterpriseProvisionResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+  /api/organizations/{org_id}/downgrade:
+    post:
+      tags:
+      - organizations
+      summary: Downgrade an organization from the Enterprise plan to the default Free plan
+      description: 'Downgrade an organization from Enterprise to the default Free plan.
+
+
+        Superuser-only. Moves the org plan to Free, cancels the enterprise
+
+        subscription, and writes a ledger entry. CIU balance is left unchanged.'
+      operationId: downgrade_enterprise
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Org Id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/EnterpriseDowngradeRequest'
+              - type: 'null'
+              title: Body
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnterpriseDowngradeResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+  /api/organizations/{org_id}/grant-credits:
+    post:
+      tags:
+      - organizations
+      summary: Manually grant CIU credits to an organization
+      description: 'Add CIU credits to an organization''s balance.
+
+
+        Superuser-only. Increases total_cius by the given amount and creates
+
+        a CREDIT ledger entry with MANUAL_ADJUSTMENT action type for audit trail.'
+      operationId: grant_ciu_credits
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Org Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GrantCreditsRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GrantCreditsResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: Not found
+components:
+  schemas:
+    UpdateScheduleResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        organization_id:
+          type: string
+          title: Organization Id
+        cadence:
+          $ref: '#/components/schemas/ScheduleCadence'
+        day_of_week:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Day Of Week
+        day_of_month:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Day Of Month
+        time:
+          type: string
+          title: Time
+        doc_sync:
+          type: boolean
+          title: Doc Sync
+        last_edited_by_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Edited By Id
+        last_edited_by_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Edited By Name
+        last_edited_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Edited At
+        timezone:
+          type: string
+          title: Timezone
+          default: UTC
+        next_run_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Next Run At
+        is_running:
+          type: boolean
+          title: Is Running
+          default: false
+        auto_codebases_count:
+          type: integer
+          title: Auto Codebases Count
+          default: 0
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+      type: object
+      required:
+      - id
+      - organization_id
+      - cadence
+      - time
+      - doc_sync
+      - created_at
+      - updated_at
+      title: UpdateScheduleResponse
+      description: Response for org update schedule, includes computed fields.
+    SyncStatusItem:
+      properties:
+        project_id:
+          type: integer
+          title: Project Id
+          description: Project ID
+        name:
+          type: string
+          title: Name
+          description: Project name
+        sync_mode:
+          $ref: '#/components/schemas/SyncMode'
+          description: Manual or Auto
+        status:
+          $ref: '#/components/schemas/ProjectSyncStatus'
+          description: Current sync/processing status
+        last_ingested_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Ingested At
+          description: Last successful ingestion timestamp
+      type: object
+      required:
+      - project_id
+      - name
+      - sync_mode
+      - status
+      title: SyncStatusItem
+      description: A single project row in the org project sync-status list.
+    ProjectSyncStatus:
+      type: string
+      enum:
+      - up_to_date
+      - updating
+      - stale
+      - failed
+      - couldnt_process
+      title: ProjectSyncStatus
+      description: Sync/processing status for a project in the org roster.
+    SetPersonalResponse:
+      properties:
+        success:
+          type: boolean
+          title: Success
+        organization_id:
+          type: string
+          title: Organization Id
+      type: object
+      required:
+      - success
+      - organization_id
+      title: SetPersonalResponse
+      description: Response from marking an organization as personal.
+    IngestionConfigPatch:
+      properties:
+        supported_extensions:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Supported Extensions
+          description: Additional file extensions to process. Merged with current config (additive).
+          examples:
+          - - .gltf
+            - .proto
+        binary_extensions:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Binary Extensions
+          description: Additional binary file extensions to skip. Merged with current config (additive).
+          examples:
+          - - .glb
+            - .fbx
+      type: object
+      title: IngestionConfigPatch
+      description: Schema for additively merging extensions into ingestion configuration (PATCH).
+    EnterpriseProvisionResponse:
+      properties:
+        organization_id:
+          type: string
+          title: Organization Id
+          description: Organization database ID
+        clerk_org_id:
+          type: string
+          title: Clerk Org Id
+          description: Clerk organization ID
+        plan:
+          type: string
+          title: Plan
+          description: Plan tier name
+        total_cius:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Total Cius
+          description: Total CIUs allocated
+        consumed_cius:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Consumed Cius
+          description: CIUs consumed in current cycle
+        available_cius:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Available Cius
+          description: Remaining available CIUs
+        renewal_date:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Renewal Date
+          description: Next renewal date
+        provisioned_at:
+          type: string
+          format: date-time
+          title: Provisioned At
+          description: When the provisioning occurred
+      type: object
+      required:
+      - organization_id
+      - clerk_org_id
+      - plan
+      - total_cius
+      - consumed_cius
+      - available_cius
+      - renewal_date
+      - provisioned_at
+      title: EnterpriseProvisionResponse
+      description: Response after successfully provisioning an org onto the Enterprise plan.
+    PinWorkspaceRequest:
+      properties:
+        project_id:
+          type: integer
+          title: Project Id
+          description: ID of the workspace (project) to pin.
+      type: object
+      required:
+      - project_id
+      title: PinWorkspaceRequest
+      description: Body for pinning a workspace.
+    SyncMode:
+      type: string
+      enum:
+      - manual
+      - auto
+      title: SyncMode
+      description: Whether a project syncs manually or automatically with its repo.
+    UpdateMemberRoleRequest:
+      properties:
+        role_id:
+          type: string
+          title: Role Id
+          description: New role ID
+      type: object
+      required:
+      - role_id
+      title: UpdateMemberRoleRequest
+      description: Request to update a member's role.
+    OrganizationInvitationResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        email_address:
+          type: string
+          title: Email Address
+        role:
+          type: string
+          title: Role
+        status:
+          type: string
+          title: Status
+        created_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Created At
+      type: object
+      required:
+      - id
+      - email_address
+      - role
+      - status
+      title: OrganizationInvitationResponse
+      description: Response from creating an organization invitation.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    UpdateScheduleUpsert:
+      properties:
+        cadence:
+          $ref: '#/components/schemas/ScheduleCadence'
+        day_of_week:
+          anyOf:
+          - type: integer
+            maximum: 6.0
+            minimum: 0.0
+          - type: 'null'
+          title: Day Of Week
+          description: 0=Monday..6=Sunday. Required when weekly.
+        day_of_month:
+          anyOf:
+          - type: integer
+            maximum: 28.0
+            minimum: 1.0
+          - type: 'null'
+          title: Day Of Month
+          description: 1-28. Required when monthly.
+        time:
+          type: string
+          pattern: ^([01]\d|2[0-3]):(00|30)$
+          title: Time
+          description: HH:MM in 24h format. Must be on a 30-minute boundary (e.g. 09:00, 09:30).
+        doc_sync:
+          type: boolean
+          title: Doc Sync
+          default: true
+      type: object
+      required:
+      - cadence
+      - time
+      title: UpdateScheduleUpsert
+      description: Create or update an org update schedule. Single atomic operation.
+    PaginationMeta:
+      properties:
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        size:
+          type: integer
+          title: Size
+        pages:
+          type: integer
+          title: Pages
+      type: object
+      required:
+      - total
+      - page
+      - size
+      - pages
+      title: PaginationMeta
+    EnterpriseDowngradeRequest:
+      properties:
+        reason:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Reason
+          description: Downgrade reason for audit trail, e.g. 'Contract ended 2026-03-24'
+      type: object
+      title: EnterpriseDowngradeRequest
+      description: Request body for downgrading an org from the Enterprise plan.
+    OrganizationResponse:
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          minLength: 1
+          title: Name
+        slug:
+          anyOf:
+          - type: string
+            maxLength: 255
+          - type: 'null'
+          title: Slug
+        id:
+          type: string
+          title: Id
+        clerk_org_id:
+          type: string
+          title: Clerk Org Id
+        timezone:
+          type: string
+          title: Timezone
+          default: UTC
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+        members_count:
+          type: integer
+          title: Members Count
+          default: 0
+        projects_count:
+          type: integer
+          title: Projects Count
+          default: 0
+        plan_tier:
+          type: string
+          title: Plan Tier
+          default: free
+      type: object
+      required:
+      - name
+      - id
+      - clerk_org_id
+      - created_at
+      - updated_at
+      title: OrganizationResponse
+      description: Schema for organization API response.
+    PinnedWorkspaceItem:
+      properties:
+        project_id:
+          type: integer
+          title: Project Id
+          description: Workspace (project) ID.
+        name:
+          type: string
+          title: Name
+          description: Workspace name.
+        repo_slug:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Repo Slug
+          description: Repository slug in 'owner/repo' form, if known.
+        status:
+          $ref: '#/components/schemas/ProjectSyncStatus'
+          description: Current ingestion/sync status of the workspace.
+        pinned_at:
+          type: string
+          format: date-time
+          title: Pinned At
+          description: When the workspace was pinned (drives pin order).
+        is_stale:
+          type: boolean
+          title: Is Stale
+          description: Whether the workspace intelligence is out of sync with the repo.
+          default: false
+        last_ingested_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Ingested At
+          description: Timestamp of the last successful ingestion.
+        ingestion_status:
+          $ref: '#/components/schemas/JobStatus'
+          description: Status of the workspace's latest ingestion job.
+          default: not_started
+      type: object
+      required:
+      - project_id
+      - name
+      - status
+      - pinned_at
+      title: PinnedWorkspaceItem
+      description: A single pinned workspace, annotated with workspace metadata for display.
+    OrganizationWithMembers:
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          minLength: 1
+          title: Name
+        slug:
+          anyOf:
+          - type: string
+            maxLength: 255
+          - type: 'null'
+          title: Slug
+        id:
+          type: string
+          title: Id
+        clerk_org_id:
+          type: string
+          title: Clerk Org Id
+        timezone:
+          type: string
+          title: Timezone
+          default: UTC
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+        members_count:
+          type: integer
+          title: Members Count
+          default: 0
+        projects_count:
+          type: integer
+          title: Projects Count
+          default: 0
+        plan_tier:
+          type: string
+          title: Plan Tier
+          default: free
+        members:
+          items:
+            $ref: '#/components/schemas/OrgMembershipResponse'
+          type: array
+          title: Members
+          default: []
+      type: object
+      required:
+      - name
+      - id
+      - clerk_org_id
+      - created_at
+      - updated_at
+      title: OrganizationWithMembers
+      description: Organization with members list.
+    GrantCreditsRequest:
+      properties:
+        amount:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Amount
+          description: Number of CIU credits to grant (must be a whole number)
+        reason:
+          type: string
+          maxLength: 500
+          minLength: 1
+          title: Reason
+          description: Reason for granting credits (required)
+      type: object
+      required:
+      - amount
+      - reason
+      title: GrantCreditsRequest
+      description: Request schema for manually granting CIU credits to an organization.
+    GrantCreditsResponse:
+      properties:
+        credits_added:
+          type: integer
+          title: Credits Added
+          description: Number of CIU credits that were added
+        new_balance:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: New Balance
+          description: The organization's total CIU balance after the grant
+        provisioned_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Provisioned By
+          description: Clerk user ID of the superuser who granted the credits
+        reason:
+          type: string
+          title: Reason
+          description: Reason for granting credits
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: When the credits were granted
+      type: object
+      required:
+      - credits_added
+      - new_balance
+      - reason
+      - created_at
+      title: GrantCreditsResponse
+      description: Response schema for manually granted CIU credits.
+    EnterpriseProvisionRequest:
+      properties:
+        plan_slug:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Plan Slug
+          description: Slug of the sales-managed plan to provision onto (e.g. 'business', 'enterprise_1m', 'enterprise_10m'). Defaults to the largest Enterprise bracket.
+        reason:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Reason
+          description: Provisioning reason for audit trail, e.g. 'Contract signed 2026-03-01'
+      type: object
+      title: EnterpriseProvisionRequest
+      description: Request body for provisioning an org onto a sales-managed plan.
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    EnterpriseDowngradeResponse:
+      properties:
+        organization_id:
+          type: string
+          title: Organization Id
+          description: Organization database ID
+        clerk_org_id:
+          type: string
+          title: Clerk Org Id
+          description: Clerk organization ID
+        plan:
+          type: string
+          title: Plan
+          description: Resulting plan tier name
+        downgraded_at:
+          type: string
+          format: date-time
+          title: Downgraded At
+          description: When the downgrade occurred
+      type: object
+      required:
+      - organization_id
+      - clerk_org_id
+      - plan
+      - downgraded_at
+      title: EnterpriseDowngradeResponse
+      description: Response after successfully downgrading an org from the Enterprise plan.
+    SyncFromClerkResponse:
+      properties:
+        organization:
+          $ref: '#/components/schemas/OrganizationResponse'
+        members_synced:
+          type: integer
+          title: Members Synced
+          default: 0
+        members_failed:
+          type: integer
+          title: Members Failed
+          default: 0
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - organization
+      - message
+      title: SyncFromClerkResponse
+      description: Response from Clerk sync operation.
+    InviteMemberRequest:
+      properties:
+        email_address:
+          type: string
+          format: email
+          title: Email Address
+          description: Email address to send the invitation to.
+        role:
+          type: string
+          enum:
+          - org:member
+          - org:admin
+          - org:owner
+          - org:collaborator
+          title: Role
+          description: Role to assign the invited user.
+          default: org:member
+        redirect_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Redirect Url
+          description: URL the invitee lands on after accepting the invitation.
+      type: object
+      required:
+      - email_address
+      title: InviteMemberRequest
+      description: Request to invite a member to an organization via email.
+    OrganizationUpdate:
+      properties:
+        name:
+          anyOf:
+          - type: string
+            maxLength: 255
+            minLength: 1
+          - type: 'null'
+          title: Name
+        slug:
+          anyOf:
+          - type: string
+            maxLength: 255
+          - type: 'null'
+          title: Slug
+        timezone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Timezone
+          description: IANA timezone, e.g. 'America/New_York'.
+      type: object
+      title: OrganizationUpdate
+      description: Schema for updating an organization.
+    IngestionConfigResponse:
+      properties:
+        supported_extensions:
+          items:
+            type: string
+          type: array
+          title: Supported Extensions
+          description: List of supported file extensions
+        binary_extensions:
+          items:
+            type: string
+          type: array
+          title: Binary Extensions
+          description: List of binary file extensions
+        is_custom:
+          type: boolean
+          title: Is Custom
+          description: True if organization has custom config, False if using defaults
+        supported_extensions_count:
+          type: integer
+          title: Supported Extensions Count
+          description: Number of supported extensions
+        binary_extensions_count:
+          type: integer
+          title: Binary Extensions Count
+          description: Number of binary extensions
+      type: object
+      required:
+      - supported_extensions
+      - binary_extensions
+      - is_custom
+      - supported_extensions_count
+      - binary_extensions_count
+      title: IngestionConfigResponse
+      description: Schema for ingestion configuration response.
+    SyncFromClerkRequest:
+      properties:
+        clerk_org_id:
+          type: string
+          title: Clerk Org Id
+          description: Clerk organization ID to sync
+        sync_members:
+          type: boolean
+          title: Sync Members
+          description: Whether to sync members
+          default: true
+      type: object
+      required:
+      - clerk_org_id
+      title: SyncFromClerkRequest
+      description: Request to sync organization from Clerk.
+    SyncStatusSummary:
+      properties:
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total projects across the organization ignoring filter
+        auto_count:
+          type: integer
+          title: Auto Count
+          description: Projects with sync_mode=auto across the org
+        blocked_count:
+          type: integer
+          title: Blocked Count
+          description: Projects with status=couldnt_process across the org
+        is_ciu_exhausted:
+          type: boolean
+          title: Is Ciu Exhausted
+          description: Whether the org has run out of CIUs
+      type: object
+      required:
+      - total_count
+      - auto_count
+      - blocked_count
+      - is_ciu_exhausted
+      title: SyncStatusSummary
+      description: Org-wide aggregates rendered as page-level chrome. Not affected by filters.
+    SyncStatusResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/SyncStatusItem'
+          type: array
+          title: Items
+          description: List of items
+        pagination:
+          $ref: '#/components/schemas/PaginationMeta'
+          description: Pagination metadata
+        summary:
+          $ref: '#/components/schemas/SyncStatusSummary'
+          description: Org-wide aggregates (unaffected by filters)
+      type: object
+      required:
+      - items
+      - pagination
+      - summary
+      title: SyncStatusResponse
+      description: Paginated project sync-status list with org-wide summary aggregates.
+    AddMemberRequest:
+      properties:
+        user_clerk_id:
+          type: string
+          title: User Clerk Id
+          description: Clerk user ID to add
+        role_id:
+          type: string
+          title: Role Id
+          description: Role to assign
+          default: org:member
+      type: object
+      required:
+      - user_clerk_id
+      title: AddMemberRequest
+      description: Request to add a member to an organization.
+    OrgMembershipResponse:
+      properties:
+        role_id:
+          type: string
+          title: Role Id
+          description: Role ID from Clerk (e.g., org:admin)
+        user:
+          $ref: '#/components/schemas/UserSummary'
+        joined_at:
+          type: string
+          format: date-time
+          title: Joined At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+        is_admin:
+          type: boolean
+          title: Is Admin
+        is_owner:
+          type: boolean
+          title: Is Owner
+      type: object
+      required:
+      - role_id
+      - user
+      - joined_at
+      - updated_at
+      - is_admin
+      - is_owner
+      title: OrgMembershipResponse
+      description: Schema for organization membership API response.
+    ScheduleCadence:
+      type: string
+      enum:
+      - daily
+      - weekly
+      - monthly
+      title: ScheduleCadence
+      description: How frequently the org schedule runs.
+    IngestionConfigUpdate:
+      properties:
+        supported_extensions:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Supported Extensions
+          description: List of file extensions to process (e.g., ['.py', '.js']). Overrides global defaults.
+          examples:
+          - - .py
+            - .js
+            - .ts
+            - .tsx
+            - .jsx
+        binary_extensions:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Binary Extensions
+          description: List of binary file extensions to skip (e.g., ['.png', '.jpg']). Overrides global defaults.
+          examples:
+          - - .png
+            - .jpg
+            - .pdf
+            - .exe
+      type: object
+      title: IngestionConfigUpdate
+      description: Schema for fully replacing ingestion configuration (PUT).
+    JobStatus:
+      type: string
+      enum:
+      - not_started
+      - running
+      - completed
+      - failed
+      - cancelled
+      title: JobStatus
+      description: Job status enumeration
+    UserSummary:
+      properties:
+        id:
+          type: string
+          title: Id
+        email:
+          type: string
+          title: Email
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+        clerk_uid:
+          type: string
+          title: Clerk Uid
+      type: object
+      required:
+      - id
+      - email
+      - clerk_uid
+      title: UserSummary
+      description: Summary of user for membership responses.
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Enter the Bearer token from Clerk authentication
+x-tagGroups:
+- name: Ingest Your Codebase
+  tags:
+  - vector_store
+  - projects
+  - pre_ingestion
+  - reingestion
+- name: Generate Code Intelligence
+  tags:
+  - documents
+  - document_generation
+  - document_formatters
+  - prd
+  - prd_version
+  - tech_spec
+  - quality_metrics
+  - sample_projects
+- name: Query Your Codebase
+  tags:
+  - conversations
+  - workflows
+  - discovery
+  - context
+  - artifacts
+- name: Manage and Inspect Intelligence
+  tags:
+  - api_debugging
+  - events
+  - version
+  - files
+  - cache
+  - token_tracking
+- name: Authenticate and Manage Access
+  tags:
+  - clerk_authentication
+  - github_webhooks
+  - github_integration
+  - organizations
+  - api_key_management
+  - mcp_token_management
+  - user
+- name: (Advanced) Prompt Tuning
+  tags:
+  - prompts
+- name: MCP Protocol
+  tags:
+  - mcp_protocol
+- name: Administration
+  tags:
+  - admin

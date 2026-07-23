@@ -1,0 +1,4731 @@
+openapi: 3.1.0
+info:
+  title: Crowdbotics API Documentation admin projects API
+  description: "# CoreStory API Overview\n\nThe CoreStory API provides programmatic access to structured insights derived from software source code. It is designed for engineering, architecture, and product teams who need to extract business logic, technical specifications, architectural relationships, and system-level context from complex or legacy codebases.\n\nBy interfacing directly with CoreStory API, users can:\n\n- Generate full Product Requirements Documents (PRDs) from a codebase\n- Extract detailed Technical Specifications for modernization or migration\n- Query a codebase using natural language to surface implementation details, logic paths, dependencies, and architectural insights\n- Construct and visualize knowledge graphs of systems, components, and relationships\n- Ingest, store, and retrieve content from a vector store for AI-powered retrieval-augmented generation (RAG) workflows\n\nCoreStory is especially valuable in contexts where:\n\n- Codebases are large, unstructured, or under-documented\n- Product and engineering teams are onboarding to unfamiliar systems\n- Technical stakeholders require visibility into system design or feature coverage\n- Modernization, replatforming, or M&A due diligence is underway\n\nThe API can be integrated into existing CI/CD pipelines, internal developer portals, architecture review boards, product planning processes, or documentation automation workflows.\n\nAll endpoints support secure authentication and are designed for high-availability, asynchronous workloads. Output formats include JSON, Markdown, and PDF, with flexible formatting options for downstream consumption.\n\nFor step-by-step usage instructions and workflows, refer to the [CoreStory API Quick Start Guide](#section/CoreStory-API-Quick-Start-Guide).\n\n## Features\n\n* **Document Generation**\n    * Generate complete Product Requirements Documents (PRD)\n    * Generate Technical Specifications\n    * Generate individual document sections (executive overview, user personas, etc.)\n    * Format documents in JSON or Markdown\n\n* **Vector Store Management**\n    * Ingest and manage documents in vector store\n    * Query and retrieve document content\n    * Manage document embeddings\n\n* **Context Management**\n    * Manage context for different document types\n    * Set and retrieve PRD context\n    * Support for future context types (technical specs, user stories, etc.)\n\n* **Knowledge Graph**\n    * Generate knowledge graphs from codebase queries\n    * Visualize relationships between code entities\n    * Analyze code structure and dependencies\n\n* **API Endpoints**\n    * `/api/documents/*` - Document generation and formatting\n    * `/api/generate/*` - Document formatting utilities\n    * `/api/vector-store/*` - Vector store management\n    * `/api/agents/*` - AI agent operations\n    * `/api/context/*` - Context management for documents\n    * `/api/graph/*` - Knowledge graph generation and analysis\n\nNote: JWT authentication support coming soon. All endpoints currently provide detailed OpenAPI documentation.\n\n* **Observability**\n    * OpenTelemetry instrumentation for distributed tracing\n    * Prometheus metrics endpoint at `/metrics`\n    * Comprehensive request/response tracking\n    * Custom business metrics\n\n\n\n# CoreStory System Architecture\n\nThis document provides a high-level overview of how the CoreStory platform ingests, analyzes, and serves structured software intelligence through its API. The system is designed to process codebases and related technical artifacts in order to generate product specifications, technical documents, and knowledge graph representations.\n\n---\n\n## Core Components\n\n### 1. **Ingestion Layer**\n\n- Accepts Git URLs, file uploads, or local archives\n- Extracts source files, documentation, and metadata\n- Initiates chunking and embedding via the vector store pipeline\n\n### 2. **Vector Store and Context Engine**\n\n- Stores chunked and embedded documents\n- Supports semantic search and document retrieval\n- Feeds LLMs with scoped context for generation and reasoning\n\n### 3. **LLM Orchestration Layer**\n\n- Fan-out to multiple large language models\n- Handles prompt templating, context injection, and result normalization\n- Evaluates and scores generated outputs\n\n### 4. **Document Generation Engine**\n\n- Produces:\n  - PRDs\n  - Technical Specs\n  - Individual document sections\n  - Markdown and PDF exports\n- Format-flexible output for portals, APIs, and documentation pipelines\n\n### 5. **Graph Construction Module**\n\n- Extracts static and dynamic code relationships\n- Builds DAGs and call graphs of components, services, and files\n- Allows natural-language queries that return graph subviews and LLM explanations\n\n### 6. **Query Engine**\n\n- Accepts free-form questions about codebases\n- Routes queries to code graph, document store, or LLMs\n- Returns structured JSON answers and explanatory text\n\n### 7. **API Gateway**\n\n- Authenticates and rate-limits clients\n- Routes requests to internal services\n- Serves all external-facing endpoints in REST format\n\n---\n\n## Security and Privacy\n\n- All data transfer is encrypted via HTTPS\n- API access is secured using provided auth credentials (JWT tokens coming soon)\n- Uploaded code is only used to generate customer-requested outputs and is not retained indefinitely\n\n---\n\n## Extensibility\n\nThe platform is modular. It can be extended to:\n\n- Add new LLMs for ensemble generation\n- Integrate alternative vector databases\n- Connect to internal developer portals or product management tools via webhook or export endpoints\n\nFor more information, see the Quick Start or contact the CoreStory team.\n\n\n# CoreStory API Quick Start Guide\n\nThe CoreStory API provides programmatic access to structured code intelligence, enabling your team to extract business and technical specifications directly from source code. You can use the API to integrate CoreStory-generated documents into existing workflows, support software modernization and maintenance efforts, or enrich internal platforms with architectural and feature-level metadata.\n\n---\n\n## Overview\n\nThe CoreStory API enables:\n\n- Ingestion of content into a **vector store** for LLM-driven analysis\n- Generation of **Product Requirements Documents (PRDs)** and **Technical Specifications** from code\n- Interrogation of your codebase via a natural language **query engine**\n- Construction of **knowledge graphs** describing code relationships and system architecture\n- Management of **custom document context** and **custom prompts** for improved output relevance and quality\n\nThese capabilities support SDLC workflows such as:\n\n- Application modernization, migration, and maintenance\n- Documentation and auditability of legacy systems\n- Alignment of product, engineering, and architecture teams and systems\n- Developer onboarding and code comprehension\n\n---\n\n**Note for POV customers:** If your codebase has already been ingested as part of a proof-of-value (POV) engagement, you can use your existing authentication credentials and skip step 2 (”Ingest a Codebase or Document Source) of this guide.\n\n## 1. Authentication\n\n```\nPOST /api/auth/login\n```\n\nObtain a JWT for future API calls.\n\n**Request:**\n\n```\n{\n  \"email\": \"you@example.com\",\n  \"password\": \"your-password\"\n}\n```\n\n**Response:**\n\n```\n{\n  \"access_token\": \"...\",\n  \"token_type\": \"bearer\"\n}\n```\n\nInclude this token in all subsequent requests:\n\n```\nAuthorization: Bearer <access_token>\n```\n\n---\n\n## 2. Ingest a Codebase or Document Source\n\n```\nPOST /api/vector-store/ingest\n```\n\nTrigger ingestion of code from a Git repo, ZIP file, or local document directory.\n\n**Example Payload (GitHub):**\n\n```\n{\n  \"source_type\": \"url\",\n  \"source\": \"https://github.com/example/repo.git\",\n  \"force\": true\n}\n```\n\nIngestion automatically chunks, embeds, and summarizes source files for downstream analysis.\n\n<details>\n<summary>Supported File Extensions</summary>\n\n### Programming Languages\n- Python: `.py`, `.pyw`, `.pyx`, `.pyi`\n- JavaScript/TypeScript: `.js`, `.mjs`, `.cjs`, `.ts`, `.jsx`, `.tsx`\n- Java: `.java`, `.class`, `.jar`\n- C/C++: `.c`, `.cpp`, `.cc`, `.cxx`, `.c++`, `.h`, `.hpp`, `.hh`, `.hxx`, `.h++`\n- .NET: `.cs`, `.csx`, `.vb`, `.fs`, `.fsx`, `.fsi`\n- PHP: `.php`, `.php3`, `.php4`, `.php5`, `.phtml`\n- Ruby: `.rb`, `.rbw`, `.rake`, `.gemspec`\n- Go: `.go`, `.mod`, `.sum`\n- Rust: `.rs`, `.rlib`\n- Swift: `.swift`\n- Kotlin: `.kt`, `.kts`, `.ktm`\n- Scala: `.scala`, `.sc`\n- Clojure: `.clj`, `.cljs`, `.cljc`, `.edn`\n- Haskell: `.hs`, `.lhs`\n- OCaml: `.ml`, `.mli`, `.mll`, `.mly`\n- R: `.r`, `.R`, `.rmd`, `.rnw`\n- Objective-C: `.m`, `.mm`\n- Perl: `.pl`, `.pm`, `.t`, `.pod`\n- Shell scripts: `.sh`, `.bash`, `.zsh`, `.fish`, `.ksh`, `.csh`, `.tcsh`\n- PowerShell: `.ps1`, `.psm1`, `.psd1`\n- Windows batch: `.bat`, `.cmd`\n- Lua: `.lua`\n- Dart: `.dart`\n- Elm: `.elm`\n- Elixir: `.ex`, `.exs`\n- Erlang: `.erl`, `.hrl`\n- Julia: `.jl`\n- Nim: `.nim`, `.nims`\n- Crystal: `.cr`\n- D: `.d`\n- Pascal: `.pas`, `.pp`, `.inc`\n- Fortran: `.f`, `.f90`, `.f95`, `.f03`, `.f08`, `.for`, `.ftn`, `.fpp`\n- COBOL: `.cob`, `.cbl`, `.cpy`, `.cobol`, `.bms`, `.ctl`, `.jcl`, `.proc`\n- IBM i (AS/400) RPG ILE: `.rpgle`, `.rpgleinc`\n- IBM i (AS/400) CLLE: `.clle`\n- IBM i (AS/400) DDS: `.pf`, `.lf`, `.dspf`\n- PowerBuilder: `.pbt`, `.pbs`, `.pbr`, `.srw`, `.srd`, `.sru`, `.sra`, `.srp`, `.srf`, `.srq`, `.srs`, `.srm`, `.srj`\n- Ada: `.ada`, `.adb`, `.ads`\n- Assembly: `.asm`, `.s`, `.S`\n- Verilog/SystemVerilog: `.v`, `.vh`, `.sv`, `.svh`\n- VHDL: `.vhd`, `.vhdl`\n- Tcl/Tk: `.tcl`, `.tk`\n- Groovy: `.groovy`, `.gvy`, `.gy`, `.gsh`\n- CoffeeScript: `.coffee`, `.litcoffee`\n- PureScript: `.purs`\n- ReasonML: `.reason`, `.re`, `.rei`\n- Racket/Scheme: `.rkt`, `.scm`, `.ss`\n- Lisp: `.lisp`, `.lsp`, `.l`, `.cl`, `.fasl`\n- Prolog: `.prolog`, `.pro`, `.P`\n- MATLAB: `.matlab`, `.fig`\n- Mathematica: `.mathematica`, `.nb`, `.wl`, `.wls`\n- SageMath: `.sage`, `.spyx`\n- Zig: `.zig`\n- Odin: `.odin`\n- V: `.v3`, `.v2`, `.v1`\n- Pony: `.pony`\n- Red: `.red`, `.reds`\n- Io: `.io`\n- Factor: `.factor`\n- Forth: `.forth`, `.fth`, `.4th`\n- J/K/Q/APL: `.j`, `.k`, `.q`, `.apl`\n- Chapel: `.chapel`, `.chpl`\n- X10: `.x10`\n- Arduino/Processing: `.pde`, `.ino`\n\n### Web Technologies\n- HTML: `.html`, `.htm`, `.xhtml`, `.shtml`\n- CSS/Preprocessors: `.css`, `.scss`, `.sass`, `.less`, `.styl`, `.stylus`\n- Frontend frameworks: `.vue`, `.svelte`\n- JSP: `.jsp`, `.jspx`, `.tag`, `.tagx`\n- ASP.NET: `.asp`, `.aspx`, `.ascx`, `.asax`, `.ashx`, `.asmx`\n- Ruby templates: `.erb`, `.haml`, `.slim`\n- PHP templates: `.twig`, `.blade`\n- Template engines: `.mustache`, `.hbs`, `.handlebars`, `.ejs`, `.pug`, `.jade`, `.liquid`, `.ftl`, `.ftlh`, `.vm`, `.vtl`, `.thymeleaf`\n\n### Configuration/Data\n- JSON: `.json`, `.json5`, `.jsonc`, `.jsonl`, `.ndjson`\n- XML: `.xml`, `.xsd`, `.xsl`, `.xslt`, `.dtd`, `.rng`, `.rnc`\n- YAML/TOML: `.yaml`, `.yml`, `.toml`\n- INI/Cfg/Conf: `.ini`, `.cfg`, `.conf`, `.config`, `.properties`\n- Environment: `.env`, `.envrc`, `.env.local`, `.env.development`, `.env.production`\n- Property lists: `.plist`\n- HOCON: `.hocon`\n- RON/HJSON/CSON: `.ron`, `.hjson`, `.cson`\n\n### Documentation/Text\n- Markdown: `.md`, `.markdown`, `.mdown`, `.mkd`, `.mkdn`\n- Plain text: `.txt`, `.text`\n- reStructuredText: `.rst`, `.rest`\n- AsciiDoc: `.asciidoc`, `.adoc`, `.asc`\n- LaTeX: `.tex`, `.latex`, `.ltx`, `.sty`, `.cls`, `.bib`\n- Org mode: `.org`\n- Wiki markup: `.wiki`, `.mediawiki`\n- Textile/Creole/RDoc: `.textile`, `.creole`, `.rdoc`\n\n### Data Formats\n- Delimited: `.csv`, `.tsv`, `.psv`\n- SQL: `.sql`, `.ddl`, `.dml`, `.plsql`, `.psql`, `.mysql`\n- GraphQL: `.graphql`, `.gql`\n- Protocols: `.proto`, `.protobuf`, `.avro`, `.avsc`, `.avdl`, `.thrift`, `.capnp`, `.fbs`\n- Columnar: `.parquet`, `.orc`, `.arrow`\n\n### Build/Dependency\n- Gradle: `.gradle`, `.gradle.kts`\n- Maven: `.maven`, `.mvn`\n- SBT: `.sbt`\n- CMake: `.cmake`, `.cmake.in`\n- Make: `.make`, `.mk`, `.mak`\n- Docker: `.dockerfile`, `.containerfile`, `.dockerignore`\n- Git: `.gitignore`, `.gitattributes`, `.gitmodules`, `.gitkeep`\n- Mercurial/Subversion/Bazaar: `.hgignore`, `.hgrc`, `.svnignore`, `.bzrignore`\n- EditorConfig: `.editorconfig`\n- Linters/Formatters: `.eslintrc`, `.eslintignore`, `.prettierrc`, `.prettierignore`, `.babelrc`, `.babelignore`\n- Node.js: `.npmrc`, `.npmignore`, `.yarnrc`, `.yarnignore`\n- Python: `.pipfile`, `.pipfile.lock`, `.requirements`, `.requirements.txt`, `.poetry.lock`, `.pyproject.toml`, `.setup.py`, `.setup.cfg`, `.manifest.in`, `.tox.ini`, `.noxfile.py`, `.pre-commit-config.yaml`\n- CI/CD: `.github`, `.gitlab-ci.yml`, `.travis.yml`, `.appveyor.yml`, `.circleci`, `.jenkins`, `.jenkinsfile`, `.azure-pipelines.yml`, `.buildkite.yml`\n- Package Managers: `package.json`, `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `composer.json`, `composer.lock`, `gemfile`, `gemfile.lock`, `cargo.toml`, `cargo.lock`, `go.mod`, `go.sum`, `requirements.txt`, `pipfile`, `pipfile.lock`, `poetry.lock`, `pyproject.toml`, `build.gradle`, `build.gradle.kts`, `settings.gradle`, `gradle.properties`, `pom.xml`, `settings.xml`, `build.sbt`, `plugins.sbt`, `makefile`, `gnumakefile`, `makefile.am`, `makefile.in`, `dockerfile`, `containerfile`, `vagrantfile`, `rakefile`, `guardfile`, `capfile`, `gulpfile.js`, `gruntfile.js`, `webpack.config.js`, `rollup.config.js`, `tsconfig.json`, `jsconfig.json`, `deno.json`, `deno.jsonc`, `mix.exs`, `mix.lock`, `rebar.config`, `rebar.lock`, `project.clj`, `deps.edn`, `stack.yaml`, `cabal.config`, `setup.hs`, `dub.json`, `dub.sdl`, `nimble`, `config.nims`, `shard.yml`, `shard.lock`, `pubspec.yaml`, `pubspec.lock`, `elm.json`, `elm-package.json`, `project.json`, `global.json`, `nuget.config`, `packages.config`, `paket.dependencies`, `paket.lock`, `.log`, `.lock`, `.pid`, `.tmp`, `.temp`, `.patch`, `.diff`, `.spec`, `.rpm`, `.deb`, `.control`, `.pkgbuild`, `.ebuild`, `.formula`, `.port`, `.portfile`, `.nix`, `.bzl`, `.bazel`, `.workspace`, `.buck`, `.buckconfig`, `.pants`, `.pants.ini`, `.please`, `.plzconfig`, `.gn`, `.gni`, `.ninja`, `.waf`, `.wscript`, `.scons`, `.sconstruct`, `.sconscript`\n\n</details>\n\n<details>\n<summary>Configuration Files</summary>\n\n- `requirements.txt`\n- `.gitignore`\n- `.dockerignore`\n- `.editorconfig`\n- `.eslintrc.js`\n- `.eslintrc.json`\n- `.prettierrc.js`\n- `.prettierrc.json`\n- `.babelrc.js`\n- `.babelrc.json`\n\n</details>\n\n---\n\n## 3. Generate a Product Requirements Document (PRD)\n\n**Note**: Generating a PRD or technical specification will replace the existing PRD or technical specification. The new outputs will document your codebase as it was when it was most recently ingested.\n\n```\nPOST /api/documents/prd?format=json\n```\n\nGenerates a structured PRD with:\n\n- Executive Overview\n- User Personas\n- High-Level Requirements\n- User Stories\n- Business Value\n\n**Example Response (truncated):**\n\n```\n{\n  \"content\": {\n    \"executive_overview\": \"Modernize internal authentication platform\",\n    \"user_personas\": [...],\n    \"user_stories\": [...]\n  }\n}\n```\n\n**Tip:** For PRDs or technical specs, use `format=markdown` to return a Markdown-formatted document instead.\n\n---\n\n## 4. Generate a Technical Specification\n\n```\nPOST /api/documents/technical-spec?format=json\n```\n\nReturns system-level implementation details including:\n\n- Architecture and Components\n- Data Models and Relationships\n- User Interface Screens and Components\n- APIs and Integration Points\n- System Interfaces and Specifications\n- Security Considerations\n- Implementation and Deployment Strategy\n\n---\n\n## 5. Query Your Code\n\n```\nPOST /api/graph/query-engine\n```\n\nAsk natural language questions about your codebase to return a structured graph of relationships.\n\n**Example Query:**\n\n```\n{\n  \"query\": \"How does the system determine whether a user has admin privileges when accessing the audit log?\"\n}\n```\n\n**Response (truncated):**\n\n```\n{\n  \"summary\": \"When a user requests access to the audit log, the system checks their assigned roles in `AuthService.getUserRoles`. If 'admin' is present, access is granted. This check occurs in `AuditLogController` before querying the log database. The middleware `CheckPermissions` is also invoked on this route.\"\n}\n```\n\n---\n\n## 6. Format and Retrieve Document Sections\n\nUse these endpoints to extract or reformat specific document sections:\n\n- `/api/documents/sections/{doc_type}` → generate a specific section\n- `/api/documents/format/markdown-output/{doc_type}` → format JSON as Markdown\n- `/api/documents/format/pdf-output/{doc_type}` → export PDF\n\nExample section names:\n\n- `executive-overview`\n- `data-models`\n- `system-architecture`\n- `integration-points`\n\n---\n\n## Questions?\n\nAfter reviewing this guide and the API docs, we recommend scheduling a short Q&A call if you have integration-specific needs or want assistance mapping this to your environment.\n"
+  version: 1.26.2
+servers:
+- url: /
+  description: Current server
+security:
+- BearerAuth: []
+tags:
+- name: projects
+paths:
+  /api/projects:
+    post:
+      tags:
+      - projects
+      summary: Create a new project with auto-generated PRD
+      description: Create a new project with the specified ID and automatically create an associated PRD
+      operationId: create_project
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCreateRequest'
+      responses:
+        '201':
+          description: Created project with nested PRD data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCreateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+    get:
+      tags:
+      - projects
+      summary: Get organization projects with pagination
+      description: Retrieve projects from the user's organization with pagination support and ingestion status
+      operationId: list_projects
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number (1-based)
+          default: 1
+          title: Page
+        description: Page number (1-based)
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: Items per page
+          default: 100
+          title: Size
+        description: Items per page
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Case-insensitive substring match on project name
+          title: Search
+        description: Case-insensitive substring match on project name
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          enum:
+          - created_at
+          - name
+          - ingestion_status
+          type: string
+          description: Sort field
+          default: created_at
+          title: Sort By
+        description: Sort field
+      - name: sort_order
+        in: query
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+          description: Sort direction
+          default: desc
+          title: Sort Order
+        description: Sort direction
+      - name: is_sample_clone
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Filter by sample clone status
+          title: Is Sample Clone
+        description: Filter by sample clone status
+      responses:
+        '200':
+          description: Paginated list of organization projects with ingestion information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectListResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/create-and-generate:
+    post:
+      tags:
+      - projects
+      summary: Create a new project with auto-generated PRD and ingestion
+      description: Create a new project with auto-generated ID, automatically create an associated PRD, and trigger code ingestion and document generation
+      operationId: create_project_and_generate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCreateAndGenerateRequest'
+        required: true
+      responses:
+        '201':
+          description: Created project with nested PRD data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCreateAndGenerateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}:
+    patch:
+      tags:
+      - projects
+      summary: Update project
+      description: Update the name and/or source type of a specific project
+      operationId: update_project
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectUpdateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectUpdateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+    get:
+      tags:
+      - projects
+      summary: Get project details
+      description: Retrieve details for a specific project
+      operationId: get_project
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDetailResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/transfer:
+    post:
+      tags:
+      - projects
+      summary: Transfer project to another organization
+      description: Transfer a project to a different organization. This endpoint is restricted to CoreStory employees only.
+      operationId: transfer_project
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectTransferRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectTransferResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/status:
+    get:
+      tags:
+      - projects
+      summary: Lightweight polling status for ingestion and generation jobs.
+      description: Return status + progress for ingestion, PRD generation, and tech-spec generation.
+      operationId: get_project_status
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectStatusResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/pending-commits:
+    get:
+      tags:
+      - projects
+      summary: Get pending commits for a project
+      description: Retrieve commits pushed since the last ingestion (paginated, oldest first)
+      operationId: get_pending_commits
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number (1-based)
+          default: 1
+          title: Page
+        description: Page number (1-based)
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: Items per page
+          default: 50
+          title: Size
+        description: Items per page
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PendingCommitsResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/health:
+    get:
+      tags:
+      - projects
+      summary: Get project health signals, code quality, and security findings
+      description: Get pre-computed health signals, code quality assessment, and security findings.
+      operationId: get_project_health
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectHealthResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/tech-spec:
+    get:
+      tags:
+      - projects
+      summary: Get the project's Tech Spec (not base PRD) sections data.
+      description: Get all of the project's Tech Spec sections (not base PRD sections).
+      operationId: get_tech_spec
+      deprecated: true
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: version
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Version
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TechSpecSectionsResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/prd/status:
+    get:
+      tags:
+      - projects
+      summary: Get the project's PRD generation status.
+      description: Get the project's PRD generation status.
+      operationId: get_prd_status
+      deprecated: true
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobStatusSummary'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/tech-spec/status:
+    get:
+      tags:
+      - projects
+      summary: Get the project's tech-spec generation status.
+      description: Get the project's tech spec generation status.
+      operationId: get_tech_spec_status
+      deprecated: true
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobStatusSummary'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/prd:
+    get:
+      tags:
+      - projects
+      summary: Get the project's PRD (not tech spec) sections data.
+      description: Get all of the project's PRD sections (not Tech Spec sections).
+      operationId: get_prd
+      deprecated: true
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: version
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Version
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PRDSectionsResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/delete:
+    delete:
+      tags:
+      - projects
+      summary: Delete a project
+      description: Delete a project and all its associated data including PRD, PRD steps, and vector store data
+      operationId: delete_project
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      responses:
+        '204':
+          description: Project deleted successfully
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/metrics/processing/summary:
+    get:
+      tags:
+      - projects
+      summary: Get latest ingestion/generation metrics for a project
+      description: Returns a consolidated snapshot of ingestion/generation status & progress.
+      operationId: get_project_metrics_summary
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionMetricsSummaryResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/upload-repository:
+    post:
+      tags:
+      - projects
+      summary: Upload repository files and create project
+      description: Upload a single zipped repository file to Azure Blob Storage or Local directory, create a new project, and trigger ingestion and document generation
+      operationId: upload_repository
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_upload_repository'
+        required: true
+      responses:
+        '201':
+          description: Repository upload confirmation with project details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCreateAndGenerateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/upload-repository-from-pre-ingestion:
+    post:
+      tags:
+      - projects
+      summary: Create project from an existing pre-ingestion upload
+      description: Use an existing pre-ingestion job (already uploaded artifact) to create a project and start ingestion.
+      operationId: upload_repository_from_pre_ingestion
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFromPreIngestionRequest'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCreateAndGenerateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/prd/generate:
+    post:
+      tags:
+      - projects
+      summary: Generate the PRD sections (no Tech Spec sections) for the project.
+      description: "Generates a high-level Product Requirements Document (PRD) focused on business and user requirements.\n    It generates 5 sections: Executive Overview, User Personas, High-Level Requirements (Epics), User Stories, Security Requirements.\n\n    The show_code_references flag (default: False) controls whether code references are included in user stories.\n    When set to False, code references will be removed from both JSON and markdown output.\n\n    The generate_toc flag (default: False) controls whether to include a table of contents in the markdown output.\n    This parameter only has an effect when the format is set to \"markdown\". When format is \"json\", this parameter is ignored."
+      operationId: generate_prd
+      deprecated: true
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: format
+        in: query
+        required: false
+        schema:
+          enum:
+          - json
+          - markdown
+          type: string
+          description: The format of the generated document
+          default: json
+          title: Format
+        description: The format of the generated document
+      - name: show_code_references
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Whether to include code references in user stories
+          default: false
+          title: Show Code References
+        description: Whether to include code references in user stories
+      - name: generate_toc
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Whether to generate a table of contents (only applies when format is 'markdown')
+          default: false
+          title: Generate Toc
+        description: Whether to generate a table of contents (only applies when format is 'markdown')
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeneratePRDRequest'
+      responses:
+        '200':
+          description: A complete PRD in either JSON or Markdown format.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PRDGenerateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/tech-spec/generate:
+    post:
+      tags:
+      - projects
+      summary: Generate the Tech Spec sections (no base PRD sections) for the project.
+      description: 'Generates a detailed Technical Specification Document focused on implementation details, including:
+
+        - System Architecture
+
+        - Data Models and ERDs
+
+        - API Specifications
+
+        - Integration Points
+
+        - Security Considerations
+
+        - Implementation Strategy
+
+
+        This document is suitable for technical teams, developers, and system architects.
+
+
+        The endpoint accepts an optional context object that can include:
+
+        - features: Pre-defined features to use for generation
+
+
+        If features are not provided, they will be generated automatically.
+
+
+        The show_code_references flag (default: False) controls whether code references are included in user stories.
+
+        The generate_toc flag (default: False) controls whether to include a table of contents in the markdown output.'
+      operationId: generate_tech_spec
+      deprecated: true
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: format
+        in: query
+        required: false
+        schema:
+          enum:
+          - json
+          - markdown
+          type: string
+          description: The format of the generated document
+          default: json
+          title: Format
+        description: The format of the generated document
+      - name: show_code_references
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Whether to include code references in user stories
+          default: false
+          title: Show Code References
+        description: Whether to include code references in user stories
+      - name: generate_toc
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Whether to generate a table of contents (only applies when format is 'markdown')
+          default: false
+          title: Generate Toc
+        description: Whether to generate a table of contents (only applies when format is 'markdown')
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateTechSpecRequest'
+      responses:
+        '200':
+          description: A complete technical specification in either JSON or Markdown format.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PRDGenerateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/prd/generate-all:
+    post:
+      tags:
+      - projects
+      summary: Generate all PRD and tech spec sections for the project.
+      description: (Re)generates all sections, runs in background.
+      operationId: generate_all_prd_sections
+      deprecated: true
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateAllRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Generate All Prd Sections
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/prd/context:
+    get:
+      tags:
+      - projects
+      summary: Get the context for the project's latest PRD.
+      description: "Get the context for the project's latest PRD.\n\nArgs:\n    project_id: ID of the Project\n\nReturns:\n    PRDContextResponse: The PRD context with creation timestamp"
+      operationId: get_prd_context
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      responses:
+        '200':
+          description: The PRD context with creation timestamp.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PRDContextResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+    post:
+      tags:
+      - projects
+      summary: Set or update the context for the project's latest PRD.
+      description: "Set or update the context for a specific PRD.\n\nArgs:\n    project_id: ID of the Project\n\nReturns:\n    PRDContextResponse: The updated PRD context with creation timestamp"
+      operationId: set_prd_context
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PRDContextRequest'
+      responses:
+        '200':
+          description: The updated PRD context with creation timestamp.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PRDContextResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/prd/user-stories/catalog:
+    get:
+      tags:
+      - projects
+      summary: Get a catalog of user stories items for UI faceted browsing.
+      description: "Returns unique, alpha-sorted catalogs lists, and counts for:\n  - main_features: from high_level_requirements.features[*].category\n  - epics: from high_level_requirements.features[*].name\n  - personas: from user_personas.user_personas[*].name"
+      operationId: get_user_stories_catalog
+      deprecated: true
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Get User Stories Catalog
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/tech-spec/tech-user-stories/catalog:
+    get:
+      tags:
+      - projects
+      summary: Get a catalog of user stories items for UI faceted browsing.
+      description: "Returns unique, alpha-sorted catalogs lists, and counts for:\n  - main_features: from high_level_requirements.features[*].category\n  - epics: from high_level_requirements.features[*].name\n  - personas: from user_personas.user_personas[*].name"
+      operationId: get_tech_user_stories_catalog
+      deprecated: true
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Get Tech User Stories Catalog
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/reingestion/analyze:
+    post:
+      tags:
+      - projects
+      summary: Start pre-reingestion analysis for an existing project
+      description: 'Start analysis of an existing project''s codebase for reingestion.
+
+        Returns a job ID that can be polled for status and results.'
+      operationId: start_reingestion_analysis
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReingestionAnalysisResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/reingestion/analyze/{job_id}/status:
+    get:
+      tags:
+      - projects
+      summary: Get reingestion analysis job status
+      description: Get the status of a reingestion analysis job.
+      operationId: get_reingestion_status
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Job Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReingestionAnalysisResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/reingestion/analyze/{job_id}/coverage:
+    get:
+      tags:
+      - projects
+      summary: Get coverage results from reingestion analysis
+      description: 'Get coverage results from a reingestion analysis job.
+
+
+        Includes file change summary (added/modified/removed) and CIU cost
+
+        estimate when the analysis was run for an existing project (reingestion).'
+      operationId: get_reingestion_coverage
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Job Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReingestionAnalysisCoverageResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/reingestion/analyze/{job_id}/excluded-files:
+    get:
+      tags:
+      - projects
+      summary: Get excluded file paths from reingestion analysis
+      description: Get the list of excluded file paths from a reingestion analysis job.
+      operationId: get_reingestion_excluded_files
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Job Id
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number (1-based)
+          default: 1
+          title: Page
+        description: Page number (1-based)
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: Items per page
+          default: 100
+          title: Size
+        description: Items per page
+      - name: file_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter files by name
+          title: File Name
+        description: Filter files by name
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFilePathResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/reingestion/analyze/{job_id}/included-files:
+    get:
+      tags:
+      - projects
+      summary: Get included file paths from reingestion analysis
+      description: Get the list of included file paths from a reingestion analysis job.
+      operationId: get_reingestion_included_files
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Job Id
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number (1-based)
+          default: 1
+          title: Page
+        description: Page number (1-based)
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: Items per page
+          default: 100
+          title: Size
+        description: Items per page
+      - name: file_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter files by name
+          title: File Name
+        description: Filter files by name
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFilePathResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/reingestion/analyze/{job_id}:
+    delete:
+      tags:
+      - projects
+      summary: Delete a reingestion analysis job
+      description: Delete a reingestion analysis job and its associated files.
+      operationId: delete_reingestion_job
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Job Id
+      responses:
+        '204':
+          description: Successful Response
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/reingestion/trigger:
+    post:
+      tags:
+      - projects
+      summary: Trigger full reingestion for an existing project
+      description: 'Trigger full reingestion of an existing project''s codebase.
+
+
+        This will:
+
+        1. Delete the existing vector store
+
+        2. Re-clone and ingest the codebase
+
+        3. Optionally regenerate PRD/TechSpec documents
+
+        4. Create a new version entry
+
+
+        Set `force=true` in the body to re-process every document instead of skipping
+
+        files that already exist in the vector store. Use after extractor/schema changes
+
+        when existing chunks need to be re-extracted.'
+      operationId: trigger_reingestion
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReingestionTriggerRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReingestionTriggerResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/ingestion-events:
+    get:
+      tags:
+      - projects
+      summary: List ingestion events for a project
+      description: List ingestion events for a project, ordered most recent first.
+      operationId: list_ingestion_events
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number (1-based)
+          default: 1
+          title: Page
+        description: Page number (1-based)
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: Items per page
+          default: 50
+          title: Size
+        description: Items per page
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse_IngestionEventResponse_'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/ingestion-events/{event_id}/doc-impact:
+    get:
+      tags:
+      - projects
+      summary: Doc-section impact (added/modified/removed) for an ingestion event
+      description: Return which PRD/Tech Spec sections changed when this ingestion event regenerated docs.
+      operationId: get_ingestion_event_doc_impact
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: event_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Event Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocImpactResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/clone:
+    post:
+      tags:
+      - projects
+      summary: Clone Project
+      description: 'Take a project and clone it and all associated resources.
+
+        ONLY creates the project syncronously. Fires off task to clone all related items in the background
+
+        and returns the new project asap.'
+      operationId: clone_project
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Clone Project
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/prd/{section_name}/generate:
+    post:
+      tags:
+      - projects
+      summary: Generate a specific PRD section
+      operationId: generate_prd_section
+      deprecated: true
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: section_name
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/PRDStepsDashedEnum'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeneratePRDSectionRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                title: Response Generate Prd Section
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/tech-spec/{section_name}/generate:
+    post:
+      tags:
+      - projects
+      summary: Generate a specific Tech Spec section
+      operationId: generate_tech_spec_section
+      deprecated: true
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: section_name
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/TechSpecStepsDashedEnum'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeneratePRDSectionRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                title: Response Generate Tech Spec Section
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/prd/{section_name}:
+    patch:
+      tags:
+      - projects
+      summary: Update the specified PRD section.
+      description: Get a single specified section for the project's base PRD (not tech spec).
+      operationId: update_prd_section
+      deprecated: true
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: section_name
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/PRDStepsDashedEnum'
+      - name: version
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Version
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+              title: Patch Data
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasicSuccessResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+    get:
+      tags:
+      - projects
+      summary: Get the specified PRD section.
+      description: Get a single specified section for the project's base PRD (not tech spec).
+      operationId: get_prd_section
+      deprecated: true
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: section_name
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/PRDStepsDashedEnum'
+      - name: version
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Version
+      - name: epics
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+          - type: 'null'
+          description: Epic IDs
+          title: Epics
+        description: Epic IDs
+      - name: personas
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+          - type: 'null'
+          description: Persona IDs
+          title: Personas
+        description: Persona IDs
+      - name: main_features
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+          - type: 'null'
+          description: Main feature IDs
+          title: Main Features
+        description: Main feature IDs
+      - name: keywords
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Keyword list
+          title: Keywords
+        description: Keyword list
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Free-text; supports exact, "a or b", or "a and b"
+          title: Search
+        description: Free-text; supports exact, "a or b", or "a and b"
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number (1-based)
+          default: 1
+          title: Page
+        description: Page number (1-based)
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: 'Items per page (default: 999)'
+          default: 999
+          title: Size
+        description: 'Items per page (default: 999)'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PRDSingleSectionResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/tech-spec/{section_name}:
+    patch:
+      tags:
+      - projects
+      summary: Update the specified Tech Spec section.
+      description: Get a single specified section for the project's base PRD (not tech spec).
+      operationId: update_tech_spec_section
+      deprecated: true
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: section_name
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/TechSpecStepsDashedEnum'
+      - name: version
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Version
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+              title: Patch Data
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasicSuccessResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+    get:
+      tags:
+      - projects
+      summary: Get the specified Tech Spec section.
+      description: Get a single specified section for the project's PRD Tech Spec (not base PRD section).
+      operationId: get_tech_spec_section
+      deprecated: true
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: section_name
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/TechSpecStepsDashedEnum'
+      - name: version
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Version
+      - name: epics
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+          - type: 'null'
+          description: Epic IDs
+          title: Epics
+        description: Epic IDs
+      - name: personas
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+          - type: 'null'
+          description: Persona IDs
+          title: Personas
+        description: Persona IDs
+      - name: main_features
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+          - type: 'null'
+          description: Main feature IDs
+          title: Main Features
+        description: Main feature IDs
+      - name: keywords
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Keyword list
+          title: Keywords
+        description: Keyword list
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Free-text; supports exact, "a or b", or "a and b"
+          title: Search
+        description: Free-text; supports exact, "a or b", or "a and b"
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number (1-based)
+          default: 1
+          title: Page
+        description: Page number (1-based)
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: 'Items per page (default: 999)'
+          default: 999
+          title: Size
+        description: 'Items per page (default: 999)'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TechSpecSingleSectionResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/file-manifest:
+    get:
+      tags:
+      - projects
+      summary: Get the complete file manifest for a project
+      description: Returns a manifest of files discovered during pre-ingestion analysis. By default only included files are returned. Use include_excluded=true to also return excluded files. Use ingested_only=true to return only files successfully ingested into the vector store.
+      operationId: get_project_file_manifest
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: include_excluded
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Include files excluded during pre-ingestion analysis
+          default: false
+          title: Include Excluded
+        description: Include files excluded during pre-ingestion analysis
+      - name: ingested_only
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Only return files successfully ingested into the vector store
+          default: false
+          title: Ingested Only
+        description: Only return files successfully ingested into the vector store
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileManifestResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/file-content:
+    get:
+      tags:
+      - projects
+      summary: Stream file content from vector store by file path
+      description: Retrieve the code content of a file from the vector store using its file path. Returns streaming response for memory efficiency.
+      operationId: get_file_content
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: file_path
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The file path to retrieve content for
+          title: File Path
+        description: The file path to retrieve content for
+      - name: start_line
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+            minimum: 1
+          - type: 'null'
+          description: Starting line number (1-indexed, inclusive)
+          title: Start Line
+        description: Starting line number (1-indexed, inclusive)
+      - name: end_line
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+            minimum: 1
+          - type: 'null'
+          description: Ending line number (1-indexed, inclusive)
+          title: End Line
+        description: Ending line number (1-indexed, inclusive)
+      responses:
+        '200':
+          description: Streaming file content
+          content:
+            application/json:
+              schema: {}
+            text/plain: {}
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: File or vector store not found
+  /api/projects/{project_id}/file-content/metadata:
+    get:
+      tags:
+      - projects
+      summary: Get file metadata from vector store
+      description: Retrieve aggregated metadata for a file from the vector store including summaries, functions, classes, and interfaces.
+      operationId: get_file_content_metadata
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      - name: file_path
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The file path to retrieve metadata for
+          title: File Path
+        description: The file path to retrieve metadata for
+      - name: start_line
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+            minimum: 1
+          - type: 'null'
+          description: Starting line number (1-indexed, inclusive)
+          title: Start Line
+        description: Starting line number (1-indexed, inclusive)
+      - name: end_line
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+            minimum: 1
+          - type: 'null'
+          description: Ending line number (1-indexed, inclusive)
+          title: End Line
+        description: Ending line number (1-indexed, inclusive)
+      responses:
+        '200':
+          description: File metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileContentMetadata'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        '404':
+          description: File or vector store not found
+  /api/projects/{project_id}/config:
+    get:
+      tags:
+      - projects
+      summary: Get project operator config (stored overrides + effective values)
+      description: 'Return a project''s stored operator overrides and the resolved effective values.
+
+
+        Internal-only: these overrides steer experiment/A-B behavior (e.g. chat
+
+        topology) and are not org-member-facing.'
+      operationId: get_project_config
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectConfigResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+    patch:
+      tags:
+      - projects
+      summary: Update project operator config (partial merge)
+      description: 'Partial-merge operator overrides onto a project''s config.
+
+
+        Only keys present in the request change; a key set to null clears that
+
+        override and falls back to the env default. Unknown keys are rejected.
+
+        Internal-only.'
+      operationId: update_project_config
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectConfig'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectConfigResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+  /api/projects/{project_id}/sync-mode:
+    patch:
+      tags:
+      - projects
+      summary: Set project sync mode (manual or auto)
+      description: 'Toggle a project between manual and auto sync mode.
+
+
+        Auto mode requires an org schedule to exist — the backend enforces this.'
+      operationId: update_project_sync_mode
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Project Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyncModeUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncModeResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+components:
+  schemas:
+    TechSpecSingleSectionResponse:
+      properties:
+        prd_id:
+          type: integer
+          title: Prd Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        custom_prompt:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Custom Prompt
+        can_regenerate:
+          type: boolean
+          title: Can Regenerate
+          default: false
+        prd_version_num:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Prd Version Num
+        prd_version_uid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prd Version Uid
+        stats:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Stats
+          description: Optional stats such as total_user_stories and filtered_user_stories.
+        language:
+          anyOf:
+          - $ref: '#/components/schemas/LanguageInfo'
+          - type: 'null'
+          description: Language the section was generated in, if non-English.
+        system_architecture:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          - type: 'null'
+          title: System Architecture
+        data_models:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          - type: 'null'
+          title: Data Models
+        user_interface:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          - type: 'null'
+          title: User Interface
+        api_specifications:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          - type: 'null'
+          title: Api Specifications
+        interface_specifications:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          - type: 'null'
+          title: Interface Specifications
+        integration_points:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          - type: 'null'
+          title: Integration Points
+        security_considerations:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          - type: 'null'
+          title: Security Considerations
+        implementation_strategy:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          - type: 'null'
+          title: Implementation Strategy
+        tech_user_stories:
+          anyOf:
+          - items: {}
+            type: array
+          - type: string
+          - type: 'null'
+          title: Tech User Stories
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        caveat:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Caveat
+          description: Provenance caveat for the requested section. Populated when the section's evidence is documentation-only or mixed; absent otherwise.
+      type: object
+      required:
+      - prd_id
+      - created_at
+      title: TechSpecSingleSectionResponse
+      description: 'Used for endpoint to get a single section of a tech spec.
+
+        Only 1 section is ever output, endpoint sets "don''t output None".
+
+        # AKA: Only output the property if it exists.'
+    TechSpecStepsDashedEnum:
+      type: string
+      enum:
+      - system-architecture
+      - data-models
+      - user-interface
+      - api-specifications
+      - interface-specifications
+      - integration-points
+      - security-considerations
+      - tech-user-stories
+      - implementation-strategy
+      title: TechSpecStepsDashedEnum
+      description: All tech spec steps with dashed values.
+    GenerationStatusResponse:
+      properties:
+        prd:
+          $ref: '#/components/schemas/JobStatusSummary'
+        tech_spec:
+          $ref: '#/components/schemas/JobStatusSummary'
+        use_dga_pipeline:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Use Dga Pipeline
+          description: Whether the DGA pipeline was used for this generation run
+        react_status_summary:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: React Status Summary
+          description: Final ReAct feature-extraction summary for this generation run
+      type: object
+      required:
+      - prd
+      - tech_spec
+      title: GenerationStatusResponse
+      description: PRD + tech-spec generation status.
+    SyncMode:
+      type: string
+      enum:
+      - manual
+      - auto
+      title: SyncMode
+      description: Whether a project syncs manually or automatically with its repo.
+    GeneratePRDRequest:
+      properties:
+        custom_prompts:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/GeneratePRDCustomPromptItem'
+            type: array
+          - type: 'null'
+          title: Custom Prompts
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+      type: object
+      title: GeneratePRDRequest
+    HealthIndicator:
+      properties:
+        name:
+          type: string
+          enum:
+          - test_coverage
+          - error_handling
+          - documentation
+          - code_freshness
+          - dependency_health
+          - build_configuration
+          title: Name
+          description: Signal identifier (e.g. 'test_coverage')
+        status:
+          type: string
+          enum:
+          - green
+          - yellow
+          - red
+          title: Status
+          description: Traffic-light status for this indicator
+        label:
+          type: string
+          title: Label
+          description: Human-readable label (e.g. 'Test Coverage')
+        summary:
+          type: string
+          title: Summary
+          description: One-sentence explanation referencing evidence
+        evidence:
+          items:
+            type: string
+          type: array
+          title: Evidence
+          description: Specific evidence items
+      type: object
+      required:
+      - name
+      - status
+      - label
+      - summary
+      title: HealthIndicator
+    FileManifestResponse:
+      properties:
+        project_id:
+          type: integer
+          title: Project Id
+          description: Project ID
+        total_files:
+          type: integer
+          title: Total Files
+          description: Total number of files in the manifest
+        included_files:
+          type: integer
+          title: Included Files
+          description: Number of included files
+        excluded_files:
+          type: integer
+          title: Excluded Files
+          description: Number of excluded files
+        ingestion_status_degraded:
+          type: boolean
+          title: Ingestion Status Degraded
+          description: True when the vector store lookup failed and ingestion status could not be determined
+          default: false
+        files:
+          items:
+            $ref: '#/components/schemas/FileManifestItem'
+          type: array
+          title: Files
+          description: List of file manifest entries
+      type: object
+      required:
+      - project_id
+      - total_files
+      - included_files
+      - excluded_files
+      - files
+      title: FileManifestResponse
+      description: Complete file manifest for a project.
+    DocImpactResponse:
+      properties:
+        doc_impact:
+          $ref: '#/components/schemas/DocImpact'
+      type: object
+      title: DocImpactResponse
+    SecurityFinding:
+      properties:
+        severity:
+          type: string
+          enum:
+          - info
+          - warning
+          title: Severity
+          description: Severity level badge
+        title:
+          type: string
+          title: Title
+          description: Short finding title
+        description:
+          type: string
+          title: Description
+          description: What was found and why it matters
+        file_paths:
+          items:
+            type: string
+          type: array
+          title: File Paths
+          description: Specific files where the issue was observed
+      type: object
+      required:
+      - severity
+      - title
+      - description
+      title: SecurityFinding
+    ProjectCreateAndGenerateResponse:
+      properties:
+        id:
+          type: integer
+          title: Id
+          description: Project ID
+        name:
+          type: string
+          title: Name
+          description: Project name
+        sync_mode:
+          $ref: '#/components/schemas/SyncMode'
+          description: Whether this project syncs manually or automatically
+          default: manual
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: When the project was created
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+          description: When the project was last updated
+        prd:
+          anyOf:
+          - $ref: '#/components/schemas/PRDResponse'
+          - type: 'null'
+          description: Associated PRD data
+        is_sample_clone:
+          type: boolean
+          title: Is Sample Clone
+          description: Whether this project was cloned from a sample project
+          default: false
+        ingestion:
+          $ref: '#/components/schemas/ProjectIngestionInfo'
+          description: Ingestion state
+      type: object
+      required:
+      - id
+      - name
+      - created_at
+      title: ProjectCreateAndGenerateResponse
+      description: Response model for project data with ingestion status
+    ProjectUpdateResponse:
+      properties:
+        id:
+          type: integer
+          title: Id
+          description: Project ID
+        name:
+          type: string
+          title: Name
+          description: Project name
+        application_context:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application Context
+          description: Application context or description
+      type: object
+      required:
+      - id
+      - name
+      - application_context
+      title: ProjectUpdateResponse
+      description: Response model for project update
+    ProjectStatusResponse:
+      properties:
+        ingestion:
+          $ref: '#/components/schemas/JobStatusSummary'
+        generation:
+          $ref: '#/components/schemas/GenerationStatusResponse'
+      type: object
+      required:
+      - ingestion
+      - generation
+      title: ProjectStatusResponse
+      description: Lightweight polling response with status + progress for all job types.
+    CodeQualityAssessmentResponse:
+      properties:
+        strengths:
+          items:
+            $ref: '#/components/schemas/CodeQualityStrength'
+          type: array
+          title: Strengths
+        concerns:
+          items:
+            $ref: '#/components/schemas/CodeQualityConcern'
+          type: array
+          title: Concerns
+      type: object
+      title: CodeQualityAssessmentResponse
+    PRDSectionsResponse:
+      properties:
+        executive_overview:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Executive Overview
+          description: Executive overview details
+        user_personas:
+          additionalProperties: true
+          type: object
+          title: User Personas
+          description: User personas details
+        high_level_requirements:
+          additionalProperties: true
+          type: object
+          title: High Level Requirements
+          description: High level requirements details
+        user_stories:
+          anyOf:
+          - items: {}
+            type: array
+          - type: string
+          title: User Stories
+          description: User stories details
+        security_requirements:
+          additionalProperties: true
+          type: object
+          title: Security Requirements
+          description: Security requirements details
+        caveats:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Caveats
+          description: Per-section provenance caveats keyed by section name. Only populated for sections whose evidence is documentation-only or mixed; absent when all sections are grounded in code or have no sources.
+        prd_id:
+          type: integer
+          title: Prd Id
+        prd_version_num:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Prd Version Num
+        prd_version_uid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prd Version Uid
+        generated_from_commit_sha:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Generated From Commit Sha
+        custom_prompt:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Custom Prompt
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+          description: Job metadata including version and version_tag
+      type: object
+      required:
+      - prd_id
+      - created_at
+      title: PRDSectionsResponse
+    PRDSingleSectionResponse:
+      properties:
+        prd_id:
+          type: integer
+          title: Prd Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        custom_prompt:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Custom Prompt
+        can_regenerate:
+          type: boolean
+          title: Can Regenerate
+          default: false
+        stats:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Stats
+          description: Optional stats such as total_user_stories and filtered_user_stories.
+        prd_version_num:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Prd Version Num
+        prd_version_uid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prd Version Uid
+        language:
+          anyOf:
+          - $ref: '#/components/schemas/LanguageInfo'
+          - type: 'null'
+          description: Language the section was generated in, if non-English.
+        executive_overview:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Executive Overview
+        user_personas:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: User Personas
+        high_level_requirements:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: High Level Requirements
+        user_stories:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: string
+          - type: 'null'
+          title: User Stories
+        security_requirements:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Security Requirements
+        pagination:
+          anyOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: 'null'
+        caveat:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Caveat
+          description: Provenance caveat for the requested section. Populated when the section's evidence is documentation-only or mixed; absent otherwise.
+      type: object
+      required:
+      - prd_id
+      - created_at
+      title: PRDSingleSectionResponse
+      description: 'Used for endpoint to get a single section of a PRD.
+
+        Only 1 section is ever output, endpoint sets "don''t output None".
+
+        # AKA: Only output the property if it exists.'
+    TechnicalSpecContext:
+      properties:
+        features:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Feature-Input'
+            type: array
+          - type: 'null'
+          title: Features
+          description: Optional list of features to use for generation
+        user_stories:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/UserStory'
+            type: array
+          - type: 'null'
+          title: User Stories
+          description: Optional list of user stories to generate code from
+      type: object
+      title: TechnicalSpecContext
+      description: Context model for technical specification generation.
+    DocImpactGroup:
+      properties:
+        sections_added:
+          items:
+            type: string
+          type: array
+          title: Sections Added
+          description: Sections present only in the new version.
+        sections_modified:
+          items:
+            type: string
+          type: array
+          title: Sections Modified
+          description: Sections whose content changed.
+        sections_removed:
+          items:
+            type: string
+          type: array
+          title: Sections Removed
+          description: Sections present only in the old version.
+      type: object
+      title: DocImpactGroup
+      description: Section-level changes for a single document (PRD or Tech Spec).
+    SecurityFindingsResponse:
+      properties:
+        risk_level:
+          type: string
+          enum:
+          - low
+          - medium
+          - high
+          title: Risk Level
+          description: Overall security risk level
+        findings:
+          items:
+            $ref: '#/components/schemas/SecurityFinding'
+          type: array
+          title: Findings
+      type: object
+      required:
+      - risk_level
+      title: SecurityFindingsResponse
+    PRDStepsDashedEnum:
+      type: string
+      enum:
+      - executive-overview
+      - user-personas
+      - high-level-requirements
+      - user-stories
+      - security-requirements
+      title: PRDStepsDashedEnum
+      description: All PRD steps with dashed values.
+    HealthSignalsResponse:
+      properties:
+        indicators:
+          items:
+            $ref: '#/components/schemas/HealthIndicator'
+          type: array
+          title: Indicators
+          description: The 6 health signal indicators
+        overall_risk:
+          type: string
+          enum:
+          - low
+          - medium
+          - high
+          title: Overall Risk
+          description: Overall risk badge
+        overall_summary:
+          type: string
+          title: Overall Summary
+          description: One-sentence risk summary
+      type: object
+      required:
+      - indicators
+      - overall_risk
+      - overall_summary
+      title: HealthSignalsResponse
+    PRDContextResponse:
+      properties:
+        context:
+          type: string
+          title: Context
+          description: The PRD context
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: When the context was created
+      type: object
+      required:
+      - context
+      - created_at
+      title: PRDContextResponse
+      description: Response model for PRD context.
+    InterfaceInfo:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Interface type (mainframe, desktop, web, mobile, terminal, api)
+        summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary
+          description: Technology used
+      type: object
+      required:
+      - name
+      title: InterfaceInfo
+      description: Interface name and summary.
+    GenerateTechSpecCustomPromptItem:
+      properties:
+        section_name:
+          $ref: '#/components/schemas/TechSpecStepsDashedEnum'
+        prompt:
+          type: string
+          title: Prompt
+        replacement:
+          type: boolean
+          title: Replacement
+          default: false
+      type: object
+      required:
+      - section_name
+      - prompt
+      title: GenerateTechSpecCustomPromptItem
+    ClassInfo:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Class name
+        summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary
+          description: AI-generated summary
+      type: object
+      required:
+      - name
+      title: ClassInfo
+      description: Class name and summary.
+    TriggerType:
+      type: string
+      enum:
+      - manual
+      - automatic
+      title: TriggerType
+      description: How an ingestion event was triggered.
+    ProjectConfig:
+      properties:
+        chat_topology:
+          anyOf:
+          - type: string
+            enum:
+            - legacy
+            - react
+          - type: 'null'
+          title: Chat Topology
+          description: Override for the chat topology. None → use settings.CHAT_TOPOLOGY.
+      additionalProperties: false
+      type: object
+      title: ProjectConfig
+      description: Per-project overrides of env-default behavior. All keys optional.
+    ProjectDetailResponse:
+      properties:
+        id:
+          type: integer
+          title: Id
+          description: Project ID
+        name:
+          type: string
+          title: Name
+          description: Project name
+        sync_mode:
+          $ref: '#/components/schemas/SyncMode'
+          description: Whether this project syncs manually or automatically
+          default: manual
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: When the project was created
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+          description: When the project was last updated
+        prd:
+          anyOf:
+          - $ref: '#/components/schemas/PRDResponse'
+          - type: 'null'
+          description: Associated PRD data
+        is_sample_clone:
+          type: boolean
+          title: Is Sample Clone
+          description: Whether this project was cloned from a sample project
+          default: false
+        ingestion:
+          $ref: '#/components/schemas/ProjectIngestionInfo'
+          description: Ingestion state
+        last_opened_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Opened At
+          description: When the project was last opened
+        tech_spec_generated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Tech Spec Generated At
+          description: When tech spec was last generated
+        prd_generated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Prd Generated At
+          description: When PRD was last generated
+        application_context:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application Context
+          description: Application context or description
+        generation:
+          anyOf:
+          - $ref: '#/components/schemas/GenerationStatusResponse'
+          - type: 'null'
+          description: PRD and tech spec generation status
+      type: object
+      required:
+      - id
+      - name
+      - created_at
+      - last_opened_at
+      - tech_spec_generated_at
+      - prd_generated_at
+      - application_context
+      title: ProjectDetailResponse
+      description: Extended response for project detail endpoint with document timestamps
+    FileChanges:
+      properties:
+        added:
+          items:
+            type: string
+          type: array
+          title: Added
+        modified:
+          items:
+            type: string
+          type: array
+          title: Modified
+        removed:
+          items:
+            type: string
+          type: array
+          title: Removed
+      type: object
+      title: FileChanges
+      description: Categorized file paths changed between last ingestion and latest commit.
+    IngestionMetricsTimingsResponse:
+      properties:
+        full_ingestion_duration:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Full Ingestion Duration
+        ingestion_dispatch_delay:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Ingestion Dispatch Delay
+        prd_generation_time:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Prd Generation Time
+        tech_req_generation_time:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Tech Req Generation Time
+        total_processing_time:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Total Processing Time
+      type: object
+      title: IngestionMetricsTimingsResponse
+    GenerateAllRequest:
+      properties:
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+      type: object
+      title: GenerateAllRequest
+    TechnicalRequirements:
+      properties:
+        requirement:
+          type: string
+          title: Requirement
+          description: Technical requirements for the user story.
+        uml_diagram:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Uml Diagram
+          description: UML diagram for the user story.
+          default: ''
+        sequence_diagram:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sequence Diagram
+          description: Sequence diagram for the user story.
+          default: ''
+        reference:
+          items:
+            $ref: '#/components/schemas/Reference'
+          type: array
+          title: Reference
+          description: Reference to the file where the technical requirements were found.
+      additionalProperties: false
+      type: object
+      required:
+      - requirement
+      - reference
+      title: TechnicalRequirements
+    PreIngestionStatus:
+      type: string
+      enum:
+      - started
+      - cloning
+      - parsing
+      - analyzed
+      - completed
+      - failed
+      title: PreIngestionStatus
+      description: PreIngestion status enumeration
+    IngestionMetricsSummaryResponse:
+      properties:
+        NOTE:
+          type: string
+          const: Times are in seconds
+          title: Note
+          default: Times are in seconds
+        project_id:
+          type: string
+          title: Project Id
+        last_updated:
+          type: string
+          format: date-time
+          title: Last Updated
+        pipeline_status:
+          anyOf:
+          - $ref: '#/components/schemas/JobStatus'
+          - type: 'null'
+        exclusion_policy:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Exclusion Policy
+        repo_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Repo Url
+        repo_branch:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Repo Branch
+        counts:
+          $ref: '#/components/schemas/IngestionMetricsCountsResponse'
+        timings:
+          $ref: '#/components/schemas/IngestionMetricsTimingsResponse'
+        models:
+          $ref: '#/components/schemas/IngestionMetricsModelsResponse'
+        code_analysis:
+          additionalProperties: true
+          type: object
+          title: Code Analysis
+          description: Dict with ingestion files analysis and detections.
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+          description: Job metadata including version and version_tag from latest job.
+      additionalProperties: false
+      type: object
+      required:
+      - project_id
+      title: IngestionMetricsSummaryResponse
+    ProjectListItem:
+      properties:
+        id:
+          type: integer
+          title: Id
+          description: Project ID
+        name:
+          type: string
+          title: Name
+          description: Project name
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: When the project was created
+        created_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created By
+          description: Full name of user who created the project
+        repo_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Repo Name
+          description: Repository name in format owner/repo
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+          description: When the project data was last modified
+        last_opened_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Opened At
+          description: When the project was last opened
+        is_sample_clone:
+          type: boolean
+          title: Is Sample Clone
+          description: Whether this project was cloned from a sample project
+          default: false
+        ingestion:
+          $ref: '#/components/schemas/ProjectIngestionInfo'
+          description: Ingestion state
+      type: object
+      required:
+      - id
+      - name
+      - created_at
+      - created_by
+      - repo_name
+      - last_opened_at
+      title: ProjectListItem
+      description: Response model for a single project in list view
+    ProjectConfigResponse:
+      properties:
+        config:
+          $ref: '#/components/schemas/ProjectConfig'
+          description: Stored operator overrides; null keys are inactive.
+        effective_chat_topology:
+          type: string
+          title: Effective Chat Topology
+          description: Topology in effect after env fallback.
+        chat_topology_source:
+          type: string
+          title: Chat Topology Source
+          description: '''project'' when overridden, else ''env''.'
+      type: object
+      required:
+      - config
+      - effective_chat_topology
+      - chat_topology_source
+      title: ProjectConfigResponse
+      description: 'Config endpoint payload: stored overrides plus resolved effective values.'
+    GenerateTechSpecRequest:
+      properties:
+        custom_prompts:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/GenerateTechSpecCustomPromptItem'
+            type: array
+          - type: 'null'
+          title: Custom Prompts
+        context:
+          anyOf:
+          - $ref: '#/components/schemas/TechnicalSpecContext'
+          - type: 'null'
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+      type: object
+      title: GenerateTechSpecRequest
+    IngestionMetricsCountsResponse:
+      properties:
+        directories_found:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Directories Found
+        files_found:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Files Found
+        files_included:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Files Included
+        files_excluded:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Files Excluded
+        files_ingested:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Files Ingested
+        files_not_ingested:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Files Not Ingested
+        included_total_lines:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Included Total Lines
+        included_code_lines:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Included Code Lines
+        percent_processed:
+          anyOf:
+          - type: number
+            maximum: 100.0
+            minimum: 0.0
+          - type: 'null'
+          title: Percent Processed
+        supported_files_with_counts:
+          additionalProperties: true
+          type: object
+          title: Supported Files With Counts
+        user_stories_count:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: User Stories Count
+      type: object
+      title: IngestionMetricsCountsResponse
+    FileContentMetadata:
+      properties:
+        file_path:
+          type: string
+          title: File Path
+          description: Full file path
+        file_name:
+          type: string
+          title: File Name
+          description: File name extracted from path
+        file_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: File Type
+          description: MIME type of the file (e.g. 'text/markdown')
+        last_modified_date:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Modified Date
+          description: Last modified date (ISO 8601)
+        creation_date:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Creation Date
+          description: File creation date (ISO 8601)
+        first_ingested_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Ingested At
+          description: When the file was first ingested (ISO 8601)
+        last_ingested_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Ingested At
+          description: When the file was last ingested (ISO 8601)
+        start_line:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Start Line
+          description: Requested start line (1-indexed)
+        end_line:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: End Line
+          description: Requested end line (1-indexed)
+        github_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Github Url
+          description: Direct GitHub URL to the file (with line range if specified)
+        code_summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Code Summary
+          description: Aggregated code summary from chunks
+        functions:
+          items:
+            $ref: '#/components/schemas/FunctionInfo'
+          type: array
+          title: Functions
+          description: Functions in the file/range
+        classes:
+          items:
+            $ref: '#/components/schemas/ClassInfo'
+          type: array
+          title: Classes
+          description: Classes in the file/range
+        interfaces:
+          items:
+            $ref: '#/components/schemas/InterfaceInfo'
+          type: array
+          title: Interfaces
+          description: Interfaces in the file/range
+        referenced_in_sections:
+          items:
+            $ref: '#/components/schemas/PRDReferenceContext'
+          type: array
+          title: Referenced In Sections
+          description: Sections that reference this file
+      type: object
+      required:
+      - file_path
+      - file_name
+      title: FileContentMetadata
+      description: Metadata response for file content retrieval.
+    Feature-Input:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the feature
+        description:
+          type: string
+          title: Description
+          description: Description of the feature
+        category:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Category
+          description: Category of the feature
+      type: object
+      required:
+      - name
+      - description
+      title: Feature
+      description: Model for a feature in the technical specification.
+    PRDCustomPromptRequest:
+      properties:
+        prompt:
+          type: string
+          title: Prompt
+        replacement:
+          type: boolean
+          title: Replacement
+      type: object
+      required:
+      - prompt
+      - replacement
+      title: PRDCustomPromptRequest
+    CodeQualityStrength:
+      properties:
+        label:
+          type: string
+          title: Label
+          description: Short strength title
+        detail:
+          type: string
+          title: Detail
+          description: Explanation with evidence
+      type: object
+      required:
+      - label
+      - detail
+      title: CodeQualityStrength
+    ProjectTransferResponse:
+      properties:
+        id:
+          type: integer
+          title: Id
+          description: Project ID
+        name:
+          type: string
+          title: Name
+          description: Project name
+        organization_id:
+          type: string
+          title: Organization Id
+          description: New organization ID
+        previous_organization_id:
+          type: string
+          title: Previous Organization Id
+          description: Previous organization ID
+      type: object
+      required:
+      - id
+      - name
+      - organization_id
+      - previous_organization_id
+      title: ProjectTransferResponse
+      description: Response model for project transfer
+    Body_upload_repository:
+      properties:
+        app_custom_name:
+          type: string
+          title: App Custom Name
+          description: Custom application name for the project
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Optional description for the uploaded repository
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+          description: Zipped repository file to upload (.zip/.tar/.tar.gz/.rar/.7z)
+      type: object
+      required:
+      - app_custom_name
+      - file
+      title: Body_upload_repository
+    FunctionInfo:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Function name
+        summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary
+          description: AI-generated summary
+      type: object
+      required:
+      - name
+      title: FunctionInfo
+      description: Function name and summary.
+    NewReference:
+      properties:
+        file_name:
+          type: string
+          title: File Name
+          description: Name of the file where the reference was found.
+        line_number:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Line Number
+          description: Line number where the reference was found.
+        reference_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reference Text
+          description: Actual code from the file.
+      additionalProperties: false
+      type: object
+      required:
+      - file_name
+      title: NewReference
+    ProjectResponse:
+      properties:
+        id:
+          type: integer
+          title: Id
+          description: Project ID
+        name:
+          type: string
+          title: Name
+          description: Project name
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: When the project was created
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+          description: When the project was last updated
+        prd:
+          anyOf:
+          - $ref: '#/components/schemas/PRDResponse'
+          - type: 'null'
+          description: Associated PRD data
+      type: object
+      required:
+      - id
+      - name
+      - created_at
+      - updated_at
+      - prd
+      title: ProjectResponse
+      description: Response model for project data with nested PRD
+    ReingestionTriggerResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        project_id:
+          type: integer
+          title: Project Id
+        status:
+          type: string
+          title: Status
+          default: started
+        regenerate_docs:
+          type: boolean
+          title: Regenerate Docs
+          description: Whether document regeneration was requested
+          default: false
+        force:
+          type: boolean
+          title: Force
+          description: Whether force re-ingestion was requested
+          default: false
+        prd_job_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Prd Job Id
+          description: SOTJ job ID for PRD generation (if regenerate_docs=true)
+        tech_spec_job_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tech Spec Job Id
+          description: SOTJ job ID for tech spec generation (if regenerate_docs=true)
+      type: object
+      required:
+      - message
+      - project_id
+      title: ReingestionTriggerResponse
+      description: Response when reingestion is triggered
+    ProjectIngestionInfo:
+      properties:
+        status:
+          $ref: '#/components/schemas/JobStatus'
+          description: Current ingestion status
+          default: not_started
+        progress:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Progress
+          description: Ingestion progress percentage
+        is_stale:
+          type: boolean
+          title: Is Stale
+          description: Whether the intelligence is out of sync with the repo
+          default: false
+        file_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: File Count
+          description: Number of files ingested into vector store
+        last_ingested_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Ingested At
+          description: Timestamp of last successful ingestion
+        commit_sha:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Commit Sha
+          description: Git commit SHA of the last successful ingestion
+        stale_since_sha:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stale Since Sha
+          description: Remote commit SHA that triggered staleness
+        created_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created By
+          description: User ID who triggered the last ingestion
+      type: object
+      title: ProjectIngestionInfo
+      description: Grouped ingestion state for a project.
+    ProjectHealthResponse:
+      properties:
+        health_signals:
+          anyOf:
+          - $ref: '#/components/schemas/HealthSignalsResponse'
+          - type: 'null'
+        code_quality:
+          anyOf:
+          - $ref: '#/components/schemas/CodeQualityAssessmentResponse'
+          - type: 'null'
+        security:
+          anyOf:
+          - $ref: '#/components/schemas/SecurityFindingsResponse'
+          - type: 'null'
+      type: object
+      title: ProjectHealthResponse
+      description: Combined response for the GET /projects/{project_id}/health endpoint.
+    JobStatus:
+      type: string
+      enum:
+      - not_started
+      - running
+      - completed
+      - failed
+      - cancelled
+      title: JobStatus
+      description: Job status enumeration
+    GeneratePRDSectionRequest:
+      properties:
+        custom_prompt:
+          anyOf:
+          - $ref: '#/components/schemas/PRDCustomPromptRequest'
+          - type: 'null'
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+      type: object
+      title: GeneratePRDSectionRequest
+    DocImpact:
+      properties:
+        prd:
+          $ref: '#/components/schemas/DocImpactGroup'
+        tech_spec:
+          $ref: '#/components/schemas/DocImpactGroup'
+      type: object
+      title: DocImpact
+      description: Doc-section changes an ingestion event produced, grouped by document.
+    ProjectCreateAndGenerateRequest:
+      properties:
+        public_repo_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Public Repo Url
+          description: Full GitHub repository URL (format 1)
+        repo_full_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Repo Full Name
+          description: Repository full name like 'owner/repo' (format 2)
+        repo_branch:
+          type: string
+          title: Repo Branch
+          description: Branch name
+          default: main
+        github_app_installation_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Github App Installation Id
+          description: GitHub App installation ID for private repository access
+        pre_ingestion_id:
+          type: integer
+          title: Pre Ingestion Id
+          description: Pre-ingestion job ID to use the stored values
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+          description: Standard BCP 47 language code for document generation (ja, es, fr-CA).
+        use_dga:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Use Dga
+          description: Override the server default pipeline for this run. When omitted, the server default is used.
+      type: object
+      required:
+      - pre_ingestion_id
+      title: ProjectCreateAndGenerateRequest
+      description: Request model for creating a new project
+    UserStory:
+      properties:
+        epic_name:
+          type: string
+          title: Epic Name
+          description: Name of the Epic that is grouping multiple user stories.
+        title:
+          type: string
+          title: Title
+          description: Title of the user story.
+        description:
+          type: string
+          title: Description
+          description: Description of the user story.
+        business_rules:
+          items:
+            type: string
+          type: array
+          title: Business Rules
+          description: If applicable, the business rules for the user story.
+        acceptance_criteria:
+          items:
+            type: string
+          type: array
+          title: Acceptance Criteria
+          description: Acceptance criteria for the user story.
+        references:
+          items:
+            $ref: '#/components/schemas/NewReference'
+          type: array
+          title: References
+          description: Reference to the file where the user story was found.
+        technical_requirements:
+          anyOf:
+          - $ref: '#/components/schemas/TechnicalRequirements'
+          - type: 'null'
+          description: Technical requirements for the user story.
+        user_persona:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Persona
+          description: User persona associated with the user story.
+      additionalProperties: false
+      type: object
+      required:
+      - epic_name
+      - title
+      - description
+      - business_rules
+      - acceptance_criteria
+      - references
+      - user_persona
+      title: UserStory
+    PRDContextRequest:
+      properties:
+        context:
+          type: string
+          title: Context
+          description: The context to set for the PRD
+          example: This is the context for the PRD that will be used for document generation.
+      type: object
+      required:
+      - context
+      title: PRDContextRequest
+      description: Request model for setting PRD context.
+    JobStatusSummary:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Current job status
+        progress:
+          type: number
+          title: Progress
+          description: Progress percentage (0-100)
+          default: 0.0
+        created_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created By
+          description: User ID who triggered this job
+        failure_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Failure Type
+          description: Short categorical failure tag set only when the job is FAILED. Lets the UI render category-specific guidance without parsing the message. See `app.orchestrations.ingestion.failure_handler.classify_failure` for the authoritative set of values.
+        failure_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Failure Reason
+          description: Human-readable failure message safe to show in the UI. Set only when the job is FAILED.
+      type: object
+      required:
+      - status
+      title: JobStatusSummary
+      description: Lightweight status + progress for a single job type (ingestion, PRD generation, etc.).
+    ProjectUpdateRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Project name
+        source_type:
+          anyOf:
+          - $ref: '#/components/schemas/SourceType'
+          - type: 'null'
+          description: Source Type for Project
+        application_context:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application Context
+          description: Application context or description
+      type: object
+      title: ProjectUpdateRequest
+      description: Request model for updating a project
+    CIUEstimate:
+      properties:
+        min:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Min
+          description: Minimum estimated CIU cost
+        max:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Max
+          description: Maximum estimated CIU cost
+      type: object
+      required:
+      - min
+      - max
+      title: CIUEstimate
+      description: Estimated CIU cost for reingestion.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    PaginationMeta:
+      properties:
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        size:
+          type: integer
+          title: Size
+        pages:
+          type: integer
+          title: Pages
+      type: object
+      required:
+      - total
+      - page
+      - size
+      - pages
+      title: PaginationMeta
+    PaginatedResponse_IngestionEventResponse_:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/IngestionEventResponse'
+          type: array
+          title: Items
+          description: List of items
+        pagination:
+          $ref: '#/components/schemas/PaginationMeta'
+          description: Pagination metadata
+      type: object
+      required:
+      - items
+      - pagination
+      title: PaginatedResponse[IngestionEventResponse]
+    ReingestionAnalysisCoverageResponse:
+      properties:
+        total_files:
+          type: integer
+          title: Total Files
+        total_directories:
+          type: integer
+          title: Total Directories
+        file_coverage:
+          type: number
+          title: File Coverage
+          description: Percentage of files that will be ingested
+        included_count:
+          additionalProperties: true
+          type: object
+          title: Included Count
+          description: File types included with counts
+        excluded_count:
+          additionalProperties: true
+          type: object
+          title: Excluded Count
+          description: File types excluded with counts
+        exclusion_reasons:
+          additionalProperties: true
+          type: object
+          title: Exclusion Reasons
+          description: Breakdown by exclusion reason
+        files:
+          anyOf:
+          - $ref: '#/components/schemas/FileChanges'
+          - type: 'null'
+          description: Files added/modified/removed since last ingestion
+        summary:
+          anyOf:
+          - $ref: '#/components/schemas/FileChangeSummary'
+          - type: 'null'
+          description: Counts of added/modified/removed files
+        last_synced_commit:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Synced Commit
+          description: Commit SHA of last ingestion
+        latest_commit:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Latest Commit
+          description: HEAD commit SHA of the repo
+        estimated_cius:
+          anyOf:
+          - $ref: '#/components/schemas/CIUEstimate'
+          - type: 'null'
+          description: Estimated CIU cost range for reingestion
+      type: object
+      required:
+      - total_files
+      - total_directories
+      - file_coverage
+      - included_count
+      - excluded_count
+      - exclusion_reasons
+      title: ReingestionAnalysisCoverageResponse
+      description: Coverage results from analysis, including file change summary and CIU estimate.
+    GeneratePRDCustomPromptItem:
+      properties:
+        section_name:
+          $ref: '#/components/schemas/PRDStepsDashedEnum'
+        prompt:
+          type: string
+          title: Prompt
+        replacement:
+          type: boolean
+          title: Replacement
+          default: false
+      type: object
+      required:
+      - section_name
+      - prompt
+      title: GeneratePRDCustomPromptItem
+    CreateFromPreIngestionRequest:
+      properties:
+        pre_ingestion_job_id:
+          type: integer
+          title: Pre Ingestion Job Id
+          description: Existing pre-ingestion job ID
+        app_custom_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: App Custom Name
+          description: Optional override; defaults to pre-ingestion custom_name
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Optional project description
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+          description: Target language for document generation (e.g., 'pt-br', 'es')
+        use_dga:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Use Dga
+          description: Opt the project into the DGA ingestion/generation pipeline. Defaults to the system default when omitted.
+      type: object
+      required:
+      - pre_ingestion_job_id
+      title: CreateFromPreIngestionRequest
+    ProjectListResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/ProjectListItem'
+          type: array
+          title: Results
+          description: List of projects
+        pagination:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Pagination
+      type: object
+      required:
+      - results
+      - pagination
+      title: ProjectListResponse
+      description: Response model for paginated project list
+    TechSpecSectionsResponse:
+      properties:
+        system_architecture:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          title: System Architecture
+          description: System architecture details
+        data_models:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          title: Data Models
+          description: Data models details
+        user_interface:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          title: User Interface
+          description: User interface details
+        api_specifications:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          title: Api Specifications
+          description: API specifications details
+        interface_specifications:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          title: Interface Specifications
+          description: Interface specifications details
+        integration_points:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          title: Integration Points
+          description: Integration points details
+        security_considerations:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          title: Security Considerations
+          description: Security considerations details
+        implementation_strategy:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          title: Implementation Strategy
+          description: Implementation strategy details
+        tech_user_stories:
+          anyOf:
+          - items: {}
+            type: array
+          - type: string
+          title: Tech User Stories
+          description: User stories details
+        caveats:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Caveats
+          description: Per-section provenance caveats keyed by section name. Only populated for sections whose evidence is documentation-only or mixed; absent when all sections are grounded in code or have no sources.
+        prd_id:
+          type: integer
+          title: Prd Id
+        prd_version_num:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Prd Version Num
+        prd_version_uid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prd Version Uid
+        generated_from_commit_sha:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Generated From Commit Sha
+        custom_prompt:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Custom Prompt
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+          description: Job metadata including version and version_tag
+      type: object
+      required:
+      - prd_id
+      - created_at
+      title: TechSpecSectionsResponse
+    BasicSuccessResponse:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: success
+      type: object
+      title: BasicSuccessResponse
+      description: 'Use this for returns for deletes and patches.
+
+        UI ALWAYS needs some payload return. This just standarizes it.'
+    ReingestionAnalysisResponse:
+      properties:
+        job_id:
+          type: integer
+          title: Job Id
+        status:
+          $ref: '#/components/schemas/PreIngestionStatus'
+        progress:
+          type: number
+          title: Progress
+          description: Progress percentage 0-100
+          default: 0.0
+        failure_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Failure Type
+          description: Short categorical failure tag set only when the job is FAILED. Lets the UI render category-specific guidance without parsing the message. See `app.utils.pre_ingestion.classify_pre_ingestion_failure` for the authoritative set of values.
+        failure_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Failure Reason
+          description: Human-readable, sanitized failure message safe to show in the UI. Set only when the job is FAILED.
+      type: object
+      required:
+      - job_id
+      - status
+      title: ReingestionAnalysisResponse
+      description: Response for pre-reingestion analysis
+    PRDGenerateResponse:
+      properties:
+        content:
+          title: Content
+          description: The generated document content (dict for JSON format, str for markdown format)
+        format:
+          type: string
+          title: Format
+          description: The format of the document (json or markdown)
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+          description: Additional metadata about the document
+      type: object
+      required:
+      - content
+      - format
+      - metadata
+      title: PRDGenerateResponse
+      description: Response model for PRD generation
+    ProjectCreateResponse:
+      properties:
+        project:
+          $ref: '#/components/schemas/ProjectResponse'
+          description: Created project data with nested PRD
+      type: object
+      required:
+      - project
+      title: ProjectCreateResponse
+      description: Response model for project creation with auto-generated PRD
+    PRDReferenceContext:
+      properties:
+        section_name:
+          type: string
+          title: Section Name
+          description: Section name in dashed format (e.g. 'executive-overview', 'user-stories')
+        reference_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reference Text
+          description: Short description of what this file contributes to the section
+        line_number:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Line Number
+          description: Line number in the file that was referenced
+        index_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Index Id
+          description: Array index of the entity within the section (e.g. user story index)
+      type: object
+      required:
+      - section_name
+      title: PRDReferenceContext
+      description: A PRD section that references this file.
+    ProjectCreateRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Project name
+      type: object
+      required:
+      - name
+      title: ProjectCreateRequest
+      description: Request model for creating a new project
+    CodeQualityConcern:
+      properties:
+        label:
+          type: string
+          title: Label
+          description: Short concern title
+        detail:
+          type: string
+          title: Detail
+          description: Explanation with evidence and file paths
+        severity:
+          type: string
+          enum:
+          - low
+          - medium
+          - high
+          title: Severity
+          description: How urgent this concern is
+      type: object
+      required:
+      - label
+      - detail
+      - severity
+      title: CodeQualityConcern
+    LanguageInfo:
+      properties:
+        code:
+          type: string
+          title: Code
+          description: BCP-47 language code (ja, es, fr-CA).
+        name:
+          type: string
+          title: Name
+          description: Language name in its native script (English, français (Canada)).
+      type: object
+      required:
+      - code
+      - name
+      title: LanguageInfo
+      description: Language information with code and native display name.
+    ReingestionTriggerRequest:
+      properties:
+        regenerate_docs:
+          type: boolean
+          title: Regenerate Docs
+          description: Whether to regenerate PRD/TechSpec after ingestion
+          default: false
+        application_context:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application Context
+          description: Update project application context before reingestion
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+          description: BCP-47 language code for document generation (ja, es, fr-CA).
+        force:
+          type: boolean
+          title: Force
+          description: Force re-ingestion of every document instead of skipping ones already in the vector store. Use this after extractor/schema changes when existing chunks need to be re-processed.
+          default: false
+      type: object
+      title: ReingestionTriggerRequest
+      description: Request to trigger reingestion
+    SourceType:
+      type: string
+      enum:
+      - git_clone
+      - url
+      - default
+      - azure_blob
+      - repo_full_name
+      title: SourceType
+      description: Enum-like class for source types.
+    ProjectTransferRequest:
+      properties:
+        organization_id:
+          type: string
+          minLength: 1
+          title: Organization Id
+          description: Target organization ID to transfer the project to
+      type: object
+      required:
+      - organization_id
+      title: ProjectTransferRequest
+      description: Request model for transferring a project to a different organization (admin only)
+    FileChangeSummary:
+      properties:
+        added_count:
+          type: integer
+          title: Added Count
+          default: 0
+        modified_count:
+          type: integer
+          title: Modified Count
+          default: 0
+        removed_count:
+          type: integer
+          title: Removed Count
+          default: 0
+      type: object
+      title: FileChangeSummary
+      description: Summary counts of file changes between last ingestion and latest commit.
+    PendingCommitItem:
+      properties:
+        hash:
+          type: string
+          title: Hash
+          description: Git commit SHA
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+          description: Commit message
+        author_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Author Name
+          description: Commit author name
+        timestamp:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Timestamp
+          description: When the commit was created
+        files_added:
+          type: integer
+          title: Files Added
+          description: Number of files added in this commit
+          default: 0
+        files_modified:
+          type: integer
+          title: Files Modified
+          description: Number of files modified in this commit
+          default: 0
+        files_removed:
+          type: integer
+          title: Files Removed
+          description: Number of files removed in this commit
+          default: 0
+      type: object
+      required:
+      - hash
+      title: PendingCommitItem
+      description: A single pending commit that arrived via webhook since the last ingestion.
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    IngestionEventResponse:
+      properties:
+        id:
+          type: integer
+          title: Id
+        project_id:
+          type: integer
+          title: Project Id
+        triggered_at:
+          type: string
+          format: date-time
+          title: Triggered At
+        trigger_type:
+          $ref: '#/components/schemas/TriggerType'
+        commit_sha:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Commit Sha
+        branch:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Branch
+        created_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created By
+        files_added:
+          items:
+            type: string
+          type: array
+          title: Files Added
+        files_modified:
+          items:
+            type: string
+          type: array
+          title: Files Modified
+        files_removed:
+          items:
+            type: string
+          type: array
+          title: Files Removed
+        regenerated_docs:
+          type: boolean
+          title: Regenerated Docs
+        completed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Completed At
+        failed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Failed At
+        failure_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Failure Type
+          description: Short categorical reason for failure (e.g. 'github_auth', 'timeout').
+        failure_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Failure Reason
+          description: User-safe explanation of the failure.
+      type: object
+      required:
+      - id
+      - project_id
+      - triggered_at
+      - trigger_type
+      - regenerated_docs
+      title: IngestionEventResponse
+    FileManifestItem:
+      properties:
+        path:
+          type: string
+          title: Path
+          description: Full file path relative to the repository root
+        file_name:
+          type: string
+          title: File Name
+          description: Base file name derived from path
+        status:
+          type: string
+          enum:
+          - included
+          - excluded
+          title: Status
+          description: Whether the file was included or excluded during pre-ingestion
+        ingested:
+          type: boolean
+          title: Ingested
+          description: Whether the file has been ingested into the vector store
+        exclusion_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Exclusion Reason
+          description: Reason for exclusion, null for included files
+        creation_date:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Creation Date
+          description: File creation date (ISO 8601)
+        last_modified_date:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Modified Date
+          description: Last modified date (ISO 8601)
+        first_ingested_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Ingested At
+          description: When the file was first ingested (ISO 8601)
+        last_ingested_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Ingested At
+          description: When the file was last ingested (ISO 8601)
+      type: object
+      required:
+      - path
+      - file_name
+      - status
+      - ingested
+      title: FileManifestItem
+      description: A single file entry in the project file manifest.
+    PRDResponse:
+      properties:
+        id:
+          type: integer
+          title: Id
+          description: PRD ID
+        project_id:
+          type: integer
+          title: Project Id
+          description: Project ID this PRD belongs to
+        title:
+          type: string
+          title: Title
+          description: PRD title
+        version:
+          type: integer
+          title: Version
+          description: PRD version number
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: When the PRD was created
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+          description: When the PRD was last updated
+      type: object
+      required:
+      - id
+      - project_id
+      - title
+      - version
+      - created_at
+      - updated_at
+      title: PRDResponse
+      description: Response model for PRD data
+    Reference:
+      properties:
+        file_name:
+          type: string
+          title: File Name
+          description: Name of the file where the reference was found (just the filename, e.g., 'COCRDLIC.cbl').
+        line_number:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Line Number
+          description: Line number where the reference was found in the code.
+        reference_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reference Text
+          description: Textual content of the reference. Class, method name, or other relevant information.
+        file_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: File Path
+          description: 'Full relative path to the file from repository root (e.g., ''app/cbl/COCRDLIC.cbl''). Extract from the Source: lines in the context if available.'
+      type: object
+      required:
+      - file_name
+      title: Reference
+    SyncModeResponse:
+      properties:
+        project_id:
+          type: integer
+          title: Project Id
+        sync_mode:
+          $ref: '#/components/schemas/SyncMode'
+        is_first_auto_codebase:
+          type: boolean
+          title: Is First Auto Codebase
+          default: false
+        auto_codebases_count:
+          type: integer
+          title: Auto Codebases Count
+          default: 0
+      type: object
+      required:
+      - project_id
+      - sync_mode
+      title: SyncModeResponse
+      description: Response after changing a project's sync mode.
+    PaginatedFilePathResponse:
+      properties:
+        results:
+          items:
+            type: string
+          type: array
+          title: Results
+          description: List of filepaths in pre-ingestion job
+        pagination:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Pagination
+      type: object
+      required:
+      - results
+      - pagination
+      title: PaginatedFilePathResponse
+    PendingCommitsResponse:
+      properties:
+        pending_commit_count:
+          type: integer
+          title: Pending Commit Count
+          description: Total number of pending commits (across all pages)
+        commits:
+          items:
+            $ref: '#/components/schemas/PendingCommitItem'
+          type: array
+          title: Commits
+          description: Paginated list of pending commits ordered by timestamp
+        pagination:
+          $ref: '#/components/schemas/PaginationMeta'
+          description: Pagination metadata
+      type: object
+      required:
+      - pending_commit_count
+      - commits
+      - pagination
+      title: PendingCommitsResponse
+      description: Response for the pending commits endpoint.
+    IngestionMetricsModelsResponse:
+      properties:
+        ingestion_llm_model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ingestion Llm Model
+        ingestion_llm_provider:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ingestion Llm Provider
+        ingestion_embedding_model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ingestion Embedding Model
+        prd_llm_model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prd Llm Model
+        prd_llm_provider:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prd Llm Provider
+        prd_embedding_model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prd Embedding Model
+        prd_use_dga_pipeline:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Prd Use Dga Pipeline
+        prd_react_status_summary:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Prd React Status Summary
+        tech_spec_llm_model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tech Spec Llm Model
+        tech_spec_llm_provider:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tech Spec Llm Provider
+        tech_spec_embedding_model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tech Spec Embedding Model
+        tech_spec_use_dga_pipeline:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Tech Spec Use Dga Pipeline
+      type: object
+      title: IngestionMetricsModelsResponse
+      description: LLM models and config used for each pipeline step.
+    SyncModeUpdate:
+      properties:
+        sync_mode:
+          $ref: '#/components/schemas/SyncMode'
+      type: object
+      required:
+      - sync_mode
+      title: SyncModeUpdate
+      description: Request to change a project's sync mode.
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Enter the Bearer token from Clerk authentication
+x-tagGroups:
+- name: Ingest Your Codebase
+  tags:
+  - vector_store
+  - projects
+  - pre_ingestion
+  - reingestion
+- name: Generate Code Intelligence
+  tags:
+  - documents
+  - document_generation
+  - document_formatters
+  - prd
+  - prd_version
+  - tech_spec
+  - quality_metrics
+  - sample_projects
+- name: Query Your Codebase
+  tags:
+  - conversations
+  - workflows
+  - discovery
+  - context
+  - artifacts
+- name: Manage and Inspect Intelligence
+  tags:
+  - api_debugging
+  - events
+  - version
+  - files
+  - cache
+  - token_tracking
+- name: Authenticate and Manage Access
+  tags:
+  - clerk_authentication
+  - github_webhooks
+  - github_integration
+  - organizations
+  - api_key_management
+  - mcp_token_management
+  - user
+- name: (Advanced) Prompt Tuning
+  tags:
+  - prompts
+- name: MCP Protocol
+  tags:
+  - mcp_protocol
+- name: Administration
+  tags:
+  - admin
