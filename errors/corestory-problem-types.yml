@@ -1,0 +1,29 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/corestory-openapi-original.json
+format: http-status
+envelope: >-
+  Errors are returned as JSON with HTTP status codes. The API (FastAPI/Crowdbotics
+  platform) returns standard status codes; 422 responses carry a validation-error
+  body (detail[] with loc/msg/type). Responses are not application/problem+json.
+problems:
+- status: 400
+  title: Bad request
+  description: Invalid request payload (e.g. invalid repository URL format).
+  example_operation: openapi/corestory-openapi-original.json#(POST /api/projects)
+- status: 404
+  title: Not found
+  description: Requested resource does not exist (e.g. project not found). Most common non-2xx code (53 operations).
+- status: 409
+  title: Conflict
+  description: State conflict (e.g. step conflict on first/last PRD step).
+- status: 422
+  title: Unprocessable entity
+  description: Request failed validation; body is a FastAPI validation error (detail[] of loc/msg/type).
+- status: 500
+  title: Internal server error
+  description: Unexpected server-side error (37 operations declare it).
+notes: >-
+  Derived from the response objects declared across 255 operations. Status-code
+  frequency: 404 x53, 500 x37, 422 x4, 400 x1, 409 x1. No RFC 9457 problem+json
+  media type is used; the platform is FastAPI-style JSON error bodies.

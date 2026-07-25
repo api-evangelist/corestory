@@ -1,0 +1,1 @@
+{"resource":"https://c2s.corestory.ai/mcp","authorization_servers":["https://clerk.corestory.ai"],"bearer_methods_supported":["header"],"scopes_supported":["profile","email"]}

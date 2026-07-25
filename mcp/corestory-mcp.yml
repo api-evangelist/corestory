@@ -1,0 +1,46 @@
+generated: '2026-07-18'
+method: searched
+status: published
+source: https://docs.corestory.ai/getting-started/mcp-server-setup
+server:
+  name: corestory
+  transport: http
+  url: https://c2s.corestory.ai/mcp
+  authorization:
+    type: oauth2-bearer
+    scheme: Bearer
+    token_prefix: mcp_
+    token_format: "mcp_{token_id}.{jwt_token}"
+    authorization_server: https://clerk.corestory.ai
+    protected_resource_metadata: https://c2s.corestory.ai/.well-known/oauth-protected-resource
+    docs: https://docs.corestory.ai/getting-started/mcp-server-setup
+supported_clients:
+- Claude Desktop
+- Claude Code
+- Cursor
+- VS Code (GitHub Copilot)
+- Windsurf
+- Devin
+- Factory.ai
+tools:
+- name: list_projects
+  description: List all projects in your organization
+- name: get_project_prd
+  description: Retrieve Product Requirements Document
+- name: get_project_techspec
+  description: Retrieve Technical Specification
+- name: list_conversations
+  description: List project conversations
+- name: get_conversation
+  description: Get conversation details and history
+- name: create_conversation
+  description: Create new conversation
+- name: rename_conversation
+  description: Rename existing conversation
+- name: send_message
+  description: Send message to conversation (streaming response)
+notes: >-
+  Official hosted/remote MCP server. Organization-scoped tokens are created in the
+  CoreStory dashboard (app.corestory.ai/settings) or via the token-management API
+  (/api/mcp-tokens). Verified live: GET /.well-known/oauth-protected-resource returns
+  resource https://c2s.corestory.ai/mcp with authorization_servers [clerk.corestory.ai].

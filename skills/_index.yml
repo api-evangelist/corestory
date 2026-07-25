@@ -1,0 +1,7 @@
+generated: '2026-07-18'
+method: generated
+skills:
+- file: corestory-query-code-intelligence.md
+  name: Query CoreStory code intelligence for a project
+  api: openapi/corestory-openapi-original.json
+  operations: [list_projects, get_project, get_prd, get_tech_spec, create_conversation, list_conversations]

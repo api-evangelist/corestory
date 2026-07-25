@@ -1,27 +1,673 @@
 aid: corestory
 name: CoreStory
-description: 'CoreStory is a company surfaced as a portfolio company of homebrew and added to the API
-  Evangelist network as a stub for enrichment. Sector: ai. This profile is a lead awaiting the enrichment
-  pipeline.'
+description: >-
+  CoreStory is an AI code intelligence platform that ingests large brownfield and legacy
+  codebases and reverse-engineers a persistent understanding of how they work — generating
+  product requirements (PRDs), technical specifications, dependency graphs, and business-rule
+  extractions directly from source. That intelligence is served to architects, product
+  managers, engineers, and AI coding agents (Claude, Cursor, Copilot, Devin) to accelerate
+  modernization, migration, maintenance, and developer onboarding. CoreStory exposes a REST
+  API (Bearer/JWT via Clerk) and a hosted Model Context Protocol (MCP) server so agents can
+  query project PRDs, tech specs, and codebase conversations directly. San Francisco based;
+  raised a $32M Series A in October 2025.
 url: https://raw.githubusercontent.com/api-evangelist/corestory/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - homebrew
-x-tier: stub
+x-tier: enriched
 x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
+image: https://cdn.prod.website-files.com/68896c42739657d548061137/68b9a4d77efd01ea98d5c962_og_Image%20Generic.png
 tags:
 - Company
 - Ai
-apis: []
+- Code Intelligence
+- Legacy Modernization
+- Developer Tools
+- Code Analysis
+- Documentation
+- MCP
+- Agentic
+apis:
+- aid: corestory:corestory-admin-api
+  name: CoreStory admin API
+  description: The admin API from CoreStory — 6 operation(s) for admin.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - admin
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-admin-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-api-debugging-api
+  name: CoreStory api_debugging API
+  description: The api_debugging API from CoreStory — 2 operation(s) for api_debugging.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - api_debugging
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-api-debugging-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-api-key-management-api
+  name: CoreStory api_key_management API
+  description: The api_key_management API from CoreStory — 4 operation(s) for api_key_management.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - api_key_management
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-api-key-management-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-artifacts-api
+  name: CoreStory artifacts API
+  description: The artifacts API from CoreStory — 2 operation(s) for artifacts.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - artifacts
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-artifacts-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-billing-api
+  name: CoreStory billing API
+  description: The billing API from CoreStory — 4 operation(s) for billing.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - billing
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-billing-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-cache-api
+  name: CoreStory cache API
+  description: The cache API from CoreStory — 6 operation(s) for cache.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - cache
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-cache-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-ciu-api
+  name: CoreStory ciu API
+  description: The ciu API from CoreStory — 4 operation(s) for ciu.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - ciu
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-ciu-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-clerk-authentication-api
+  name: CoreStory clerk_authentication API
+  description: The clerk_authentication API from CoreStory — 3 operation(s) for clerk_authentication.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - clerk_authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-clerk-authentication-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-context-api
+  name: CoreStory context API
+  description: The context API from CoreStory — 1 operation(s) for context.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - context
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-context-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-conversations-api
+  name: CoreStory conversations API
+  description: The conversations API from CoreStory — 11 operation(s) for conversations.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - conversations
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-conversations-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-discovery-api
+  name: CoreStory discovery API
+  description: The discovery API from CoreStory — 3 operation(s) for discovery.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - discovery
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-discovery-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-document-formatters-api
+  name: CoreStory document_formatters API
+  description: The document_formatters API from CoreStory — 8 operation(s) for document_formatters.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - document_formatters
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-document-formatters-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-document-generation-api
+  name: CoreStory document_generation API
+  description: The document_generation API from CoreStory — 6 operation(s) for document_generation.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - document_generation
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-document-generation-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-documents-api
+  name: CoreStory documents API
+  description: The documents API from CoreStory — 1 operation(s) for documents.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - documents
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-documents-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-events-api
+  name: CoreStory events API
+  description: The events API from CoreStory — 1 operation(s) for events.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - events
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-events-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-files-api
+  name: CoreStory files API
+  description: The files API from CoreStory — 3 operation(s) for files.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - files
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-files-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-github-integration-api
+  name: CoreStory github_integration API
+  description: The github_integration API from CoreStory — 10 operation(s) for github_integration.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - github_integration
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-github-integration-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-github-webhooks-api
+  name: CoreStory github_webhooks API
+  description: The github_webhooks API from CoreStory — 1 operation(s) for github_webhooks.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - github_webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-github-webhooks-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-languages-api
+  name: CoreStory languages API
+  description: The languages API from CoreStory — 1 operation(s) for languages.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - languages
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-languages-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-marketplace-api
+  name: CoreStory marketplace API
+  description: The marketplace API from CoreStory — 6 operation(s) for marketplace.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - marketplace
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-marketplace-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-mcp-protocol-api
+  name: CoreStory mcp_protocol API
+  description: The mcp_protocol API from CoreStory — 3 operation(s) for mcp_protocol.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - mcp_protocol
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-mcp-protocol-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-mcp-token-management-api
+  name: CoreStory mcp_token_management API
+  description: The mcp_token_management API from CoreStory — 3 operation(s) for mcp_token_management.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - mcp_token_management
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-mcp-token-management-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-mermaid-api
+  name: CoreStory mermaid API
+  description: The mermaid API from CoreStory — 1 operation(s) for mermaid.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - mermaid
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-mermaid-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-oauth-discovery-api
+  name: CoreStory oauth_discovery API
+  description: The oauth_discovery API from CoreStory — 1 operation(s) for oauth_discovery.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - oauth_discovery
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-oauth-discovery-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-old-conversations-api
+  name: CoreStory OLD_conversations API
+  description: The OLD_conversations API from CoreStory — 4 operation(s) for old_conversations.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - OLD_conversations
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-old-conversations-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-organizations-api
+  name: CoreStory organizations API
+  description: The organizations API from CoreStory — 15 operation(s) for organizations.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - organizations
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-organizations-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-pinned-workspaces-api
+  name: CoreStory pinned-workspaces API
+  description: The pinned-workspaces API from CoreStory — 2 operation(s) for pinned-workspaces.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - pinned-workspaces
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-pinned-workspaces-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-prd-api
+  name: CoreStory prd API
+  description: The prd API from CoreStory — 8 operation(s) for prd.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - prd
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-prd-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-prd-version-api
+  name: CoreStory prd_version API
+  description: The prd_version API from CoreStory — 10 operation(s) for prd_version.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - prd_version
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-prd-version-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-pre-ingestion-api
+  name: CoreStory pre_ingestion API
+  description: The pre_ingestion API from CoreStory — 10 operation(s) for pre_ingestion.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - pre_ingestion
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-pre-ingestion-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-projects-api
+  name: CoreStory projects API
+  description: The projects API from CoreStory — 40 operation(s) for projects.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - projects
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-projects-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-prompts-api
+  name: CoreStory prompts API
+  description: The prompts API from CoreStory — 4 operation(s) for prompts.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - prompts
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-prompts-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-quality-metrics-api
+  name: CoreStory quality_metrics API
+  description: The quality_metrics API from CoreStory — 3 operation(s) for quality_metrics.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - quality_metrics
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-quality-metrics-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-realtime-api
+  name: CoreStory realtime API
+  description: The realtime API from CoreStory — 1 operation(s) for realtime.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - realtime
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-realtime-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-reingestion-api
+  name: CoreStory reingestion API
+  description: The reingestion API from CoreStory — 9 operation(s) for reingestion.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - reingestion
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-reingestion-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-sample-projects-api
+  name: CoreStory sample_projects API
+  description: The sample_projects API from CoreStory — 3 operation(s) for sample_projects.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - sample_projects
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-sample-projects-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-sections-api
+  name: CoreStory sections API
+  description: The sections API from CoreStory — 7 operation(s) for sections.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - sections
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-sections-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-subscriptions-api
+  name: CoreStory subscriptions API
+  description: The subscriptions API from CoreStory — 2 operation(s) for subscriptions.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - subscriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-subscriptions-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-sync-status-api
+  name: CoreStory sync-status API
+  description: The sync-status API from CoreStory — 1 operation(s) for sync-status.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - sync-status
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-sync-status-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-system-overview-api
+  name: CoreStory system_overview API
+  description: The system_overview API from CoreStory — 3 operation(s) for system_overview.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - system_overview
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-system-overview-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-tech-spec-api
+  name: CoreStory tech_spec API
+  description: The tech_spec API from CoreStory — 7 operation(s) for tech_spec.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - tech_spec
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-tech-spec-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-update-schedule-api
+  name: CoreStory update-schedule API
+  description: The update-schedule API from CoreStory — 1 operation(s) for update-schedule.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - update-schedule
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-update-schedule-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-user-api
+  name: CoreStory user API
+  description: The user API from CoreStory — 3 operation(s) for user.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - user
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-user-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-vector-store-api
+  name: CoreStory vector_store API
+  description: The vector_store API from CoreStory — 12 operation(s) for vector_store.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - vector_store
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-vector-store-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-version-api
+  name: CoreStory version API
+  description: The version API from CoreStory — 1 operation(s) for version.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - version
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-version-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-webhooks-api
+  name: CoreStory webhooks API
+  description: The webhooks API from CoreStory — 2 operation(s) for webhooks.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-webhooks-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
+- aid: corestory:corestory-workflows-api
+  name: CoreStory workflows API
+  description: The workflows API from CoreStory — 7 operation(s) for workflows.
+  humanURL: https://docs.corestory.ai
+  baseURL: https://c2s.corestory.ai
+  tags:
+  - workflows
+  properties:
+  - type: OpenAPI
+    url: openapi/corestory-workflows-api-openapi.yml
+  - type: APIReference
+    url: https://c2s.corestory.ai/docs
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DeveloperPortal
+  url: https://docs.corestory.ai
+- type: Documentation
+  url: https://docs.corestory.ai
+- type: APIReference
+  url: https://c2s.corestory.ai/docs
+- type: GettingStarted
+  url: https://docs.corestory.ai/getting-started/getting-started
+- type: Blog
+  url: https://corestory.ai/blog
+- type: SignUp
+  url: https://app.corestory.ai
+- type: Support
+  url: https://corestory.ai/contact
+- type: TermsOfService
+  url: https://corestory.ai/terms-of-service
+- type: PrivacyPolicy
+  url: https://corestory.ai/privacy-policy
+- type: MCPServer
+  url: mcp/corestory-mcp.yml
+- type: LLMsTxt
+  url: llms/corestory-llms.txt
+- type: Authentication
+  url: authentication/corestory-authentication.yml
+- type: OAuthScopes
+  url: scopes/corestory-scopes.yml
+- type: WellKnown
+  url: well-known/corestory-well-known.yml
+- type: ErrorCatalog
+  url: errors/corestory-problem-types.yml
+- type: Conventions
+  url: conventions/corestory-conventions.yml
+- type: DataModel
+  url: data-model/corestory-data-model.yml
+- type: Overlay
+  url: overlays/corestory-openapi-overlay.yaml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: AgenticAccess
+  url: agentic-access/corestory-agentic-access.yml
+- type: VulnerabilityDisclosure
+  url: security/corestory-vulnerability-disclosure.yml
+- type: Security
+  url: https://corestory.ai/security
+- type: DomainSecurity
+  url: security/corestory-domain-security.yml
+- type: LinkedIn
+  url: https://www.linkedin.com/company/corestoryai/
+- type: YouTube
+  url: https://www.youtube.com/channel/UCEKEZLEx-vIGfIqxRopULsQ
 - type: Website
   url: https://corestory.ai
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

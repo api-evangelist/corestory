@@ -1,0 +1,21 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for CoreStory
+  version: 1.0.0
+extends: openapi/corestory-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: corestory
+    x-apievangelist-base-url: https://c2s.corestory.ai
+    x-apievangelist-mcp-server: https://c2s.corestory.ai/mcp
+    x-apievangelist-category: code-intelligence
+- target: $.servers
+  update:
+  - url: https://c2s.corestory.ai
+    description: CoreStory (Crowdbotics platform) production API
+notes: >-
+  Non-destructive Overlay 1.0.0 capturing API Evangelist enhancements over the
+  harvested spec. The original OpenAPI declares a single relative server ("/");
+  this overlay records the real production host (c2s.corestory.ai) and links the
+  hosted MCP server. Apply with the apply_overlay tool; never mutates the original.

@@ -1,0 +1,63 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/corestory-openapi-original.json
+entities:
+- name: Organization
+  schema: OrganizationResponse
+  key_fields: [id, slug, clerk_org_id, plan_tier, members_count, projects_count]
+- name: Project
+  schema: ProjectResponse
+  key_fields: [id, name, prd, created_at, updated_at]
+- name: Conversation
+  schema: ConversationResponse
+  key_fields: [id, project_id, user_id, title, persona, context_scope, chat_messages]
+- name: ApiKey
+  schema: ApiKeyResponse
+  key_fields: [id, name, key_prefix, scope_type, project_id, expires_at, is_active]
+- name: PRD
+  schema: (prd / prd_version tags)
+  key_fields: [project_id]
+- name: TechSpec
+  schema: (tech_spec tag)
+  key_fields: [project_id]
+- name: Document
+  schema: (documents / document_generation tags)
+  key_fields: [project_id]
+relationships:
+- from: Project
+  to: Organization
+  type: belongs_to
+  via: organization_id
+- from: Conversation
+  to: Project
+  type: belongs_to
+  via: project_id
+- from: Conversation
+  to: User
+  type: belongs_to
+  via: user_id
+- from: ApiKey
+  to: Project
+  type: belongs_to
+  via: project_id
+- from: PRD
+  to: Project
+  type: belongs_to
+  via: project_id
+- from: TechSpec
+  to: Project
+  type: belongs_to
+  via: project_id
+- from: Document
+  to: Project
+  type: belongs_to
+  via: project_id
+- from: Organization
+  to: Project
+  type: has_many
+  via: projects_count
+notes: >-
+  Derived from OpenAPI component schemas (352 total) and id-reference fields. Core
+  graph: Organization -> Project -> {Conversation, PRD, TechSpec, Document, ApiKey}.
+  A Project is the central aggregate; code intelligence artifacts (PRD, TechSpec,
+  documents) and conversations all hang off project_id.

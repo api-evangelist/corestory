@@ -1,0 +1,39 @@
+generated: '2026-07-18'
+method: searched
+hosts:
+- host: https://c2s.corestory.ai
+  documents:
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: corestory-oauth-protected-resource.json
+    note: RFC 9728 OAuth protected-resource metadata for the MCP server
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+- host: https://clerk.corestory.ai
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: corestory-oauth-authorization-server.json
+    note: RFC 8414 OAuth authorization-server metadata (Clerk identity provider)
+  - path: /.well-known/openid-configuration
+    status: 200
+    note: OIDC discovery (not saved; mirrors the oauth-authorization-server doc)
+- host: https://corestory.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+notes: >-
+  The API host (c2s.corestory.ai) exposes RFC 9728 protected-resource metadata for
+  its MCP server, pointing at Clerk as the authorization server. Clerk publishes the
+  RFC 8414 authorization-server + OIDC discovery docs. No security.txt or api-catalog
+  is published on the marketing or API hosts.

@@ -1,0 +1,45 @@
+generated: '2026-07-18'
+method: searched
+source: https://c2s.corestory.ai/.well-known/oauth-protected-resource
+docs: https://docs.corestory.ai/getting-started/mcp-server-setup
+schemes:
+- name: OAuth2 (Clerk)
+  source: https://clerk.corestory.ai/.well-known/oauth-authorization-server
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://clerk.corestory.ai/oauth/authorize
+    tokenUrl: https://clerk.corestory.ai/oauth/token
+    grant_types: [authorization_code, refresh_token]
+mcp_resource:
+  resource: https://c2s.corestory.ai/mcp
+  authorization_servers: [https://clerk.corestory.ai]
+  bearer_methods_supported: [header]
+  scopes_supported: [profile, email]
+scopes:
+- scope: openid
+  description: OpenID Connect authentication.
+  sources: [https://clerk.corestory.ai/.well-known/oauth-authorization-server]
+- scope: profile
+  description: Access the user's profile. Advertised by the MCP protected-resource metadata.
+  sources: [https://c2s.corestory.ai/.well-known/oauth-protected-resource]
+- scope: email
+  description: Access the user's email. Advertised by the MCP protected-resource metadata.
+  sources: [https://c2s.corestory.ai/.well-known/oauth-protected-resource]
+- scope: public_metadata
+  description: Read the user's public metadata.
+  sources: [https://clerk.corestory.ai/.well-known/oauth-authorization-server]
+- scope: private_metadata
+  description: Read the user's private metadata.
+  sources: [https://clerk.corestory.ai/.well-known/oauth-authorization-server]
+- scope: offline_access
+  description: Obtain a refresh token for offline access.
+  sources: [https://clerk.corestory.ai/.well-known/oauth-authorization-server]
+- scope: "user:org:read"
+  description: Read the user's organization membership.
+  sources: [https://clerk.corestory.ai/.well-known/oauth-authorization-server]
+notes: >-
+  The OpenAPI declares only http-bearer (JWT) global security, but CoreStory's MCP
+  server is an OAuth-protected resource (RFC 9728) whose authorization server is
+  Clerk (clerk.corestory.ai). Scopes captured verbatim from the live well-known
+  metadata. The MCP resource advertises profile+email; Clerk advertises the fuller
+  scope set.

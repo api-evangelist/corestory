@@ -1,0 +1,48 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/corestory-openapi-original.json
+authentication:
+  style: bearer
+  scheme: http bearer (JWT)
+  detail: >-
+    Global security is BearerAuth (JWT issued by Clerk, clerk.corestory.ai).
+    Programmatic API keys are managed under /api/api-keys (create/list/refresh/
+    revoke) and are project- or organization-scoped. MCP access uses separate
+    mcp_-prefixed tokens.
+  see: authentication/corestory-authentication.yml
+pagination:
+  style: offset-limit
+  params:
+  - limit
+  - offset
+  - page
+  - page_size
+  detail: >-
+    List endpoints accept offset/limit and/or page/page_size query parameters.
+    Style is page/offset based rather than cursor based.
+idempotency:
+  supported: false
+  detail: No Idempotency-Key header or idempotency parameter is declared in the OpenAPI.
+versioning:
+  scheme: none-in-path
+  api_version: 1.26.2
+  detail: >-
+    Spec info.version is 1.26.2; the server declares a single root server ("/")
+    with no version prefix in the path. No documented version-negotiation header.
+error_envelope:
+  detail: >-
+    JSON bodies with standard HTTP status codes; 422 carries a FastAPI validation
+    error (detail[] of loc/msg/type). Not RFC 9457 problem+json.
+  see: errors/corestory-problem-types.yml
+webhooks:
+  direction: inbound
+  detail: >-
+    The API receives inbound webhooks from GitHub (/api/webhooks/github), Stripe
+    (/api/webhooks/stripe), and subscription events (/api/webhooks/subscriptions),
+    plus a generic /api/events/receive. These are ingestion endpoints, not a
+    consumer-subscribable outbound event catalog.
+notes: >-
+  Derived cross-cutting semantics. Base host https://c2s.corestory.ai. Tags in the
+  spec group the surface into projects, conversations, prd, tech_spec, documents,
+  organizations, api_key_management, mcp_token_management, github_integration,
+  billing, and vector_store.

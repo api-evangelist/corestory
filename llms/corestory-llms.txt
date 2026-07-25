@@ -1,0 +1,40 @@
+# CoreStory Docs
+
+## Docs
+
+- [How Does CoreStory Work?](https://docs.corestory.ai/about/how-does-corestory-work.md): How CoreStory ingests repositories and produces queryable code intelligence.
+- [What is CoreStory?](https://docs.corestory.ai/about/what-is-corestory.md): An overview of the CoreStory code intelligence platform.
+- [Who is CoreStory For?](https://docs.corestory.ai/about/who-is-corestory-for.md): The teams and roles that benefit from CoreStory's code intelligence.
+- [Getting Started](https://docs.corestory.ai/getting-started/getting-started.md): Set up your CoreStory account and start generating code intelligence.
+- [MCP Server Setup](https://docs.corestory.ai/getting-started/mcp-server-setup.md): Connect CoreStory to AI coding tools via the Model Context Protocol.
+- [Supercharging AI Agents with CoreStory](https://docs.corestory.ai/getting-started/supercharging-ai-agents.md): How CoreStory's persistent code intelligence makes AI coding agents dramatically more effective across your development workflow.
+- [CoreStory Documentation](https://docs.corestory.ai/index.md): CoreStory is a code intelligence platform that uses AI to reverse-engineer specifications from source code. Explore guides, playbooks, and integrations to make any codebase queryable by humans and AI agents.
+- [Agentic Bug Resolution](https://docs.corestory.ai/playbooks/agentic-bug-resolution.md): Use CoreStory's persistent code intelligence to diagnose and fix bugs faster with AI agents grounded in your actual architecture.
+- [Business Rules Extraction](https://docs.corestory.ai/playbooks/business-rules-extraction.md): Extract, catalog, and validate business rules embedded in your codebase using CoreStory's persistent architectural intelligence.
+- [Code Modernization](https://docs.corestory.ai/playbooks/code-modernization.md): A phased, architecture-grounded methodology for modernizing legacy systems using CoreStory's persistent code intelligence — from assessment through behavioral verification.
+- [Feature Gap Analysis](https://docs.corestory.ai/playbooks/feature-gap-analysis.md): Systematically identify what exists, what's missing, and what needs to change to implement a new feature in an existing codebase using CoreStory's persistent architectural intelligence.
+- [Feature Implementation](https://docs.corestory.ai/playbooks/feature-implementation.md): A structured workflow for implementing new features using CoreStory's architectural intelligence to guide every step from spec to merge.
+- [Playbooks](https://docs.corestory.ai/playbooks/index.md): Structured, end-to-end workflows for the work software teams keep getting stuck on. Each playbook combines CoreStory's persistent code intelligence with AI agents and proven engineering methodology.
+- [M&A Technical Due Diligence](https://docs.corestory.ai/playbooks/ma-technical-due-diligence.md): Leverage CoreStory's code intelligence to accelerate technical due diligence for mergers, acquisitions, and investment decisions.
+- [Behavioral Verification](https://docs.corestory.ai/playbooks/modernization/behavioral-verification.md): Verify that modernized components faithfully preserve the business rules and behavioral semantics of the legacy system using CoreStory's persistent code intelligence.
+- [Codebase Assessment](https://docs.corestory.ai/playbooks/modernization/codebase-assessment.md): Evaluate a legacy codebase's modernization readiness using CoreStory's persistent code intelligence — architecture mapping, dependency analysis, tech debt identification, and risk scoring.
+- [Decomposition & Sequencing](https://docs.corestory.ai/playbooks/modernization/decomposition-sequencing.md): Use CoreStory to identify migration boundaries, map component dependencies, produce an ordered migration plan, and create work packages in Jira or Linear.
+- [Monolith to Microservices](https://docs.corestory.ai/playbooks/modernization/monolith-to-microservices.md): Architecture-specific guidance for decomposing a monolithic application into microservices using CoreStory's persistent code intelligence and the Strangler Fig execution pattern.
+- [Target Architecture & Strategy Selection](https://docs.corestory.ai/playbooks/modernization/target-architecture.md): Use CoreStory's codebase intelligence to inform the critical architectural decision: what modernization pattern to follow and what the target architecture should look like.
+- [Spec-Driven Development](https://docs.corestory.ai/playbooks/spec-driven-development.md): A six-phase methodology for writing architecture-grounded specifications that produce correct implementations on the first pass.
+- [Spec-Driven Test Generation](https://docs.corestory.ai/playbooks/spec-driven-test-generation.md): Generate tests from behavioral specifications — not implementation details — using CoreStory's code intelligence as a specification expert for AI coding agents.
+- [Spec Kit Companion](https://docs.corestory.ai/playbooks/spec-kit-companion.md): Companion guide for integrating GitHub's Spec Kit framework with CoreStory's architecture-grounded spec-driven development workflow.
+- [Behavioral Test Coverage](https://docs.corestory.ai/playbooks/test-generation/behavioral-test-coverage.md): Systematically generate behavioral test coverage from CoreStory's specification intelligence — acceptance criteria, invariants, business rules, state transitions, and edge cases — using AI coding agents.
+- [E2E Test Generation](https://docs.corestory.ai/playbooks/test-generation/e2e-test-generation.md): Generate end-to-end tests that verify critical user journeys against CoreStory's acceptance criteria and user story intelligence — from journey extraction through flakiness management.
+- [Using CoreStory with Jira](https://docs.corestory.ai/playbooks/using-corestory-with-jira.md): Connect Jira to your AI coding agent alongside CoreStory's MCP server to resolve tickets, enrich specs, draft issues, and triage complexity.
+- [Chat With Your Code](https://docs.corestory.ai/product/chat-with-your-code.md): Ask natural language questions about your codebase and get grounded answers.
+- [API Specifications](https://docs.corestory.ai/product/core-documents/api-specifications.md): AI-generated API documentation derived from your codebase's endpoints and interfaces.
+- [Data Models](https://docs.corestory.ai/product/core-documents/data-models.md): AI-generated data model documentation derived from your codebase's schema and structures.
+- [Executive Summary](https://docs.corestory.ai/product/core-documents/executive-summary.md): Auto-generated executive overview of your codebase's architecture and purpose.
+- [Integration Points](https://docs.corestory.ai/product/core-documents/integration-points.md): AI-generated integration documentation showing how your codebase connects to external systems.
+- [User Personas](https://docs.corestory.ai/product/core-documents/user-personas.md): AI-generated user personas derived from your codebase's functionality.
+- [User Stories](https://docs.corestory.ai/product/core-documents/user-stories.md): AI-generated user stories derived from your codebase's features and workflows.
+
+## OpenAPI Specs
+
+- [openapi](https://docs.corestory.ai/api-reference/openapi.json)
