@@ -1,0 +1,46 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin api_debugging API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "api_debugging",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Root",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/"
+          },
+          "docs": "Root endpoint that provides basic API information.\n\nReturns:\n    dict: Welcome message and API version"
+        },
+        {
+          "info": {
+            "name": "Health Check",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/health"
+          },
+          "docs": "Health check endpoint to verify API status.\n\nReturns:\n    dict: Health status of the API"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,50 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin update-schedule API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "update-schedule",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the org update schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/organizations/schedule"
+          },
+          "docs": "Return the org update schedule, or null if none exists."
+        },
+        {
+          "info": {
+            "name": "Create or update the org update schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/organizations/schedule",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or update the org update schedule. Blocked while a run is in progress."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

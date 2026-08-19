@@ -1,0 +1,1241 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin projects API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "projects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get organization projects with pagination",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Case-insensitive substring match on project name"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "sort_order",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "is_sample_clone",
+                "value": "",
+                "type": "query",
+                "description": "Filter by sample clone status"
+              }
+            ]
+          },
+          "docs": "Retrieve projects from the user's organization with pagination support and ingestion status"
+        },
+        {
+          "info": {
+            "name": "Create a new project with auto-generated PRD",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new project with the specified ID and automatically create an associated PRD"
+        },
+        {
+          "info": {
+            "name": "Create a new project with auto-generated PRD and ingestion",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/create-and-generate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new project with auto-generated ID, automatically create an associated PRD, and trigger code ingestion and document generation"
+        },
+        {
+          "info": {
+            "name": "Get project details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve details for a specific project"
+        },
+        {
+          "info": {
+            "name": "Update project",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/projects/:project_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the name and/or source type of a specific project"
+        },
+        {
+          "info": {
+            "name": "Transfer project to another organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/transfer",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Transfer a project to a different organization. This endpoint is restricted to CoreStory employees only."
+        },
+        {
+          "info": {
+            "name": "Lightweight polling status for ingestion and generation jobs.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/status",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Return status + progress for ingestion, PRD generation, and tech-spec generation."
+        },
+        {
+          "info": {
+            "name": "Get pending commits for a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/pending-commits",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page"
+              }
+            ]
+          },
+          "docs": "Retrieve commits pushed since the last ingestion (paginated, oldest first)"
+        },
+        {
+          "info": {
+            "name": "Get project health signals, code quality, and security findings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/health",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get pre-computed health signals, code quality assessment, and security findings."
+        },
+        {
+          "info": {
+            "name": "Get the project's Tech Spec (not base PRD) sections data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/tech-spec",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get all of the project's Tech Spec sections (not base PRD sections)."
+        },
+        {
+          "info": {
+            "name": "Get the project's PRD generation status.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/prd/status",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get the project's PRD generation status."
+        },
+        {
+          "info": {
+            "name": "Get the project's tech-spec generation status.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/tech-spec/status",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get the project's tech spec generation status."
+        },
+        {
+          "info": {
+            "name": "Get the project's PRD (not tech spec) sections data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/prd",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get all of the project's PRD sections (not Tech Spec sections)."
+        },
+        {
+          "info": {
+            "name": "Delete a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/projects/:project_id/delete",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a project and all its associated data including PRD, PRD steps, and vector store data"
+        },
+        {
+          "info": {
+            "name": "Get latest ingestion/generation metrics for a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/metrics/processing/summary",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a consolidated snapshot of ingestion/generation status & progress."
+        },
+        {
+          "info": {
+            "name": "Upload repository files and create project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/upload-repository",
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Upload a single zipped repository file to Azure Blob Storage or Local directory, create a new project, and trigger ingestion and document generation"
+        },
+        {
+          "info": {
+            "name": "Create project from an existing pre-ingestion upload",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/upload-repository-from-pre-ingestion",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use an existing pre-ingestion job (already uploaded artifact) to create a project and start ingestion."
+        },
+        {
+          "info": {
+            "name": "Generate the PRD sections (no Tech Spec sections) for the project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/prd/generate",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "The format of the generated document"
+              },
+              {
+                "name": "show_code_references",
+                "value": "",
+                "type": "query",
+                "description": "Whether to include code references in user stories"
+              },
+              {
+                "name": "generate_toc",
+                "value": "",
+                "type": "query",
+                "description": "Whether to generate a table of contents (only applies when format is 'markdown')"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generates a high-level Product Requirements Document (PRD) focused on business and user requirements.\n    It generates 5 sections: Executive Overview, User Personas, High-Level Requirements (Epics), User Stories, Security Requirements.\n\n    The show_code_references flag (default: False) controls whether code references are included in user stories.\n    When set to False, code references will be removed from both JSON and markdown output.\n\n    The generate_toc flag (default: False) controls wheth"
+        },
+        {
+          "info": {
+            "name": "Generate the Tech Spec sections (no base PRD sections) for the project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/tech-spec/generate",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "The format of the generated document"
+              },
+              {
+                "name": "show_code_references",
+                "value": "",
+                "type": "query",
+                "description": "Whether to include code references in user stories"
+              },
+              {
+                "name": "generate_toc",
+                "value": "",
+                "type": "query",
+                "description": "Whether to generate a table of contents (only applies when format is 'markdown')"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generates a detailed Technical Specification Document focused on implementation details, including:\n- System Architecture\n- Data Models and ERDs\n- API Specifications\n- Integration Points\n- Security Considerations\n- Implementation Strategy\n\nThis document is suitable for technical teams, developers, and system architects.\n\nThe endpoint accepts an optional context object that can include:\n- features: Pre-defined features to use for generation\n\nIf features are not provided, they will be generated au"
+        },
+        {
+          "info": {
+            "name": "Generate all PRD and tech spec sections for the project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/prd/generate-all",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "(Re)generates all sections, runs in background."
+        },
+        {
+          "info": {
+            "name": "Get the context for the project's latest PRD.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/prd/context",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get the context for the project's latest PRD.\n\nArgs:\n    project_id: ID of the Project\n\nReturns:\n    PRDContextResponse: The PRD context with creation timestamp"
+        },
+        {
+          "info": {
+            "name": "Set or update the context for the project's latest PRD.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/prd/context",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set or update the context for a specific PRD.\n\nArgs:\n    project_id: ID of the Project\n\nReturns:\n    PRDContextResponse: The updated PRD context with creation timestamp"
+        },
+        {
+          "info": {
+            "name": "Get a catalog of user stories items for UI faceted browsing.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/prd/user-stories/catalog",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns unique, alpha-sorted catalogs lists, and counts for:\n  - main_features: from high_level_requirements.features[*].category\n  - epics: from high_level_requirements.features[*].name\n  - personas: from user_personas.user_personas[*].name"
+        },
+        {
+          "info": {
+            "name": "Get a catalog of user stories items for UI faceted browsing.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/tech-spec/tech-user-stories/catalog",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns unique, alpha-sorted catalogs lists, and counts for:\n  - main_features: from high_level_requirements.features[*].category\n  - epics: from high_level_requirements.features[*].name\n  - personas: from user_personas.user_personas[*].name"
+        },
+        {
+          "info": {
+            "name": "Start pre-reingestion analysis for an existing project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/reingestion/analyze",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Start analysis of an existing project's codebase for reingestion.\nReturns a job ID that can be polled for status and results."
+        },
+        {
+          "info": {
+            "name": "Get reingestion analysis job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/reingestion/analyze/:job_id/status",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get the status of a reingestion analysis job."
+        },
+        {
+          "info": {
+            "name": "Get coverage results from reingestion analysis",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/reingestion/analyze/:job_id/coverage",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get coverage results from a reingestion analysis job.\n\nIncludes file change summary (added/modified/removed) and CIU cost\nestimate when the analysis was run for an existing project (reingestion)."
+        },
+        {
+          "info": {
+            "name": "Get excluded file paths from reingestion analysis",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/reingestion/analyze/:job_id/excluded-files",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page"
+              },
+              {
+                "name": "file_name",
+                "value": "",
+                "type": "query",
+                "description": "Filter files by name"
+              }
+            ]
+          },
+          "docs": "Get the list of excluded file paths from a reingestion analysis job."
+        },
+        {
+          "info": {
+            "name": "Get included file paths from reingestion analysis",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/reingestion/analyze/:job_id/included-files",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page"
+              },
+              {
+                "name": "file_name",
+                "value": "",
+                "type": "query",
+                "description": "Filter files by name"
+              }
+            ]
+          },
+          "docs": "Get the list of included file paths from a reingestion analysis job."
+        },
+        {
+          "info": {
+            "name": "Delete a reingestion analysis job",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/projects/:project_id/reingestion/analyze/:job_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a reingestion analysis job and its associated files."
+        },
+        {
+          "info": {
+            "name": "Trigger full reingestion for an existing project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/reingestion/trigger",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Trigger full reingestion of an existing project's codebase.\n\nThis will:\n1. Delete the existing vector store\n2. Re-clone and ingest the codebase\n3. Optionally regenerate PRD/TechSpec documents\n4. Create a new version entry\n\nSet `force=true` in the body to re-process every document instead of skipping\nfiles that already exist in the vector store. Use after extractor/schema changes\nwhen existing chunks need to be re-extracted."
+        },
+        {
+          "info": {
+            "name": "List ingestion events for a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/ingestion-events",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page"
+              }
+            ]
+          },
+          "docs": "List ingestion events for a project, ordered most recent first."
+        },
+        {
+          "info": {
+            "name": "Doc-section impact (added/modified/removed) for an ingestion event",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/ingestion-events/:event_id/doc-impact",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "event_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Return which PRD/Tech Spec sections changed when this ingestion event regenerated docs."
+        },
+        {
+          "info": {
+            "name": "Clone Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/clone",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Take a project and clone it and all associated resources.\nONLY creates the project syncronously. Fires off task to clone all related items in the background\nand returns the new project asap."
+        },
+        {
+          "info": {
+            "name": "Generate a specific PRD section",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/prd/:section_name/generate",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate a specific PRD section"
+        },
+        {
+          "info": {
+            "name": "Generate a specific Tech Spec section",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/tech-spec/:section_name/generate",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate a specific Tech Spec section"
+        },
+        {
+          "info": {
+            "name": "Get the specified PRD section.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/prd/:section_name",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "epics",
+                "value": "",
+                "type": "query",
+                "description": "Epic IDs"
+              },
+              {
+                "name": "personas",
+                "value": "",
+                "type": "query",
+                "description": "Persona IDs"
+              },
+              {
+                "name": "main_features",
+                "value": "",
+                "type": "query",
+                "description": "Main feature IDs"
+              },
+              {
+                "name": "keywords",
+                "value": "",
+                "type": "query",
+                "description": "Keyword list"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Free-text; supports exact, \"a or b\", or \"a and b\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page (default: 999)"
+              }
+            ]
+          },
+          "docs": "Get a single specified section for the project's base PRD (not tech spec)."
+        },
+        {
+          "info": {
+            "name": "Update the specified PRD section.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/projects/:project_id/prd/:section_name",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get a single specified section for the project's base PRD (not tech spec)."
+        },
+        {
+          "info": {
+            "name": "Get the specified Tech Spec section.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/tech-spec/:section_name",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "epics",
+                "value": "",
+                "type": "query",
+                "description": "Epic IDs"
+              },
+              {
+                "name": "personas",
+                "value": "",
+                "type": "query",
+                "description": "Persona IDs"
+              },
+              {
+                "name": "main_features",
+                "value": "",
+                "type": "query",
+                "description": "Main feature IDs"
+              },
+              {
+                "name": "keywords",
+                "value": "",
+                "type": "query",
+                "description": "Keyword list"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Free-text; supports exact, \"a or b\", or \"a and b\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page (default: 999)"
+              }
+            ]
+          },
+          "docs": "Get a single specified section for the project's PRD Tech Spec (not base PRD section)."
+        },
+        {
+          "info": {
+            "name": "Update the specified Tech Spec section.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/projects/:project_id/tech-spec/:section_name",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get a single specified section for the project's base PRD (not tech spec)."
+        },
+        {
+          "info": {
+            "name": "Get the complete file manifest for a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/file-manifest",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "include_excluded",
+                "value": "",
+                "type": "query",
+                "description": "Include files excluded during pre-ingestion analysis"
+              },
+              {
+                "name": "ingested_only",
+                "value": "",
+                "type": "query",
+                "description": "Only return files successfully ingested into the vector store"
+              }
+            ]
+          },
+          "docs": "Returns a manifest of files discovered during pre-ingestion analysis. By default only included files are returned. Use include_excluded=true to also return excluded files. Use ingested_only=true to return only files successfully ingested into the vector store."
+        },
+        {
+          "info": {
+            "name": "Stream file content from vector store by file path",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/file-content",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "file_path",
+                "value": "",
+                "type": "query",
+                "description": "The file path to retrieve content for"
+              },
+              {
+                "name": "start_line",
+                "value": "",
+                "type": "query",
+                "description": "Starting line number (1-indexed, inclusive)"
+              },
+              {
+                "name": "end_line",
+                "value": "",
+                "type": "query",
+                "description": "Ending line number (1-indexed, inclusive)"
+              }
+            ]
+          },
+          "docs": "Retrieve the code content of a file from the vector store using its file path. Returns streaming response for memory efficiency."
+        },
+        {
+          "info": {
+            "name": "Get file metadata from vector store",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/file-content/metadata",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "file_path",
+                "value": "",
+                "type": "query",
+                "description": "The file path to retrieve metadata for"
+              },
+              {
+                "name": "start_line",
+                "value": "",
+                "type": "query",
+                "description": "Starting line number (1-indexed, inclusive)"
+              },
+              {
+                "name": "end_line",
+                "value": "",
+                "type": "query",
+                "description": "Ending line number (1-indexed, inclusive)"
+              }
+            ]
+          },
+          "docs": "Retrieve aggregated metadata for a file from the vector store including summaries, functions, classes, and interfaces."
+        },
+        {
+          "info": {
+            "name": "Get project operator config (stored overrides + effective values)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/config",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Return a project's stored operator overrides and the resolved effective values.\n\nInternal-only: these overrides steer experiment/A-B behavior (e.g. chat\ntopology) and are not org-member-facing."
+        },
+        {
+          "info": {
+            "name": "Update project operator config (partial merge)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/projects/:project_id/config",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partial-merge operator overrides onto a project's config.\n\nOnly keys present in the request change; a key set to null clears that\noverride and falls back to the env default. Unknown keys are rejected.\nInternal-only."
+        },
+        {
+          "info": {
+            "name": "Set project sync mode (manual or auto)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/projects/:project_id/sync-mode",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Toggle a project between manual and auto sync mode.\n\nAuto mode requires an org schedule to exist — the backend enforces this."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

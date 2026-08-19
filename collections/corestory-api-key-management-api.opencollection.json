@@ -1,0 +1,148 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin api_key_management API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "api_key_management",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all API keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/api-keys",
+            "params": [
+              {
+                "name": "include_revoked",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List all API keys for the current user in the current organization."
+        },
+        {
+          "info": {
+            "name": "Create a new API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/api-keys",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new API key for programmatic access.\n\n    The key is returned ONLY ONCE in the response. Save it securely!\n\n    API keys inherit your current permissions in the organization.\n    When your permissions change in Clerk, the API key automatically\n    reflects those changes.\n\n    **Scope Types:**\n    - `user`: Full access based on your organization permissions\n    - `project`: Access limited to a specific project\n    - `organization`: Machine-to-machine (M2M) key not tied to a specific user"
+        },
+        {
+          "info": {
+            "name": "Refresh (rotate) an API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/api-keys/refresh",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Refresh an existing API key by revoking the current one and generating a new one.\n\n    This endpoint finds the active key matching the specified scope, revokes it,\n    and creates a new key with the same name and description.\n\n    The new key is returned ONLY ONCE in the response. Save it securely!\n\n    **Use Cases:**\n    - Key rotation for security compliance\n    - Replacing a potentially compromised key\n    - Refreshing an expiring key"
+        },
+        {
+          "info": {
+            "name": "Get key details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/api-keys/:key_id",
+            "params": [
+              {
+                "name": "key_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get details for a specific API key."
+        },
+        {
+          "info": {
+            "name": "Update key metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/api-keys/:key_id",
+            "params": [
+              {
+                "name": "key_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the name or description of an API key."
+        },
+        {
+          "info": {
+            "name": "Revoke an API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/api-keys/:key_id",
+            "params": [
+              {
+                "name": "key_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Revoke an API key. The key will immediately stop working."
+        },
+        {
+          "info": {
+            "name": "Revoke an API key (alternative endpoint)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/api-keys/:key_id/revoke",
+            "params": [
+              {
+                "name": "key_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Alternative endpoint to revoke an API key. Same as DELETE /api-keys/{key_id}"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

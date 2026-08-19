@@ -1,0 +1,324 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin document_formatters API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "document_formatters",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get available sections for a document type",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/format/available-sections/:doc_type",
+            "params": [
+              {
+                "name": "doc_type",
+                "value": "",
+                "type": "path",
+                "description": "Document type"
+              }
+            ]
+          },
+          "docs": "Get list of available sections for a document type.\n\nThis helps clients know what sections they can request."
+        },
+        {
+          "info": {
+            "name": "Format Table Of Contents",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/format/table-of-contents",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate a table of contents for markdown content.\n\nArgs:\n    request: The request containing markdown content\n\nReturns:\n    DocumentFormatResponse: The markdown content with table of contents"
+        },
+        {
+          "info": {
+            "name": "Retrieve and format stored document as markdown",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/format/markdown-output/:project_id/:doc_type",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "Project ID"
+              },
+              {
+                "name": "doc_type",
+                "value": "",
+                "type": "path",
+                "description": "Document type"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "query",
+                "description": "Section name for document-section type"
+              },
+              {
+                "name": "show_code_references",
+                "value": "",
+                "type": "query",
+                "description": "Include code references in user stories"
+              },
+              {
+                "name": "show_references",
+                "value": "",
+                "type": "query",
+                "description": "Include reference sections"
+              },
+              {
+                "name": "generate_toc",
+                "value": "",
+                "type": "query",
+                "description": "Generate table of contents"
+              },
+              {
+                "name": "epics",
+                "value": "",
+                "type": "query",
+                "description": "Epic IDs"
+              },
+              {
+                "name": "personas",
+                "value": "",
+                "type": "query",
+                "description": "Persona IDs"
+              },
+              {
+                "name": "main_features",
+                "value": "",
+                "type": "query",
+                "description": "Main feature IDs"
+              },
+              {
+                "name": "keywords",
+                "value": "",
+                "type": "query",
+                "description": "Keyword list"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Free-text; supports exact, \"a or b\", or \"a and b\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page (default: 999)"
+              }
+            ]
+          },
+          "docs": "Retrieves a stored document (PRD, Technical Specification, or Document Section) from the database\n    and formats it into a clean, readable markdown document.\n\n    This endpoint fetches the latest PRD for the given project and formats it based on the doc_type.\n\n    Document types:\n    - prd: Full Product Requirements Document\n    - technical-spec: Full Technical Specification\n    - document-section: Individual document section (requires section query parameter)"
+        },
+        {
+          "info": {
+            "name": "Export document as PDF from markdown input",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/format/pdf-output",
+            "params": [
+              {
+                "name": "doc_type",
+                "value": "",
+                "type": "query",
+                "description": "Optional document type for filename generation"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Exports a document as PDF from markdown content (e.g., from artifact download).\n\n    This endpoint accepts markdown content directly and converts it to PDF format.\n    It accepts pre-formatted markdown content and converts it directly to PDF.\n\n    The markdown should already be formatted (e.g., from a previous artifact download).\n\n    **Plan restriction:** Requires Pro or Enterprise plan. Free users receive a\n    403 error with PLAN_UPGRADE_REQUIRED."
+        },
+        {
+          "info": {
+            "name": "Initiate async PDF generation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/format/document-async/:project_id/:doc_type",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "Project ID"
+              },
+              {
+                "name": "doc_type",
+                "value": "",
+                "type": "path",
+                "description": "Document type"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "query",
+                "description": "Section name for document-section type"
+              },
+              {
+                "name": "show_code_references",
+                "value": "",
+                "type": "query",
+                "description": "Include code references in user stories"
+              },
+              {
+                "name": "show_references",
+                "value": "",
+                "type": "query",
+                "description": "Include reference sections"
+              },
+              {
+                "name": "generate_toc",
+                "value": "",
+                "type": "query",
+                "description": "Generate table of contents"
+              },
+              {
+                "name": "epics",
+                "value": "",
+                "type": "query",
+                "description": "Epic IDs"
+              },
+              {
+                "name": "personas",
+                "value": "",
+                "type": "query",
+                "description": "Persona IDs"
+              },
+              {
+                "name": "main_features",
+                "value": "",
+                "type": "query",
+                "description": "Main feature IDs"
+              },
+              {
+                "name": "keywords",
+                "value": "",
+                "type": "query",
+                "description": "Keyword list"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Free-text; supports exact, \"a or b\", or \"a and b\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page (default: 999)"
+              }
+            ]
+          },
+          "docs": "Initiates asynchronous PDF generation for a document.\n\n    Returns immediately with a job_id and URLs for tracking progress:\n    - stream_url: Real-time SSE updates (subscribe for progress events)\n    - result_url: Download the completed PDF\n\n    The PDF generation runs in the background via ARQ workers. Clients should:\n    1. Subscribe to stream_url for real-time progress via SSE\n    2. When status is 'completed', download the PDF from result_url\n\n    Document types:\n    - prd: Full Product Req"
+        },
+        {
+          "info": {
+            "name": "Stream PDF generation progress via SSE",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/format/pdf-stream/:job_id",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "The job identifier"
+              }
+            ]
+          },
+          "docs": "Stream real-time progress updates for a PDF generation job using Server-Sent Events (SSE).\n\n    This endpoint provides live progress updates as the PDF is being generated, without\n    requiring polling. It uses Redis Pub/Sub to receive events from the ARQ worker,\n    making it work seamlessly across Kubernetes pods.\n\n    **Usage:**\n    ```javascript\n    const eventSource = new EventSource('/api/format/pdf-stream/abc-123');\n    eventSource.addEventListener('progress', (event) => {\n        const d"
+        },
+        {
+          "info": {
+            "name": "Download completed PDF",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/format/pdf-output-result/:job_id",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "Job ID from the async initiation response"
+              }
+            ]
+          },
+          "docs": "Download the completed PDF for a finished job.\n\n    This endpoint returns the PDF binary content with appropriate headers\n    for browser download. After successful download, the PDF file is\n    deleted from storage, while the SOTJ job record is retained for audit purposes.\n\n    Clients should call this endpoint after the status endpoint returns\n    'completed' status.\n\n    Returns:\n        - 200: PDF binary content (application/pdf)\n        - 403: Access denied (job belongs to different organiz"
+        },
+        {
+          "info": {
+            "name": "Export document as Word (.docx) from markdown input",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/format/docx-output",
+            "params": [
+              {
+                "name": "doc_type",
+                "value": "",
+                "type": "query",
+                "description": "Optional document type for filename generation"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Exports a document as Word (.docx) from markdown content.\n\n    This endpoint accepts pre-formatted markdown content and converts it to a\n    Word document using Pandoc. Mermaid diagrams are rendered as embedded images.\n\n    **Plan restriction:** Requires Pro or Enterprise plan. Free users receive a\n    403 error with PLAN_UPGRADE_REQUIRED."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

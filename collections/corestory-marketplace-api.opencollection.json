@@ -1,0 +1,129 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin marketplace API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "marketplace",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Start the OAuth handshake for a connector",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/marketplace/connectors/:connector_id/oauth/start",
+            "params": [
+              {
+                "name": "connector_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Start the OAuth handshake for a connector"
+        },
+        {
+          "info": {
+            "name": "Update non-secret configuration values and re-evaluate connection status",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/marketplace/connections/:connector_id/configuration",
+            "params": [
+              {
+                "name": "connector_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update non-secret configuration values and re-evaluate connection status"
+        },
+        {
+          "info": {
+            "name": "Re-check a connection's stored credentials against the provider",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/marketplace/connections/:connector_id/verify",
+            "params": [
+              {
+                "name": "connector_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Re-check a connection's stored credentials against the provider"
+        },
+        {
+          "info": {
+            "name": "Disconnect a connection: remove credentials + configuration (idempotent)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/marketplace/connections/:connector_id/disconnect",
+            "params": [
+              {
+                "name": "connector_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Disconnect a connection: remove credentials + configuration (idempotent)"
+        },
+        {
+          "info": {
+            "name": "List marketplace connectors with per-org status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/marketplace/catalog"
+          },
+          "docs": "Return all active connectors annotated with the caller's connection status."
+        },
+        {
+          "info": {
+            "name": "Get connector detail with per-org connection record",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/marketplace/catalog/:connector_id",
+            "params": [
+              {
+                "name": "connector_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Return descriptive fields plus the caller org's connection record."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

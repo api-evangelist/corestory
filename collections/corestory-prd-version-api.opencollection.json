@@ -1,0 +1,323 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin prd_version API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "prd_version",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List the versions of the given PRD (with per-version diffs vs previous)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/prd/versions",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page (default: 999)"
+              }
+            ]
+          },
+          "docs": "List all versions for the project's PRD (most recent first) and, for each version,\ninclude the list of section names that differ compared to the previous version\nin that ordered list. The oldest version has an empty diff."
+        },
+        {
+          "info": {
+            "name": "Bulk-import PRD/TechSpec step content",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/prd/import-steps",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Bulk-create PRDStep rows from a flat dict of dashed step names to content.\nDoes not create a version — call create-from-latest afterwards."
+        },
+        {
+          "info": {
+            "name": "Create a new PRD version from the latest steps",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/prd/versions/create-from-latest",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Snapshot the latest PRD steps into a new PRDVersion and set it as current."
+        },
+        {
+          "info": {
+            "name": "Update a PRD Version (only certain allowed fields)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/projects/:project_id/prd/versions/:version_uid",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version_uid",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update allowed fields on a PRD Version.\nCurrently allowed fields: title"
+        },
+        {
+          "info": {
+            "name": "Delete a PRD Version by uid",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/projects/:project_id/prd/versions/:version_uid",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version_uid",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a PRD version by UID (must belong to this project's PRD)."
+        },
+        {
+          "info": {
+            "name": "Get section names that changed between two PRD versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/prd/versions/diff",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "from_version",
+                "value": "",
+                "type": "query",
+                "description": "Source PRD version UID"
+              },
+              {
+                "name": "to_version",
+                "value": "",
+                "type": "query",
+                "description": "Target PRD version UID"
+              }
+            ]
+          },
+          "docs": "Return a list of section names that differ between two PRD versions.\nExample:\n{ \"changed_sections\": [\"executive-overview\", \"data-models\", \"user-stories\"] }"
+        },
+        {
+          "info": {
+            "name": "Promote a full PRD version (PRD + tech specs) to be the current one",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/prd/versions/:version_uid/promote",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version_uid",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Make the given PRD version (by UID) the current version for this project's PRD."
+        },
+        {
+          "info": {
+            "name": "Promote a single section from an old version by cloning into a new current version",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/prd/versions/:version_uid/:section_name/promote",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version_uid",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Clone the given PRD section from the specified PRD version (by UID),\ncreate a NEW PRDVersion using that section, set it current, and return the new version."
+        },
+        {
+          "info": {
+            "name": "Promote a single tech-spec section from an old version by cloning into a new current version",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/tech-spec/versions/:version_uid/:section_name/promote",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version_uid",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Clone the given tech-spec section from the specified PRD version (by UID),\ncreate a NEW PRDVersion using that section, set it current, and return the new version."
+        },
+        {
+          "info": {
+            "name": "List PRD versions that include the given section.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/prd/:section_name/versions",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page (default: 999)"
+              }
+            ]
+          },
+          "docs": "Return PRD versions (newest first) that contain the specified section.\nUses PRDVersionStepService.list_versions_for_step(prd_id, step_name) to find matches."
+        },
+        {
+          "info": {
+            "name": "List PRD versions that include the given tech-spec section.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/tech-spec/:section_name/versions",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page (default: 999)"
+              }
+            ]
+          },
+          "docs": "Return PRD versions (newest first) that contain the specified section.\nUses PRDVersionStepService.list_versions_for_step(prd_id, step_name) to find matches."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

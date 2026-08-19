@@ -1,0 +1,245 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin sections API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "sections",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Generate a specific section.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/sections/:section_name/generate",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate (or regenerate) a single section."
+        },
+        {
+          "info": {
+            "name": "Generate all sections (PRD + Tech Spec) in background.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/sections/generate-all",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate all PRD and tech-spec sections in background.\n\nUsed for \"living PRD\" — after reingestion, regenerate everything."
+        },
+        {
+          "info": {
+            "name": "Get a catalog of tech-user-story facets for UI browsing.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/sections/tech-user-stories/catalog",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Return unique, alpha-sorted catalog lists for main_features, epics, and personas."
+        },
+        {
+          "info": {
+            "name": "Get a catalog of user-story facets for UI browsing.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/sections/user-stories/catalog",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Return unique, alpha-sorted catalog lists for main_features, epics, and personas."
+        },
+        {
+          "info": {
+            "name": "Get all sections (PRD + Tech Spec) for the project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/sections",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get all PRD + tech-spec sections combined into a single response."
+        },
+        {
+          "info": {
+            "name": "Get a single section by name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/sections/:section_name",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "epics",
+                "value": "",
+                "type": "query",
+                "description": "Epic IDs"
+              },
+              {
+                "name": "personas",
+                "value": "",
+                "type": "query",
+                "description": "Persona IDs"
+              },
+              {
+                "name": "main_features",
+                "value": "",
+                "type": "query",
+                "description": "Main feature IDs"
+              },
+              {
+                "name": "keywords",
+                "value": "",
+                "type": "query",
+                "description": "Keyword list"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Free-text; supports exact, \"a or b\", or \"a and b\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page (default: 999)"
+              }
+            ]
+          },
+          "docs": "Get a single section (PRD or tech-spec) with optional pagination and filtering."
+        },
+        {
+          "info": {
+            "name": "Update a section.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/projects/:project_id/sections/:section_name",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a single section (PRD or tech-spec)."
+        },
+        {
+          "info": {
+            "name": "List all document section names (PRD + Tech Spec).",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/sections/catalog"
+          },
+          "docs": "Return the static catalog of all 14 PRD + Tech Spec section names."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

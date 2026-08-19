@@ -1,0 +1,133 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin mcp_token_management API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "mcp_token_management",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all MCP tokens",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/mcp-tokens",
+            "params": [
+              {
+                "name": "include_revoked",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List all MCP tokens for the current user."
+        },
+        {
+          "info": {
+            "name": "Create a new MCP token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/mcp-tokens",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new named MCP access token.\n\n    The token is returned ONLY ONCE in the response. Save it securely!\n\n    Use this token to authenticate MCP clients like Claude Desktop."
+        },
+        {
+          "info": {
+            "name": "Get token details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/mcp-tokens/:token_id",
+            "params": [
+              {
+                "name": "token_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get details for a specific MCP token."
+        },
+        {
+          "info": {
+            "name": "Update token metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/mcp-tokens/:token_id",
+            "params": [
+              {
+                "name": "token_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the name or description of an MCP token."
+        },
+        {
+          "info": {
+            "name": "Revoke a token",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/mcp-tokens/:token_id",
+            "params": [
+              {
+                "name": "token_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Revoke an MCP token. The token will immediately stop working."
+        },
+        {
+          "info": {
+            "name": "Revoke a token (alternative endpoint)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/mcp-tokens/:token_id/revoke",
+            "params": [
+              {
+                "name": "token_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Alternative endpoint to revoke a token. Same as DELETE /mcp-tokens/{token_id}"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

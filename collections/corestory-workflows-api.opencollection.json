@@ -1,0 +1,355 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin workflows API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "workflows",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List workflow definitions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/workflows/definitions",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a list of all available workflow types with their names and descriptions."
+        },
+        {
+          "info": {
+            "name": "Get workflow definition",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/workflows/definitions/:workflow_type",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "workflow_type",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get the full definition of a specific workflow type including all steps and suggestions."
+        },
+        {
+          "info": {
+            "name": "List workflow documents",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/workflows/documents",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page (default: 999)"
+              }
+            ]
+          },
+          "docs": "List all workflow documents for a project with pagination."
+        },
+        {
+          "info": {
+            "name": "Get workflow document",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/workflows/:workflow_id/document",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "workflow_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve the generated document for a workflow."
+        },
+        {
+          "info": {
+            "name": "Generate workflow document",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/workflows/:workflow_id/document",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "workflow_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Start document generation in the background. Returns a SOTJ job ID for polling progress."
+        },
+        {
+          "info": {
+            "name": "Update workflow document",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/projects/:project_id/workflows/:workflow_id/document",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "workflow_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the content of an existing workflow document."
+        },
+        {
+          "info": {
+            "name": "List workflows",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/workflows",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by status"
+              },
+              {
+                "name": "workflow_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by workflow type"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page (default: 999)"
+              }
+            ]
+          },
+          "docs": "List all workflows for a project with optional filters and pagination."
+        },
+        {
+          "info": {
+            "name": "Create a new workflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/workflows",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new workflow instance for a project."
+        },
+        {
+          "info": {
+            "name": "Get workflow details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/workflows/:workflow_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "workflow_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a workflow instance with its full definition."
+        },
+        {
+          "info": {
+            "name": "Update workflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/projects/:project_id/workflows/:workflow_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "workflow_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a workflow instance (status only)."
+        },
+        {
+          "info": {
+            "name": "Delete workflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/projects/:project_id/workflows/:workflow_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "workflow_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a workflow instance and all its messages and documents."
+        },
+        {
+          "info": {
+            "name": "List workflow messages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/workflows/:workflow_id/messages",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "workflow_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List all messages in a workflow conversation, ordered by creation time."
+        },
+        {
+          "info": {
+            "name": "Send workflow message or navigate steps",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/workflows/:workflow_id/messages",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "workflow_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Send a message (SSE stream response) or perform a step action (advance/back)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

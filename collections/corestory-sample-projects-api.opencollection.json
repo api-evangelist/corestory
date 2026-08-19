@@ -1,0 +1,135 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin sample_projects API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "sample_projects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List sample projects",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/samples",
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List all available sample projects with pagination. Requires CoreStory internal access."
+        },
+        {
+          "info": {
+            "name": "Create sample project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/samples",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new sample project from an existing project. Requires CoreStory internal access."
+        },
+        {
+          "info": {
+            "name": "Get sample project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/samples/:sample_project_id",
+            "params": [
+              {
+                "name": "sample_project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve details for a specific sample project by ID. Requires CoreStory internal access."
+        },
+        {
+          "info": {
+            "name": "Update sample project",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/projects/samples/:sample_project_id",
+            "params": [
+              {
+                "name": "sample_project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing sample project's details. Requires CoreStory internal access."
+        },
+        {
+          "info": {
+            "name": "Delete sample project",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/projects/samples/:sample_project_id",
+            "params": [
+              {
+                "name": "sample_project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a sample project entry. Requires CoreStory internal access."
+        },
+        {
+          "info": {
+            "name": "Clone a sample project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/samples/clone",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Clone a sample project by language into the current user's organization. Creates a new project with all related data."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

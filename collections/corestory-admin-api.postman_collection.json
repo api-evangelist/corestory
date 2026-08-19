@@ -1,0 +1,986 @@
+{
+  "item": [
+    {
+      "id": "1bcc0621-eb5a-4cbe-b889-6c7f23859877",
+      "name": "admin",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e63badf8-a64f-44df-85e4-e2ea61159832",
+          "name": "Get admin configuration",
+          "request": {
+            "name": "Get admin configuration",
+            "description": {
+              "content": "View current application configuration settings. Requires CoreStory internal access.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "admin",
+                "config"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5e9f7b24-ffc2-4d58-8a78-e04c6bd36691",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "admin",
+                    "config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "898fa709-dcbe-4434-a8e6-0e6bc311f8ae",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "admin",
+                    "config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 6189.97115756384\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "514624bb-8c36-4aaa-b77c-b72512ebff39",
+          "name": "Get admin metrics",
+          "request": {
+            "name": "Get admin metrics",
+            "description": {
+              "content": "Retrieve application-wide admin metrics including usage statistics. Requires CoreStory internal access.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "admin",
+                "metrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "date_range",
+                  "value": "<string>",
+                  "description": "Date range for activity-based metrics: all, 30d, 3m, 6m. Defaults to all when None."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "dfeee0fe-18b0-466a-82f0-436046dc42ba",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "admin",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date_range",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"kpis\": {\n    \"total_users\": 3820,\n    \"total_organizations\": 2719,\n    \"total_projects\": 7504,\n    \"active_projects_30d\": 632,\n    \"total_loc_ingested\": 6285,\n    \"total_files_ingested\": 7833\n  },\n  \"tokens\": {\n    \"all_time\": {\n      \"input_tokens\": 8210,\n      \"output_tokens\": 9886,\n      \"total_tokens\": 3232\n    },\n    \"last_30d\": {\n      \"input_tokens\": 8386,\n      \"output_tokens\": 583,\n      \"total_tokens\": 1093\n    },\n    \"per_project\": {\n      \"min\": 642.8436926163295,\n      \"max\": 4350.36597157565,\n      \"avg\": 2154.8773176569957\n    }\n  },\n  \"users_orgs\": {\n    \"users_per_org\": [\n      {\n        \"key_0\": \"string\",\n        \"key_1\": true\n      },\n      {\n        \"key_0\": false,\n        \"key_1\": 1492,\n        \"key_2\": true,\n        \"key_3\": \"string\",\n        \"key_4\": \"string\"\n      }\n    ],\n    \"single_user_org_count\": 6755,\n    \"projects_per_org_stats\": {\n      \"min\": 9780.216877333805,\n      \"max\": 4213.303971544769,\n      \"avg\": 6152.391709858115\n    },\n    \"top_orgs_by_project_count\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"count\": 9422\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"count\": 7576\n      }\n    ],\n    \"top_users_by_projects_created\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"count\": 3892\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"count\": 838\n      }\n    ]\n  },\n  \"project_performance\": {\n    \"ingestion_seconds\": {\n      \"min\": 0,\n      \"max\": 0,\n      \"avg\": 0\n    },\n    \"prd_seconds\": {\n      \"min\": 0,\n      \"max\": 0,\n      \"avg\": 0\n    },\n    \"tech_spec_seconds\": {\n      \"min\": 0,\n      \"max\": 0,\n      \"avg\": 0\n    }\n  },\n  \"code_ingestion\": {\n    \"loc_stats\": {\n      \"min\": 4785.562201960308,\n      \"max\": 8405.879045332773,\n      \"avg\": 341.0427431193275\n    },\n    \"files_ingested_stats\": {\n      \"min\": 2173.522113443658,\n      \"max\": 923.2829704347523,\n      \"avg\": 2448.752800146292\n    },\n    \"source_type_counts\": [\n      {\n        \"key_0\": 2446\n      },\n      {\n        \"key_0\": 5064\n      }\n    ],\n    \"unsupported_file_counts_stats\": {\n      \"min\": 9644.034241407102,\n      \"max\": 7419.706564614284,\n      \"avg\": 7740.328432158561\n    }\n  },\n  \"data_audit_totals\": {\n    \"users\": 8399,\n    \"non_corestory_users\": 1344,\n    \"organizations\": 2182,\n    \"github_installations\": 8097,\n    \"projects\": 6934,\n    \"sotj_jobs\": 6622,\n    \"prds\": 642,\n    \"prd_versions\": 4613,\n    \"prd_multi_version_pct\": 8355.26167345089,\n    \"conversations\": 1399,\n    \"custom_prompts\": 9289\n  },\n  \"conversations\": {\n    \"total_conversations\": 3962,\n    \"conversations_per_project\": {\n      \"min\": 9582.704948430635,\n      \"max\": 4295.392100780695,\n      \"avg\": 4144.5011412223\n    },\n    \"messages_per_conversation\": {\n      \"min\": 3386.502586736092,\n      \"max\": 5052.216762709863,\n      \"avg\": 8018.9446605212\n    }\n  },\n  \"jobs\": {\n    \"total_jobs\": 5197,\n    \"not_started\": 5778,\n    \"running\": 3111,\n    \"failed_jobs_by_type\": [\n      {\n        \"key_0\": 4676,\n        \"key_1\": 4637.821819354776,\n        \"key_2\": 7907\n      },\n      {\n        \"key_0\": \"string\"\n      }\n    ]\n  },\n  \"user_stories_buckets\": [\n    {\n      \"bucket\": \"string\",\n      \"count\": 9522\n    },\n    {\n      \"bucket\": \"string\",\n      \"count\": 1049\n    }\n  ],\n  \"prd_version_buckets\": [\n    {\n      \"bucket\": \"string\",\n      \"prd_count\": 2440\n    },\n    {\n      \"bucket\": \"string\",\n      \"prd_count\": 9649\n    }\n  ],\n  \"projects_per_org_buckets\": [\n    {\n      \"bucket\": \"string\",\n      \"org_count\": 5131\n    },\n    {\n      \"bucket\": \"string\",\n      \"org_count\": 2733\n    }\n  ],\n  \"primary_languages\": {\n    \"counts\": [\n      {\n        \"key_0\": false,\n        \"key_1\": false,\n        \"key_2\": false,\n        \"key_3\": \"string\",\n        \"key_4\": true\n      },\n      {\n        \"key_0\": 9179.26862756433,\n        \"key_1\": false\n      }\n    ]\n  },\n  \"credit_usage\": {\n    \"total_credits_used\": 753.4823813401914,\n    \"top_orgs_by_credits_used\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"amount\": 1991.8647009966116\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"amount\": 1979.5124489926275\n      }\n    ],\n    \"top_orgs_lowest_remaining_balance\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"amount\": 3004.6373533621486,\n        \"pct\": 906.2838397080342\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"amount\": 4421.92862099236,\n        \"pct\": 1546.199353095391\n      }\n    ],\n    \"top_orgs_highest_remaining_balance\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"amount\": 8369.140379449524,\n        \"pct\": 8379.389287629896\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"amount\": 6546.714908612698,\n        \"pct\": 98.21026469999272\n      }\n    ],\n    \"usage_by_action_type\": [\n      {\n        \"action_type\": \"string\",\n        \"total_amount\": 8351.585824283482,\n        \"percentage\": 2865.8013222602553\n      },\n      {\n        \"action_type\": \"string\",\n        \"total_amount\": 5310.783306400604,\n        \"percentage\": 5585.614785904019\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "24ab34d6-9c93-4b85-8c2a-d23dfd3f800f",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "admin",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date_range",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 6189.97115756384\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3241468e-89d0-4921-91f9-45563aac8de6",
+          "name": "List all organizations",
+          "request": {
+            "name": "List all organizations",
+            "description": {
+              "content": "List all organizations with summary info. Restricted to superusers.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "admin",
+                "organizations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Maximum number of results"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Number of results to skip"
+                },
+                {
+                  "disabled": false,
+                  "key": "search",
+                  "value": "<string>",
+                  "description": "Filter organizations by name (case-insensitive)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "dd768d84-b226-437a-ac75-ac6f90e1c84e",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "admin",
+                    "organizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"organization_id\": \"string\",\n      \"organization_name\": \"string\",\n      \"created_at\": \"2016-02-25T10:52:41.672Z\",\n      \"plan_tier\": \"free\",\n      \"subscription_status\": \"none\",\n      \"owner\": {\n        \"name\": \"string\",\n        \"email\": \"string\"\n      },\n      \"members_count\": 0,\n      \"projects_count\": 0\n    },\n    {\n      \"organization_id\": \"string\",\n      \"organization_name\": \"string\",\n      \"created_at\": \"2024-06-25T13:23:04.392Z\",\n      \"plan_tier\": \"free\",\n      \"subscription_status\": \"none\",\n      \"owner\": {\n        \"name\": \"string\",\n        \"email\": \"string\"\n      },\n      \"members_count\": 0,\n      \"projects_count\": 0\n    }\n  ],\n  \"total\": 2371,\n  \"limit\": 5305,\n  \"offset\": 6956\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e13961e4-c233-4e4c-be2c-7ba0ccc1cf87",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "admin",
+                    "organizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 6189.97115756384\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e129890e-79e6-432f-896b-be6baba5856b",
+          "name": "List platform users",
+          "request": {
+            "name": "List platform users",
+            "description": {
+              "content": "List all Clerk users with role metadata (is_superuser, is_internal). Supports pagination and optional free-text search by name or email. Restricted to superusers.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "admin",
+                "users"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (max 100 to respect Clerk rate limits)"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Number of results to skip"
+                },
+                {
+                  "disabled": false,
+                  "key": "search",
+                  "value": "<string>",
+                  "description": "Free-text search across name, email, username"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "df4e7d99-2e7b-430b-9b0d-868bf65e9229",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "admin",
+                    "users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"string\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"email\": \"string\",\n      \"created_at\": \"1955-07-24T15:27:36.036Z\",\n      \"is_superuser\": false,\n      \"is_internal\": false\n    },\n    {\n      \"id\": \"string\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"email\": \"string\",\n      \"created_at\": \"1979-04-11T05:17:03.971Z\",\n      \"is_superuser\": false,\n      \"is_internal\": false\n    }\n  ],\n  \"total\": 3536,\n  \"limit\": 8760,\n  \"offset\": 3064\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "750a4957-a9fc-4726-b5ec-d79fe185d94a",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "admin",
+                    "users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 6189.97115756384\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9d66ffbd-2546-47ae-9cba-714d5ef2fec4",
+          "name": "Update user role metadata",
+          "request": {
+            "name": "Update user role metadata",
+            "description": {
+              "content": "Partially update a user's Clerk public metadata (is_superuser, is_internal). Only provided fields are updated; others are preserved. Restricted to superusers.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "admin",
+                "users",
+                ":user_id",
+                "metadata"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "user_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_superuser\": \"<boolean>\",\n  \"is_internal\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c66058e8-4e71-435b-9fdf-ac245169fc24",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "admin",
+                    "users",
+                    ":user_id",
+                    "metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "user_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"is_superuser\": \"<boolean>\",\n  \"is_internal\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"first_name\": \"string\",\n  \"last_name\": \"string\",\n  \"email\": \"string\",\n  \"created_at\": \"1952-07-28T16:04:52.627Z\",\n  \"is_superuser\": false,\n  \"is_internal\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "52d0e360-3062-42dd-aef1-f0d4b5d1f588",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "admin",
+                    "users",
+                    ":user_id",
+                    "metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "user_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"is_superuser\": \"<boolean>\",\n  \"is_internal\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 6189.97115756384\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b8e262e5-cc61-4fb5-94f6-d32eb3a8b93b",
+          "name": "Get pipeline run metrics by repo URL",
+          "request": {
+            "name": "Get pipeline run metrics by repo URL",
+            "description": {
+              "content": "Returns timing metrics for all projects matching the given repo URL. Useful for tracking pipeline performance trends over time.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "admin",
+                "pipeline-metrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "repo_url",
+                  "value": "<string>",
+                  "description": "(Required) Repo URL fragment to filter projects on (e.g. 'aws-mainframe-modernization-carddemo.git')."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d968d1c1-f734-4a24-aefb-b79dc9fb9579",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "admin",
+                    "pipeline-metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "repo_url",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"repo_url\": \"string\",\n  \"total_runs\": 5470,\n  \"runs\": [\n    {\n      \"project_id\": 504,\n      \"project_name\": \"string\",\n      \"created_at\": \"2008-08-05T05:02:21.507Z\",\n      \"dispatch_delay_seconds\": 8021.672261778168,\n      \"ingestion_duration_seconds\": 6646.7806519305705,\n      \"prd_generation_seconds\": 6475.730307432475,\n      \"tech_spec_generation_seconds\": 5747.793828392704,\n      \"total_pipeline_seconds\": 1656.2205471639468,\n      \"ingestion_llm_model\": \"string\",\n      \"ingestion_llm_provider\": \"string\",\n      \"ingestion_embedding_model\": \"string\",\n      \"prd_llm_model\": \"string\",\n      \"prd_llm_provider\": \"string\",\n      \"prd_embedding_model\": \"string\",\n      \"prd_use_dga_pipeline\": false,\n      \"tech_spec_llm_model\": \"string\",\n      \"tech_spec_llm_provider\": \"string\",\n      \"tech_spec_embedding_model\": \"string\",\n      \"tech_spec_use_dga_pipeline\": false,\n      \"user_stories_count\": 5729\n    },\n    {\n      \"project_id\": 7115,\n      \"project_name\": \"string\",\n      \"created_at\": \"1989-09-18T17:35:53.322Z\",\n      \"dispatch_delay_seconds\": 8673.652951441494,\n      \"ingestion_duration_seconds\": 7913.973444583865,\n      \"prd_generation_seconds\": 8504.826157388,\n      \"tech_spec_generation_seconds\": 6466.200060308381,\n      \"total_pipeline_seconds\": 9024.948920389666,\n      \"ingestion_llm_model\": \"string\",\n      \"ingestion_llm_provider\": \"string\",\n      \"ingestion_embedding_model\": \"string\",\n      \"prd_llm_model\": \"string\",\n      \"prd_llm_provider\": \"string\",\n      \"prd_embedding_model\": \"string\",\n      \"prd_use_dga_pipeline\": true,\n      \"tech_spec_llm_model\": \"string\",\n      \"tech_spec_llm_provider\": \"string\",\n      \"tech_spec_embedding_model\": \"string\",\n      \"tech_spec_use_dga_pipeline\": true,\n      \"user_stories_count\": 9107\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a2de8537-94c8-4a86-a154-b92db94313d6",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "admin",
+                    "pipeline-metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "repo_url",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 6189.97115756384\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "4c78a4ff-01cc-49a8-99ec-583df557658e",
+    "name": "Crowdbotics API Documentation admin API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# CoreStory API Overview\n\nThe CoreStory API provides programmatic access to structured insights derived from software source code. It is designed for engineering, architecture, and product teams who need to extract business logic, technical specifications, architectural relationships, and system-level context from complex or legacy codebases.\n\nBy interfacing directly with CoreStory API, users can:\n\n- Generate full Product Requirements Documents (PRDs) from a codebase\n- Extract detailed Technical Specifications for modernization or migration\n- Query a codebase using natural language to surface implementation details, logic paths, dependencies, and architectural insights\n- Construct and visualize knowledge graphs of systems, components, and relationships\n- Ingest, store, and retrieve content from a vector store for AI-powered retrieval-augmented generation (RAG) workflows\n\nCoreStory is especially valuable in contexts where:\n\n- Codebases are large, unstructured, or under-documented\n- Product and engineering teams are onboarding to unfamiliar systems\n- Technical stakeholders require visibility into system design or feature coverage\n- Modernization, replatforming, or M&A due diligence is underway\n\nThe API can be integrated into existing CI/CD pipelines, internal developer portals, architecture review boards, product planning processes, or documentation automation workflows.\n\nAll endpoints support secure authentication and are designed for high-availability, asynchronous workloads. Output formats include JSON, Markdown, and PDF, with flexible formatting options for downstream consumption.\n\nFor step-by-step usage instructions and workflows, refer to the [CoreStory API Quick Start Guide](#section/CoreStory-API-Quick-Start-Guide).\n\n## Features\n\n* **Document Generation**\n    * Generate complete Product Requirements Documents (PRD)\n    * Generate Technical Specifications\n    * Generate individual document sections (executive overview, user personas, etc.)\n    * Format documents in JSON or Markdown\n\n* **Vector Store Management**\n    * Ingest and manage documents in vector store\n    * Query and retrieve document content\n    * Manage document embeddings\n\n* **Context Management**\n    * Manage context for different document types\n    * Set and retrieve PRD context\n    * Support for future context types (technical specs, user stories, etc.)\n\n* **Knowledge Graph**\n    * Generate knowledge graphs from codebase queries\n    * Visualize relationships between code entities\n    * Analyze code structure and dependencies\n\n* **API Endpoints**\n    * `/api/documents/*` - Document generation and formatting\n    * `/api/generate/*` - Document formatting utilities\n    * `/api/vector-store/*` - Vector store management\n    * `/api/agents/*` - AI agent operations\n    * `/api/context/*` - Context management for documents\n    * `/api/graph/*` - Knowledge graph generation and analysis\n\nNote: JWT authentication support coming soon. All endpoints currently provide detailed OpenAPI documentation.\n\n* **Observability**\n    * OpenTelemetry instrumentation for distributed tracing\n    * Prometheus metrics endpoint at `/metrics`\n    * Comprehensive request/response tracking\n    * Custom business metrics\n\n\n\n# CoreStory System Architecture\n\nThis document provides a high-level overview of how the CoreStory platform ingests, analyzes, and serves structured software intelligence through its API. The system is designed to process codebases and related technical artifacts in order to generate product specifications, technical documents, and knowledge graph representations.\n\n---\n\n## Core Components\n\n### 1. **Ingestion Layer**\n\n- Accepts Git URLs, file uploads, or local archives\n- Extracts source files, documentation, and metadata\n- Initiates chunking and embedding via the vector store pipeline\n\n### 2. **Vector Store and Context Engine**\n\n- Stores chunked and embedded documents\n- Supports semantic search and document retrieval\n- Feeds LLMs with scoped context for generation and reasoning\n\n### 3. **LLM Orchestration Layer**\n\n- Fan-out to multiple large language models\n- Handles prompt templating, context injection, and result normalization\n- Evaluates and scores generated outputs\n\n### 4. **Document Generation Engine**\n\n- Produces:\n  - PRDs\n  - Technical Specs\n  - Individual document sections\n  - Markdown and PDF exports\n- Format-flexible output for portals, APIs, and documentation pipelines\n\n### 5. **Graph Construction Module**\n\n- Extracts static and dynamic code relationships\n- Builds DAGs and call graphs of components, services, and files\n- Allows natural-language queries that return graph subviews and LLM explanations\n\n### 6. **Query Engine**\n\n- Accepts free-form questions about codebases\n- Routes queries to code graph, document store, or LLMs\n- Returns structured JSON answers and explanatory text\n\n### 7. **API Gateway**\n\n- Authenticates and rate-limits clients\n- Routes requests to internal services\n- Serves all external-facing endpoints in REST format\n\n---\n\n## Security and Privacy\n\n- All data transfer is encrypted via HTTPS\n- API access is secured using provided auth credentials (JWT tokens coming soon)\n- Uploaded code is only used to generate customer-requested outputs and is not retained indefinitely\n\n---\n\n## Extensibility\n\nThe platform is modular. It can be extended to:\n\n- Add new LLMs for ensemble generation\n- Integrate alternative vector databases\n- Connect to internal developer portals or product management tools via webhook or export endpoints\n\nFor more information, see the Quick Start or contact the CoreStory team.\n\n\n# CoreStory API Quick Start Guide\n\nThe CoreStory API provides programmatic access to structured code intelligence, enabling your team to extract business and technical specifications directly from source code. You can use the API to integrate CoreStory-generated documents into existing workflows, support software modernization and maintenance efforts, or enrich internal platforms with architectural and feature-level metadata.\n\n---\n\n## Overview\n\nThe CoreStory API enables:\n\n- Ingestion of content into a **vector store** for LLM-driven analysis\n- Generation of **Product Requirements Documents (PRDs)** and **Technical Specifications** from code\n- Interrogation of your codebase via a natural language **query engine**\n- Construction of **knowledge graphs** describing code relationships and system architecture\n- Management of **custom document context** and **custom prompts** for improved output relevance and quality\n\nThese capabilities support SDLC workflows such as:\n\n- Application modernization, migration, and maintenance\n- Documentation and auditability of legacy systems\n- Alignment of product, engineering, and architecture teams and systems\n- Developer onboarding and code comprehension\n\n---\n\n**Note for POV customers:** If your codebase has already been ingested as part of a proof-of-value (POV) engagement, you can use your existing authentication credentials and skip step 2 (”Ingest a Codebase or Document Source) of this guide.\n\n## 1. Authentication\n\n```\nPOST /api/auth/login\n```\n\nObtain a JWT for future API calls.\n\n**Request:**\n\n```\n{\n  \"email\": \"you@example.com\",\n  \"password\": \"your-password\"\n}\n```\n\n**Response:**\n\n```\n{\n  \"access_token\": \"...\",\n  \"token_type\": \"bearer\"\n}\n```\n\nInclude this token in all subsequent requests:\n\n```\nAuthorization: Bearer <access_token>\n```\n\n---\n\n## 2. Ingest a Codebase or Document Source\n\n```\nPOST /api/vector-store/ingest\n```\n\nTrigger ingestion of code from a Git repo, ZIP file, or local document directory.\n\n**Example Payload (GitHub):**\n\n```\n{\n  \"source_type\": \"url\",\n  \"source\": \"https://github.com/example/repo.git\",\n  \"force\": true\n}\n```\n\nIngestion automatically chunks, embeds, and summarizes source files for downstream analysis.\n\n<details>\n<summary>Supported File Extensions</summary>\n\n### Programming Languages\n- Python: `.py`, `.pyw`, `.pyx`, `.pyi`\n- JavaScript/TypeScript: `.js`, `.mjs`, `.cjs`, `.ts`, `.jsx`, `.tsx`\n- Java: `.java`, `.class`, `.jar`\n- C/C++: `.c`, `.cpp`, `.cc`, `.cxx`, `.c++`, `.h`, `.hpp`, `.hh`, `.hxx`, `.h++`\n- .NET: `.cs`, `.csx`, `.vb`, `.fs`, `.fsx`, `.fsi`\n- PHP: `.php`, `.php3`, `.php4`, `.php5`, `.phtml`\n- Ruby: `.rb`, `.rbw`, `.rake`, `.gemspec`\n- Go: `.go`, `.mod`, `.sum`\n- Rust: `.rs`, `.rlib`\n- Swift: `.swift`\n- Kotlin: `.kt`, `.kts`, `.ktm`\n- Scala: `.scala`, `.sc`\n- Clojure: `.clj`, `.cljs`, `.cljc`, `.edn`\n- Haskell: `.hs`, `.lhs`\n- OCaml: `.ml`, `.mli`, `.mll`, `.mly`\n- R: `.r`, `.R`, `.rmd`, `.rnw`\n- Objective-C: `.m`, `.mm`\n- Perl: `.pl`, `.pm`, `.t`, `.pod`\n- Shell scripts: `.sh`, `.bash`, `.zsh`, `.fish`, `.ksh`, `.csh`, `.tcsh`\n- PowerShell: `.ps1`, `.psm1`, `.psd1`\n- Windows batch: `.bat`, `.cmd`\n- Lua: `.lua`\n- Dart: `.dart`\n- Elm: `.elm`\n- Elixir: `.ex`, `.exs`\n- Erlang: `.erl`, `.hrl`\n- Julia: `.jl`\n- Nim: `.nim`, `.nims`\n- Crystal: `.cr`\n- D: `.d`\n- Pascal: `.pas`, `.pp`, `.inc`\n- Fortran: `.f`, `.f90`, `.f95`, `.f03`, `.f08`, `.for`, `.ftn`, `.fpp`\n- COBOL: `.cob`, `.cbl`, `.cpy`, `.cobol`, `.bms`, `.ctl`, `.jcl`, `.proc`\n- IBM i (AS/400) RPG ILE: `.rpgle`, `.rpgleinc`\n- IBM i (AS/400) CLLE: `.clle`\n- IBM i (AS/400) DDS: `.pf`, `.lf`, `.dspf`\n- PowerBuilder: `.pbt`, `.pbs`, `.pbr`, `.srw`, `.srd`, `.sru`, `.sra`, `.srp`, `.srf`, `.srq`, `.srs`, `.srm`, `.srj`\n- Ada: `.ada`, `.adb`, `.ads`\n- Assembly: `.asm`, `.s`, `.S`\n- Verilog/SystemVerilog: `.v`, `.vh`, `.sv`, `.svh`\n- VHDL: `.vhd`, `.vhdl`\n- Tcl/Tk: `.tcl`, `.tk`\n- Groovy: `.groovy`, `.gvy`, `.gy`, `.gsh`\n- CoffeeScript: `.coffee`, `.litcoffee`\n- PureScript: `.purs`\n- ReasonML: `.reason`, `.re`, `.rei`\n- Racket/Scheme: `.rkt`, `.scm`, `.ss`\n- Lisp: `.lisp`, `.lsp`, `.l`, `.cl`, `.fasl`\n- Prolog: `.prolog`, `.pro`, `.P`\n- MATLAB: `.matlab`, `.fig`\n- Mathematica: `.mathematica`, `.nb`, `.wl`, `.wls`\n- SageMath: `.sage`, `.spyx`\n- Zig: `.zig`\n- Odin: `.odin`\n- V: `.v3`, `.v2`, `.v1`\n- Pony: `.pony`\n- Red: `.red`, `.reds`\n- Io: `.io`\n- Factor: `.factor`\n- Forth: `.forth`, `.fth`, `.4th`\n- J/K/Q/APL: `.j`, `.k`, `.q`, `.apl`\n- Chapel: `.chapel`, `.chpl`\n- X10: `.x10`\n- Arduino/Processing: `.pde`, `.ino`\n\n### Web Technologies\n- HTML: `.html`, `.htm`, `.xhtml`, `.shtml`\n- CSS/Preprocessors: `.css`, `.scss`, `.sass`, `.less`, `.styl`, `.stylus`\n- Frontend frameworks: `.vue`, `.svelte`\n- JSP: `.jsp`, `.jspx`, `.tag`, `.tagx`\n- ASP.NET: `.asp`, `.aspx`, `.ascx`, `.asax`, `.ashx`, `.asmx`\n- Ruby templates: `.erb`, `.haml`, `.slim`\n- PHP templates: `.twig`, `.blade`\n- Template engines: `.mustache`, `.hbs`, `.handlebars`, `.ejs`, `.pug`, `.jade`, `.liquid`, `.ftl`, `.ftlh`, `.vm`, `.vtl`, `.thymeleaf`\n\n### Configuration/Data\n- JSON: `.json`, `.json5`, `.jsonc`, `.jsonl`, `.ndjson`\n- XML: `.xml`, `.xsd`, `.xsl`, `.xslt`, `.dtd`, `.rng`, `.rnc`\n- YAML/TOML: `.yaml`, `.yml`, `.toml`\n- INI/Cfg/Conf: `.ini`, `.cfg`, `.conf`, `.config`, `.properties`\n- Environment: `.env`, `.envrc`, `.env.local`, `.env.development`, `.env.production`\n- Property lists: `.plist`\n- HOCON: `.hocon`\n- RON/HJSON/CSON: `.ron`, `.hjson`, `.cson`\n\n### Documentation/Text\n- Markdown: `.md`, `.markdown`, `.mdown`, `.mkd`, `.mkdn`\n- Plain text: `.txt`, `.text`\n- reStructuredText: `.rst`, `.rest`\n- AsciiDoc: `.asciidoc`, `.adoc`, `.asc`\n- LaTeX: `.tex`, `.latex`, `.ltx`, `.sty`, `.cls`, `.bib`\n- Org mode: `.org`\n- Wiki markup: `.wiki`, `.mediawiki`\n- Textile/Creole/RDoc: `.textile`, `.creole`, `.rdoc`\n\n### Data Formats\n- Delimited: `.csv`, `.tsv`, `.psv`\n- SQL: `.sql`, `.ddl`, `.dml`, `.plsql`, `.psql`, `.mysql`\n- GraphQL: `.graphql`, `.gql`\n- Protocols: `.proto`, `.protobuf`, `.avro`, `.avsc`, `.avdl`, `.thrift`, `.capnp`, `.fbs`\n- Columnar: `.parquet`, `.orc`, `.arrow`\n\n### Build/Dependency\n- Gradle: `.gradle`, `.gradle.kts`\n- Maven: `.maven`, `.mvn`\n- SBT: `.sbt`\n- CMake: `.cmake`, `.cmake.in`\n- Make: `.make`, `.mk`, `.mak`\n- Docker: `.dockerfile`, `.containerfile`, `.dockerignore`\n- Git: `.gitignore`, `.gitattributes`, `.gitmodules`, `.gitkeep`\n- Mercurial/Subversion/Bazaar: `.hgignore`, `.hgrc`, `.svnignore`, `.bzrignore`\n- EditorConfig: `.editorconfig`\n- Linters/Formatters: `.eslintrc`, `.eslintignore`, `.prettierrc`, `.prettierignore`, `.babelrc`, `.babelignore`\n- Node.js: `.npmrc`, `.npmignore`, `.yarnrc`, `.yarnignore`\n- Python: `.pipfile`, `.pipfile.lock`, `.requirements`, `.requirements.txt`, `.poetry.lock`, `.pyproject.toml`, `.setup.py`, `.setup.cfg`, `.manifest.in`, `.tox.ini`, `.noxfile.py`, `.pre-commit-config.yaml`\n- CI/CD: `.github`, `.gitlab-ci.yml`, `.travis.yml`, `.appveyor.yml`, `.circleci`, `.jenkins`, `.jenkinsfile`, `.azure-pipelines.yml`, `.buildkite.yml`\n- Package Managers: `package.json`, `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `composer.json`, `composer.lock`, `gemfile`, `gemfile.lock`, `cargo.toml`, `cargo.lock`, `go.mod`, `go.sum`, `requirements.txt`, `pipfile`, `pipfile.lock`, `poetry.lock`, `pyproject.toml`, `build.gradle`, `build.gradle.kts`, `settings.gradle`, `gradle.properties`, `pom.xml`, `settings.xml`, `build.sbt`, `plugins.sbt`, `makefile`, `gnumakefile`, `makefile.am`, `makefile.in`, `dockerfile`, `containerfile`, `vagrantfile`, `rakefile`, `guardfile`, `capfile`, `gulpfile.js`, `gruntfile.js`, `webpack.config.js`, `rollup.config.js`, `tsconfig.json`, `jsconfig.json`, `deno.json`, `deno.jsonc`, `mix.exs`, `mix.lock`, `rebar.config`, `rebar.lock`, `project.clj`, `deps.edn`, `stack.yaml`, `cabal.config`, `setup.hs`, `dub.json`, `dub.sdl`, `nimble`, `config.nims`, `shard.yml`, `shard.lock`, `pubspec.yaml`, `pubspec.lock`, `elm.json`, `elm-package.json`, `project.json`, `global.json`, `nuget.config`, `packages.config`, `paket.dependencies`, `paket.lock`, `.log`, `.lock`, `.pid`, `.tmp`, `.temp`, `.patch`, `.diff`, `.spec`, `.rpm`, `.deb`, `.control`, `.pkgbuild`, `.ebuild`, `.formula`, `.port`, `.portfile`, `.nix`, `.bzl`, `.bazel`, `.workspace`, `.buck`, `.buckconfig`, `.pants`, `.pants.ini`, `.please`, `.plzconfig`, `.gn`, `.gni`, `.ninja`, `.waf`, `.wscript`, `.scons`, `.sconstruct`, `.sconscript`\n\n</details>\n\n<details>\n<summary>Configuration Files</summary>\n\n- `requirements.txt`\n- `.gitignore`\n- `.dockerignore`\n- `.editorconfig`\n- `.eslintrc.js`\n- `.eslintrc.json`\n- `.prettierrc.js`\n- `.prettierrc.json`\n- `.babelrc.js`\n- `.babelrc.json`\n\n</details>\n\n---\n\n## 3. Generate a Product Requirements Document (PRD)\n\n**Note**: Generating a PRD or technical specification will replace the existing PRD or technical specification. The new outputs will document your codebase as it was when it was most recently ingested.\n\n```\nPOST /api/documents/prd?format=json\n```\n\nGenerates a structured PRD with:\n\n- Executive Overview\n- User Personas\n- High-Level Requirements\n- User Stories\n- Business Value\n\n**Example Response (truncated):**\n\n```\n{\n  \"content\": {\n    \"executive_overview\": \"Modernize internal authentication platform\",\n    \"user_personas\": [...],\n    \"user_stories\": [...]\n  }\n}\n```\n\n**Tip:** For PRDs or technical specs, use `format=markdown` to return a Markdown-formatted document instead.\n\n---\n\n## 4. Generate a Technical Specification\n\n```\nPOST /api/documents/technical-spec?format=json\n```\n\nReturns system-level implementation details including:\n\n- Architecture and Components\n- Data Models and Relationships\n- User Interface Screens and Components\n- APIs and Integration Points\n- System Interfaces and Specifications\n- Security Considerations\n- Implementation and Deployment Strategy\n\n---\n\n## 5. Query Your Code\n\n```\nPOST /api/graph/query-engine\n```\n\nAsk natural language questions about your codebase to return a structured graph of relationships.\n\n**Example Query:**\n\n```\n{\n  \"query\": \"How does the system determine whether a user has admin privileges when accessing the audit log?\"\n}\n```\n\n**Response (truncated):**\n\n```\n{\n  \"summary\": \"When a user requests access to the audit log, the system checks their assigned roles in `AuthService.getUserRoles`. If 'admin' is present, access is granted. This check occurs in `AuditLogController` before querying the log database. The middleware `CheckPermissions` is also invoked on this route.\"\n}\n```\n\n---\n\n## 6. Format and Retrieve Document Sections\n\nUse these endpoints to extract or reformat specific document sections:\n\n- `/api/documents/sections/{doc_type}` → generate a specific section\n- `/api/documents/format/markdown-output/{doc_type}` → format JSON as Markdown\n- `/api/documents/format/pdf-output/{doc_type}` → export PDF\n\nExample section names:\n\n- `executive-overview`\n- `data-models`\n- `system-architecture`\n- `integration-points`\n\n---\n\n## Questions?\n\nAfter reviewing this guide and the API docs, we recommend scheduling a short Q&A call if you have integration-specific needs or want assistance mapping this to your environment.\n",
+      "type": "text/plain"
+    }
+  }
+}

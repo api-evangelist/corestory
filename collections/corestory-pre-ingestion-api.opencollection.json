@@ -1,0 +1,248 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin pre_ingestion API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "pre_ingestion",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Start Pre-Ingestion Process",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/pre-ingestion/start",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Start the pre-ingestion process for a specific repository. This process\nwill analyze the repository and return a summary of the supported files.\n\nArgs:\n    request (PreIngestionRequest): The incoming request object.\n    user (ClerkUser): The authenticated user.\n    organization (Organization): The organization context.\n    db (Session): The database session.\n\nReturns:\n    PreIngestionResponse: Details about the initiated pre-ingestion process."
+        },
+        {
+          "info": {
+            "name": "Upload repository files and run the pre-ingestion analysis",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/pre-ingestion/start/upload-repository",
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Upload a single zipped repository file to Azure Blob Storage or Local directory,create a new project, and trigger pre-ingestion analysis."
+        },
+        {
+          "info": {
+            "name": "Get a pre-signed URL for direct file upload",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/pre-ingestion/upload-url",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns a time-limited pre-signed URL that allows the client to upload a file directly to storage, bypassing server-side proxying and Cloudflare's upload size limits."
+        },
+        {
+          "info": {
+            "name": "Start pre-ingestion from an already-uploaded file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/pre-ingestion/start/from-storage",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Triggers the pre-ingestion analysis for a file that was uploaded directly to storage via a pre-signed URL obtained from the /upload-url endpoint."
+        },
+        {
+          "info": {
+            "name": "Get Pre-Ingestion Job Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/pre-ingestion/:job_id/status",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get the status of a pre-ingestion job by its ID.\n\nArgs:\n    job_id (int): The ID of the pre-ingestion job.\n    user (ClerkUser): The authenticated user.\n    organization (Organization): The organization context.\n    db (Session): The database session.\n\nReturns:\n    PreIngestionResponse: Details about the pre-ingestion job status."
+        },
+        {
+          "info": {
+            "name": "Get Pre-Ingestion Job Results",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/pre-ingestion/:job_id/coverage",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get the coverage results of a pre-ingestion job by its ID.\n\nArgs:\n    job_id (int): The ID of the pre-ingestion job.\n    user (ClerkUser): The authenticated user.\n    organization (Organization): The organization context.\n    db (Session): The database session.\n\nReturns:\n    PreIngestionCoverageResponse: Coverage details of the pre-ingestion job."
+        },
+        {
+          "info": {
+            "name": "Get Excluded File Paths from Pre-Ingestion Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/pre-ingestion/:job_id/excluded-files",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page"
+              },
+              {
+                "name": "file_name",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get the list of excluded file paths from a pre-ingestion job by its ID.\n\nArgs:\n    job_id (int): The ID of the pre-ingestion job.\n    user (ClerkUser): The authenticated user.\n    organization (Organization): The organization context.\n    db (Session): The database session.\n    file_name (str, optional): Filter files by name.\n\nReturns:\n    list[str]: List of excluded file paths."
+        },
+        {
+          "info": {
+            "name": "Get Included File Paths from Pre-Ingestion Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/pre-ingestion/:job_id/included-files",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page"
+              },
+              {
+                "name": "file_name",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get the list of included file paths from a pre-ingestion job by its ID.\n\nArgs:\n    job_id (int): The ID of the pre-ingestion job.\n    user (ClerkUser): The authenticated user.\n    organization (Organization): The organization context.\n    db (Session): The database session.\n    file_name (str, optional): Filter files by name.\n\nReturns:\n    list[str]: Paginated list of included file paths."
+        },
+        {
+          "info": {
+            "name": "Update Pre-Ingestion Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/pre-ingestion/:job_id",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a pre-ingestion job by its ID.\n\nArgs:\n    job_id (int): The ID of the pre-ingestion job.\n    user (ClerkUser): The authenticated user.\n    organization (Organization): The organization context.\n    application_context (str, optional): New application context.\n    db (Session): The database session.\n\nReturns:\n    PreIngestionResponse: Updated details of the pre-ingestion job."
+        },
+        {
+          "info": {
+            "name": "Delete Pre-Ingestion Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/pre-ingestion/:job_id",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a pre-ingestion job by its ID.\n\nArgs:\n    job_id (int): The ID of the pre-ingestion job.\n    user (ClerkUser): The authenticated user.\n    organization (Organization): The organization context.\n    db (Session): The database session.\n    storage (StorageBackend): Storage backend for artifact cleanup.\n\nReturns:\n    dict: Confirmation message upon successful deletion."
+        },
+        {
+          "info": {
+            "name": "Estimate CIU cost for a number of LOC and files count.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/pre-ingestion/:pre_ingestion_id/estimate-ingestion",
+            "params": [
+              {
+                "name": "pre_ingestion_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Estimate the CIU cost for ingesting a codebase based on the number of lines of code and files."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

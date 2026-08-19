@@ -1,0 +1,1920 @@
+{
+  "item": [
+    {
+      "id": "a6dccc18-590b-4d13-83e3-1966f1a53564",
+      "name": "pre_ingestion",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "739e5bc5-567d-4ac1-9c42-a7b4ed59434a",
+          "name": "Start Pre-Ingestion Process",
+          "request": {
+            "name": "Start Pre-Ingestion Process",
+            "description": {
+              "content": "Start the pre-ingestion process for a specific repository. This process\nwill analyze the repository and return a summary of the supported files.\n\nArgs:\n    request (PreIngestionRequest): The incoming request object.\n    user (ClerkUser): The authenticated user.\n    organization (Organization): The organization context.\n    db (Session): The database session.\n\nReturns:\n    PreIngestionResponse: Details about the initiated pre-ingestion process.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pre-ingestion",
+                "start"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"app_custom_name\": \"<string>\",\n  \"public_repo_url\": \"<string>\",\n  \"repo_full_name\": \"<string>\",\n  \"repo_branch\": \"main\",\n  \"github_app_installation_id\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "30ae719b-19ca-4f79-ae81-5dfa06c77f78",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    "start"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"app_custom_name\": \"<string>\",\n  \"public_repo_url\": \"<string>\",\n  \"repo_full_name\": \"<string>\",\n  \"repo_branch\": \"main\",\n  \"github_app_installation_id\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 2290,\n  \"status\": \"cloning\",\n  \"created_at\": \"1952-03-21T06:33:56.986Z\",\n  \"updated_at\": \"1951-01-21T15:37:45.231Z\",\n  \"project_id\": 6796,\n  \"progress\": 0,\n  \"application_context\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "80608729-fe43-4957-9f5b-7d4501c0ef53",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    "start"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"app_custom_name\": \"<string>\",\n  \"public_repo_url\": \"<string>\",\n  \"repo_full_name\": \"<string>\",\n  \"repo_branch\": \"main\",\n  \"github_app_installation_id\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 7925.184593679932,\n      \"key_1\": true\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b461ab19-aa03-484e-97af-990be4b6960c",
+          "name": "Upload repository files and run the pre-ingestion analysis",
+          "request": {
+            "name": "Upload repository files and run the pre-ingestion analysis",
+            "description": {
+              "content": "Upload a single zipped repository file to Azure Blob Storage or Local directory,create a new project, and trigger pre-ingestion analysis.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pre-ingestion",
+                "start",
+                "upload-repository"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "app_custom_name",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "(Required) Custom application name for the project"
+                },
+                {
+                  "key": "file",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "(Required) Zipped repository file to upload"
+                },
+                {
+                  "key": "context",
+                  "value": "",
+                  "type": "text",
+                  "description": "Application context for the project"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "50870123-9a5d-4269-b1fc-23d20febe236",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    "start",
+                    "upload-repository"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) Custom application name for the project",
+                        "type": "text/plain"
+                      },
+                      "key": "app_custom_name",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) Zipped repository file to upload",
+                        "type": "text/plain"
+                      },
+                      "key": "file",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Application context for the project",
+                        "type": "text/plain"
+                      },
+                      "key": "context",
+                      "value": "",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 2290,\n  \"status\": \"cloning\",\n  \"created_at\": \"1952-03-21T06:33:56.986Z\",\n  \"updated_at\": \"1951-01-21T15:37:45.231Z\",\n  \"project_id\": 6796,\n  \"progress\": 0,\n  \"application_context\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "165765d1-0aec-4912-a2bb-8d3ac1d9abf4",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    "start",
+                    "upload-repository"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) Custom application name for the project",
+                        "type": "text/plain"
+                      },
+                      "key": "app_custom_name",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) Zipped repository file to upload",
+                        "type": "text/plain"
+                      },
+                      "key": "file",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Application context for the project",
+                        "type": "text/plain"
+                      },
+                      "key": "context",
+                      "value": "",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 7925.184593679932,\n      \"key_1\": true\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3be84e25-b37a-4155-92e5-a9439a9f0138",
+          "name": "Get a pre-signed URL for direct file upload",
+          "request": {
+            "name": "Get a pre-signed URL for direct file upload",
+            "description": {
+              "content": "Returns a time-limited pre-signed URL that allows the client to upload a file directly to storage, bypassing server-side proxying and Cloudflare's upload size limits.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pre-ingestion",
+                "upload-url"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"filename\": \"<string>\",\n  \"file_size_bytes\": \"<integer>\",\n  \"content_type\": \"application/octet-stream\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9c72d840-a334-4639-8532-b97287dfa5c5",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    "upload-url"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"filename\": \"<string>\",\n  \"file_size_bytes\": \"<integer>\",\n  \"content_type\": \"application/octet-stream\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"upload_url\": \"string\",\n  \"storage_key\": \"string\",\n  \"expires_at\": \"1986-11-23T07:26:56.007Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3b54a901-5742-45cd-b7c7-719cd0673629",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    "upload-url"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"filename\": \"<string>\",\n  \"file_size_bytes\": \"<integer>\",\n  \"content_type\": \"application/octet-stream\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 7925.184593679932,\n      \"key_1\": true\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9b9df7dc-3aee-4c0c-a9b2-ff52d20e5f74",
+          "name": "Start pre-ingestion from an already-uploaded file",
+          "request": {
+            "name": "Start pre-ingestion from an already-uploaded file",
+            "description": {
+              "content": "Triggers the pre-ingestion analysis for a file that was uploaded directly to storage via a pre-signed URL obtained from the /upload-url endpoint.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pre-ingestion",
+                "start",
+                "from-storage"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"storage_key\": \"<string>\",\n  \"app_custom_name\": \"<string>\",\n  \"context\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2cf833b3-c060-45d9-a4e8-d97c7680f288",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    "start",
+                    "from-storage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"storage_key\": \"<string>\",\n  \"app_custom_name\": \"<string>\",\n  \"context\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 2290,\n  \"status\": \"cloning\",\n  \"created_at\": \"1952-03-21T06:33:56.986Z\",\n  \"updated_at\": \"1951-01-21T15:37:45.231Z\",\n  \"project_id\": 6796,\n  \"progress\": 0,\n  \"application_context\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b390f60f-69f3-4dc6-88e0-34abaf89df0c",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    "start",
+                    "from-storage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"storage_key\": \"<string>\",\n  \"app_custom_name\": \"<string>\",\n  \"context\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 7925.184593679932,\n      \"key_1\": true\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1b27bfcc-dc79-4b08-95a1-68effec2c59f",
+          "name": "Get Pre-Ingestion Job Status",
+          "request": {
+            "name": "Get Pre-Ingestion Job Status",
+            "description": {
+              "content": "Get the status of a pre-ingestion job by its ID.\n\nArgs:\n    job_id (int): The ID of the pre-ingestion job.\n    user (ClerkUser): The authenticated user.\n    organization (Organization): The organization context.\n    db (Session): The database session.\n\nReturns:\n    PreIngestionResponse: Details about the pre-ingestion job status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pre-ingestion",
+                ":job_id",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "job_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "007cfb38-be68-4590-a67f-db8a4f2c4eb8",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    ":job_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 2290,\n  \"status\": \"cloning\",\n  \"created_at\": \"1952-03-21T06:33:56.986Z\",\n  \"updated_at\": \"1951-01-21T15:37:45.231Z\",\n  \"project_id\": 6796,\n  \"progress\": 0,\n  \"application_context\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d29d0580-3788-412a-beb5-96f6fcc391c6",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    ":job_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 7925.184593679932,\n      \"key_1\": true\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "657b18b7-4e2e-4451-a760-1332ea5a12e9",
+          "name": "Get Pre-Ingestion Job Results",
+          "request": {
+            "name": "Get Pre-Ingestion Job Results",
+            "description": {
+              "content": "Get the coverage results of a pre-ingestion job by its ID.\n\nArgs:\n    job_id (int): The ID of the pre-ingestion job.\n    user (ClerkUser): The authenticated user.\n    organization (Organization): The organization context.\n    db (Session): The database session.\n\nReturns:\n    PreIngestionCoverageResponse: Coverage details of the pre-ingestion job.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pre-ingestion",
+                ":job_id",
+                "coverage"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "job_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "03c16386-fae0-4f8a-b73a-dadbc4fd736d",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    ":job_id",
+                    "coverage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"repository_url\": \"string\",\n  \"branch\": \"string\",\n  \"included_count\": {\n    \"key_0\": false\n  },\n  \"excluded_count\": {\n    \"key_0\": false,\n    \"key_1\": 1220.9733898517716,\n    \"key_2\": false\n  },\n  \"project_id\": 3944,\n  \"total_files\": 0,\n  \"total_directories\": 0,\n  \"code_analysis\": {\n    \"key_0\": \"string\"\n  },\n  \"file_coverage\": 0,\n  \"exclusion_reasons\": {\n    \"key_0\": 3685.0402473917698\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b57ea715-b93d-4f17-9e75-ae7aeae2c7ef",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    ":job_id",
+                    "coverage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 7925.184593679932,\n      \"key_1\": true\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5a9b0031-1018-4c5b-8681-b116d6617985",
+          "name": "Get Excluded File Paths from Pre-Ingestion Job",
+          "request": {
+            "name": "Get Excluded File Paths from Pre-Ingestion Job",
+            "description": {
+              "content": "Get the list of excluded file paths from a pre-ingestion job by its ID.\n\nArgs:\n    job_id (int): The ID of the pre-ingestion job.\n    user (ClerkUser): The authenticated user.\n    organization (Organization): The organization context.\n    db (Session): The database session.\n    file_name (str, optional): Filter files by name.\n\nReturns:\n    list[str]: List of excluded file paths.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pre-ingestion",
+                ":job_id",
+                "excluded-files"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (1-based)"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "100",
+                  "description": "Items per page"
+                },
+                {
+                  "disabled": false,
+                  "key": "file_name",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "job_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "743a72df-b650-4dba-bce0-f43e7b9c6692",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    ":job_id",
+                    "excluded-files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "file_name",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    \"string\",\n    \"string\"\n  ],\n  \"pagination\": {\n    \"key_0\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "370516ec-b6d0-4db5-9e99-566678c0e8e1",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    ":job_id",
+                    "excluded-files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "file_name",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 7925.184593679932,\n      \"key_1\": true\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "278419c7-a455-488f-af35-f540f6a771ca",
+          "name": "Get Included File Paths from Pre-Ingestion Job",
+          "request": {
+            "name": "Get Included File Paths from Pre-Ingestion Job",
+            "description": {
+              "content": "Get the list of included file paths from a pre-ingestion job by its ID.\n\nArgs:\n    job_id (int): The ID of the pre-ingestion job.\n    user (ClerkUser): The authenticated user.\n    organization (Organization): The organization context.\n    db (Session): The database session.\n    file_name (str, optional): Filter files by name.\n\nReturns:\n    list[str]: Paginated list of included file paths.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pre-ingestion",
+                ":job_id",
+                "included-files"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (1-based)"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "100",
+                  "description": "Items per page"
+                },
+                {
+                  "disabled": false,
+                  "key": "file_name",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "job_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "43b24e47-67fe-49a5-b86b-93db59c42393",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    ":job_id",
+                    "included-files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "file_name",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    \"string\",\n    \"string\"\n  ],\n  \"pagination\": {\n    \"key_0\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ff6cd1b6-75fb-4d24-b727-7c9b96846bbc",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    ":job_id",
+                    "included-files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "file_name",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 7925.184593679932,\n      \"key_1\": true\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fc7021fa-c4f9-4329-bb0c-7323153b7310",
+          "name": "Delete Pre-Ingestion Job",
+          "request": {
+            "name": "Delete Pre-Ingestion Job",
+            "description": {
+              "content": "Delete a pre-ingestion job by its ID.\n\nArgs:\n    job_id (int): The ID of the pre-ingestion job.\n    user (ClerkUser): The authenticated user.\n    organization (Organization): The organization context.\n    db (Session): The database session.\n    storage (StorageBackend): Storage backend for artifact cleanup.\n\nReturns:\n    dict: Confirmation message upon successful deletion.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pre-ingestion",
+                ":job_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "job_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0639584d-85ad-4165-b625-6ed19548bb6a",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    ":job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e593b9fe-7304-437b-a636-54b8dfdb31a8",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    ":job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 7925.184593679932,\n      \"key_1\": true\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "23dbcffe-1be8-4940-890e-8eedbd85c8aa",
+          "name": "Update Pre-Ingestion Job",
+          "request": {
+            "name": "Update Pre-Ingestion Job",
+            "description": {
+              "content": "Update a pre-ingestion job by its ID.\n\nArgs:\n    job_id (int): The ID of the pre-ingestion job.\n    user (ClerkUser): The authenticated user.\n    organization (Organization): The organization context.\n    application_context (str, optional): New application context.\n    db (Session): The database session.\n\nReturns:\n    PreIngestionResponse: Updated details of the pre-ingestion job.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pre-ingestion",
+                ":job_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "job_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"application_context\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1cd67d49-b9d7-4096-99da-6ade9104424e",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    ":job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"application_context\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 2290,\n  \"status\": \"cloning\",\n  \"created_at\": \"1952-03-21T06:33:56.986Z\",\n  \"updated_at\": \"1951-01-21T15:37:45.231Z\",\n  \"project_id\": 6796,\n  \"progress\": 0,\n  \"application_context\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2695cd59-1f06-4c12-932d-09e36f058673",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    ":job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"application_context\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 7925.184593679932,\n      \"key_1\": true\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "76cb454f-0ac5-432a-a5a4-fc0096df6622",
+          "name": "Estimate CIU cost for a number of LOC and files count.",
+          "request": {
+            "name": "Estimate CIU cost for a number of LOC and files count.",
+            "description": {
+              "content": "Estimate the CIU cost for ingesting a codebase based on the number of lines of code and files.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "pre-ingestion",
+                ":pre_ingestion_id",
+                "estimate-ingestion"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "pre_ingestion_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "30efd07c-60c8-4e44-a1df-c8307c715086",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    ":pre_ingestion_id",
+                    "estimate-ingestion"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "pre_ingestion_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"estimated_ciu_cost\": 1775.496338255712,\n  \"remaining_ciu_balance\": 3305.5195608784948\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8207f046-1cf8-4b58-97b9-fd1b6e66a4ba",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "pre-ingestion",
+                    ":pre_ingestion_id",
+                    "estimate-ingestion"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "pre_ingestion_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 7925.184593679932,\n      \"key_1\": true\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "b04af2ca-e8af-4c0e-897c-25244c1f9b27",
+    "name": "Crowdbotics API Documentation admin pre_ingestion API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# CoreStory API Overview\n\nThe CoreStory API provides programmatic access to structured insights derived from software source code. It is designed for engineering, architecture, and product teams who need to extract business logic, technical specifications, architectural relationships, and system-level context from complex or legacy codebases.\n\nBy interfacing directly with CoreStory API, users can:\n\n- Generate full Product Requirements Documents (PRDs) from a codebase\n- Extract detailed Technical Specifications for modernization or migration\n- Query a codebase using natural language to surface implementation details, logic paths, dependencies, and architectural insights\n- Construct and visualize knowledge graphs of systems, components, and relationships\n- Ingest, store, and retrieve content from a vector store for AI-powered retrieval-augmented generation (RAG) workflows\n\nCoreStory is especially valuable in contexts where:\n\n- Codebases are large, unstructured, or under-documented\n- Product and engineering teams are onboarding to unfamiliar systems\n- Technical stakeholders require visibility into system design or feature coverage\n- Modernization, replatforming, or M&A due diligence is underway\n\nThe API can be integrated into existing CI/CD pipelines, internal developer portals, architecture review boards, product planning processes, or documentation automation workflows.\n\nAll endpoints support secure authentication and are designed for high-availability, asynchronous workloads. Output formats include JSON, Markdown, and PDF, with flexible formatting options for downstream consumption.\n\nFor step-by-step usage instructions and workflows, refer to the [CoreStory API Quick Start Guide](#section/CoreStory-API-Quick-Start-Guide).\n\n## Features\n\n* **Document Generation**\n    * Generate complete Product Requirements Documents (PRD)\n    * Generate Technical Specifications\n    * Generate individual document sections (executive overview, user personas, etc.)\n    * Format documents in JSON or Markdown\n\n* **Vector Store Management**\n    * Ingest and manage documents in vector store\n    * Query and retrieve document content\n    * Manage document embeddings\n\n* **Context Management**\n    * Manage context for different document types\n    * Set and retrieve PRD context\n    * Support for future context types (technical specs, user stories, etc.)\n\n* **Knowledge Graph**\n    * Generate knowledge graphs from codebase queries\n    * Visualize relationships between code entities\n    * Analyze code structure and dependencies\n\n* **API Endpoints**\n    * `/api/documents/*` - Document generation and formatting\n    * `/api/generate/*` - Document formatting utilities\n    * `/api/vector-store/*` - Vector store management\n    * `/api/agents/*` - AI agent operations\n    * `/api/context/*` - Context management for documents\n    * `/api/graph/*` - Knowledge graph generation and analysis\n\nNote: JWT authentication support coming soon. All endpoints currently provide detailed OpenAPI documentation.\n\n* **Observability**\n    * OpenTelemetry instrumentation for distributed tracing\n    * Prometheus metrics endpoint at `/metrics`\n    * Comprehensive request/response tracking\n    * Custom business metrics\n\n\n\n# CoreStory System Architecture\n\nThis document provides a high-level overview of how the CoreStory platform ingests, analyzes, and serves structured software intelligence through its API. The system is designed to process codebases and related technical artifacts in order to generate product specifications, technical documents, and knowledge graph representations.\n\n---\n\n## Core Components\n\n### 1. **Ingestion Layer**\n\n- Accepts Git URLs, file uploads, or local archives\n- Extracts source files, documentation, and metadata\n- Initiates chunking and embedding via the vector store pipeline\n\n### 2. **Vector Store and Context Engine**\n\n- Stores chunked and embedded documents\n- Supports semantic search and document retrieval\n- Feeds LLMs with scoped context for generation and reasoning\n\n### 3. **LLM Orchestration Layer**\n\n- Fan-out to multiple large language models\n- Handles prompt templating, context injection, and result normalization\n- Evaluates and scores generated outputs\n\n### 4. **Document Generation Engine**\n\n- Produces:\n  - PRDs\n  - Technical Specs\n  - Individual document sections\n  - Markdown and PDF exports\n- Format-flexible output for portals, APIs, and documentation pipelines\n\n### 5. **Graph Construction Module**\n\n- Extracts static and dynamic code relationships\n- Builds DAGs and call graphs of components, services, and files\n- Allows natural-language queries that return graph subviews and LLM explanations\n\n### 6. **Query Engine**\n\n- Accepts free-form questions about codebases\n- Routes queries to code graph, document store, or LLMs\n- Returns structured JSON answers and explanatory text\n\n### 7. **API Gateway**\n\n- Authenticates and rate-limits clients\n- Routes requests to internal services\n- Serves all external-facing endpoints in REST format\n\n---\n\n## Security and Privacy\n\n- All data transfer is encrypted via HTTPS\n- API access is secured using provided auth credentials (JWT tokens coming soon)\n- Uploaded code is only used to generate customer-requested outputs and is not retained indefinitely\n\n---\n\n## Extensibility\n\nThe platform is modular. It can be extended to:\n\n- Add new LLMs for ensemble generation\n- Integrate alternative vector databases\n- Connect to internal developer portals or product management tools via webhook or export endpoints\n\nFor more information, see the Quick Start or contact the CoreStory team.\n\n\n# CoreStory API Quick Start Guide\n\nThe CoreStory API provides programmatic access to structured code intelligence, enabling your team to extract business and technical specifications directly from source code. You can use the API to integrate CoreStory-generated documents into existing workflows, support software modernization and maintenance efforts, or enrich internal platforms with architectural and feature-level metadata.\n\n---\n\n## Overview\n\nThe CoreStory API enables:\n\n- Ingestion of content into a **vector store** for LLM-driven analysis\n- Generation of **Product Requirements Documents (PRDs)** and **Technical Specifications** from code\n- Interrogation of your codebase via a natural language **query engine**\n- Construction of **knowledge graphs** describing code relationships and system architecture\n- Management of **custom document context** and **custom prompts** for improved output relevance and quality\n\nThese capabilities support SDLC workflows such as:\n\n- Application modernization, migration, and maintenance\n- Documentation and auditability of legacy systems\n- Alignment of product, engineering, and architecture teams and systems\n- Developer onboarding and code comprehension\n\n---\n\n**Note for POV customers:** If your codebase has already been ingested as part of a proof-of-value (POV) engagement, you can use your existing authentication credentials and skip step 2 (”Ingest a Codebase or Document Source) of this guide.\n\n## 1. Authentication\n\n```\nPOST /api/auth/login\n```\n\nObtain a JWT for future API calls.\n\n**Request:**\n\n```\n{\n  \"email\": \"you@example.com\",\n  \"password\": \"your-password\"\n}\n```\n\n**Response:**\n\n```\n{\n  \"access_token\": \"...\",\n  \"token_type\": \"bearer\"\n}\n```\n\nInclude this token in all subsequent requests:\n\n```\nAuthorization: Bearer <access_token>\n```\n\n---\n\n## 2. Ingest a Codebase or Document Source\n\n```\nPOST /api/vector-store/ingest\n```\n\nTrigger ingestion of code from a Git repo, ZIP file, or local document directory.\n\n**Example Payload (GitHub):**\n\n```\n{\n  \"source_type\": \"url\",\n  \"source\": \"https://github.com/example/repo.git\",\n  \"force\": true\n}\n```\n\nIngestion automatically chunks, embeds, and summarizes source files for downstream analysis.\n\n<details>\n<summary>Supported File Extensions</summary>\n\n### Programming Languages\n- Python: `.py`, `.pyw`, `.pyx`, `.pyi`\n- JavaScript/TypeScript: `.js`, `.mjs`, `.cjs`, `.ts`, `.jsx`, `.tsx`\n- Java: `.java`, `.class`, `.jar`\n- C/C++: `.c`, `.cpp`, `.cc`, `.cxx`, `.c++`, `.h`, `.hpp`, `.hh`, `.hxx`, `.h++`\n- .NET: `.cs`, `.csx`, `.vb`, `.fs`, `.fsx`, `.fsi`\n- PHP: `.php`, `.php3`, `.php4`, `.php5`, `.phtml`\n- Ruby: `.rb`, `.rbw`, `.rake`, `.gemspec`\n- Go: `.go`, `.mod`, `.sum`\n- Rust: `.rs`, `.rlib`\n- Swift: `.swift`\n- Kotlin: `.kt`, `.kts`, `.ktm`\n- Scala: `.scala`, `.sc`\n- Clojure: `.clj`, `.cljs`, `.cljc`, `.edn`\n- Haskell: `.hs`, `.lhs`\n- OCaml: `.ml`, `.mli`, `.mll`, `.mly`\n- R: `.r`, `.R`, `.rmd`, `.rnw`\n- Objective-C: `.m`, `.mm`\n- Perl: `.pl`, `.pm`, `.t`, `.pod`\n- Shell scripts: `.sh`, `.bash`, `.zsh`, `.fish`, `.ksh`, `.csh`, `.tcsh`\n- PowerShell: `.ps1`, `.psm1`, `.psd1`\n- Windows batch: `.bat`, `.cmd`\n- Lua: `.lua`\n- Dart: `.dart`\n- Elm: `.elm`\n- Elixir: `.ex`, `.exs`\n- Erlang: `.erl`, `.hrl`\n- Julia: `.jl`\n- Nim: `.nim`, `.nims`\n- Crystal: `.cr`\n- D: `.d`\n- Pascal: `.pas`, `.pp`, `.inc`\n- Fortran: `.f`, `.f90`, `.f95`, `.f03`, `.f08`, `.for`, `.ftn`, `.fpp`\n- COBOL: `.cob`, `.cbl`, `.cpy`, `.cobol`, `.bms`, `.ctl`, `.jcl`, `.proc`\n- IBM i (AS/400) RPG ILE: `.rpgle`, `.rpgleinc`\n- IBM i (AS/400) CLLE: `.clle`\n- IBM i (AS/400) DDS: `.pf`, `.lf`, `.dspf`\n- PowerBuilder: `.pbt`, `.pbs`, `.pbr`, `.srw`, `.srd`, `.sru`, `.sra`, `.srp`, `.srf`, `.srq`, `.srs`, `.srm`, `.srj`\n- Ada: `.ada`, `.adb`, `.ads`\n- Assembly: `.asm`, `.s`, `.S`\n- Verilog/SystemVerilog: `.v`, `.vh`, `.sv`, `.svh`\n- VHDL: `.vhd`, `.vhdl`\n- Tcl/Tk: `.tcl`, `.tk`\n- Groovy: `.groovy`, `.gvy`, `.gy`, `.gsh`\n- CoffeeScript: `.coffee`, `.litcoffee`\n- PureScript: `.purs`\n- ReasonML: `.reason`, `.re`, `.rei`\n- Racket/Scheme: `.rkt`, `.scm`, `.ss`\n- Lisp: `.lisp`, `.lsp`, `.l`, `.cl`, `.fasl`\n- Prolog: `.prolog`, `.pro`, `.P`\n- MATLAB: `.matlab`, `.fig`\n- Mathematica: `.mathematica`, `.nb`, `.wl`, `.wls`\n- SageMath: `.sage`, `.spyx`\n- Zig: `.zig`\n- Odin: `.odin`\n- V: `.v3`, `.v2`, `.v1`\n- Pony: `.pony`\n- Red: `.red`, `.reds`\n- Io: `.io`\n- Factor: `.factor`\n- Forth: `.forth`, `.fth`, `.4th`\n- J/K/Q/APL: `.j`, `.k`, `.q`, `.apl`\n- Chapel: `.chapel`, `.chpl`\n- X10: `.x10`\n- Arduino/Processing: `.pde`, `.ino`\n\n### Web Technologies\n- HTML: `.html`, `.htm`, `.xhtml`, `.shtml`\n- CSS/Preprocessors: `.css`, `.scss`, `.sass`, `.less`, `.styl`, `.stylus`\n- Frontend frameworks: `.vue`, `.svelte`\n- JSP: `.jsp`, `.jspx`, `.tag`, `.tagx`\n- ASP.NET: `.asp`, `.aspx`, `.ascx`, `.asax`, `.ashx`, `.asmx`\n- Ruby templates: `.erb`, `.haml`, `.slim`\n- PHP templates: `.twig`, `.blade`\n- Template engines: `.mustache`, `.hbs`, `.handlebars`, `.ejs`, `.pug`, `.jade`, `.liquid`, `.ftl`, `.ftlh`, `.vm`, `.vtl`, `.thymeleaf`\n\n### Configuration/Data\n- JSON: `.json`, `.json5`, `.jsonc`, `.jsonl`, `.ndjson`\n- XML: `.xml`, `.xsd`, `.xsl`, `.xslt`, `.dtd`, `.rng`, `.rnc`\n- YAML/TOML: `.yaml`, `.yml`, `.toml`\n- INI/Cfg/Conf: `.ini`, `.cfg`, `.conf`, `.config`, `.properties`\n- Environment: `.env`, `.envrc`, `.env.local`, `.env.development`, `.env.production`\n- Property lists: `.plist`\n- HOCON: `.hocon`\n- RON/HJSON/CSON: `.ron`, `.hjson`, `.cson`\n\n### Documentation/Text\n- Markdown: `.md`, `.markdown`, `.mdown`, `.mkd`, `.mkdn`\n- Plain text: `.txt`, `.text`\n- reStructuredText: `.rst`, `.rest`\n- AsciiDoc: `.asciidoc`, `.adoc`, `.asc`\n- LaTeX: `.tex`, `.latex`, `.ltx`, `.sty`, `.cls`, `.bib`\n- Org mode: `.org`\n- Wiki markup: `.wiki`, `.mediawiki`\n- Textile/Creole/RDoc: `.textile`, `.creole`, `.rdoc`\n\n### Data Formats\n- Delimited: `.csv`, `.tsv`, `.psv`\n- SQL: `.sql`, `.ddl`, `.dml`, `.plsql`, `.psql`, `.mysql`\n- GraphQL: `.graphql`, `.gql`\n- Protocols: `.proto`, `.protobuf`, `.avro`, `.avsc`, `.avdl`, `.thrift`, `.capnp`, `.fbs`\n- Columnar: `.parquet`, `.orc`, `.arrow`\n\n### Build/Dependency\n- Gradle: `.gradle`, `.gradle.kts`\n- Maven: `.maven`, `.mvn`\n- SBT: `.sbt`\n- CMake: `.cmake`, `.cmake.in`\n- Make: `.make`, `.mk`, `.mak`\n- Docker: `.dockerfile`, `.containerfile`, `.dockerignore`\n- Git: `.gitignore`, `.gitattributes`, `.gitmodules`, `.gitkeep`\n- Mercurial/Subversion/Bazaar: `.hgignore`, `.hgrc`, `.svnignore`, `.bzrignore`\n- EditorConfig: `.editorconfig`\n- Linters/Formatters: `.eslintrc`, `.eslintignore`, `.prettierrc`, `.prettierignore`, `.babelrc`, `.babelignore`\n- Node.js: `.npmrc`, `.npmignore`, `.yarnrc`, `.yarnignore`\n- Python: `.pipfile`, `.pipfile.lock`, `.requirements`, `.requirements.txt`, `.poetry.lock`, `.pyproject.toml`, `.setup.py`, `.setup.cfg`, `.manifest.in`, `.tox.ini`, `.noxfile.py`, `.pre-commit-config.yaml`\n- CI/CD: `.github`, `.gitlab-ci.yml`, `.travis.yml`, `.appveyor.yml`, `.circleci`, `.jenkins`, `.jenkinsfile`, `.azure-pipelines.yml`, `.buildkite.yml`\n- Package Managers: `package.json`, `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `composer.json`, `composer.lock`, `gemfile`, `gemfile.lock`, `cargo.toml`, `cargo.lock`, `go.mod`, `go.sum`, `requirements.txt`, `pipfile`, `pipfile.lock`, `poetry.lock`, `pyproject.toml`, `build.gradle`, `build.gradle.kts`, `settings.gradle`, `gradle.properties`, `pom.xml`, `settings.xml`, `build.sbt`, `plugins.sbt`, `makefile`, `gnumakefile`, `makefile.am`, `makefile.in`, `dockerfile`, `containerfile`, `vagrantfile`, `rakefile`, `guardfile`, `capfile`, `gulpfile.js`, `gruntfile.js`, `webpack.config.js`, `rollup.config.js`, `tsconfig.json`, `jsconfig.json`, `deno.json`, `deno.jsonc`, `mix.exs`, `mix.lock`, `rebar.config`, `rebar.lock`, `project.clj`, `deps.edn`, `stack.yaml`, `cabal.config`, `setup.hs`, `dub.json`, `dub.sdl`, `nimble`, `config.nims`, `shard.yml`, `shard.lock`, `pubspec.yaml`, `pubspec.lock`, `elm.json`, `elm-package.json`, `project.json`, `global.json`, `nuget.config`, `packages.config`, `paket.dependencies`, `paket.lock`, `.log`, `.lock`, `.pid`, `.tmp`, `.temp`, `.patch`, `.diff`, `.spec`, `.rpm`, `.deb`, `.control`, `.pkgbuild`, `.ebuild`, `.formula`, `.port`, `.portfile`, `.nix`, `.bzl`, `.bazel`, `.workspace`, `.buck`, `.buckconfig`, `.pants`, `.pants.ini`, `.please`, `.plzconfig`, `.gn`, `.gni`, `.ninja`, `.waf`, `.wscript`, `.scons`, `.sconstruct`, `.sconscript`\n\n</details>\n\n<details>\n<summary>Configuration Files</summary>\n\n- `requirements.txt`\n- `.gitignore`\n- `.dockerignore`\n- `.editorconfig`\n- `.eslintrc.js`\n- `.eslintrc.json`\n- `.prettierrc.js`\n- `.prettierrc.json`\n- `.babelrc.js`\n- `.babelrc.json`\n\n</details>\n\n---\n\n## 3. Generate a Product Requirements Document (PRD)\n\n**Note**: Generating a PRD or technical specification will replace the existing PRD or technical specification. The new outputs will document your codebase as it was when it was most recently ingested.\n\n```\nPOST /api/documents/prd?format=json\n```\n\nGenerates a structured PRD with:\n\n- Executive Overview\n- User Personas\n- High-Level Requirements\n- User Stories\n- Business Value\n\n**Example Response (truncated):**\n\n```\n{\n  \"content\": {\n    \"executive_overview\": \"Modernize internal authentication platform\",\n    \"user_personas\": [...],\n    \"user_stories\": [...]\n  }\n}\n```\n\n**Tip:** For PRDs or technical specs, use `format=markdown` to return a Markdown-formatted document instead.\n\n---\n\n## 4. Generate a Technical Specification\n\n```\nPOST /api/documents/technical-spec?format=json\n```\n\nReturns system-level implementation details including:\n\n- Architecture and Components\n- Data Models and Relationships\n- User Interface Screens and Components\n- APIs and Integration Points\n- System Interfaces and Specifications\n- Security Considerations\n- Implementation and Deployment Strategy\n\n---\n\n## 5. Query Your Code\n\n```\nPOST /api/graph/query-engine\n```\n\nAsk natural language questions about your codebase to return a structured graph of relationships.\n\n**Example Query:**\n\n```\n{\n  \"query\": \"How does the system determine whether a user has admin privileges when accessing the audit log?\"\n}\n```\n\n**Response (truncated):**\n\n```\n{\n  \"summary\": \"When a user requests access to the audit log, the system checks their assigned roles in `AuthService.getUserRoles`. If 'admin' is present, access is granted. This check occurs in `AuditLogController` before querying the log database. The middleware `CheckPermissions` is also invoked on this route.\"\n}\n```\n\n---\n\n## 6. Format and Retrieve Document Sections\n\nUse these endpoints to extract or reformat specific document sections:\n\n- `/api/documents/sections/{doc_type}` → generate a specific section\n- `/api/documents/format/markdown-output/{doc_type}` → format JSON as Markdown\n- `/api/documents/format/pdf-output/{doc_type}` → export PDF\n\nExample section names:\n\n- `executive-overview`\n- `data-models`\n- `system-architecture`\n- `integration-points`\n\n---\n\n## Questions?\n\nAfter reviewing this guide and the API docs, we recommend scheduling a short Q&A call if you have integration-specific needs or want assistance mapping this to your environment.\n",
+      "type": "text/plain"
+    }
+  }
+}

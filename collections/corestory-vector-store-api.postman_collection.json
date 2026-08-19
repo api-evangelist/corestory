@@ -1,0 +1,2890 @@
+{
+  "item": [
+    {
+      "id": "ad634f8b-8e25-4ba3-95c0-acc97062a447",
+      "name": "vector_store",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "77a53069-8ac7-496a-85b4-25c8112d8a6b",
+          "name": "Clear the vector store",
+          "request": {
+            "name": "Clear the vector store",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "vector-store",
+                ":project_id",
+                "clear"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d3a3dcae-bfe3-4cf4-9f9a-7527676ee9c9",
+              "name": "Confirmation that the vector store was cleared",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "clear"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"metadata\": {\n    \"key_0\": 1077\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f7608f22-271d-4b20-8c26-56b48b6ffc26",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "clear"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "af865955-e16c-40e1-a24d-79a78dfa617d",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "clear"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 9060,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a07b59c2-bb6c-4528-a732-d343a0ab8247",
+          "name": "Build the latest-filtered partial HNSW index for a project",
+          "request": {
+            "name": "Build the latest-filtered partial HNSW index for a project",
+            "description": {
+              "content": "Schedule a per-project build of the partial HNSW index scoped to\n``latest='true'`` (COR-3016).\n\nThe build runs ``CONCURRENTLY`` in the background — it can take minutes on\nlarge tables and we don't want to block the request or hold a lock — so this\nreturns ``202`` immediately. It's idempotent (``IF NOT EXISTS``), so\nre-hitting the endpoint is safe.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "vector-store",
+                ":project_id",
+                "latest-index"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "59026208-d036-441e-a959-ef5cb28eb70b",
+              "name": "Confirmation that the index build was scheduled",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "latest-index"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"metadata\": {\n    \"key_0\": 1077\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "45f5a8e1-af65-4afd-9996-41f05da33d78",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "latest-index"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9844dd13-c43e-4263-adea-fb7d9ef4d0e9",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "latest-index"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 9060,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c30c4cd2-cb2a-4530-bbb6-fae5f325cc1c",
+          "name": "Ingest data into the vector store",
+          "request": {
+            "name": "Ingest data into the vector store",
+            "description": {
+              "content": "Ingest data from a specified source into the vector store",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "vector-store",
+                ":project_id",
+                "ingest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source_type\": \"<string>\",\n  \"source\": \"<uri>\",\n  \"force\": false,\n  \"num_summaries\": 1,\n  \"summary_types\": [\n    \"self\"\n  ],\n  \"num_questions\": 2,\n  \"run_in_background\": true,\n  \"github_app_installation_id\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9b11387b-1a98-4004-8eaa-76fb132189dc",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "ingest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source_type\": \"url\",\n  \"source\": \"https://github.com/some/path/to/repo.git\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"document_count\": 9051\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "88a4990a-b075-4896-b20c-124b1be365c7",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "ingest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source_type\": \"url\",\n  \"source\": \"https://github.com/some/path/to/repo.git\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2d44bc7b-ac15-489f-ad99-c0ec13174f84",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "ingest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source_type\": \"url\",\n  \"source\": \"https://github.com/some/path/to/repo.git\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 9060,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e1c2c321-6e9e-48b2-b720-5669124f3b87",
+          "name": "Get Vector Store Status",
+          "request": {
+            "name": "Get Vector Store Status",
+            "description": {
+              "content": "Get the status of the vector store",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "vector-store",
+                ":project_id",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e20665a6-e45d-414d-a49a-a9393bf761ae",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": 1348,\n  \"key_1\": true,\n  \"key_2\": 229.72686466488756\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "15311c71-0b00-4a8b-8333-ab0deed1c325",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d5329b07-fe30-432b-a692-08e8cda60ab4",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 9060,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7a21cdf6-7624-4d9e-ae80-25ad07c0e071",
+          "name": "Side-load vectors directly into the database",
+          "request": {
+            "name": "Side-load vectors directly into the database",
+            "description": {
+              "content": "Insert vector records directly into the PostgreSQL vector store database.\n\n    This endpoint allows you to:\n    * Insert pre-computed vectors with text and metadata\n    * Automatically compute embeddings for text if vectors are not provided\n    * Batch process multiple records for efficiency\n    * Specify custom document IDs or auto-generate UUIDs\n\n    This is useful for:\n    * Migrating data from other vector stores\n    * Bulk loading pre-processed data\n    * Testing with specific vector data\n    * Integration with external embedding pipelines\n\n    **Note**: This bypasses the normal document ingestion pipeline and directly\n    inserts into the database. Use with caution in production environments.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "vector-store",
+                ":project_id",
+                "side-load"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"records\": [\n    {\n      \"text\": \"<string>\",\n      \"vector\": [\n        \"<number>\",\n        \"<number>\"\n      ],\n      \"metadata\": {\n        \"key_0\": 7094,\n        \"key_1\": \"string\",\n        \"key_2\": 2624.3307847797714,\n        \"key_3\": 835.8926470137528\n      },\n      \"document_id\": \"<string>\"\n    },\n    {\n      \"text\": \"<string>\",\n      \"vector\": [\n        \"<number>\",\n        \"<number>\"\n      ],\n      \"metadata\": {\n        \"key_0\": true,\n        \"key_1\": 9787.092451101129,\n        \"key_2\": \"string\"\n      },\n      \"document_id\": \"<string>\"\n    }\n  ],\n  \"batch_size\": 100\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1cd0eec4-1119-4375-84ee-5bba189df427",
+              "name": "Status of the side-loading operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "side-load"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"records\": [\n    {\n      \"text\": \"string\",\n      \"vector\": [\n        8791.145306992008,\n        8822.804122851006\n      ],\n      \"metadata\": {\n        \"key_0\": 3249,\n        \"key_1\": false,\n        \"key_2\": false,\n        \"key_3\": false\n      },\n      \"document_id\": \"string\"\n    },\n    {\n      \"text\": \"string\",\n      \"vector\": [\n        3437.9235580603095,\n        2913.503105113244\n      ],\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": 45.78376678298079\n      },\n      \"document_id\": \"string\"\n    }\n  ],\n  \"batch_size\": 100\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"records_processed\": 5498,\n  \"records_failed\": 4388,\n  \"embeddings_computed\": 6765,\n  \"metadata\": {\n    \"key_0\": 683,\n    \"key_1\": true\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fed05179-95d5-48ec-bd76-74dc3a152723",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "side-load"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"records\": [\n    {\n      \"text\": \"string\",\n      \"vector\": [\n        8791.145306992008,\n        8822.804122851006\n      ],\n      \"metadata\": {\n        \"key_0\": 3249,\n        \"key_1\": false,\n        \"key_2\": false,\n        \"key_3\": false\n      },\n      \"document_id\": \"string\"\n    },\n    {\n      \"text\": \"string\",\n      \"vector\": [\n        3437.9235580603095,\n        2913.503105113244\n      ],\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": 45.78376678298079\n      },\n      \"document_id\": \"string\"\n    }\n  ],\n  \"batch_size\": 100\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c4e173b8-413a-4ab5-9adc-a779936d6d30",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "side-load"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"records\": [\n    {\n      \"text\": \"string\",\n      \"vector\": [\n        8791.145306992008,\n        8822.804122851006\n      ],\n      \"metadata\": {\n        \"key_0\": 3249,\n        \"key_1\": false,\n        \"key_2\": false,\n        \"key_3\": false\n      },\n      \"document_id\": \"string\"\n    },\n    {\n      \"text\": \"string\",\n      \"vector\": [\n        3437.9235580603095,\n        2913.503105113244\n      ],\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": 45.78376678298079\n      },\n      \"document_id\": \"string\"\n    }\n  ],\n  \"batch_size\": 100\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 9060,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0c3f14f3-580b-41ce-a392-29cc8de3aebc",
+          "name": "Add documents to the vector store",
+          "request": {
+            "name": "Add documents to the vector store",
+            "description": {
+              "content": "Adds new documents to the existing vector store.\n\n    This endpoint allows uploading files that will be:\n    * Processed and split into chunks\n    * Embedded using the configured embedding model\n    * Added to the existing vector store\n\n    Supported file types: PDF, TXT, MD, HTML, JSON",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "vector-store",
+                ":project_id",
+                "add-documents"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files",
+                  "value": "[\"<string>\",\"<string>\"]",
+                  "type": "text",
+                  "description": "(Required) Documents to add to the vector store"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "45873b92-2efb-4586-94e5-09d08613e524",
+              "name": "Confirmation of successful document addition",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "add-documents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) Documents to add to the vector store",
+                        "type": "text/plain"
+                      },
+                      "key": "files",
+                      "value": "[\"<string>\",\"<string>\"]",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"document_count\": 7735,\n  \"metadata\": {\n    \"key_0\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bf8b67ef-f16f-4e3e-bd63-16f58f244a23",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "add-documents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) Documents to add to the vector store",
+                        "type": "text/plain"
+                      },
+                      "key": "files",
+                      "value": "[\"<string>\",\"<string>\"]",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fcbb65ac-f97e-43d8-9557-9add9b383637",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "add-documents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) Documents to add to the vector store",
+                        "type": "text/plain"
+                      },
+                      "key": "files",
+                      "value": "[\"<string>\",\"<string>\"]",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 9060,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0c33e584-34b2-4a2a-bb54-e1c1bb2218d5",
+          "name": "Get vector table schema information",
+          "request": {
+            "name": "Get vector table schema information",
+            "description": {
+              "content": "Inspect the structure of the vector store table to understand column names and types.\n\n    This is useful for:\n    * Understanding the exact table structure before side-loading\n    * Debugging database issues\n    * Verifying table creation\n    * Understanding what columns are available for queries",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "vector-store",
+                ":project_id",
+                "schema"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f8f9220c-c59b-479c-b6ea-a6d147525266",
+              "name": "Table schema information including column names and types",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "schema"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": 7185\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ff08b513-ef0c-4a56-9626-2a27deab2ada",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "schema"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b7678c36-7002-4a8b-9ebf-bb9b8e11fe8b",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "schema"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 9060,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a2d3c269-5567-4fe1-88a8-1c5468663a94",
+          "name": "Export all vectors from the database",
+          "request": {
+            "name": "Export all vectors from the database",
+            "description": {
+              "content": "Export all vector records from the PostgreSQL vector store for backup or migration purposes.\n\n    This endpoint:\n    * Retrieves all records from the vector table\n    * Returns them in the same format used by the side-load endpoint\n    * Supports pagination for large datasets\n    * Includes full vector embeddings and metadata\n    * Provides statistics about the export operation\n\n    **Use cases:**\n    * Backup vector data before system changes\n    * Migrate data to another vector store\n    * Analyze vector data externally\n    * Create test datasets for development\n\n    **Performance notes:**\n    * Large datasets may take time to export\n    * Consider using limit and offset for very large tables\n    * Vector data can be substantial in size",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "vector-store",
+                ":project_id",
+                "export"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Maximum number of records to export. If not specified, exports all records."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Number of records to skip (for pagination)"
+                },
+                {
+                  "disabled": false,
+                  "key": "include_vectors",
+                  "value": "true",
+                  "description": "Whether to include vector embeddings in the export (set to false to reduce size)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e9c760cd-726e-486f-a04b-18b58584dc70",
+              "name": "All vector records in side-load compatible format",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "export"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "include_vectors",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"total_records\": 4196,\n  \"records\": [\n    {\n      \"text\": \"string\",\n      \"vector\": [\n        5568.262701313333,\n        5971.775924488976\n      ],\n      \"metadata\": {\n        \"key_0\": \"string\"\n      },\n      \"document_id\": \"string\"\n    },\n    {\n      \"text\": \"string\",\n      \"vector\": [\n        9442.605935064988,\n        7506.185302791078\n      ],\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": true\n      },\n      \"document_id\": \"string\"\n    }\n  ],\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "46a5f7fe-9bb6-44b8-9a9f-af31030ca292",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "export"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "include_vectors",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "13435754-54d3-4f95-ad6d-1f72c1d691e5",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "export"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "include_vectors",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 9060,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "91fd8ef0-5c05-4186-a9d2-c7b8d8e32915",
+          "name": "Stream export all vectors as JSONL",
+          "request": {
+            "name": "Stream export all vectors as JSONL",
+            "description": {
+              "content": "Stream export all vector records as newline-delimited JSON (JSONL) for memory-efficient processing of large datasets.\n\n    This endpoint:\n    * Streams records one at a time to minimize memory usage\n    * Returns JSONL format (one JSON object per line)\n    * Processes records in batches to avoid database timeouts\n    * Suitable for very large vector stores\n    * Can be imported directly using the side-load endpoint\n\n    **Format:** Each line is a complete VectorRecord JSON object.\n    **Use cases:**\n    * Export very large vector databases without memory issues\n    * Streaming backup for continuous processing\n    * ETL pipelines that process data incrementally\n\n    **Performance notes:**\n    * Much more memory efficient than the regular export endpoint\n    * Streams data as it's retrieved from the database\n    * Suitable for datasets of any size",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "vector-store",
+                ":project_id",
+                "export",
+                "stream"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "batch_size",
+                  "value": "1000",
+                  "description": "Number of records to fetch per database query batch"
+                },
+                {
+                  "disabled": false,
+                  "key": "include_vectors",
+                  "value": "true",
+                  "description": "Whether to include vector embeddings in the export"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/x-jsonlines"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "bff55c09-4c82-447a-988f-508d4f5895e9",
+              "name": "Stream of JSONL records",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "export",
+                    "stream"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "batch_size",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "include_vectors",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/x-jsonlines"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/x-jsonlines"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b46781e8-bf24-4cd8-969b-7f64bf984491",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "export",
+                    "stream"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "batch_size",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "include_vectors",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3cadd36d-a684-4090-acc8-2d583d3908bd",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "export",
+                    "stream"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "batch_size",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "include_vectors",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 9060,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c14476e7-15b8-466d-a746-f740490740bd",
+          "name": "Import vectors from JSONL file",
+          "request": {
+            "name": "Import vectors from JSONL file",
+            "description": {
+              "content": "Import vector records from a JSONL (JSON Lines) file, typically exported from the export/stream endpoint.\n\n    This endpoint:\n    * Processes JSONL files line by line for memory efficiency\n    * Handles both records with pre-computed vectors and text-only records\n    * Automatically computes embeddings for records without vectors\n    * Processes data in configurable batches for performance\n    * Skips metadata lines (non-record JSON objects)\n    * Provides detailed import statistics and error reporting\n\n    **Supported file format:**\n    * JSONL (JSON Lines) - one JSON object per line\n    * Each line should be a VectorRecord object or metadata\n    * Compatible with files exported from the export/stream endpoint\n\n    **Use cases:**\n    * Restore data from backups\n    * Migrate data between environments\n    * Import data from external systems\n    * Batch processing of vector data\n\n    **Performance notes:**\n    * Memory efficient streaming processing\n    * Configurable batch sizes for database operations\n    * Automatic error recovery for individual record failures",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "vector-store",
+                ":project_id",
+                "import",
+                "stream"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "batch_size",
+                  "value": "100",
+                  "description": "Number of records to process in each database batch"
+                },
+                {
+                  "disabled": false,
+                  "key": "skip_existing",
+                  "value": "true",
+                  "description": "Skip records that already exist (based on document_id/node_id)"
+                },
+                {
+                  "disabled": false,
+                  "key": "compute_missing_embeddings",
+                  "value": "true",
+                  "description": "Automatically compute embeddings for records without vectors"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "(Required) JSONL file containing vector records to import"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "fc89e507-a800-47f9-b70a-45a475756347",
+              "name": "Import statistics and operation results",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "import",
+                    "stream"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "batch_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "skip_existing",
+                      "value": "true"
+                    },
+                    {
+                      "key": "compute_missing_embeddings",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) JSONL file containing vector records to import",
+                        "type": "text/plain"
+                      },
+                      "key": "file",
+                      "value": "<string>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"total_lines_processed\": 1781,\n  \"records_imported\": 2672,\n  \"records_failed\": 6486,\n  \"metadata_lines\": 9467,\n  \"embeddings_computed\": 2929,\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1c510bfa-884c-46e8-a0b6-1c44d43b7159",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "import",
+                    "stream"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "batch_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "skip_existing",
+                      "value": "true"
+                    },
+                    {
+                      "key": "compute_missing_embeddings",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) JSONL file containing vector records to import",
+                        "type": "text/plain"
+                      },
+                      "key": "file",
+                      "value": "<string>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bd42b90a-05b8-4787-b207-44d4d9ede5c2",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "import",
+                    "stream"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "batch_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "skip_existing",
+                      "value": "true"
+                    },
+                    {
+                      "key": "compute_missing_embeddings",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) JSONL file containing vector records to import",
+                        "type": "text/plain"
+                      },
+                      "key": "file",
+                      "value": "<string>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 9060,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4a7b2f28-f617-42db-bbb7-8aa8a344695a",
+          "name": "Cancel ongoing data ingestion",
+          "request": {
+            "name": "Cancel ongoing data ingestion",
+            "description": {
+              "content": "Flip the active ingestion SOTJ job for the project to CANCELLED.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "vector-store",
+                ":project_id",
+                "cancel-ingest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a9b9c112-bfa2-45ea-9091-78a25c0dadb3",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "cancel-ingest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"job_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ee7e8c36-ccd7-4d16-bd22-b342064f6e25",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "cancel-ingest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "71626db8-dfc2-4925-88f1-1dcea72d40d1",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "cancel-ingest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 9060,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1d9b09d7-609c-4eb8-b5d9-41e0782acead",
+          "name": "Update metadata for all records in the vector store",
+          "request": {
+            "name": "Update metadata for all records in the vector store",
+            "description": {
+              "content": "Update metadata for all records in the vector store for a specific project.\n\n    This endpoint:\n    * Updates metadata for all existing records in the project's vector store\n    * Adds standard metadata fields like updated_at timestamp\n    * Preserves existing metadata while adding new fields\n    * Processes records in batches for performance\n\n    **Use cases:**\n    * Add tracking information to existing records\n    * Update metadata after system changes\n    * Standardize metadata across all records\n    * Add project-specific metadata fields",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "vector-store",
+                ":project_id",
+                "update-metadata"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "action",
+                  "value": "file_relationships"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"file_path\": \"<string>\",\n  \"extractors\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"comment\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "766eee9d-5ca6-4d96-a921-f0a2adea2218",
+              "name": "Status of the metadata update operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "update-metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "action",
+                      "value": "file_relationships"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"file_path\": \"string\",\n  \"extractors\": [\n    \"imports_exports\",\n    \"api_specifications\"\n  ],\n  \"comment\": \"string\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"records_updated\": 5225,\n  \"metadata\": {\n    \"key_0\": true\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bd39b593-a89f-470a-85c8-0cf2ab0e7c6b",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "update-metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "action",
+                      "value": "file_relationships"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"file_path\": \"string\",\n  \"extractors\": [\n    \"imports_exports\",\n    \"api_specifications\"\n  ],\n  \"comment\": \"string\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6a2bc9e8-39c9-4bce-8781-9fdf6fad548e",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "vector-store",
+                    ":project_id",
+                    "update-metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "action",
+                      "value": "file_relationships"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"file_path\": \"string\",\n  \"extractors\": [\n    \"imports_exports\",\n    \"api_specifications\"\n  ],\n  \"comment\": \"string\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 9060,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "70dc6a11-13cb-49c2-81d5-7fe0238c723e",
+    "name": "Crowdbotics API Documentation admin vector_store API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# CoreStory API Overview\n\nThe CoreStory API provides programmatic access to structured insights derived from software source code. It is designed for engineering, architecture, and product teams who need to extract business logic, technical specifications, architectural relationships, and system-level context from complex or legacy codebases.\n\nBy interfacing directly with CoreStory API, users can:\n\n- Generate full Product Requirements Documents (PRDs) from a codebase\n- Extract detailed Technical Specifications for modernization or migration\n- Query a codebase using natural language to surface implementation details, logic paths, dependencies, and architectural insights\n- Construct and visualize knowledge graphs of systems, components, and relationships\n- Ingest, store, and retrieve content from a vector store for AI-powered retrieval-augmented generation (RAG) workflows\n\nCoreStory is especially valuable in contexts where:\n\n- Codebases are large, unstructured, or under-documented\n- Product and engineering teams are onboarding to unfamiliar systems\n- Technical stakeholders require visibility into system design or feature coverage\n- Modernization, replatforming, or M&A due diligence is underway\n\nThe API can be integrated into existing CI/CD pipelines, internal developer portals, architecture review boards, product planning processes, or documentation automation workflows.\n\nAll endpoints support secure authentication and are designed for high-availability, asynchronous workloads. Output formats include JSON, Markdown, and PDF, with flexible formatting options for downstream consumption.\n\nFor step-by-step usage instructions and workflows, refer to the [CoreStory API Quick Start Guide](#section/CoreStory-API-Quick-Start-Guide).\n\n## Features\n\n* **Document Generation**\n    * Generate complete Product Requirements Documents (PRD)\n    * Generate Technical Specifications\n    * Generate individual document sections (executive overview, user personas, etc.)\n    * Format documents in JSON or Markdown\n\n* **Vector Store Management**\n    * Ingest and manage documents in vector store\n    * Query and retrieve document content\n    * Manage document embeddings\n\n* **Context Management**\n    * Manage context for different document types\n    * Set and retrieve PRD context\n    * Support for future context types (technical specs, user stories, etc.)\n\n* **Knowledge Graph**\n    * Generate knowledge graphs from codebase queries\n    * Visualize relationships between code entities\n    * Analyze code structure and dependencies\n\n* **API Endpoints**\n    * `/api/documents/*` - Document generation and formatting\n    * `/api/generate/*` - Document formatting utilities\n    * `/api/vector-store/*` - Vector store management\n    * `/api/agents/*` - AI agent operations\n    * `/api/context/*` - Context management for documents\n    * `/api/graph/*` - Knowledge graph generation and analysis\n\nNote: JWT authentication support coming soon. All endpoints currently provide detailed OpenAPI documentation.\n\n* **Observability**\n    * OpenTelemetry instrumentation for distributed tracing\n    * Prometheus metrics endpoint at `/metrics`\n    * Comprehensive request/response tracking\n    * Custom business metrics\n\n\n\n# CoreStory System Architecture\n\nThis document provides a high-level overview of how the CoreStory platform ingests, analyzes, and serves structured software intelligence through its API. The system is designed to process codebases and related technical artifacts in order to generate product specifications, technical documents, and knowledge graph representations.\n\n---\n\n## Core Components\n\n### 1. **Ingestion Layer**\n\n- Accepts Git URLs, file uploads, or local archives\n- Extracts source files, documentation, and metadata\n- Initiates chunking and embedding via the vector store pipeline\n\n### 2. **Vector Store and Context Engine**\n\n- Stores chunked and embedded documents\n- Supports semantic search and document retrieval\n- Feeds LLMs with scoped context for generation and reasoning\n\n### 3. **LLM Orchestration Layer**\n\n- Fan-out to multiple large language models\n- Handles prompt templating, context injection, and result normalization\n- Evaluates and scores generated outputs\n\n### 4. **Document Generation Engine**\n\n- Produces:\n  - PRDs\n  - Technical Specs\n  - Individual document sections\n  - Markdown and PDF exports\n- Format-flexible output for portals, APIs, and documentation pipelines\n\n### 5. **Graph Construction Module**\n\n- Extracts static and dynamic code relationships\n- Builds DAGs and call graphs of components, services, and files\n- Allows natural-language queries that return graph subviews and LLM explanations\n\n### 6. **Query Engine**\n\n- Accepts free-form questions about codebases\n- Routes queries to code graph, document store, or LLMs\n- Returns structured JSON answers and explanatory text\n\n### 7. **API Gateway**\n\n- Authenticates and rate-limits clients\n- Routes requests to internal services\n- Serves all external-facing endpoints in REST format\n\n---\n\n## Security and Privacy\n\n- All data transfer is encrypted via HTTPS\n- API access is secured using provided auth credentials (JWT tokens coming soon)\n- Uploaded code is only used to generate customer-requested outputs and is not retained indefinitely\n\n---\n\n## Extensibility\n\nThe platform is modular. It can be extended to:\n\n- Add new LLMs for ensemble generation\n- Integrate alternative vector databases\n- Connect to internal developer portals or product management tools via webhook or export endpoints\n\nFor more information, see the Quick Start or contact the CoreStory team.\n\n\n# CoreStory API Quick Start Guide\n\nThe CoreStory API provides programmatic access to structured code intelligence, enabling your team to extract business and technical specifications directly from source code. You can use the API to integrate CoreStory-generated documents into existing workflows, support software modernization and maintenance efforts, or enrich internal platforms with architectural and feature-level metadata.\n\n---\n\n## Overview\n\nThe CoreStory API enables:\n\n- Ingestion of content into a **vector store** for LLM-driven analysis\n- Generation of **Product Requirements Documents (PRDs)** and **Technical Specifications** from code\n- Interrogation of your codebase via a natural language **query engine**\n- Construction of **knowledge graphs** describing code relationships and system architecture\n- Management of **custom document context** and **custom prompts** for improved output relevance and quality\n\nThese capabilities support SDLC workflows such as:\n\n- Application modernization, migration, and maintenance\n- Documentation and auditability of legacy systems\n- Alignment of product, engineering, and architecture teams and systems\n- Developer onboarding and code comprehension\n\n---\n\n**Note for POV customers:** If your codebase has already been ingested as part of a proof-of-value (POV) engagement, you can use your existing authentication credentials and skip step 2 (”Ingest a Codebase or Document Source) of this guide.\n\n## 1. Authentication\n\n```\nPOST /api/auth/login\n```\n\nObtain a JWT for future API calls.\n\n**Request:**\n\n```\n{\n  \"email\": \"you@example.com\",\n  \"password\": \"your-password\"\n}\n```\n\n**Response:**\n\n```\n{\n  \"access_token\": \"...\",\n  \"token_type\": \"bearer\"\n}\n```\n\nInclude this token in all subsequent requests:\n\n```\nAuthorization: Bearer <access_token>\n```\n\n---\n\n## 2. Ingest a Codebase or Document Source\n\n```\nPOST /api/vector-store/ingest\n```\n\nTrigger ingestion of code from a Git repo, ZIP file, or local document directory.\n\n**Example Payload (GitHub):**\n\n```\n{\n  \"source_type\": \"url\",\n  \"source\": \"https://github.com/example/repo.git\",\n  \"force\": true\n}\n```\n\nIngestion automatically chunks, embeds, and summarizes source files for downstream analysis.\n\n<details>\n<summary>Supported File Extensions</summary>\n\n### Programming Languages\n- Python: `.py`, `.pyw`, `.pyx`, `.pyi`\n- JavaScript/TypeScript: `.js`, `.mjs`, `.cjs`, `.ts`, `.jsx`, `.tsx`\n- Java: `.java`, `.class`, `.jar`\n- C/C++: `.c`, `.cpp`, `.cc`, `.cxx`, `.c++`, `.h`, `.hpp`, `.hh`, `.hxx`, `.h++`\n- .NET: `.cs`, `.csx`, `.vb`, `.fs`, `.fsx`, `.fsi`\n- PHP: `.php`, `.php3`, `.php4`, `.php5`, `.phtml`\n- Ruby: `.rb`, `.rbw`, `.rake`, `.gemspec`\n- Go: `.go`, `.mod`, `.sum`\n- Rust: `.rs`, `.rlib`\n- Swift: `.swift`\n- Kotlin: `.kt`, `.kts`, `.ktm`\n- Scala: `.scala`, `.sc`\n- Clojure: `.clj`, `.cljs`, `.cljc`, `.edn`\n- Haskell: `.hs`, `.lhs`\n- OCaml: `.ml`, `.mli`, `.mll`, `.mly`\n- R: `.r`, `.R`, `.rmd`, `.rnw`\n- Objective-C: `.m`, `.mm`\n- Perl: `.pl`, `.pm`, `.t`, `.pod`\n- Shell scripts: `.sh`, `.bash`, `.zsh`, `.fish`, `.ksh`, `.csh`, `.tcsh`\n- PowerShell: `.ps1`, `.psm1`, `.psd1`\n- Windows batch: `.bat`, `.cmd`\n- Lua: `.lua`\n- Dart: `.dart`\n- Elm: `.elm`\n- Elixir: `.ex`, `.exs`\n- Erlang: `.erl`, `.hrl`\n- Julia: `.jl`\n- Nim: `.nim`, `.nims`\n- Crystal: `.cr`\n- D: `.d`\n- Pascal: `.pas`, `.pp`, `.inc`\n- Fortran: `.f`, `.f90`, `.f95`, `.f03`, `.f08`, `.for`, `.ftn`, `.fpp`\n- COBOL: `.cob`, `.cbl`, `.cpy`, `.cobol`, `.bms`, `.ctl`, `.jcl`, `.proc`\n- IBM i (AS/400) RPG ILE: `.rpgle`, `.rpgleinc`\n- IBM i (AS/400) CLLE: `.clle`\n- IBM i (AS/400) DDS: `.pf`, `.lf`, `.dspf`\n- PowerBuilder: `.pbt`, `.pbs`, `.pbr`, `.srw`, `.srd`, `.sru`, `.sra`, `.srp`, `.srf`, `.srq`, `.srs`, `.srm`, `.srj`\n- Ada: `.ada`, `.adb`, `.ads`\n- Assembly: `.asm`, `.s`, `.S`\n- Verilog/SystemVerilog: `.v`, `.vh`, `.sv`, `.svh`\n- VHDL: `.vhd`, `.vhdl`\n- Tcl/Tk: `.tcl`, `.tk`\n- Groovy: `.groovy`, `.gvy`, `.gy`, `.gsh`\n- CoffeeScript: `.coffee`, `.litcoffee`\n- PureScript: `.purs`\n- ReasonML: `.reason`, `.re`, `.rei`\n- Racket/Scheme: `.rkt`, `.scm`, `.ss`\n- Lisp: `.lisp`, `.lsp`, `.l`, `.cl`, `.fasl`\n- Prolog: `.prolog`, `.pro`, `.P`\n- MATLAB: `.matlab`, `.fig`\n- Mathematica: `.mathematica`, `.nb`, `.wl`, `.wls`\n- SageMath: `.sage`, `.spyx`\n- Zig: `.zig`\n- Odin: `.odin`\n- V: `.v3`, `.v2`, `.v1`\n- Pony: `.pony`\n- Red: `.red`, `.reds`\n- Io: `.io`\n- Factor: `.factor`\n- Forth: `.forth`, `.fth`, `.4th`\n- J/K/Q/APL: `.j`, `.k`, `.q`, `.apl`\n- Chapel: `.chapel`, `.chpl`\n- X10: `.x10`\n- Arduino/Processing: `.pde`, `.ino`\n\n### Web Technologies\n- HTML: `.html`, `.htm`, `.xhtml`, `.shtml`\n- CSS/Preprocessors: `.css`, `.scss`, `.sass`, `.less`, `.styl`, `.stylus`\n- Frontend frameworks: `.vue`, `.svelte`\n- JSP: `.jsp`, `.jspx`, `.tag`, `.tagx`\n- ASP.NET: `.asp`, `.aspx`, `.ascx`, `.asax`, `.ashx`, `.asmx`\n- Ruby templates: `.erb`, `.haml`, `.slim`\n- PHP templates: `.twig`, `.blade`\n- Template engines: `.mustache`, `.hbs`, `.handlebars`, `.ejs`, `.pug`, `.jade`, `.liquid`, `.ftl`, `.ftlh`, `.vm`, `.vtl`, `.thymeleaf`\n\n### Configuration/Data\n- JSON: `.json`, `.json5`, `.jsonc`, `.jsonl`, `.ndjson`\n- XML: `.xml`, `.xsd`, `.xsl`, `.xslt`, `.dtd`, `.rng`, `.rnc`\n- YAML/TOML: `.yaml`, `.yml`, `.toml`\n- INI/Cfg/Conf: `.ini`, `.cfg`, `.conf`, `.config`, `.properties`\n- Environment: `.env`, `.envrc`, `.env.local`, `.env.development`, `.env.production`\n- Property lists: `.plist`\n- HOCON: `.hocon`\n- RON/HJSON/CSON: `.ron`, `.hjson`, `.cson`\n\n### Documentation/Text\n- Markdown: `.md`, `.markdown`, `.mdown`, `.mkd`, `.mkdn`\n- Plain text: `.txt`, `.text`\n- reStructuredText: `.rst`, `.rest`\n- AsciiDoc: `.asciidoc`, `.adoc`, `.asc`\n- LaTeX: `.tex`, `.latex`, `.ltx`, `.sty`, `.cls`, `.bib`\n- Org mode: `.org`\n- Wiki markup: `.wiki`, `.mediawiki`\n- Textile/Creole/RDoc: `.textile`, `.creole`, `.rdoc`\n\n### Data Formats\n- Delimited: `.csv`, `.tsv`, `.psv`\n- SQL: `.sql`, `.ddl`, `.dml`, `.plsql`, `.psql`, `.mysql`\n- GraphQL: `.graphql`, `.gql`\n- Protocols: `.proto`, `.protobuf`, `.avro`, `.avsc`, `.avdl`, `.thrift`, `.capnp`, `.fbs`\n- Columnar: `.parquet`, `.orc`, `.arrow`\n\n### Build/Dependency\n- Gradle: `.gradle`, `.gradle.kts`\n- Maven: `.maven`, `.mvn`\n- SBT: `.sbt`\n- CMake: `.cmake`, `.cmake.in`\n- Make: `.make`, `.mk`, `.mak`\n- Docker: `.dockerfile`, `.containerfile`, `.dockerignore`\n- Git: `.gitignore`, `.gitattributes`, `.gitmodules`, `.gitkeep`\n- Mercurial/Subversion/Bazaar: `.hgignore`, `.hgrc`, `.svnignore`, `.bzrignore`\n- EditorConfig: `.editorconfig`\n- Linters/Formatters: `.eslintrc`, `.eslintignore`, `.prettierrc`, `.prettierignore`, `.babelrc`, `.babelignore`\n- Node.js: `.npmrc`, `.npmignore`, `.yarnrc`, `.yarnignore`\n- Python: `.pipfile`, `.pipfile.lock`, `.requirements`, `.requirements.txt`, `.poetry.lock`, `.pyproject.toml`, `.setup.py`, `.setup.cfg`, `.manifest.in`, `.tox.ini`, `.noxfile.py`, `.pre-commit-config.yaml`\n- CI/CD: `.github`, `.gitlab-ci.yml`, `.travis.yml`, `.appveyor.yml`, `.circleci`, `.jenkins`, `.jenkinsfile`, `.azure-pipelines.yml`, `.buildkite.yml`\n- Package Managers: `package.json`, `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `composer.json`, `composer.lock`, `gemfile`, `gemfile.lock`, `cargo.toml`, `cargo.lock`, `go.mod`, `go.sum`, `requirements.txt`, `pipfile`, `pipfile.lock`, `poetry.lock`, `pyproject.toml`, `build.gradle`, `build.gradle.kts`, `settings.gradle`, `gradle.properties`, `pom.xml`, `settings.xml`, `build.sbt`, `plugins.sbt`, `makefile`, `gnumakefile`, `makefile.am`, `makefile.in`, `dockerfile`, `containerfile`, `vagrantfile`, `rakefile`, `guardfile`, `capfile`, `gulpfile.js`, `gruntfile.js`, `webpack.config.js`, `rollup.config.js`, `tsconfig.json`, `jsconfig.json`, `deno.json`, `deno.jsonc`, `mix.exs`, `mix.lock`, `rebar.config`, `rebar.lock`, `project.clj`, `deps.edn`, `stack.yaml`, `cabal.config`, `setup.hs`, `dub.json`, `dub.sdl`, `nimble`, `config.nims`, `shard.yml`, `shard.lock`, `pubspec.yaml`, `pubspec.lock`, `elm.json`, `elm-package.json`, `project.json`, `global.json`, `nuget.config`, `packages.config`, `paket.dependencies`, `paket.lock`, `.log`, `.lock`, `.pid`, `.tmp`, `.temp`, `.patch`, `.diff`, `.spec`, `.rpm`, `.deb`, `.control`, `.pkgbuild`, `.ebuild`, `.formula`, `.port`, `.portfile`, `.nix`, `.bzl`, `.bazel`, `.workspace`, `.buck`, `.buckconfig`, `.pants`, `.pants.ini`, `.please`, `.plzconfig`, `.gn`, `.gni`, `.ninja`, `.waf`, `.wscript`, `.scons`, `.sconstruct`, `.sconscript`\n\n</details>\n\n<details>\n<summary>Configuration Files</summary>\n\n- `requirements.txt`\n- `.gitignore`\n- `.dockerignore`\n- `.editorconfig`\n- `.eslintrc.js`\n- `.eslintrc.json`\n- `.prettierrc.js`\n- `.prettierrc.json`\n- `.babelrc.js`\n- `.babelrc.json`\n\n</details>\n\n---\n\n## 3. Generate a Product Requirements Document (PRD)\n\n**Note**: Generating a PRD or technical specification will replace the existing PRD or technical specification. The new outputs will document your codebase as it was when it was most recently ingested.\n\n```\nPOST /api/documents/prd?format=json\n```\n\nGenerates a structured PRD with:\n\n- Executive Overview\n- User Personas\n- High-Level Requirements\n- User Stories\n- Business Value\n\n**Example Response (truncated):**\n\n```\n{\n  \"content\": {\n    \"executive_overview\": \"Modernize internal authentication platform\",\n    \"user_personas\": [...],\n    \"user_stories\": [...]\n  }\n}\n```\n\n**Tip:** For PRDs or technical specs, use `format=markdown` to return a Markdown-formatted document instead.\n\n---\n\n## 4. Generate a Technical Specification\n\n```\nPOST /api/documents/technical-spec?format=json\n```\n\nReturns system-level implementation details including:\n\n- Architecture and Components\n- Data Models and Relationships\n- User Interface Screens and Components\n- APIs and Integration Points\n- System Interfaces and Specifications\n- Security Considerations\n- Implementation and Deployment Strategy\n\n---\n\n## 5. Query Your Code\n\n```\nPOST /api/graph/query-engine\n```\n\nAsk natural language questions about your codebase to return a structured graph of relationships.\n\n**Example Query:**\n\n```\n{\n  \"query\": \"How does the system determine whether a user has admin privileges when accessing the audit log?\"\n}\n```\n\n**Response (truncated):**\n\n```\n{\n  \"summary\": \"When a user requests access to the audit log, the system checks their assigned roles in `AuthService.getUserRoles`. If 'admin' is present, access is granted. This check occurs in `AuditLogController` before querying the log database. The middleware `CheckPermissions` is also invoked on this route.\"\n}\n```\n\n---\n\n## 6. Format and Retrieve Document Sections\n\nUse these endpoints to extract or reformat specific document sections:\n\n- `/api/documents/sections/{doc_type}` → generate a specific section\n- `/api/documents/format/markdown-output/{doc_type}` → format JSON as Markdown\n- `/api/documents/format/pdf-output/{doc_type}` → export PDF\n\nExample section names:\n\n- `executive-overview`\n- `data-models`\n- `system-architecture`\n- `integration-points`\n\n---\n\n## Questions?\n\nAfter reviewing this guide and the API docs, we recommend scheduling a short Q&A call if you have integration-specific needs or want assistance mapping this to your environment.\n",
+      "type": "text/plain"
+    }
+  }
+}

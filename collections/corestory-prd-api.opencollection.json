@@ -1,0 +1,314 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin prd API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "prd",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the project's PRD generation status.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/prd/status",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get the project's PRD generation status."
+        },
+        {
+          "info": {
+            "name": "Get the project's PRD (not tech spec) sections data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/prd",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get all of the project's PRD sections (not Tech Spec sections)."
+        },
+        {
+          "info": {
+            "name": "Generate the PRD sections (no Tech Spec sections) for the project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/prd/generate",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "The format of the generated document"
+              },
+              {
+                "name": "show_code_references",
+                "value": "",
+                "type": "query",
+                "description": "Whether to include code references in user stories"
+              },
+              {
+                "name": "generate_toc",
+                "value": "",
+                "type": "query",
+                "description": "Whether to generate a table of contents (only applies when format is 'markdown')"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generates a high-level Product Requirements Document (PRD) focused on business and user requirements.\n    It generates 5 sections: Executive Overview, User Personas, High-Level Requirements (Epics), User Stories, Security Requirements.\n\n    The show_code_references flag (default: False) controls whether code references are included in user stories.\n    When set to False, code references will be removed from both JSON and markdown output.\n\n    The generate_toc flag (default: False) controls wheth"
+        },
+        {
+          "info": {
+            "name": "Generate all PRD and tech spec sections for the project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/prd/generate-all",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "(Re)generates all sections, runs in background."
+        },
+        {
+          "info": {
+            "name": "Get the context for the project's latest PRD.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/prd/context",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get the context for the project's latest PRD.\n\nArgs:\n    project_id: ID of the Project\n\nReturns:\n    PRDContextResponse: The PRD context with creation timestamp"
+        },
+        {
+          "info": {
+            "name": "Set or update the context for the project's latest PRD.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/prd/context",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set or update the context for a specific PRD.\n\nArgs:\n    project_id: ID of the Project\n\nReturns:\n    PRDContextResponse: The updated PRD context with creation timestamp"
+        },
+        {
+          "info": {
+            "name": "Get a catalog of user stories items for UI faceted browsing.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/prd/user-stories/catalog",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns unique, alpha-sorted catalogs lists, and counts for:\n  - main_features: from high_level_requirements.features[*].category\n  - epics: from high_level_requirements.features[*].name\n  - personas: from user_personas.user_personas[*].name"
+        },
+        {
+          "info": {
+            "name": "Generate a specific PRD section",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/prd/:section_name/generate",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate a specific PRD section"
+        },
+        {
+          "info": {
+            "name": "Get the specified PRD section.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/prd/:section_name",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "epics",
+                "value": "",
+                "type": "query",
+                "description": "Epic IDs"
+              },
+              {
+                "name": "personas",
+                "value": "",
+                "type": "query",
+                "description": "Persona IDs"
+              },
+              {
+                "name": "main_features",
+                "value": "",
+                "type": "query",
+                "description": "Main feature IDs"
+              },
+              {
+                "name": "keywords",
+                "value": "",
+                "type": "query",
+                "description": "Keyword list"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Free-text; supports exact, \"a or b\", or \"a and b\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page (default: 999)"
+              }
+            ]
+          },
+          "docs": "Get a single specified section for the project's base PRD (not tech spec)."
+        },
+        {
+          "info": {
+            "name": "Update the specified PRD section.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/projects/:project_id/prd/:section_name",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get a single specified section for the project's base PRD (not tech spec)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

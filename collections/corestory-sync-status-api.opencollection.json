@@ -1,0 +1,67 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin sync-status API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "sync-status",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List org projects with sync status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/organizations/projects/sync-status",
+            "params": [
+              {
+                "name": "sync_mode",
+                "value": "",
+                "type": "query",
+                "description": "Filter by sync mode"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "sort_order",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page"
+              }
+            ]
+          },
+          "docs": "Return a paginated list of projects in the org with their sync mode and status."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

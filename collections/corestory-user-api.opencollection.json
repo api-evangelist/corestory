@@ -1,0 +1,80 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin user API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "user",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get user activity statistics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/user/activity-stats"
+          },
+          "docs": "Retrieve activity statistics for the currently authenticated user"
+        },
+        {
+          "info": {
+            "name": "Get recent conversations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/user/recent-conversations",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of recent conversations to retrieve (default: 10, max: 50)"
+              }
+            ]
+          },
+          "docs": "Retrieve a list of recent conversations for the currently authenticated user"
+        },
+        {
+          "info": {
+            "name": "Get user onboarding profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/user/onboarding-profile"
+          },
+          "docs": "Retrieve the onboarding profile for the currently authenticated user"
+        },
+        {
+          "info": {
+            "name": "Upsert user onboarding profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/user/onboarding-profile",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or update the onboarding profile for the currently authenticated user (idempotent)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

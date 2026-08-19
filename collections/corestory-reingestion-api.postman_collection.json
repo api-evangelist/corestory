@@ -1,0 +1,1753 @@
+{
+  "item": [
+    {
+      "id": "0aee288e-bbac-4a89-9cb1-98990b76f129",
+      "name": "reingestion",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7d678c9e-ec8d-429b-a3fe-93b566c440c5",
+          "name": "Start pre-reingestion analysis for an existing project",
+          "request": {
+            "name": "Start pre-reingestion analysis for an existing project",
+            "description": {
+              "content": "Start analysis of an existing project's codebase for reingestion.\nReturns a job ID that can be polled for status and results.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "reingestion",
+                "analyze"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "83ebef24-35c5-4f59-8f84-443f664e1725",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "reingestion",
+                    "analyze"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"job_id\": 7480,\n  \"status\": \"completed\",\n  \"progress\": 0,\n  \"failure_type\": \"string\",\n  \"failure_reason\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5fc7f471-20ed-412f-a73b-af4044b11257",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "reingestion",
+                    "analyze"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5636d386-0f24-4a6e-9007-1eef10e47b8b",
+          "name": "Get reingestion analysis job status",
+          "request": {
+            "name": "Get reingestion analysis job status",
+            "description": {
+              "content": "Get the status of a reingestion analysis job.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "reingestion",
+                "analyze",
+                ":job_id",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "job_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9cc2a496-c7ee-422a-8e6e-1d37258590dc",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "reingestion",
+                    "analyze",
+                    ":job_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"job_id\": 7480,\n  \"status\": \"completed\",\n  \"progress\": 0,\n  \"failure_type\": \"string\",\n  \"failure_reason\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9fd8a436-062c-4c14-806b-71a655f038bf",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "reingestion",
+                    "analyze",
+                    ":job_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2d391b9b-835a-4eea-8d2f-f2204cce1ee3",
+          "name": "Get coverage results from reingestion analysis",
+          "request": {
+            "name": "Get coverage results from reingestion analysis",
+            "description": {
+              "content": "Get coverage results from a reingestion analysis job.\n\nIncludes file change summary (added/modified/removed) and CIU cost\nestimate when the analysis was run for an existing project (reingestion).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "reingestion",
+                "analyze",
+                ":job_id",
+                "coverage"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "job_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e52c98fc-1da2-499e-bfbc-e0246f05f461",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "reingestion",
+                    "analyze",
+                    ":job_id",
+                    "coverage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"total_files\": 6449,\n  \"total_directories\": 921,\n  \"file_coverage\": 4799.014457242471,\n  \"included_count\": {\n    \"key_0\": 4578.861059453677,\n    \"key_1\": 209\n  },\n  \"excluded_count\": {\n    \"key_0\": 1708.0491152038069,\n    \"key_1\": 1578.8509045492128\n  },\n  \"exclusion_reasons\": {\n    \"key_0\": 9066.850503382188,\n    \"key_1\": 2182\n  },\n  \"files\": {\n    \"added\": [\n      \"string\",\n      \"string\"\n    ],\n    \"modified\": [\n      \"string\",\n      \"string\"\n    ],\n    \"removed\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"summary\": {\n    \"added_count\": 0,\n    \"modified_count\": 0,\n    \"removed_count\": 0\n  },\n  \"last_synced_commit\": \"string\",\n  \"latest_commit\": \"string\",\n  \"estimated_cius\": {\n    \"min\": \"-0000000007556.3066842468\",\n    \"max\": \"000000000062.564667816\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6385ce90-c79d-448b-8eac-2a71ee4844be",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "reingestion",
+                    "analyze",
+                    ":job_id",
+                    "coverage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1a958c33-443f-4d6d-8db2-f48461497ce0",
+          "name": "Get excluded file paths from reingestion analysis",
+          "request": {
+            "name": "Get excluded file paths from reingestion analysis",
+            "description": {
+              "content": "Get the list of excluded file paths from a reingestion analysis job.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "reingestion",
+                "analyze",
+                ":job_id",
+                "excluded-files"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (1-based)"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "100",
+                  "description": "Items per page"
+                },
+                {
+                  "disabled": false,
+                  "key": "file_name",
+                  "value": "<string>",
+                  "description": "Filter files by name"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "job_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "eeca21b1-dd09-46a2-9e3a-46fd95de55be",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "reingestion",
+                    "analyze",
+                    ":job_id",
+                    "excluded-files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "file_name",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    \"string\",\n    \"string\"\n  ],\n  \"pagination\": {\n    \"key_0\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6310de08-07a1-4329-805e-94f334153930",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "reingestion",
+                    "analyze",
+                    ":job_id",
+                    "excluded-files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "file_name",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6ad0724d-4772-41e5-8538-f78877b3a119",
+          "name": "Get included file paths from reingestion analysis",
+          "request": {
+            "name": "Get included file paths from reingestion analysis",
+            "description": {
+              "content": "Get the list of included file paths from a reingestion analysis job.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "reingestion",
+                "analyze",
+                ":job_id",
+                "included-files"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (1-based)"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "100",
+                  "description": "Items per page"
+                },
+                {
+                  "disabled": false,
+                  "key": "file_name",
+                  "value": "<string>",
+                  "description": "Filter files by name"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "job_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e14f10bf-faba-46d0-9c9e-20ecd58cbcb7",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "reingestion",
+                    "analyze",
+                    ":job_id",
+                    "included-files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "file_name",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    \"string\",\n    \"string\"\n  ],\n  \"pagination\": {\n    \"key_0\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7733201e-b324-4c47-acdd-cdbb1850d5e7",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "reingestion",
+                    "analyze",
+                    ":job_id",
+                    "included-files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "file_name",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "929e55c2-8411-4c22-b731-17d346090b0d",
+          "name": "Delete a reingestion analysis job",
+          "request": {
+            "name": "Delete a reingestion analysis job",
+            "description": {
+              "content": "Delete a reingestion analysis job and its associated files.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "reingestion",
+                "analyze",
+                ":job_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "job_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2427a776-9ae1-4643-b6dd-7c8a8fcb2251",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "reingestion",
+                    "analyze",
+                    ":job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "95866e81-82e5-4969-9179-1ab78f334ec0",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "reingestion",
+                    "analyze",
+                    ":job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "job_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "da421a5b-b17c-4710-b800-cb32949ad9d8",
+          "name": "Trigger full reingestion for an existing project",
+          "request": {
+            "name": "Trigger full reingestion for an existing project",
+            "description": {
+              "content": "Trigger full reingestion of an existing project's codebase.\n\nThis will:\n1. Delete the existing vector store\n2. Re-clone and ingest the codebase\n3. Optionally regenerate PRD/TechSpec documents\n4. Create a new version entry\n\nSet `force=true` in the body to re-process every document instead of skipping\nfiles that already exist in the vector store. Use after extractor/schema changes\nwhen existing chunks need to be re-extracted.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "reingestion",
+                "trigger"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"regenerate_docs\": false,\n  \"application_context\": \"<string>\",\n  \"language\": \"<string>\",\n  \"force\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fb258885-a298-4e6d-bb38-fc8134bd3f32",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "reingestion",
+                    "trigger"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"regenerate_docs\": false,\n  \"application_context\": \"<string>\",\n  \"language\": \"<string>\",\n  \"force\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"project_id\": 3437,\n  \"status\": \"started\",\n  \"regenerate_docs\": false,\n  \"force\": false,\n  \"prd_job_id\": 5948,\n  \"tech_spec_job_id\": 2565\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "56de9653-e705-4d7d-ae83-35366ff5aa39",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "reingestion",
+                    "trigger"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"regenerate_docs\": false,\n  \"application_context\": \"<string>\",\n  \"language\": \"<string>\",\n  \"force\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "08192d41-c691-4036-b0c3-0c8f174de20d",
+          "name": "List ingestion events for a project",
+          "request": {
+            "name": "List ingestion events for a project",
+            "description": {
+              "content": "List ingestion events for a project, ordered most recent first.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "ingestion-events"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (1-based)"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "50",
+                  "description": "Items per page"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e1c15d75-314c-4acd-861c-3e77947aa02b",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "ingestion-events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "size",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": 8367,\n      \"project_id\": 4182,\n      \"triggered_at\": \"2016-08-14T19:46:16.162Z\",\n      \"trigger_type\": \"automatic\",\n      \"regenerated_docs\": true,\n      \"commit_sha\": \"string\",\n      \"branch\": \"string\",\n      \"created_by\": \"string\",\n      \"files_added\": [\n        \"string\",\n        \"string\"\n      ],\n      \"files_modified\": [\n        \"string\",\n        \"string\"\n      ],\n      \"files_removed\": [\n        \"string\",\n        \"string\"\n      ],\n      \"completed_at\": \"2012-08-13T19:57:56.173Z\",\n      \"failed_at\": \"1994-09-24T05:02:55.213Z\",\n      \"failure_type\": \"string\",\n      \"failure_reason\": \"string\"\n    },\n    {\n      \"id\": 841,\n      \"project_id\": 5738,\n      \"triggered_at\": \"1948-01-08T16:45:02.735Z\",\n      \"trigger_type\": \"manual\",\n      \"regenerated_docs\": false,\n      \"commit_sha\": \"string\",\n      \"branch\": \"string\",\n      \"created_by\": \"string\",\n      \"files_added\": [\n        \"string\",\n        \"string\"\n      ],\n      \"files_modified\": [\n        \"string\",\n        \"string\"\n      ],\n      \"files_removed\": [\n        \"string\",\n        \"string\"\n      ],\n      \"completed_at\": \"2019-02-17T03:20:48.534Z\",\n      \"failed_at\": \"1990-11-15T07:55:34.878Z\",\n      \"failure_type\": \"string\",\n      \"failure_reason\": \"string\"\n    }\n  ],\n  \"pagination\": {\n    \"total\": 5567,\n    \"page\": 4163,\n    \"size\": 6319,\n    \"pages\": 5832\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2a6dbaca-85a7-4adc-afa2-92fc62a212bb",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "ingestion-events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "size",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a2d1ce62-2c43-48b5-8a69-1f7c08b901c9",
+          "name": "Doc-section impact (added/modified/removed) for an ingestion event",
+          "request": {
+            "name": "Doc-section impact (added/modified/removed) for an ingestion event",
+            "description": {
+              "content": "Return which PRD/Tech Spec sections changed when this ingestion event regenerated docs.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "ingestion-events",
+                ":event_id",
+                "doc-impact"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "event_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ec83d396-27ad-4bb1-886e-f17f3509ef1e",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "ingestion-events",
+                    ":event_id",
+                    "doc-impact"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"doc_impact\": {\n    \"prd\": {\n      \"sections_added\": [\n        \"string\",\n        \"string\"\n      ],\n      \"sections_modified\": [\n        \"string\",\n        \"string\"\n      ],\n      \"sections_removed\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"tech_spec\": {\n      \"sections_added\": [\n        \"string\",\n        \"string\"\n      ],\n      \"sections_modified\": [\n        \"string\",\n        \"string\"\n      ],\n      \"sections_removed\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7360fea7-3fac-450b-85ed-5c8b8f13234d",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "ingestion-events",
+                    ":event_id",
+                    "doc-impact"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "event_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "60b24660-0b95-4dd0-845d-60d2fbab30b7",
+    "name": "Crowdbotics API Documentation admin reingestion API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# CoreStory API Overview\n\nThe CoreStory API provides programmatic access to structured insights derived from software source code. It is designed for engineering, architecture, and product teams who need to extract business logic, technical specifications, architectural relationships, and system-level context from complex or legacy codebases.\n\nBy interfacing directly with CoreStory API, users can:\n\n- Generate full Product Requirements Documents (PRDs) from a codebase\n- Extract detailed Technical Specifications for modernization or migration\n- Query a codebase using natural language to surface implementation details, logic paths, dependencies, and architectural insights\n- Construct and visualize knowledge graphs of systems, components, and relationships\n- Ingest, store, and retrieve content from a vector store for AI-powered retrieval-augmented generation (RAG) workflows\n\nCoreStory is especially valuable in contexts where:\n\n- Codebases are large, unstructured, or under-documented\n- Product and engineering teams are onboarding to unfamiliar systems\n- Technical stakeholders require visibility into system design or feature coverage\n- Modernization, replatforming, or M&A due diligence is underway\n\nThe API can be integrated into existing CI/CD pipelines, internal developer portals, architecture review boards, product planning processes, or documentation automation workflows.\n\nAll endpoints support secure authentication and are designed for high-availability, asynchronous workloads. Output formats include JSON, Markdown, and PDF, with flexible formatting options for downstream consumption.\n\nFor step-by-step usage instructions and workflows, refer to the [CoreStory API Quick Start Guide](#section/CoreStory-API-Quick-Start-Guide).\n\n## Features\n\n* **Document Generation**\n    * Generate complete Product Requirements Documents (PRD)\n    * Generate Technical Specifications\n    * Generate individual document sections (executive overview, user personas, etc.)\n    * Format documents in JSON or Markdown\n\n* **Vector Store Management**\n    * Ingest and manage documents in vector store\n    * Query and retrieve document content\n    * Manage document embeddings\n\n* **Context Management**\n    * Manage context for different document types\n    * Set and retrieve PRD context\n    * Support for future context types (technical specs, user stories, etc.)\n\n* **Knowledge Graph**\n    * Generate knowledge graphs from codebase queries\n    * Visualize relationships between code entities\n    * Analyze code structure and dependencies\n\n* **API Endpoints**\n    * `/api/documents/*` - Document generation and formatting\n    * `/api/generate/*` - Document formatting utilities\n    * `/api/vector-store/*` - Vector store management\n    * `/api/agents/*` - AI agent operations\n    * `/api/context/*` - Context management for documents\n    * `/api/graph/*` - Knowledge graph generation and analysis\n\nNote: JWT authentication support coming soon. All endpoints currently provide detailed OpenAPI documentation.\n\n* **Observability**\n    * OpenTelemetry instrumentation for distributed tracing\n    * Prometheus metrics endpoint at `/metrics`\n    * Comprehensive request/response tracking\n    * Custom business metrics\n\n\n\n# CoreStory System Architecture\n\nThis document provides a high-level overview of how the CoreStory platform ingests, analyzes, and serves structured software intelligence through its API. The system is designed to process codebases and related technical artifacts in order to generate product specifications, technical documents, and knowledge graph representations.\n\n---\n\n## Core Components\n\n### 1. **Ingestion Layer**\n\n- Accepts Git URLs, file uploads, or local archives\n- Extracts source files, documentation, and metadata\n- Initiates chunking and embedding via the vector store pipeline\n\n### 2. **Vector Store and Context Engine**\n\n- Stores chunked and embedded documents\n- Supports semantic search and document retrieval\n- Feeds LLMs with scoped context for generation and reasoning\n\n### 3. **LLM Orchestration Layer**\n\n- Fan-out to multiple large language models\n- Handles prompt templating, context injection, and result normalization\n- Evaluates and scores generated outputs\n\n### 4. **Document Generation Engine**\n\n- Produces:\n  - PRDs\n  - Technical Specs\n  - Individual document sections\n  - Markdown and PDF exports\n- Format-flexible output for portals, APIs, and documentation pipelines\n\n### 5. **Graph Construction Module**\n\n- Extracts static and dynamic code relationships\n- Builds DAGs and call graphs of components, services, and files\n- Allows natural-language queries that return graph subviews and LLM explanations\n\n### 6. **Query Engine**\n\n- Accepts free-form questions about codebases\n- Routes queries to code graph, document store, or LLMs\n- Returns structured JSON answers and explanatory text\n\n### 7. **API Gateway**\n\n- Authenticates and rate-limits clients\n- Routes requests to internal services\n- Serves all external-facing endpoints in REST format\n\n---\n\n## Security and Privacy\n\n- All data transfer is encrypted via HTTPS\n- API access is secured using provided auth credentials (JWT tokens coming soon)\n- Uploaded code is only used to generate customer-requested outputs and is not retained indefinitely\n\n---\n\n## Extensibility\n\nThe platform is modular. It can be extended to:\n\n- Add new LLMs for ensemble generation\n- Integrate alternative vector databases\n- Connect to internal developer portals or product management tools via webhook or export endpoints\n\nFor more information, see the Quick Start or contact the CoreStory team.\n\n\n# CoreStory API Quick Start Guide\n\nThe CoreStory API provides programmatic access to structured code intelligence, enabling your team to extract business and technical specifications directly from source code. You can use the API to integrate CoreStory-generated documents into existing workflows, support software modernization and maintenance efforts, or enrich internal platforms with architectural and feature-level metadata.\n\n---\n\n## Overview\n\nThe CoreStory API enables:\n\n- Ingestion of content into a **vector store** for LLM-driven analysis\n- Generation of **Product Requirements Documents (PRDs)** and **Technical Specifications** from code\n- Interrogation of your codebase via a natural language **query engine**\n- Construction of **knowledge graphs** describing code relationships and system architecture\n- Management of **custom document context** and **custom prompts** for improved output relevance and quality\n\nThese capabilities support SDLC workflows such as:\n\n- Application modernization, migration, and maintenance\n- Documentation and auditability of legacy systems\n- Alignment of product, engineering, and architecture teams and systems\n- Developer onboarding and code comprehension\n\n---\n\n**Note for POV customers:** If your codebase has already been ingested as part of a proof-of-value (POV) engagement, you can use your existing authentication credentials and skip step 2 (”Ingest a Codebase or Document Source) of this guide.\n\n## 1. Authentication\n\n```\nPOST /api/auth/login\n```\n\nObtain a JWT for future API calls.\n\n**Request:**\n\n```\n{\n  \"email\": \"you@example.com\",\n  \"password\": \"your-password\"\n}\n```\n\n**Response:**\n\n```\n{\n  \"access_token\": \"...\",\n  \"token_type\": \"bearer\"\n}\n```\n\nInclude this token in all subsequent requests:\n\n```\nAuthorization: Bearer <access_token>\n```\n\n---\n\n## 2. Ingest a Codebase or Document Source\n\n```\nPOST /api/vector-store/ingest\n```\n\nTrigger ingestion of code from a Git repo, ZIP file, or local document directory.\n\n**Example Payload (GitHub):**\n\n```\n{\n  \"source_type\": \"url\",\n  \"source\": \"https://github.com/example/repo.git\",\n  \"force\": true\n}\n```\n\nIngestion automatically chunks, embeds, and summarizes source files for downstream analysis.\n\n<details>\n<summary>Supported File Extensions</summary>\n\n### Programming Languages\n- Python: `.py`, `.pyw`, `.pyx`, `.pyi`\n- JavaScript/TypeScript: `.js`, `.mjs`, `.cjs`, `.ts`, `.jsx`, `.tsx`\n- Java: `.java`, `.class`, `.jar`\n- C/C++: `.c`, `.cpp`, `.cc`, `.cxx`, `.c++`, `.h`, `.hpp`, `.hh`, `.hxx`, `.h++`\n- .NET: `.cs`, `.csx`, `.vb`, `.fs`, `.fsx`, `.fsi`\n- PHP: `.php`, `.php3`, `.php4`, `.php5`, `.phtml`\n- Ruby: `.rb`, `.rbw`, `.rake`, `.gemspec`\n- Go: `.go`, `.mod`, `.sum`\n- Rust: `.rs`, `.rlib`\n- Swift: `.swift`\n- Kotlin: `.kt`, `.kts`, `.ktm`\n- Scala: `.scala`, `.sc`\n- Clojure: `.clj`, `.cljs`, `.cljc`, `.edn`\n- Haskell: `.hs`, `.lhs`\n- OCaml: `.ml`, `.mli`, `.mll`, `.mly`\n- R: `.r`, `.R`, `.rmd`, `.rnw`\n- Objective-C: `.m`, `.mm`\n- Perl: `.pl`, `.pm`, `.t`, `.pod`\n- Shell scripts: `.sh`, `.bash`, `.zsh`, `.fish`, `.ksh`, `.csh`, `.tcsh`\n- PowerShell: `.ps1`, `.psm1`, `.psd1`\n- Windows batch: `.bat`, `.cmd`\n- Lua: `.lua`\n- Dart: `.dart`\n- Elm: `.elm`\n- Elixir: `.ex`, `.exs`\n- Erlang: `.erl`, `.hrl`\n- Julia: `.jl`\n- Nim: `.nim`, `.nims`\n- Crystal: `.cr`\n- D: `.d`\n- Pascal: `.pas`, `.pp`, `.inc`\n- Fortran: `.f`, `.f90`, `.f95`, `.f03`, `.f08`, `.for`, `.ftn`, `.fpp`\n- COBOL: `.cob`, `.cbl`, `.cpy`, `.cobol`, `.bms`, `.ctl`, `.jcl`, `.proc`\n- IBM i (AS/400) RPG ILE: `.rpgle`, `.rpgleinc`\n- IBM i (AS/400) CLLE: `.clle`\n- IBM i (AS/400) DDS: `.pf`, `.lf`, `.dspf`\n- PowerBuilder: `.pbt`, `.pbs`, `.pbr`, `.srw`, `.srd`, `.sru`, `.sra`, `.srp`, `.srf`, `.srq`, `.srs`, `.srm`, `.srj`\n- Ada: `.ada`, `.adb`, `.ads`\n- Assembly: `.asm`, `.s`, `.S`\n- Verilog/SystemVerilog: `.v`, `.vh`, `.sv`, `.svh`\n- VHDL: `.vhd`, `.vhdl`\n- Tcl/Tk: `.tcl`, `.tk`\n- Groovy: `.groovy`, `.gvy`, `.gy`, `.gsh`\n- CoffeeScript: `.coffee`, `.litcoffee`\n- PureScript: `.purs`\n- ReasonML: `.reason`, `.re`, `.rei`\n- Racket/Scheme: `.rkt`, `.scm`, `.ss`\n- Lisp: `.lisp`, `.lsp`, `.l`, `.cl`, `.fasl`\n- Prolog: `.prolog`, `.pro`, `.P`\n- MATLAB: `.matlab`, `.fig`\n- Mathematica: `.mathematica`, `.nb`, `.wl`, `.wls`\n- SageMath: `.sage`, `.spyx`\n- Zig: `.zig`\n- Odin: `.odin`\n- V: `.v3`, `.v2`, `.v1`\n- Pony: `.pony`\n- Red: `.red`, `.reds`\n- Io: `.io`\n- Factor: `.factor`\n- Forth: `.forth`, `.fth`, `.4th`\n- J/K/Q/APL: `.j`, `.k`, `.q`, `.apl`\n- Chapel: `.chapel`, `.chpl`\n- X10: `.x10`\n- Arduino/Processing: `.pde`, `.ino`\n\n### Web Technologies\n- HTML: `.html`, `.htm`, `.xhtml`, `.shtml`\n- CSS/Preprocessors: `.css`, `.scss`, `.sass`, `.less`, `.styl`, `.stylus`\n- Frontend frameworks: `.vue`, `.svelte`\n- JSP: `.jsp`, `.jspx`, `.tag`, `.tagx`\n- ASP.NET: `.asp`, `.aspx`, `.ascx`, `.asax`, `.ashx`, `.asmx`\n- Ruby templates: `.erb`, `.haml`, `.slim`\n- PHP templates: `.twig`, `.blade`\n- Template engines: `.mustache`, `.hbs`, `.handlebars`, `.ejs`, `.pug`, `.jade`, `.liquid`, `.ftl`, `.ftlh`, `.vm`, `.vtl`, `.thymeleaf`\n\n### Configuration/Data\n- JSON: `.json`, `.json5`, `.jsonc`, `.jsonl`, `.ndjson`\n- XML: `.xml`, `.xsd`, `.xsl`, `.xslt`, `.dtd`, `.rng`, `.rnc`\n- YAML/TOML: `.yaml`, `.yml`, `.toml`\n- INI/Cfg/Conf: `.ini`, `.cfg`, `.conf`, `.config`, `.properties`\n- Environment: `.env`, `.envrc`, `.env.local`, `.env.development`, `.env.production`\n- Property lists: `.plist`\n- HOCON: `.hocon`\n- RON/HJSON/CSON: `.ron`, `.hjson`, `.cson`\n\n### Documentation/Text\n- Markdown: `.md`, `.markdown`, `.mdown`, `.mkd`, `.mkdn`\n- Plain text: `.txt`, `.text`\n- reStructuredText: `.rst`, `.rest`\n- AsciiDoc: `.asciidoc`, `.adoc`, `.asc`\n- LaTeX: `.tex`, `.latex`, `.ltx`, `.sty`, `.cls`, `.bib`\n- Org mode: `.org`\n- Wiki markup: `.wiki`, `.mediawiki`\n- Textile/Creole/RDoc: `.textile`, `.creole`, `.rdoc`\n\n### Data Formats\n- Delimited: `.csv`, `.tsv`, `.psv`\n- SQL: `.sql`, `.ddl`, `.dml`, `.plsql`, `.psql`, `.mysql`\n- GraphQL: `.graphql`, `.gql`\n- Protocols: `.proto`, `.protobuf`, `.avro`, `.avsc`, `.avdl`, `.thrift`, `.capnp`, `.fbs`\n- Columnar: `.parquet`, `.orc`, `.arrow`\n\n### Build/Dependency\n- Gradle: `.gradle`, `.gradle.kts`\n- Maven: `.maven`, `.mvn`\n- SBT: `.sbt`\n- CMake: `.cmake`, `.cmake.in`\n- Make: `.make`, `.mk`, `.mak`\n- Docker: `.dockerfile`, `.containerfile`, `.dockerignore`\n- Git: `.gitignore`, `.gitattributes`, `.gitmodules`, `.gitkeep`\n- Mercurial/Subversion/Bazaar: `.hgignore`, `.hgrc`, `.svnignore`, `.bzrignore`\n- EditorConfig: `.editorconfig`\n- Linters/Formatters: `.eslintrc`, `.eslintignore`, `.prettierrc`, `.prettierignore`, `.babelrc`, `.babelignore`\n- Node.js: `.npmrc`, `.npmignore`, `.yarnrc`, `.yarnignore`\n- Python: `.pipfile`, `.pipfile.lock`, `.requirements`, `.requirements.txt`, `.poetry.lock`, `.pyproject.toml`, `.setup.py`, `.setup.cfg`, `.manifest.in`, `.tox.ini`, `.noxfile.py`, `.pre-commit-config.yaml`\n- CI/CD: `.github`, `.gitlab-ci.yml`, `.travis.yml`, `.appveyor.yml`, `.circleci`, `.jenkins`, `.jenkinsfile`, `.azure-pipelines.yml`, `.buildkite.yml`\n- Package Managers: `package.json`, `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `composer.json`, `composer.lock`, `gemfile`, `gemfile.lock`, `cargo.toml`, `cargo.lock`, `go.mod`, `go.sum`, `requirements.txt`, `pipfile`, `pipfile.lock`, `poetry.lock`, `pyproject.toml`, `build.gradle`, `build.gradle.kts`, `settings.gradle`, `gradle.properties`, `pom.xml`, `settings.xml`, `build.sbt`, `plugins.sbt`, `makefile`, `gnumakefile`, `makefile.am`, `makefile.in`, `dockerfile`, `containerfile`, `vagrantfile`, `rakefile`, `guardfile`, `capfile`, `gulpfile.js`, `gruntfile.js`, `webpack.config.js`, `rollup.config.js`, `tsconfig.json`, `jsconfig.json`, `deno.json`, `deno.jsonc`, `mix.exs`, `mix.lock`, `rebar.config`, `rebar.lock`, `project.clj`, `deps.edn`, `stack.yaml`, `cabal.config`, `setup.hs`, `dub.json`, `dub.sdl`, `nimble`, `config.nims`, `shard.yml`, `shard.lock`, `pubspec.yaml`, `pubspec.lock`, `elm.json`, `elm-package.json`, `project.json`, `global.json`, `nuget.config`, `packages.config`, `paket.dependencies`, `paket.lock`, `.log`, `.lock`, `.pid`, `.tmp`, `.temp`, `.patch`, `.diff`, `.spec`, `.rpm`, `.deb`, `.control`, `.pkgbuild`, `.ebuild`, `.formula`, `.port`, `.portfile`, `.nix`, `.bzl`, `.bazel`, `.workspace`, `.buck`, `.buckconfig`, `.pants`, `.pants.ini`, `.please`, `.plzconfig`, `.gn`, `.gni`, `.ninja`, `.waf`, `.wscript`, `.scons`, `.sconstruct`, `.sconscript`\n\n</details>\n\n<details>\n<summary>Configuration Files</summary>\n\n- `requirements.txt`\n- `.gitignore`\n- `.dockerignore`\n- `.editorconfig`\n- `.eslintrc.js`\n- `.eslintrc.json`\n- `.prettierrc.js`\n- `.prettierrc.json`\n- `.babelrc.js`\n- `.babelrc.json`\n\n</details>\n\n---\n\n## 3. Generate a Product Requirements Document (PRD)\n\n**Note**: Generating a PRD or technical specification will replace the existing PRD or technical specification. The new outputs will document your codebase as it was when it was most recently ingested.\n\n```\nPOST /api/documents/prd?format=json\n```\n\nGenerates a structured PRD with:\n\n- Executive Overview\n- User Personas\n- High-Level Requirements\n- User Stories\n- Business Value\n\n**Example Response (truncated):**\n\n```\n{\n  \"content\": {\n    \"executive_overview\": \"Modernize internal authentication platform\",\n    \"user_personas\": [...],\n    \"user_stories\": [...]\n  }\n}\n```\n\n**Tip:** For PRDs or technical specs, use `format=markdown` to return a Markdown-formatted document instead.\n\n---\n\n## 4. Generate a Technical Specification\n\n```\nPOST /api/documents/technical-spec?format=json\n```\n\nReturns system-level implementation details including:\n\n- Architecture and Components\n- Data Models and Relationships\n- User Interface Screens and Components\n- APIs and Integration Points\n- System Interfaces and Specifications\n- Security Considerations\n- Implementation and Deployment Strategy\n\n---\n\n## 5. Query Your Code\n\n```\nPOST /api/graph/query-engine\n```\n\nAsk natural language questions about your codebase to return a structured graph of relationships.\n\n**Example Query:**\n\n```\n{\n  \"query\": \"How does the system determine whether a user has admin privileges when accessing the audit log?\"\n}\n```\n\n**Response (truncated):**\n\n```\n{\n  \"summary\": \"When a user requests access to the audit log, the system checks their assigned roles in `AuthService.getUserRoles`. If 'admin' is present, access is granted. This check occurs in `AuditLogController` before querying the log database. The middleware `CheckPermissions` is also invoked on this route.\"\n}\n```\n\n---\n\n## 6. Format and Retrieve Document Sections\n\nUse these endpoints to extract or reformat specific document sections:\n\n- `/api/documents/sections/{doc_type}` → generate a specific section\n- `/api/documents/format/markdown-output/{doc_type}` → format JSON as Markdown\n- `/api/documents/format/pdf-output/{doc_type}` → export PDF\n\nExample section names:\n\n- `executive-overview`\n- `data-models`\n- `system-architecture`\n- `integration-points`\n\n---\n\n## Questions?\n\nAfter reviewing this guide and the API docs, we recommend scheduling a short Q&A call if you have integration-specific needs or want assistance mapping this to your environment.\n",
+      "type": "text/plain"
+    }
+  }
+}

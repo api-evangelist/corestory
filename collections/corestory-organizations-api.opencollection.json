@@ -1,0 +1,462 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin organizations API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "organizations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the org update schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/organizations/schedule"
+          },
+          "docs": "Return the org update schedule, or null if none exists."
+        },
+        {
+          "info": {
+            "name": "Create or update the org update schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/organizations/schedule",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or update the org update schedule. Blocked while a run is in progress."
+        },
+        {
+          "info": {
+            "name": "List org projects with sync status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/organizations/projects/sync-status",
+            "params": [
+              {
+                "name": "sync_mode",
+                "value": "",
+                "type": "query",
+                "description": "Filter by sync mode"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "sort_order",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page"
+              }
+            ]
+          },
+          "docs": "Return a paginated list of projects in the org with their sync mode and status."
+        },
+        {
+          "info": {
+            "name": "List the org's pinned workspaces",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/organizations/pinned-workspaces"
+          },
+          "docs": "Return pinned workspaces in pin order. Any org member may read; empty list if none."
+        },
+        {
+          "info": {
+            "name": "Pin a workspace (admin only)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/organizations/pinned-workspaces",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Pin a workspace for the org. Admin only. Enforces the per-org pin cap.\n\nReturns the created pin with its derived sync status so the client can render\nit without a follow-up list call."
+        },
+        {
+          "info": {
+            "name": "Unpin a workspace (admin only)",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/organizations/pinned-workspaces/:project_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Remove a workspace pin. Admin only. 404 if the workspace wasn't pinned."
+        },
+        {
+          "info": {
+            "name": "Get ingestion configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/organizations/ingestion-config"
+          },
+          "docs": "Get the ingestion file type configuration for the current organization. Returns custom config if set, otherwise returns global defaults."
+        },
+        {
+          "info": {
+            "name": "Update ingestion configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/organizations/ingestion-config",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the ingestion file type configuration for the current organization. Requires admin role. Provide supported_extensions and/or binary_extensions to override defaults."
+        },
+        {
+          "info": {
+            "name": "Add extensions to ingestion configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/organizations/ingestion-config",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Additively merge extensions into the current ingestion configuration. Provided extensions are added to the existing set (defaults or custom). Requires admin role."
+        },
+        {
+          "info": {
+            "name": "Reset ingestion configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/organizations/ingestion-config"
+          },
+          "docs": "Reset ingestion configuration to global defaults. Requires admin role."
+        },
+        {
+          "info": {
+            "name": "List my organizations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/organizations/my"
+          },
+          "docs": "List organizations the current user belongs to"
+        },
+        {
+          "info": {
+            "name": "Get organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/organizations/:org_id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get organization details by ID"
+        },
+        {
+          "info": {
+            "name": "Update organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/organizations/:org_id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update organization details (requires admin role)"
+        },
+        {
+          "info": {
+            "name": "Delete organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/organizations/:org_id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete an organization (requires owner role)"
+        },
+        {
+          "info": {
+            "name": "Get organization with members",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/organizations/:org_id/members",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get organization details including all members"
+        },
+        {
+          "info": {
+            "name": "Add member to organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/organizations/:org_id/members",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a new member to the organization (requires admin role)"
+        },
+        {
+          "info": {
+            "name": "Invite member to organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/organizations/invitations",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Send an organization invitation email via Clerk (requires admin role). The target organization is resolved from the caller's active org context (JWT). Supports a redirect_url so the invitee lands on a specific page after accepting."
+        },
+        {
+          "info": {
+            "name": "Update member role",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/organizations/:org_id/members/:user_id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a member's role in the organization (requires admin role)"
+        },
+        {
+          "info": {
+            "name": "Remove member from organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/organizations/:org_id/members/:user_id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Remove a member from the organization (requires admin role)"
+        },
+        {
+          "info": {
+            "name": "Mark organization as personal",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/organizations/:org_id/set-personal",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Set is_personal: true in the organization's Clerk public metadata."
+        },
+        {
+          "info": {
+            "name": "Sync organization from Clerk",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/organizations/sync",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sync organization and members from Clerk"
+        },
+        {
+          "info": {
+            "name": "Provision an organization onto a sales-managed plan (Business or Enterprise)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/organizations/:org_id/provision-enterprise",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Manually provision an organization onto a sales-managed plan.\n\nSuperuser-only. Provisions the org onto the plan given by ``plan_slug``\n(Business or any Enterprise variant; defaults to the largest Enterprise\nbracket), allocating that plan's CIU allowance, writing a ledger entry, and\nsyncing the plan family to Clerk metadata.\n\nIdempotent: re-provisioning resets the balance to the plan's allowance and\nupdates the renewal date."
+        },
+        {
+          "info": {
+            "name": "Downgrade an organization from the Enterprise plan to the default Free plan",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/organizations/:org_id/downgrade",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Downgrade an organization from Enterprise to the default Free plan.\n\nSuperuser-only. Moves the org plan to Free, cancels the enterprise\nsubscription, and writes a ledger entry. CIU balance is left unchanged."
+        },
+        {
+          "info": {
+            "name": "Manually grant CIU credits to an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/organizations/:org_id/grant-credits",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add CIU credits to an organization's balance.\n\nSuperuser-only. Increases total_cius by the given amount and creates\na CREDIT ledger entry with MANUAL_ADJUSTMENT action type for audit trail."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

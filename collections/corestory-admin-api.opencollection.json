@@ -1,0 +1,157 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "admin",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get admin configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/admin/config"
+          },
+          "docs": "View current application configuration settings. Requires CoreStory internal access."
+        },
+        {
+          "info": {
+            "name": "Get admin metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/admin/metrics",
+            "params": [
+              {
+                "name": "date_range",
+                "value": "",
+                "type": "query",
+                "description": "Date range for activity-based metrics: all, 30d, 3m, 6m. Defaults to all when None."
+              }
+            ]
+          },
+          "docs": "Retrieve application-wide admin metrics including usage statistics. Requires CoreStory internal access."
+        },
+        {
+          "info": {
+            "name": "List all organizations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/admin/organizations",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to skip"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Filter organizations by name (case-insensitive)"
+              }
+            ]
+          },
+          "docs": "List all organizations with summary info. Restricted to superusers."
+        },
+        {
+          "info": {
+            "name": "List platform users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/admin/users",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Page size (max 100 to respect Clerk rate limits)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to skip"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Free-text search across name, email, username"
+              }
+            ]
+          },
+          "docs": "List all Clerk users with role metadata (is_superuser, is_internal). Supports pagination and optional free-text search by name or email. Restricted to superusers."
+        },
+        {
+          "info": {
+            "name": "Update user role metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/admin/users/:user_id/metadata",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partially update a user's Clerk public metadata (is_superuser, is_internal). Only provided fields are updated; others are preserved. Restricted to superusers."
+        },
+        {
+          "info": {
+            "name": "Get pipeline run metrics by repo URL",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/admin/pipeline-metrics",
+            "params": [
+              {
+                "name": "repo_url",
+                "value": "",
+                "type": "query",
+                "description": "Repo URL fragment to filter projects on (e.g. 'aws-mainframe-modernization-carddemo.git')."
+              }
+            ]
+          },
+          "docs": "Returns timing metrics for all projects matching the given repo URL. Useful for tracking pipeline performance trends over time."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

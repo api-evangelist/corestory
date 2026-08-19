@@ -1,0 +1,68 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin pinned-workspaces API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "pinned-workspaces",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List the org's pinned workspaces",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/organizations/pinned-workspaces"
+          },
+          "docs": "Return pinned workspaces in pin order. Any org member may read; empty list if none."
+        },
+        {
+          "info": {
+            "name": "Pin a workspace (admin only)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/organizations/pinned-workspaces",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Pin a workspace for the org. Admin only. Enforces the per-org pin cap.\n\nReturns the created pin with its derived sync status so the client can render\nit without a follow-up list call."
+        },
+        {
+          "info": {
+            "name": "Unpin a workspace (admin only)",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/organizations/pinned-workspaces/:project_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Remove a workspace pin. Admin only. 404 if the workspace wasn't pinned."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

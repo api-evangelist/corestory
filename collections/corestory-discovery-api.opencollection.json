@@ -1,0 +1,102 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin discovery API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "discovery",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get core application features",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/discovery/:prd_id/identify-core-features",
+            "params": [
+              {
+                "name": "prd_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Analyzes the codebase to identify the core features and functionalities of the application.\n    This endpoint provides a focused view of the main features without generating other document sections.\n\n    The response includes:\n    - Feature name\n    - Feature description\n    - Feature category"
+        },
+        {
+          "info": {
+            "name": "Get suggested questions about the codebase",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/discovery/:prd_id/questions",
+            "params": [
+              {
+                "name": "prd_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of questions to return"
+              },
+              {
+                "name": "include_prd_context",
+                "value": "",
+                "type": "query",
+                "description": "Whether to use PRD context in generating questions"
+              }
+            ]
+          },
+          "docs": "Analyzes the codebase to generate relevant questions that users can ask about the system.\n    These questions are designed to help users explore and understand the codebase through the graph visualization.\n\n    The response includes:\n    - Question text\n    - Question category\n    - Question complexity level\n    - Total number of questions\n    - Requested limit\n\n    Parameters:\n    - limit: Maximum number of questions to return (default: 10)\n    - include_prd_context: Whether to use PRD context "
+        },
+        {
+          "info": {
+            "name": "Get Suggested Questions for discovery",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/discovery/:project_id/suggested-questions",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "persona",
+                "value": "",
+                "type": "query",
+                "description": "Filter by persona"
+              },
+              {
+                "name": "section",
+                "value": "",
+                "type": "query",
+                "description": "Filter by section"
+              }
+            ]
+          },
+          "docs": "Retrieve suggested questions for a specific project, optionally filtered by persona and section.\nArgs:\n    project_id (int): The ID of the project.\n    persona (str, optional): Filter questions by persona.\n    section (str, optional): Filter questions by section.\nReturns:\n    SuggestedQuestionListResponse: A list of questions matching the criteria."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

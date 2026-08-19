@@ -1,0 +1,268 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin reingestion API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "reingestion",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Start pre-reingestion analysis for an existing project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/reingestion/analyze",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Start analysis of an existing project's codebase for reingestion.\nReturns a job ID that can be polled for status and results."
+        },
+        {
+          "info": {
+            "name": "Get reingestion analysis job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/reingestion/analyze/:job_id/status",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get the status of a reingestion analysis job."
+        },
+        {
+          "info": {
+            "name": "Get coverage results from reingestion analysis",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/reingestion/analyze/:job_id/coverage",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get coverage results from a reingestion analysis job.\n\nIncludes file change summary (added/modified/removed) and CIU cost\nestimate when the analysis was run for an existing project (reingestion)."
+        },
+        {
+          "info": {
+            "name": "Get excluded file paths from reingestion analysis",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/reingestion/analyze/:job_id/excluded-files",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page"
+              },
+              {
+                "name": "file_name",
+                "value": "",
+                "type": "query",
+                "description": "Filter files by name"
+              }
+            ]
+          },
+          "docs": "Get the list of excluded file paths from a reingestion analysis job."
+        },
+        {
+          "info": {
+            "name": "Get included file paths from reingestion analysis",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/reingestion/analyze/:job_id/included-files",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page"
+              },
+              {
+                "name": "file_name",
+                "value": "",
+                "type": "query",
+                "description": "Filter files by name"
+              }
+            ]
+          },
+          "docs": "Get the list of included file paths from a reingestion analysis job."
+        },
+        {
+          "info": {
+            "name": "Delete a reingestion analysis job",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/projects/:project_id/reingestion/analyze/:job_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a reingestion analysis job and its associated files."
+        },
+        {
+          "info": {
+            "name": "Trigger full reingestion for an existing project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/reingestion/trigger",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Trigger full reingestion of an existing project's codebase.\n\nThis will:\n1. Delete the existing vector store\n2. Re-clone and ingest the codebase\n3. Optionally regenerate PRD/TechSpec documents\n4. Create a new version entry\n\nSet `force=true` in the body to re-process every document instead of skipping\nfiles that already exist in the vector store. Use after extractor/schema changes\nwhen existing chunks need to be re-extracted."
+        },
+        {
+          "info": {
+            "name": "List ingestion events for a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/ingestion-events",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page"
+              }
+            ]
+          },
+          "docs": "List ingestion events for a project, ordered most recent first."
+        },
+        {
+          "info": {
+            "name": "Doc-section impact (added/modified/removed) for an ingestion event",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/ingestion-events/:event_id/doc-impact",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "event_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Return which PRD/Tech Spec sections changed when this ingestion event regenerated docs."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

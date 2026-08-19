@@ -1,0 +1,64 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin context API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "context",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the context for the project's latest PRD.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/prd/context",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get the context for the project's latest PRD.\n\nArgs:\n    project_id: ID of the Project\n\nReturns:\n    PRDContextResponse: The PRD context with creation timestamp"
+        },
+        {
+          "info": {
+            "name": "Set or update the context for the project's latest PRD.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/prd/context",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set or update the context for a specific PRD.\n\nArgs:\n    project_id: ID of the Project\n\nReturns:\n    PRDContextResponse: The updated PRD context with creation timestamp"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

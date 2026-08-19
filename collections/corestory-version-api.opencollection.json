@@ -1,0 +1,35 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin version API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "version",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get application version information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/version"
+          },
+          "docs": "Retrieve the current application version and build information.\n\n    This endpoint provides version information that can be used for:\n    * Verifying deployments and identifying specific builds\n    * Debugging issues and ensuring compatibility\n    * Monitoring and tracking application versions across environments\n\n    The endpoint returns different information based on the deployment context:\n    * **Docker builds**: Includes build timestamp and additional metadata from build.json\n    * **Local "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

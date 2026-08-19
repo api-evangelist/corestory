@@ -1,0 +1,192 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin document_generation API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "document_generation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Generate a dynamic document from section definitions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/documents/generate",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "Project ID"
+              },
+              {
+                "name": "stream",
+                "value": "",
+                "type": "query",
+                "description": "If true, stream SSE progress events. If false, block until complete and return document JSON."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate a document based on explicit section definitions.\n\n    **Modes:**\n    - `stream=true` (default): Returns SSE stream with real-time progress events\n    - `stream=false`: Blocks until complete, returns the final GeneratedDocument as JSON\n\n    This endpoint uses the provided section definitions to extract relevant data from the\n    codebase (features, business rules, APIs, data models) and generates content\n    for each section matching the specified style and format.\n\n    **SSE Progress E"
+        },
+        {
+          "info": {
+            "name": "Generate a document from preset section definitions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/documents/generate/preset",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "Project ID"
+              },
+              {
+                "name": "stream",
+                "value": "",
+                "type": "query",
+                "description": "If true, stream SSE progress events."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate a document using preset section definitions resolved from the registry.\n\n    Provide a document_type (e.g., \"project_specification\", \"technical_specification\")\n    and optional overrides. Section definitions are automatically resolved.\n\n    **Modes:**\n    - `stream=true` (default): Returns SSE stream with real-time progress events\n    - `stream=false`: Blocks until complete, returns the final GeneratedDocument as JSON"
+        },
+        {
+          "info": {
+            "name": "List generated documents",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/documents",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "Project ID"
+              }
+            ]
+          },
+          "docs": "List all generated documents for a project."
+        },
+        {
+          "info": {
+            "name": "Retrieve a generated document",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/documents/:document_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "Project ID"
+              },
+              {
+                "name": "document_id",
+                "value": "",
+                "type": "path",
+                "description": "Document ID from generation"
+              }
+            ]
+          },
+          "docs": "Retrieve a previously generated document by its ID.\n\n    The document_id is returned in the 'complete' event when using the\n    POST /projects/{project_id}/documents/generate endpoint."
+        },
+        {
+          "info": {
+            "name": "Download generated document as markdown",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/documents/:document_id/download",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "Project ID"
+              },
+              {
+                "name": "document_id",
+                "value": "",
+                "type": "path",
+                "description": "Document ID from generation"
+              }
+            ]
+          },
+          "docs": "Download the generated document as a markdown file."
+        },
+        {
+          "info": {
+            "name": "Regenerate a single section of an existing document",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/documents/:document_id/sections/:section_name/regenerate",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "Project ID"
+              },
+              {
+                "name": "document_id",
+                "value": "",
+                "type": "path",
+                "description": "Document ID"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the section to regenerate"
+              },
+              {
+                "name": "stream",
+                "value": "",
+                "type": "query",
+                "description": "If true, stream SSE progress events. If false, block until complete and return document JSON."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Regenerate one section of a previously generated document.\n\n    Uses the original document's configuration (style, queries, section definitions)\n    and injects dependency context from existing sibling sections.\n\n    Only the requested section is regenerated — dependent sections are NOT\n    cascaded.\n\n    **Modes:**\n    - `stream=true` (default): Returns SSE stream with progress events\n    - `stream=false`: Blocks until complete, returns the updated GeneratedDocument as JSON"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

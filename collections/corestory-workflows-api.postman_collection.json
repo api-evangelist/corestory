@@ -1,0 +1,3104 @@
+{
+  "item": [
+    {
+      "id": "64415450-cfa5-4200-86e0-86e8db013ab6",
+      "name": "workflows",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "425865c1-106c-40fb-b054-2f1585abe5fe",
+          "name": "List workflow definitions",
+          "request": {
+            "name": "List workflow definitions",
+            "description": {
+              "content": "Get a list of all available workflow types with their names and descriptions.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "workflows",
+                "definitions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "03c84353-7a32-4923-b8f5-ef84228dcbab",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    "definitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"category\": \"string\",\n    \"estimated_duration\": \"string\",\n    \"tier\": \"string\"\n  },\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"category\": \"string\",\n    \"estimated_duration\": \"string\",\n    \"tier\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d2348e89-4861-4678-9ebf-d1ab48f23595",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    "definitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 2298.308835013575,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "53d75ba7-004f-4668-adb8-36b731758763",
+          "name": "Get workflow definition",
+          "request": {
+            "name": "Get workflow definition",
+            "description": {
+              "content": "Get the full definition of a specific workflow type including all steps and suggestions.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "workflows",
+                "definitions",
+                ":workflow_type"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "workflow_type",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4562658a-b7e8-4c97-8b40-a97dea609694",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    "definitions",
+                    ":workflow_type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "workflow_type",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"category\": \"string\",\n  \"estimated_duration\": \"string\",\n  \"initial_prompt\": \"string\",\n  \"steps\": [\n    {\n      \"id\": \"string\",\n      \"title\": \"string\",\n      \"description\": \"string\",\n      \"completion_criteria\": [\n        \"string\",\n        \"string\"\n      ],\n      \"suggestions\": [\n        {\n          \"id\": \"string\",\n          \"text\": \"string\",\n          \"full_message\": \"string\",\n          \"type\": \"action\",\n          \"icon\": \"string\"\n        },\n        {\n          \"id\": \"string\",\n          \"text\": \"string\",\n          \"full_message\": \"string\",\n          \"type\": \"action\",\n          \"icon\": \"string\"\n        }\n      ]\n    },\n    {\n      \"id\": \"string\",\n      \"title\": \"string\",\n      \"description\": \"string\",\n      \"completion_criteria\": [\n        \"string\",\n        \"string\"\n      ],\n      \"suggestions\": [\n        {\n          \"id\": \"string\",\n          \"text\": \"string\",\n          \"full_message\": \"string\",\n          \"type\": \"action\",\n          \"icon\": \"string\"\n        },\n        {\n          \"id\": \"string\",\n          \"text\": \"string\",\n          \"full_message\": \"string\",\n          \"type\": \"clarify\",\n          \"icon\": \"string\"\n        }\n      ]\n    }\n  ],\n  \"tier\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "79322525-f3e1-4df2-95fa-00023f1c7ae9",
+              "name": "Workflow type not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    "definitions",
+                    ":workflow_type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "workflow_type",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "822ff6c0-cd7f-46f1-ac60-04e541816073",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    "definitions",
+                    ":workflow_type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "workflow_type",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 2298.308835013575,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a94baa11-28d2-4f79-8f63-d605ef019f8c",
+          "name": "List workflow documents",
+          "request": {
+            "name": "List workflow documents",
+            "description": {
+              "content": "List all workflow documents for a project with pagination.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "workflows",
+                "documents"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (1-based)"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "999",
+                  "description": "Items per page (default: 999)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "188f3205-159a-44bc-aba2-85819f03f3c5",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    "documents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "size",
+                      "value": "999"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"string\",\n      \"workflow_id\": \"string\",\n      \"document_type\": \"string\",\n      \"content\": \"string\",\n      \"created_at\": \"1964-04-01T17:47:15.701Z\",\n      \"updated_at\": \"1951-12-16T00:39:10.670Z\",\n      \"content_json\": {\n        \"key_0\": true,\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"workflow_id\": \"string\",\n      \"document_type\": \"string\",\n      \"content\": \"string\",\n      \"created_at\": \"2004-09-21T19:31:49.265Z\",\n      \"updated_at\": \"2022-11-03T18:27:31.138Z\",\n      \"content_json\": {\n        \"key_0\": true,\n        \"key_1\": \"string\",\n        \"key_2\": true,\n        \"key_3\": \"string\",\n        \"key_4\": true\n      }\n    }\n  ],\n  \"pagination\": {\n    \"total\": 5272,\n    \"page\": 8476,\n    \"size\": 6047,\n    \"pages\": 3686\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bf11a6ce-a583-4862-9f52-603565241d61",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    "documents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "size",
+                      "value": "999"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 2298.308835013575,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6e895994-1e43-48d1-874e-010013a84868",
+          "name": "Generate workflow document",
+          "request": {
+            "name": "Generate workflow document",
+            "description": {
+              "content": "Start document generation in the background. Returns a SOTJ job ID for polling progress.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "workflows",
+                ":workflow_id",
+                "document"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workflow_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "facf0023-68a3-47d2-89ad-82f50411a1dd",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id",
+                    "document"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"job_id\": \"string\",\n  \"detail\": \"Document generation started\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f76d50dd-924f-457d-83be-62ed32183f03",
+              "name": "Workflow not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id",
+                    "document"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "95a5ee46-269b-4e0f-8386-cbf57531c68a",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id",
+                    "document"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 2298.308835013575,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "79edbeb3-6e66-42f8-88a7-fbedc756e131",
+          "name": "Get workflow document",
+          "request": {
+            "name": "Get workflow document",
+            "description": {
+              "content": "Retrieve the generated document for a workflow.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "workflows",
+                ":workflow_id",
+                "document"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workflow_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "30e66894-3171-4af9-9c91-40c41ad349f8",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id",
+                    "document"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"workflow_id\": \"string\",\n  \"document_type\": \"string\",\n  \"content\": \"string\",\n  \"created_at\": \"2019-01-29T07:09:13.910Z\",\n  \"updated_at\": \"2003-05-11T12:43:06.132Z\",\n  \"content_json\": {\n    \"key_0\": false,\n    \"key_1\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "39cde616-dbdc-4661-b8c2-52db912fec91",
+              "name": "Workflow or document not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id",
+                    "document"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0f2e3448-d2f9-4b67-8b0d-44b72f7d2d0e",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id",
+                    "document"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 2298.308835013575,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "46c67272-4bf2-4411-89de-d3f05b9e3cab",
+          "name": "Update workflow document",
+          "request": {
+            "name": "Update workflow document",
+            "description": {
+              "content": "Update the content of an existing workflow document.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "workflows",
+                ":workflow_id",
+                "document"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workflow_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "05304b9c-217e-4ebd-a1cb-d3c2de5bbc40",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id",
+                    "document"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"workflow_id\": \"string\",\n  \"document_type\": \"string\",\n  \"content\": \"string\",\n  \"created_at\": \"2019-01-29T07:09:13.910Z\",\n  \"updated_at\": \"2003-05-11T12:43:06.132Z\",\n  \"content_json\": {\n    \"key_0\": false,\n    \"key_1\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f02e6f67-9c84-4492-80a0-1ebd128beeba",
+              "name": "Workflow or document not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id",
+                    "document"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e7cc6c08-676f-411c-bd82-1415aaa23269",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id",
+                    "document"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 2298.308835013575,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "07381aa3-d662-4ab7-9644-6714b9387136",
+          "name": "Create a new workflow",
+          "request": {
+            "name": "Create a new workflow",
+            "description": {
+              "content": "Create a new workflow instance for a project.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "workflows"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workflow_type\": \"<string>\",\n  \"language\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "067cc9c4-632d-4c96-a212-cf2aa40f7f18",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"workflow_type\": \"user-stories\",\n  \"language\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"project_id\": 7393,\n  \"user_id\": \"string\",\n  \"workflow_type\": \"string\",\n  \"status\": \"in_progress\",\n  \"current_step_index\": 3746,\n  \"collected_data\": {\n    \"key_0\": 6280.53831960097\n  },\n  \"created_at\": \"1953-11-23T08:52:46.135Z\",\n  \"updated_at\": \"1996-10-23T01:12:01.116Z\",\n  \"definition\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"category\": \"string\",\n    \"estimated_duration\": \"string\",\n    \"initial_prompt\": \"string\",\n    \"steps\": [\n      {\n        \"id\": \"string\",\n        \"title\": \"string\",\n        \"description\": \"string\",\n        \"completion_criteria\": [\n          \"string\",\n          \"string\"\n        ],\n        \"suggestions\": [\n          {\n            \"id\": \"string\",\n            \"text\": \"string\",\n            \"full_message\": \"string\",\n            \"type\": \"example\",\n            \"icon\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"id\": \"string\",\n            \"text\": \"string\",\n            \"full_message\": \"string\",\n            \"type\": \"clarify\",\n            \"icon\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"id\": \"string\",\n        \"title\": \"string\",\n        \"description\": \"string\",\n        \"completion_criteria\": [\n          \"string\",\n          \"string\"\n        ],\n        \"suggestions\": [\n          {\n            \"id\": \"string\",\n            \"text\": \"string\",\n            \"full_message\": \"string\",\n            \"type\": \"clarify\",\n            \"icon\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"id\": \"string\",\n            \"text\": \"string\",\n            \"full_message\": \"string\",\n            \"type\": \"action\",\n            \"icon\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ],\n    \"tier\": \"string\"\n  },\n  \"language\": \"string\",\n  \"message_count\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e8067273-859d-4025-8571-859d8fc76d72",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"workflow_type\": \"user-stories\",\n  \"language\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 2298.308835013575,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "83d5adef-55fb-4d53-a06f-39a9628355d8",
+          "name": "List workflows",
+          "request": {
+            "name": "List workflows",
+            "description": {
+              "content": "List all workflows for a project with optional filters and pagination.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "workflows"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter by status"
+                },
+                {
+                  "disabled": false,
+                  "key": "workflow_type",
+                  "value": "<string>",
+                  "description": "Filter by workflow type"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (1-based)"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "999",
+                  "description": "Items per page (default: 999)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1c0f64dd-2234-495b-9e71-e2b9b4e378c9",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "failed"
+                    },
+                    {
+                      "key": "workflow_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "size",
+                      "value": "999"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"string\",\n      \"project_id\": 6114,\n      \"user_id\": \"string\",\n      \"workflow_type\": \"string\",\n      \"status\": \"failed\",\n      \"current_step_index\": 3231,\n      \"collected_data\": {\n        \"key_0\": false\n      },\n      \"created_at\": \"1982-03-17T15:29:16.336Z\",\n      \"updated_at\": \"1995-07-16T19:19:16.436Z\",\n      \"language\": \"string\",\n      \"message_count\": 0\n    },\n    {\n      \"id\": \"string\",\n      \"project_id\": 6586,\n      \"user_id\": \"string\",\n      \"workflow_type\": \"string\",\n      \"status\": \"in_progress\",\n      \"current_step_index\": 7934,\n      \"collected_data\": {\n        \"key_0\": 9532,\n        \"key_1\": \"string\"\n      },\n      \"created_at\": \"2005-07-06T22:53:56.918Z\",\n      \"updated_at\": \"2019-03-15T07:21:36.074Z\",\n      \"language\": \"string\",\n      \"message_count\": 0\n    }\n  ],\n  \"pagination\": {\n    \"total\": 6679,\n    \"page\": 9329,\n    \"size\": 3450,\n    \"pages\": 786\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1bd4270d-e42b-477b-ba64-c784cf31e633",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "failed"
+                    },
+                    {
+                      "key": "workflow_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "size",
+                      "value": "999"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 2298.308835013575,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7c5b89e1-99b5-42aa-a3c2-41e82454a417",
+          "name": "Get workflow details",
+          "request": {
+            "name": "Get workflow details",
+            "description": {
+              "content": "Get a workflow instance with its full definition.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "workflows",
+                ":workflow_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workflow_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0dde9bdc-d2a7-4831-96df-d665637f90c1",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"project_id\": 7393,\n  \"user_id\": \"string\",\n  \"workflow_type\": \"string\",\n  \"status\": \"in_progress\",\n  \"current_step_index\": 3746,\n  \"collected_data\": {\n    \"key_0\": 6280.53831960097\n  },\n  \"created_at\": \"1953-11-23T08:52:46.135Z\",\n  \"updated_at\": \"1996-10-23T01:12:01.116Z\",\n  \"definition\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"category\": \"string\",\n    \"estimated_duration\": \"string\",\n    \"initial_prompt\": \"string\",\n    \"steps\": [\n      {\n        \"id\": \"string\",\n        \"title\": \"string\",\n        \"description\": \"string\",\n        \"completion_criteria\": [\n          \"string\",\n          \"string\"\n        ],\n        \"suggestions\": [\n          {\n            \"id\": \"string\",\n            \"text\": \"string\",\n            \"full_message\": \"string\",\n            \"type\": \"example\",\n            \"icon\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"id\": \"string\",\n            \"text\": \"string\",\n            \"full_message\": \"string\",\n            \"type\": \"clarify\",\n            \"icon\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"id\": \"string\",\n        \"title\": \"string\",\n        \"description\": \"string\",\n        \"completion_criteria\": [\n          \"string\",\n          \"string\"\n        ],\n        \"suggestions\": [\n          {\n            \"id\": \"string\",\n            \"text\": \"string\",\n            \"full_message\": \"string\",\n            \"type\": \"clarify\",\n            \"icon\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"id\": \"string\",\n            \"text\": \"string\",\n            \"full_message\": \"string\",\n            \"type\": \"action\",\n            \"icon\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ],\n    \"tier\": \"string\"\n  },\n  \"language\": \"string\",\n  \"message_count\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "65602c12-1021-4cf3-a9c1-896ba53b0b97",
+              "name": "Workflow not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b06db394-72e8-480e-a24b-3b0f895778af",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 2298.308835013575,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2a51568c-de9a-4418-a2db-5ddbdd5fdcf2",
+          "name": "Update workflow",
+          "request": {
+            "name": "Update workflow",
+            "description": {
+              "content": "Update a workflow instance (status only).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "workflows",
+                ":workflow_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workflow_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"<string>\",\n  \"language\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9194ce42-93dc-469a-81f3-efaa22fe3486",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"completed\",\n  \"language\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"project_id\": 4264,\n  \"user_id\": \"string\",\n  \"workflow_type\": \"string\",\n  \"status\": \"pending\",\n  \"current_step_index\": 5692,\n  \"collected_data\": {\n    \"key_0\": true,\n    \"key_1\": 7967.66925798084\n  },\n  \"created_at\": \"2018-09-06T20:36:49.772Z\",\n  \"updated_at\": \"1994-05-19T10:10:15.044Z\",\n  \"language\": \"string\",\n  \"message_count\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "addae72b-3275-43ed-ad92-3c776b4939c5",
+              "name": "Workflow not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"completed\",\n  \"language\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f4e96cea-d445-4a76-9d0e-c41f44d32de9",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"completed\",\n  \"language\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 2298.308835013575,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c21fc3ee-2fa8-4138-8c03-774f28a6b875",
+          "name": "Delete workflow",
+          "request": {
+            "name": "Delete workflow",
+            "description": {
+              "content": "Delete a workflow instance and all its messages and documents.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "workflows",
+                ":workflow_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workflow_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a13d63c6-305d-4ad3-a370-186b65d2a806",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cde6b14b-536a-41d7-844d-f1cff714c08d",
+              "name": "Workflow not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "58c4c99d-2e80-423f-9b6f-7fadb7615c2e",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 2298.308835013575,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "91015ce4-beb4-4a75-922d-f3c3ddee8649",
+          "name": "List workflow messages",
+          "request": {
+            "name": "List workflow messages",
+            "description": {
+              "content": "List all messages in a workflow conversation, ordered by creation time.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "workflows",
+                ":workflow_id",
+                "messages"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workflow_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9fe6c96c-c3c9-4daa-9eda-f7449e25a8a4",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id",
+                    "messages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"messages\": [\n    {\n      \"id\": \"string\",\n      \"workflow_id\": \"string\",\n      \"role\": \"string\",\n      \"content\": \"string\",\n      \"created_at\": \"2012-08-20T16:53:15.623Z\",\n      \"step_id\": \"string\",\n      \"evaluation\": {\n        \"is_complete\": true,\n        \"confidence\": 0.12041107290783681,\n        \"step_summary\": \"string\",\n        \"collected_data\": {\n          \"key_0\": \"string\",\n          \"key_1\": true\n        },\n        \"reasoning\": \"\",\n        \"missing_info\": [\n          \"string\",\n          \"string\"\n        ]\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"workflow_id\": \"string\",\n      \"role\": \"string\",\n      \"content\": \"string\",\n      \"created_at\": \"1975-08-09T21:32:09.922Z\",\n      \"step_id\": \"string\",\n      \"evaluation\": {\n        \"is_complete\": false,\n        \"confidence\": 0.8595390892278041,\n        \"step_summary\": \"string\",\n        \"collected_data\": {\n          \"key_0\": \"string\",\n          \"key_1\": 4106\n        },\n        \"reasoning\": \"\",\n        \"missing_info\": [\n          \"string\",\n          \"string\"\n        ]\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b792a05c-cfef-4773-872c-534c4663dc0b",
+              "name": "Workflow not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id",
+                    "messages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c9800b02-2f8e-4492-be33-95e3885a9215",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id",
+                    "messages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 2298.308835013575,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "43192e80-aeca-497e-ae79-98c980dd2869",
+          "name": "Send workflow message or navigate steps",
+          "request": {
+            "name": "Send workflow message or navigate steps",
+            "description": {
+              "content": "Send a message (SSE stream response) or perform a step action (advance/back).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "workflows",
+                ":workflow_id",
+                "messages"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workflow_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "text/event-stream"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"<string>\",\n  \"step_action\": \"<string>\",\n  \"was_skipped\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2fcd4484-0f4f-48d7-b8fb-f2dc3af76d8f",
+              "name": "Server-Sent Events (SSE) stream",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id",
+                    "messages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/event-stream"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"<string>\",\n  \"step_action\": \"<string>\",\n  \"was_skipped\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/event-stream"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f0e740b9-8b76-4d52-8c31-495e70919fe9",
+              "name": "Workflow not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id",
+                    "messages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"<string>\",\n  \"step_action\": \"<string>\",\n  \"was_skipped\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "06dd1810-b8c1-4608-930f-6ab748679fc9",
+              "name": "Step conflict (first/last step)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id",
+                    "messages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"<string>\",\n  \"step_action\": \"<string>\",\n  \"was_skipped\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4071e85c-886b-40c8-844c-2af69217e90a",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "workflows",
+                    ":workflow_id",
+                    "messages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflow_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"<string>\",\n  \"step_action\": \"<string>\",\n  \"was_skipped\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 2298.308835013575,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "a2064a70-da6c-42f5-870a-6028b1bd247d",
+    "name": "Crowdbotics API Documentation admin workflows API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# CoreStory API Overview\n\nThe CoreStory API provides programmatic access to structured insights derived from software source code. It is designed for engineering, architecture, and product teams who need to extract business logic, technical specifications, architectural relationships, and system-level context from complex or legacy codebases.\n\nBy interfacing directly with CoreStory API, users can:\n\n- Generate full Product Requirements Documents (PRDs) from a codebase\n- Extract detailed Technical Specifications for modernization or migration\n- Query a codebase using natural language to surface implementation details, logic paths, dependencies, and architectural insights\n- Construct and visualize knowledge graphs of systems, components, and relationships\n- Ingest, store, and retrieve content from a vector store for AI-powered retrieval-augmented generation (RAG) workflows\n\nCoreStory is especially valuable in contexts where:\n\n- Codebases are large, unstructured, or under-documented\n- Product and engineering teams are onboarding to unfamiliar systems\n- Technical stakeholders require visibility into system design or feature coverage\n- Modernization, replatforming, or M&A due diligence is underway\n\nThe API can be integrated into existing CI/CD pipelines, internal developer portals, architecture review boards, product planning processes, or documentation automation workflows.\n\nAll endpoints support secure authentication and are designed for high-availability, asynchronous workloads. Output formats include JSON, Markdown, and PDF, with flexible formatting options for downstream consumption.\n\nFor step-by-step usage instructions and workflows, refer to the [CoreStory API Quick Start Guide](#section/CoreStory-API-Quick-Start-Guide).\n\n## Features\n\n* **Document Generation**\n    * Generate complete Product Requirements Documents (PRD)\n    * Generate Technical Specifications\n    * Generate individual document sections (executive overview, user personas, etc.)\n    * Format documents in JSON or Markdown\n\n* **Vector Store Management**\n    * Ingest and manage documents in vector store\n    * Query and retrieve document content\n    * Manage document embeddings\n\n* **Context Management**\n    * Manage context for different document types\n    * Set and retrieve PRD context\n    * Support for future context types (technical specs, user stories, etc.)\n\n* **Knowledge Graph**\n    * Generate knowledge graphs from codebase queries\n    * Visualize relationships between code entities\n    * Analyze code structure and dependencies\n\n* **API Endpoints**\n    * `/api/documents/*` - Document generation and formatting\n    * `/api/generate/*` - Document formatting utilities\n    * `/api/vector-store/*` - Vector store management\n    * `/api/agents/*` - AI agent operations\n    * `/api/context/*` - Context management for documents\n    * `/api/graph/*` - Knowledge graph generation and analysis\n\nNote: JWT authentication support coming soon. All endpoints currently provide detailed OpenAPI documentation.\n\n* **Observability**\n    * OpenTelemetry instrumentation for distributed tracing\n    * Prometheus metrics endpoint at `/metrics`\n    * Comprehensive request/response tracking\n    * Custom business metrics\n\n\n\n# CoreStory System Architecture\n\nThis document provides a high-level overview of how the CoreStory platform ingests, analyzes, and serves structured software intelligence through its API. The system is designed to process codebases and related technical artifacts in order to generate product specifications, technical documents, and knowledge graph representations.\n\n---\n\n## Core Components\n\n### 1. **Ingestion Layer**\n\n- Accepts Git URLs, file uploads, or local archives\n- Extracts source files, documentation, and metadata\n- Initiates chunking and embedding via the vector store pipeline\n\n### 2. **Vector Store and Context Engine**\n\n- Stores chunked and embedded documents\n- Supports semantic search and document retrieval\n- Feeds LLMs with scoped context for generation and reasoning\n\n### 3. **LLM Orchestration Layer**\n\n- Fan-out to multiple large language models\n- Handles prompt templating, context injection, and result normalization\n- Evaluates and scores generated outputs\n\n### 4. **Document Generation Engine**\n\n- Produces:\n  - PRDs\n  - Technical Specs\n  - Individual document sections\n  - Markdown and PDF exports\n- Format-flexible output for portals, APIs, and documentation pipelines\n\n### 5. **Graph Construction Module**\n\n- Extracts static and dynamic code relationships\n- Builds DAGs and call graphs of components, services, and files\n- Allows natural-language queries that return graph subviews and LLM explanations\n\n### 6. **Query Engine**\n\n- Accepts free-form questions about codebases\n- Routes queries to code graph, document store, or LLMs\n- Returns structured JSON answers and explanatory text\n\n### 7. **API Gateway**\n\n- Authenticates and rate-limits clients\n- Routes requests to internal services\n- Serves all external-facing endpoints in REST format\n\n---\n\n## Security and Privacy\n\n- All data transfer is encrypted via HTTPS\n- API access is secured using provided auth credentials (JWT tokens coming soon)\n- Uploaded code is only used to generate customer-requested outputs and is not retained indefinitely\n\n---\n\n## Extensibility\n\nThe platform is modular. It can be extended to:\n\n- Add new LLMs for ensemble generation\n- Integrate alternative vector databases\n- Connect to internal developer portals or product management tools via webhook or export endpoints\n\nFor more information, see the Quick Start or contact the CoreStory team.\n\n\n# CoreStory API Quick Start Guide\n\nThe CoreStory API provides programmatic access to structured code intelligence, enabling your team to extract business and technical specifications directly from source code. You can use the API to integrate CoreStory-generated documents into existing workflows, support software modernization and maintenance efforts, or enrich internal platforms with architectural and feature-level metadata.\n\n---\n\n## Overview\n\nThe CoreStory API enables:\n\n- Ingestion of content into a **vector store** for LLM-driven analysis\n- Generation of **Product Requirements Documents (PRDs)** and **Technical Specifications** from code\n- Interrogation of your codebase via a natural language **query engine**\n- Construction of **knowledge graphs** describing code relationships and system architecture\n- Management of **custom document context** and **custom prompts** for improved output relevance and quality\n\nThese capabilities support SDLC workflows such as:\n\n- Application modernization, migration, and maintenance\n- Documentation and auditability of legacy systems\n- Alignment of product, engineering, and architecture teams and systems\n- Developer onboarding and code comprehension\n\n---\n\n**Note for POV customers:** If your codebase has already been ingested as part of a proof-of-value (POV) engagement, you can use your existing authentication credentials and skip step 2 (”Ingest a Codebase or Document Source) of this guide.\n\n## 1. Authentication\n\n```\nPOST /api/auth/login\n```\n\nObtain a JWT for future API calls.\n\n**Request:**\n\n```\n{\n  \"email\": \"you@example.com\",\n  \"password\": \"your-password\"\n}\n```\n\n**Response:**\n\n```\n{\n  \"access_token\": \"...\",\n  \"token_type\": \"bearer\"\n}\n```\n\nInclude this token in all subsequent requests:\n\n```\nAuthorization: Bearer <access_token>\n```\n\n---\n\n## 2. Ingest a Codebase or Document Source\n\n```\nPOST /api/vector-store/ingest\n```\n\nTrigger ingestion of code from a Git repo, ZIP file, or local document directory.\n\n**Example Payload (GitHub):**\n\n```\n{\n  \"source_type\": \"url\",\n  \"source\": \"https://github.com/example/repo.git\",\n  \"force\": true\n}\n```\n\nIngestion automatically chunks, embeds, and summarizes source files for downstream analysis.\n\n<details>\n<summary>Supported File Extensions</summary>\n\n### Programming Languages\n- Python: `.py`, `.pyw`, `.pyx`, `.pyi`\n- JavaScript/TypeScript: `.js`, `.mjs`, `.cjs`, `.ts`, `.jsx`, `.tsx`\n- Java: `.java`, `.class`, `.jar`\n- C/C++: `.c`, `.cpp`, `.cc`, `.cxx`, `.c++`, `.h`, `.hpp`, `.hh`, `.hxx`, `.h++`\n- .NET: `.cs`, `.csx`, `.vb`, `.fs`, `.fsx`, `.fsi`\n- PHP: `.php`, `.php3`, `.php4`, `.php5`, `.phtml`\n- Ruby: `.rb`, `.rbw`, `.rake`, `.gemspec`\n- Go: `.go`, `.mod`, `.sum`\n- Rust: `.rs`, `.rlib`\n- Swift: `.swift`\n- Kotlin: `.kt`, `.kts`, `.ktm`\n- Scala: `.scala`, `.sc`\n- Clojure: `.clj`, `.cljs`, `.cljc`, `.edn`\n- Haskell: `.hs`, `.lhs`\n- OCaml: `.ml`, `.mli`, `.mll`, `.mly`\n- R: `.r`, `.R`, `.rmd`, `.rnw`\n- Objective-C: `.m`, `.mm`\n- Perl: `.pl`, `.pm`, `.t`, `.pod`\n- Shell scripts: `.sh`, `.bash`, `.zsh`, `.fish`, `.ksh`, `.csh`, `.tcsh`\n- PowerShell: `.ps1`, `.psm1`, `.psd1`\n- Windows batch: `.bat`, `.cmd`\n- Lua: `.lua`\n- Dart: `.dart`\n- Elm: `.elm`\n- Elixir: `.ex`, `.exs`\n- Erlang: `.erl`, `.hrl`\n- Julia: `.jl`\n- Nim: `.nim`, `.nims`\n- Crystal: `.cr`\n- D: `.d`\n- Pascal: `.pas`, `.pp`, `.inc`\n- Fortran: `.f`, `.f90`, `.f95`, `.f03`, `.f08`, `.for`, `.ftn`, `.fpp`\n- COBOL: `.cob`, `.cbl`, `.cpy`, `.cobol`, `.bms`, `.ctl`, `.jcl`, `.proc`\n- IBM i (AS/400) RPG ILE: `.rpgle`, `.rpgleinc`\n- IBM i (AS/400) CLLE: `.clle`\n- IBM i (AS/400) DDS: `.pf`, `.lf`, `.dspf`\n- PowerBuilder: `.pbt`, `.pbs`, `.pbr`, `.srw`, `.srd`, `.sru`, `.sra`, `.srp`, `.srf`, `.srq`, `.srs`, `.srm`, `.srj`\n- Ada: `.ada`, `.adb`, `.ads`\n- Assembly: `.asm`, `.s`, `.S`\n- Verilog/SystemVerilog: `.v`, `.vh`, `.sv`, `.svh`\n- VHDL: `.vhd`, `.vhdl`\n- Tcl/Tk: `.tcl`, `.tk`\n- Groovy: `.groovy`, `.gvy`, `.gy`, `.gsh`\n- CoffeeScript: `.coffee`, `.litcoffee`\n- PureScript: `.purs`\n- ReasonML: `.reason`, `.re`, `.rei`\n- Racket/Scheme: `.rkt`, `.scm`, `.ss`\n- Lisp: `.lisp`, `.lsp`, `.l`, `.cl`, `.fasl`\n- Prolog: `.prolog`, `.pro`, `.P`\n- MATLAB: `.matlab`, `.fig`\n- Mathematica: `.mathematica`, `.nb`, `.wl`, `.wls`\n- SageMath: `.sage`, `.spyx`\n- Zig: `.zig`\n- Odin: `.odin`\n- V: `.v3`, `.v2`, `.v1`\n- Pony: `.pony`\n- Red: `.red`, `.reds`\n- Io: `.io`\n- Factor: `.factor`\n- Forth: `.forth`, `.fth`, `.4th`\n- J/K/Q/APL: `.j`, `.k`, `.q`, `.apl`\n- Chapel: `.chapel`, `.chpl`\n- X10: `.x10`\n- Arduino/Processing: `.pde`, `.ino`\n\n### Web Technologies\n- HTML: `.html`, `.htm`, `.xhtml`, `.shtml`\n- CSS/Preprocessors: `.css`, `.scss`, `.sass`, `.less`, `.styl`, `.stylus`\n- Frontend frameworks: `.vue`, `.svelte`\n- JSP: `.jsp`, `.jspx`, `.tag`, `.tagx`\n- ASP.NET: `.asp`, `.aspx`, `.ascx`, `.asax`, `.ashx`, `.asmx`\n- Ruby templates: `.erb`, `.haml`, `.slim`\n- PHP templates: `.twig`, `.blade`\n- Template engines: `.mustache`, `.hbs`, `.handlebars`, `.ejs`, `.pug`, `.jade`, `.liquid`, `.ftl`, `.ftlh`, `.vm`, `.vtl`, `.thymeleaf`\n\n### Configuration/Data\n- JSON: `.json`, `.json5`, `.jsonc`, `.jsonl`, `.ndjson`\n- XML: `.xml`, `.xsd`, `.xsl`, `.xslt`, `.dtd`, `.rng`, `.rnc`\n- YAML/TOML: `.yaml`, `.yml`, `.toml`\n- INI/Cfg/Conf: `.ini`, `.cfg`, `.conf`, `.config`, `.properties`\n- Environment: `.env`, `.envrc`, `.env.local`, `.env.development`, `.env.production`\n- Property lists: `.plist`\n- HOCON: `.hocon`\n- RON/HJSON/CSON: `.ron`, `.hjson`, `.cson`\n\n### Documentation/Text\n- Markdown: `.md`, `.markdown`, `.mdown`, `.mkd`, `.mkdn`\n- Plain text: `.txt`, `.text`\n- reStructuredText: `.rst`, `.rest`\n- AsciiDoc: `.asciidoc`, `.adoc`, `.asc`\n- LaTeX: `.tex`, `.latex`, `.ltx`, `.sty`, `.cls`, `.bib`\n- Org mode: `.org`\n- Wiki markup: `.wiki`, `.mediawiki`\n- Textile/Creole/RDoc: `.textile`, `.creole`, `.rdoc`\n\n### Data Formats\n- Delimited: `.csv`, `.tsv`, `.psv`\n- SQL: `.sql`, `.ddl`, `.dml`, `.plsql`, `.psql`, `.mysql`\n- GraphQL: `.graphql`, `.gql`\n- Protocols: `.proto`, `.protobuf`, `.avro`, `.avsc`, `.avdl`, `.thrift`, `.capnp`, `.fbs`\n- Columnar: `.parquet`, `.orc`, `.arrow`\n\n### Build/Dependency\n- Gradle: `.gradle`, `.gradle.kts`\n- Maven: `.maven`, `.mvn`\n- SBT: `.sbt`\n- CMake: `.cmake`, `.cmake.in`\n- Make: `.make`, `.mk`, `.mak`\n- Docker: `.dockerfile`, `.containerfile`, `.dockerignore`\n- Git: `.gitignore`, `.gitattributes`, `.gitmodules`, `.gitkeep`\n- Mercurial/Subversion/Bazaar: `.hgignore`, `.hgrc`, `.svnignore`, `.bzrignore`\n- EditorConfig: `.editorconfig`\n- Linters/Formatters: `.eslintrc`, `.eslintignore`, `.prettierrc`, `.prettierignore`, `.babelrc`, `.babelignore`\n- Node.js: `.npmrc`, `.npmignore`, `.yarnrc`, `.yarnignore`\n- Python: `.pipfile`, `.pipfile.lock`, `.requirements`, `.requirements.txt`, `.poetry.lock`, `.pyproject.toml`, `.setup.py`, `.setup.cfg`, `.manifest.in`, `.tox.ini`, `.noxfile.py`, `.pre-commit-config.yaml`\n- CI/CD: `.github`, `.gitlab-ci.yml`, `.travis.yml`, `.appveyor.yml`, `.circleci`, `.jenkins`, `.jenkinsfile`, `.azure-pipelines.yml`, `.buildkite.yml`\n- Package Managers: `package.json`, `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `composer.json`, `composer.lock`, `gemfile`, `gemfile.lock`, `cargo.toml`, `cargo.lock`, `go.mod`, `go.sum`, `requirements.txt`, `pipfile`, `pipfile.lock`, `poetry.lock`, `pyproject.toml`, `build.gradle`, `build.gradle.kts`, `settings.gradle`, `gradle.properties`, `pom.xml`, `settings.xml`, `build.sbt`, `plugins.sbt`, `makefile`, `gnumakefile`, `makefile.am`, `makefile.in`, `dockerfile`, `containerfile`, `vagrantfile`, `rakefile`, `guardfile`, `capfile`, `gulpfile.js`, `gruntfile.js`, `webpack.config.js`, `rollup.config.js`, `tsconfig.json`, `jsconfig.json`, `deno.json`, `deno.jsonc`, `mix.exs`, `mix.lock`, `rebar.config`, `rebar.lock`, `project.clj`, `deps.edn`, `stack.yaml`, `cabal.config`, `setup.hs`, `dub.json`, `dub.sdl`, `nimble`, `config.nims`, `shard.yml`, `shard.lock`, `pubspec.yaml`, `pubspec.lock`, `elm.json`, `elm-package.json`, `project.json`, `global.json`, `nuget.config`, `packages.config`, `paket.dependencies`, `paket.lock`, `.log`, `.lock`, `.pid`, `.tmp`, `.temp`, `.patch`, `.diff`, `.spec`, `.rpm`, `.deb`, `.control`, `.pkgbuild`, `.ebuild`, `.formula`, `.port`, `.portfile`, `.nix`, `.bzl`, `.bazel`, `.workspace`, `.buck`, `.buckconfig`, `.pants`, `.pants.ini`, `.please`, `.plzconfig`, `.gn`, `.gni`, `.ninja`, `.waf`, `.wscript`, `.scons`, `.sconstruct`, `.sconscript`\n\n</details>\n\n<details>\n<summary>Configuration Files</summary>\n\n- `requirements.txt`\n- `.gitignore`\n- `.dockerignore`\n- `.editorconfig`\n- `.eslintrc.js`\n- `.eslintrc.json`\n- `.prettierrc.js`\n- `.prettierrc.json`\n- `.babelrc.js`\n- `.babelrc.json`\n\n</details>\n\n---\n\n## 3. Generate a Product Requirements Document (PRD)\n\n**Note**: Generating a PRD or technical specification will replace the existing PRD or technical specification. The new outputs will document your codebase as it was when it was most recently ingested.\n\n```\nPOST /api/documents/prd?format=json\n```\n\nGenerates a structured PRD with:\n\n- Executive Overview\n- User Personas\n- High-Level Requirements\n- User Stories\n- Business Value\n\n**Example Response (truncated):**\n\n```\n{\n  \"content\": {\n    \"executive_overview\": \"Modernize internal authentication platform\",\n    \"user_personas\": [...],\n    \"user_stories\": [...]\n  }\n}\n```\n\n**Tip:** For PRDs or technical specs, use `format=markdown` to return a Markdown-formatted document instead.\n\n---\n\n## 4. Generate a Technical Specification\n\n```\nPOST /api/documents/technical-spec?format=json\n```\n\nReturns system-level implementation details including:\n\n- Architecture and Components\n- Data Models and Relationships\n- User Interface Screens and Components\n- APIs and Integration Points\n- System Interfaces and Specifications\n- Security Considerations\n- Implementation and Deployment Strategy\n\n---\n\n## 5. Query Your Code\n\n```\nPOST /api/graph/query-engine\n```\n\nAsk natural language questions about your codebase to return a structured graph of relationships.\n\n**Example Query:**\n\n```\n{\n  \"query\": \"How does the system determine whether a user has admin privileges when accessing the audit log?\"\n}\n```\n\n**Response (truncated):**\n\n```\n{\n  \"summary\": \"When a user requests access to the audit log, the system checks their assigned roles in `AuthService.getUserRoles`. If 'admin' is present, access is granted. This check occurs in `AuditLogController` before querying the log database. The middleware `CheckPermissions` is also invoked on this route.\"\n}\n```\n\n---\n\n## 6. Format and Retrieve Document Sections\n\nUse these endpoints to extract or reformat specific document sections:\n\n- `/api/documents/sections/{doc_type}` → generate a specific section\n- `/api/documents/format/markdown-output/{doc_type}` → format JSON as Markdown\n- `/api/documents/format/pdf-output/{doc_type}` → export PDF\n\nExample section names:\n\n- `executive-overview`\n- `data-models`\n- `system-architecture`\n- `integration-points`\n\n---\n\n## Questions?\n\nAfter reviewing this guide and the API docs, we recommend scheduling a short Q&A call if you have integration-specific needs or want assistance mapping this to your environment.\n",
+      "type": "text/plain"
+    }
+  }
+}

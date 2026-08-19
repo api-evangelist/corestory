@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin mermaid API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "mermaid",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Fix broken Mermaid diagram using AI",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/mermaid/fix",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Fix broken Mermaid diagram syntax using an LLM.\n\nTakes broken Mermaid code and the rendering error, sends it to an LLM\nfor syntax correction, and returns the fixed code."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

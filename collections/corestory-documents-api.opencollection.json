@@ -1,0 +1,46 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin documents API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "documents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Generate technical requirements based on user stories",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/documents/:project_id/sections/features/requirements",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate technical requirements based on user stories.\n\nArgs:\n    project_id: The project ID for which to generate technical requirements\n    user_stories: List of user stories to generate requirements from\n    user: The authenticated user\n    org_id: The organization ID from the header\n\nReturns:\n    Any: The generated technical requirements\n\nRaises:\n    HTTPException: If generation fails"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

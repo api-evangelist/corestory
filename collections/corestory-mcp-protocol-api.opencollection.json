@@ -1,0 +1,82 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin mcp_protocol API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "mcp_protocol",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "MCP SSE stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/mcp/"
+          },
+          "docs": "MCP SSE (Server-Sent Events) Stream Endpoint\n\nOpens an SSE stream for server-to-client communication.\nMCP Spec Requirement: GET /mcp MUST return either:\n- text/event-stream (SSE) for streaming server notifications, OR\n- HTTP 405 Method Not Allowed\n\nThis implementation returns SSE for spec compliance."
+        },
+        {
+          "info": {
+            "name": "MCP SSE stream (per-org)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/mcp/:org",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Per-org SSE stream — the ``GET`` counterpart of ``POST /mcp/{org}``.\n\nThe org segment pins the organization for the JSON-RPC ``POST``; the GET\nstream itself only carries server notifications, so it behaves identically\nto the bare ``GET /mcp`` stream."
+        },
+        {
+          "info": {
+            "name": "MCP JSON-RPC endpoint (per-org)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/mcp/:org",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Per-org MCP JSON-RPC endpoint.\n\nThe ``{org}`` path segment (a Clerk org id or slug) pins which organization a\nClerk OAuth/session request acts under, taking precedence over the\n``X-Corestory-Org`` header and the token's ``org_id``. Non-membership is a 403\nauthorization decision inside ``resolve_mcp_auth``, which the MCP surface\nsurfaces as a JSON-RPC error over HTTP 200 (not a literal HTTP 403). On the\n``csk_`` API-key path the org is fixed by the key, so the segment is ignored\nthere."
+        },
+        {
+          "info": {
+            "name": "MCP JSON-RPC endpoint",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/mcp"
+          },
+          "docs": "Bare MCP JSON-RPC endpoint.\n\nThe acting organization is resolved from the request: an ``X-Corestory-Org``\nheader, a session token's ``org_id``, or membership-based auto-resolution.\nUse ``POST /mcp/{org}`` to pin it via the URL instead."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,78 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin system_overview API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "system_overview",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get System Intelligence Overview for a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/system-overview",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns the complete System Intelligence Overview including architecture classification, tech stack, code quality, and metadata. Returns 202 if analysis is still in progress."
+        },
+        {
+          "info": {
+            "name": "Estimate CIU cost for SIO regeneration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/system-overview/regenerate/estimate",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Estimate CIU cost for SIO regeneration"
+        },
+        {
+          "info": {
+            "name": "Trigger SIO regeneration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/system-overview/regenerate",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Re-runs the SIO analysis pipeline. Deducts CIUs from the organization's balance."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

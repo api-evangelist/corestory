@@ -1,0 +1,274 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin tech_spec API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "tech_spec",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the project's Tech Spec (not base PRD) sections data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/tech-spec",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get all of the project's Tech Spec sections (not base PRD sections)."
+        },
+        {
+          "info": {
+            "name": "Get the project's tech-spec generation status.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/tech-spec/status",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get the project's tech spec generation status."
+        },
+        {
+          "info": {
+            "name": "Generate the Tech Spec sections (no base PRD sections) for the project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/tech-spec/generate",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "The format of the generated document"
+              },
+              {
+                "name": "show_code_references",
+                "value": "",
+                "type": "query",
+                "description": "Whether to include code references in user stories"
+              },
+              {
+                "name": "generate_toc",
+                "value": "",
+                "type": "query",
+                "description": "Whether to generate a table of contents (only applies when format is 'markdown')"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generates a detailed Technical Specification Document focused on implementation details, including:\n- System Architecture\n- Data Models and ERDs\n- API Specifications\n- Integration Points\n- Security Considerations\n- Implementation Strategy\n\nThis document is suitable for technical teams, developers, and system architects.\n\nThe endpoint accepts an optional context object that can include:\n- features: Pre-defined features to use for generation\n\nIf features are not provided, they will be generated au"
+        },
+        {
+          "info": {
+            "name": "Generate all PRD and tech spec sections for the project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/prd/generate-all",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "(Re)generates all sections, runs in background."
+        },
+        {
+          "info": {
+            "name": "Get a catalog of user stories items for UI faceted browsing.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/tech-spec/tech-user-stories/catalog",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns unique, alpha-sorted catalogs lists, and counts for:\n  - main_features: from high_level_requirements.features[*].category\n  - epics: from high_level_requirements.features[*].name\n  - personas: from user_personas.user_personas[*].name"
+        },
+        {
+          "info": {
+            "name": "Generate a specific Tech Spec section",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/tech-spec/:section_name/generate",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate a specific Tech Spec section"
+        },
+        {
+          "info": {
+            "name": "Get the specified Tech Spec section.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/tech-spec/:section_name",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "epics",
+                "value": "",
+                "type": "query",
+                "description": "Epic IDs"
+              },
+              {
+                "name": "personas",
+                "value": "",
+                "type": "query",
+                "description": "Persona IDs"
+              },
+              {
+                "name": "main_features",
+                "value": "",
+                "type": "query",
+                "description": "Main feature IDs"
+              },
+              {
+                "name": "keywords",
+                "value": "",
+                "type": "query",
+                "description": "Keyword list"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Free-text; supports exact, \"a or b\", or \"a and b\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page (default: 999)"
+              }
+            ]
+          },
+          "docs": "Get a single specified section for the project's PRD Tech Spec (not base PRD section)."
+        },
+        {
+          "info": {
+            "name": "Update the specified Tech Spec section.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/projects/:project_id/tech-spec/:section_name",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "section_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get a single specified section for the project's base PRD (not tech spec)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

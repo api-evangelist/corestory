@@ -1,0 +1,68 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin billing API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "billing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Stripe Checkout session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/billing/checkout-session"
+          },
+          "docs": "Start a Stripe Checkout flow to subscribe the organization to the Pro plan."
+        },
+        {
+          "info": {
+            "name": "Create Stripe Customer Portal session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/billing/portal-session"
+          },
+          "docs": "Open the Stripe Customer Portal for the organization to manage their subscription."
+        },
+        {
+          "info": {
+            "name": "List past invoices",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/billing/invoices"
+          },
+          "docs": "Return past Stripe invoices for the organization. Admin only."
+        },
+        {
+          "info": {
+            "name": "Preview upcoming invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/billing/upcoming-invoice"
+          },
+          "docs": "Return a preview of the next Stripe invoice for the organization. Admin only."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

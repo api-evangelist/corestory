@@ -10,7 +10,7 @@ server:
     type: oauth2-bearer
     scheme: Bearer
     token_prefix: mcp_
-    token_format: "mcp_{token_id}.{jwt_token}"
+    token_format: mcp_{token_id}.{jwt_token}
     authorization_server: https://clerk.corestory.ai
     protected_resource_metadata: https://c2s.corestory.ai/.well-known/oauth-protected-resource
     docs: https://docs.corestory.ai/getting-started/mcp-server-setup
@@ -39,8 +39,14 @@ tools:
   description: Rename existing conversation
 - name: send_message
   description: Send message to conversation (streaming response)
-notes: >-
-  Official hosted/remote MCP server. Organization-scoped tokens are created in the
-  CoreStory dashboard (app.corestory.ai/settings) or via the token-management API
-  (/api/mcp-tokens). Verified live: GET /.well-known/oauth-protected-resource returns
-  resource https://c2s.corestory.ai/mcp with authorization_servers [clerk.corestory.ai].
+notes: 'Official hosted/remote MCP server. Organization-scoped tokens are created in the CoreStory dashboard
+  (app.corestory.ai/settings) or via the token-management API (/api/mcp-tokens). Verified live: GET /.well-known/oauth-protected-resource
+  returns resource https://c2s.corestory.ai/mcp with authorization_servers [clerk.corestory.ai].'
+deployment:
+  mode: remote
+  endpoint: https://c2s.corestory.ai/mcp
+  verified: probed
+  probe: live
+  tools: 14
+  checked: '2026-08-12'
+  source: catalog MCP census

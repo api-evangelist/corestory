@@ -1,0 +1,153 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin OLD_conversations API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "OLD_conversations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "DEPRECATED: Get all Project's conversations for a User with pagination",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/chat/conversations/list",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of items per page"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to skip"
+              }
+            ]
+          },
+          "docs": "DEPRECATED: Use GET / instead. Retrieve all conversations related to the Project for a User."
+        },
+        {
+          "info": {
+            "name": "Get conversation settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/chat/conversations/:conversation_id/settings",
+            "params": [
+              {
+                "name": "conversation_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve persona and context scope settings for a conversation. DEPRECATED: Settings are now embedded in ConversationResponse from GET /{conversation_id}."
+        },
+        {
+          "info": {
+            "name": "Update conversation settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/projects/:project_id/chat/conversations/:conversation_id/settings",
+            "params": [
+              {
+                "name": "conversation_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update persona and/or context scope for a conversation. DEPRECATED: Use PATCH /{conversation_id} instead."
+        },
+        {
+          "info": {
+            "name": "DEPRECATED: Create a new conversation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/chat/conversations/create-conversation",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "DEPRECATED: Use POST / instead. Create a new conversation for a specific project and user."
+        },
+        {
+          "info": {
+            "name": "DEPRECATED: Add a chat message to a conversation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/projects/:project_id/chat/conversations/:conversation_id/new-message",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "conversation_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "DEPRECATED: Use POST /{conversation_id}/messages instead."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,114 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin cache API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "cache",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get cache statistics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/graph/cache/stats"
+          },
+          "docs": "Get statistics about the graph query cache including hit/miss rates and entry counts."
+        },
+        {
+          "info": {
+            "name": "Clear cache",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/graph/cache",
+            "params": [
+              {
+                "name": "key",
+                "value": "",
+                "type": "query",
+                "description": "Specific cache key to remove"
+              }
+            ]
+          },
+          "docs": "Clear the entire graph query cache, or remove a specific cache entry by key."
+        },
+        {
+          "info": {
+            "name": "Update cache TTL",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/graph/cache/ttl",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the cache Time To Live value. The new TTL applies to all future cache entries."
+        },
+        {
+          "info": {
+            "name": "Get detailed information about a specific cache entry",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/graph/cache/entry/:cache_key",
+            "params": [
+              {
+                "name": "cache_key",
+                "value": "",
+                "type": "path",
+                "description": "The cache key to look up"
+              }
+            ]
+          },
+          "docs": "Retrieve detailed information about a specific cache entry using its cache key.\n    This includes the original request, cached response, and metadata about the cache entry.\n\n    The response includes:\n    * Original request parameters\n    * Cached response data\n    * Cache metadata (creation time, TTL, expiration status)\n\n    Example response:\n    ```json\n    {\n        \"cache_key\": \"abc123...\",\n        \"request\": {\n            \"query\": \"Show me the relationships between payment and vendor\",\n    "
+        },
+        {
+          "info": {
+            "name": "Dump the entire cache contents",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/graph/cache/dump"
+          },
+          "docs": "Retrieve the complete contents of the cache, including all keys and values.\n    This endpoint returns detailed information about every cache entry, including:\n    * Cache keys\n    * Original requests\n    * Cached responses\n    * Metadata for each entry\n\n    This is useful for:\n    * Debugging cache issues\n    * Analyzing cache contents\n    * Backing up cache data\n    * Migrating cache data between instances"
+        },
+        {
+          "info": {
+            "name": "Set cache entries",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/graph/cache/set",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set one or more cache entries using the same format as the dump endpoint.\n    This allows you to easily copy-paste the output from /api/graph/cache/dump\n    to restore or update cache entries.\n\n    The request should match the format of the dump endpoint:\n    ```json\n    {\n        \"entries\": [\n            {\n                \"cache_key\": \"abc123...\",\n                \"request\": {\n                    \"query\": \"Show me the relationships between payment and vendor\",\n                    \"max_nodes\": 20"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

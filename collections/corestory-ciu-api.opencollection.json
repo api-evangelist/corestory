@@ -1,0 +1,121 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin ciu API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ciu",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List active CIU plans",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/ciu/plans"
+          },
+          "docs": "Return all active CIU plan tiers."
+        },
+        {
+          "info": {
+            "name": "Get current organization's CIU balance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/ciu/balance"
+          },
+          "docs": "Return the CIU balance for the authenticated user's organization."
+        },
+        {
+          "info": {
+            "name": "Update current organization's CIU balance",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/ciu/balance",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the CIU balance for the given organization. This is typically used for manual adjustments or testing purposes and allowed to admins."
+        },
+        {
+          "info": {
+            "name": "List CIU costs per metered action",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/ciu/action-costs"
+          },
+          "docs": "Return the CIU cost for every metered action."
+        },
+        {
+          "info": {
+            "name": "Get the CIU ledger history for the current organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/ciu/ledger",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Items per page"
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Filter entries from this date (inclusive)"
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "Filter entries up to this date (inclusive)"
+              },
+              {
+                "name": "action_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter entries by action type. Repeat the parameter to filter by multiple types (e.g. ?action_type=chat&action_type=workflow)."
+              },
+              {
+                "name": "sort_order",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for entries by created_at"
+              }
+            ]
+          },
+          "docs": "Return the CIU ledger history for the authenticated user's organization."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

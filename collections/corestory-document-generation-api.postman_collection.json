@@ -1,0 +1,2010 @@
+{
+  "item": [
+    {
+      "id": "6445a33c-7408-4a0c-a48a-4f7ccc4bd43f",
+      "name": "document_generation",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ed7ded96-e603-4c77-8da0-a6472466712b",
+          "name": "Generate a dynamic document from section definitions",
+          "request": {
+            "name": "Generate a dynamic document from section definitions",
+            "description": {
+              "content": "Generate a document based on explicit section definitions.\n\n    **Modes:**\n    - `stream=true` (default): Returns SSE stream with real-time progress events\n    - `stream=false`: Blocks until complete, returns the final GeneratedDocument as JSON\n\n    This endpoint uses the provided section definitions to extract relevant data from the\n    codebase (features, business rules, APIs, data models) and generates content\n    for each section matching the specified style and format.\n\n    **SSE Progress Events (stream=true):**\n    - `preparing_sections`: Section structure being prepared\n    - `extracting_data`: Extracting features, rules, APIs from codebase\n    - `generating_section`: Generating content for a specific section\n    - `assembling`: Final document assembly\n    - `complete`: Document ready with document_id\n    - `failed`: Generation failed with error message",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "documents",
+                "generate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "stream",
+                  "value": "true",
+                  "description": "If true, stream SSE progress events. If false, block until complete and return document JSON."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) Project ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"section_definitions\": [\n    {\n      \"name\": \"<string>\",\n      \"level\": 2,\n      \"description\": \"\",\n      \"queries\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"depends_on\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"dependency_context_mode\": \"summary\",\n      \"instructions\": \"\",\n      \"derive_from_context\": false,\n      \"polish\": \"<boolean>\",\n      \"polish_instructions\": \"\",\n      \"output_schema\": {},\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        }\n      ],\n      \"research_strategy\": \"legacy\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"level\": 2,\n      \"description\": \"\",\n      \"queries\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"depends_on\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"dependency_context_mode\": \"summary\",\n      \"instructions\": \"\",\n      \"derive_from_context\": false,\n      \"polish\": \"<boolean>\",\n      \"polish_instructions\": \"\",\n      \"output_schema\": {},\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        }\n      ],\n      \"research_strategy\": \"legacy\"\n    }\n  ],\n  \"document_type\": \"project_specification\",\n  \"style\": {\n    \"tone\": \"technical\",\n    \"uses_tables\": false,\n    \"uses_diagrams\": false,\n    \"uses_code_blocks\": false,\n    \"uses_bullet_lists\": true,\n    \"uses_numbered_lists\": false,\n    \"heading_style\": \"title_case\",\n    \"section_numbering\": false,\n    \"estimated_detail_level\": \"standard\"\n  },\n  \"title\": \"<string>\",\n  \"instructions\": \"\",\n  \"global_queries\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"auto_research\": true,\n  \"questions\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"options\": {\n    \"include_code_examples\": true,\n    \"include_diagrams\": true,\n    \"include_business_rules\": true,\n    \"include_source_references\": true,\n    \"detail_level\": \"standard\",\n    \"output_format\": \"markdown\",\n    \"max_tokens_per_section\": 2000,\n    \"polish\": true,\n    \"polish_instructions\": \"\",\n    \"reference_validation\": \"hybrid\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d58a54df-0b57-4236-903a-58d3d1d69b7b",
+              "name": "SSE stream (stream=true) or GeneratedDocument JSON (stream=false)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    "generate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "stream",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"section_definitions\": [\n    {\n      \"name\": \"string\",\n      \"level\": 2,\n      \"description\": \"\",\n      \"queries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"depends_on\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dependency_context_mode\": \"summary\",\n      \"instructions\": \"\",\n      \"derive_from_context\": false,\n      \"polish\": true,\n      \"polish_instructions\": \"\",\n      \"output_schema\": {},\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        }\n      ],\n      \"research_strategy\": \"legacy\"\n    },\n    {\n      \"name\": \"string\",\n      \"level\": 2,\n      \"description\": \"\",\n      \"queries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"depends_on\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dependency_context_mode\": \"summary\",\n      \"instructions\": \"\",\n      \"derive_from_context\": false,\n      \"polish\": true,\n      \"polish_instructions\": \"\",\n      \"output_schema\": {},\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        }\n      ],\n      \"research_strategy\": \"legacy\"\n    }\n  ],\n  \"document_type\": \"project_specification\",\n  \"style\": {\n    \"tone\": \"technical\",\n    \"uses_tables\": false,\n    \"uses_diagrams\": false,\n    \"uses_code_blocks\": false,\n    \"uses_bullet_lists\": true,\n    \"uses_numbered_lists\": false,\n    \"heading_style\": \"title_case\",\n    \"section_numbering\": false,\n    \"estimated_detail_level\": \"standard\"\n  },\n  \"title\": \"<string>\",\n  \"instructions\": \"\",\n  \"global_queries\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"auto_research\": true,\n  \"questions\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"options\": {\n    \"include_code_examples\": true,\n    \"include_diagrams\": true,\n    \"include_business_rules\": true,\n    \"include_source_references\": true,\n    \"detail_level\": \"standard\",\n    \"output_format\": \"markdown\",\n    \"max_tokens_per_section\": 2000,\n    \"polish\": true,\n    \"polish_instructions\": \"\",\n    \"reference_validation\": \"hybrid\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"title\": \"string\",\n  \"document_type\": \"custom\",\n  \"metadata\": {\n    \"project_id\": 1782,\n    \"document_type\": \"technical_specification\",\n    \"generated_at\": \"1991-12-23T22:08:44.278Z\",\n    \"project_name\": \"\",\n    \"instructions_used\": \"\",\n    \"template_hash\": \"\",\n    \"sources\": [\n      \"string\",\n      \"string\"\n    ],\n    \"extraction_stats\": {\n      \"key_0\": 2155,\n      \"key_1\": 2338,\n      \"key_2\": 5227,\n      \"key_3\": 4195,\n      \"key_4\": 8025\n    },\n    \"generation_time_seconds\": 0\n  },\n  \"sections\": [\n    {\n      \"name\": \"string\",\n      \"level\": 5,\n      \"content\": \"string\",\n      \"structured_content\": {\n        \"key_0\": false,\n        \"key_1\": \"string\",\n        \"key_2\": false\n      },\n      \"sources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/GeneratedSection detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/GeneratedSection detected>\"\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"level\": 5,\n      \"content\": \"string\",\n      \"structured_content\": {\n        \"key_0\": true,\n        \"key_1\": 1147\n      },\n      \"sources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/GeneratedSection detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/GeneratedSection detected>\"\n        }\n      ]\n    }\n  ],\n  \"content\": \"\",\n  \"request_payload\": {\n    \"key_0\": 5084.515064052532\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2ca6fa68-50a8-4d8e-b24d-f0bc2ab0ef43",
+              "name": "Project not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    "generate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "stream",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"section_definitions\": [\n    {\n      \"name\": \"string\",\n      \"level\": 2,\n      \"description\": \"\",\n      \"queries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"depends_on\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dependency_context_mode\": \"summary\",\n      \"instructions\": \"\",\n      \"derive_from_context\": false,\n      \"polish\": true,\n      \"polish_instructions\": \"\",\n      \"output_schema\": {},\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        }\n      ],\n      \"research_strategy\": \"legacy\"\n    },\n    {\n      \"name\": \"string\",\n      \"level\": 2,\n      \"description\": \"\",\n      \"queries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"depends_on\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dependency_context_mode\": \"summary\",\n      \"instructions\": \"\",\n      \"derive_from_context\": false,\n      \"polish\": true,\n      \"polish_instructions\": \"\",\n      \"output_schema\": {},\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        }\n      ],\n      \"research_strategy\": \"legacy\"\n    }\n  ],\n  \"document_type\": \"project_specification\",\n  \"style\": {\n    \"tone\": \"technical\",\n    \"uses_tables\": false,\n    \"uses_diagrams\": false,\n    \"uses_code_blocks\": false,\n    \"uses_bullet_lists\": true,\n    \"uses_numbered_lists\": false,\n    \"heading_style\": \"title_case\",\n    \"section_numbering\": false,\n    \"estimated_detail_level\": \"standard\"\n  },\n  \"title\": \"<string>\",\n  \"instructions\": \"\",\n  \"global_queries\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"auto_research\": true,\n  \"questions\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"options\": {\n    \"include_code_examples\": true,\n    \"include_diagrams\": true,\n    \"include_business_rules\": true,\n    \"include_source_references\": true,\n    \"detail_level\": \"standard\",\n    \"output_format\": \"markdown\",\n    \"max_tokens_per_section\": 2000,\n    \"polish\": true,\n    \"polish_instructions\": \"\",\n    \"reference_validation\": \"hybrid\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5e847ebb-3682-45bb-af41-e182dfc1ad50",
+              "name": "Invalid request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    "generate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "stream",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"section_definitions\": [\n    {\n      \"name\": \"string\",\n      \"level\": 2,\n      \"description\": \"\",\n      \"queries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"depends_on\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dependency_context_mode\": \"summary\",\n      \"instructions\": \"\",\n      \"derive_from_context\": false,\n      \"polish\": true,\n      \"polish_instructions\": \"\",\n      \"output_schema\": {},\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        }\n      ],\n      \"research_strategy\": \"legacy\"\n    },\n    {\n      \"name\": \"string\",\n      \"level\": 2,\n      \"description\": \"\",\n      \"queries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"depends_on\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dependency_context_mode\": \"summary\",\n      \"instructions\": \"\",\n      \"derive_from_context\": false,\n      \"polish\": true,\n      \"polish_instructions\": \"\",\n      \"output_schema\": {},\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        }\n      ],\n      \"research_strategy\": \"legacy\"\n    }\n  ],\n  \"document_type\": \"project_specification\",\n  \"style\": {\n    \"tone\": \"technical\",\n    \"uses_tables\": false,\n    \"uses_diagrams\": false,\n    \"uses_code_blocks\": false,\n    \"uses_bullet_lists\": true,\n    \"uses_numbered_lists\": false,\n    \"heading_style\": \"title_case\",\n    \"section_numbering\": false,\n    \"estimated_detail_level\": \"standard\"\n  },\n  \"title\": \"<string>\",\n  \"instructions\": \"\",\n  \"global_queries\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"auto_research\": true,\n  \"questions\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"options\": {\n    \"include_code_examples\": true,\n    \"include_diagrams\": true,\n    \"include_business_rules\": true,\n    \"include_source_references\": true,\n    \"detail_level\": \"standard\",\n    \"output_format\": \"markdown\",\n    \"max_tokens_per_section\": 2000,\n    \"polish\": true,\n    \"polish_instructions\": \"\",\n    \"reference_validation\": \"hybrid\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "febe08b7-a710-48b6-b36f-9a31a89c3690",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    "generate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "stream",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"section_definitions\": [\n    {\n      \"name\": \"string\",\n      \"level\": 2,\n      \"description\": \"\",\n      \"queries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"depends_on\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dependency_context_mode\": \"summary\",\n      \"instructions\": \"\",\n      \"derive_from_context\": false,\n      \"polish\": true,\n      \"polish_instructions\": \"\",\n      \"output_schema\": {},\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        }\n      ],\n      \"research_strategy\": \"legacy\"\n    },\n    {\n      \"name\": \"string\",\n      \"level\": 2,\n      \"description\": \"\",\n      \"queries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"depends_on\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dependency_context_mode\": \"summary\",\n      \"instructions\": \"\",\n      \"derive_from_context\": false,\n      \"polish\": true,\n      \"polish_instructions\": \"\",\n      \"output_schema\": {},\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        }\n      ],\n      \"research_strategy\": \"legacy\"\n    }\n  ],\n  \"document_type\": \"project_specification\",\n  \"style\": {\n    \"tone\": \"technical\",\n    \"uses_tables\": false,\n    \"uses_diagrams\": false,\n    \"uses_code_blocks\": false,\n    \"uses_bullet_lists\": true,\n    \"uses_numbered_lists\": false,\n    \"heading_style\": \"title_case\",\n    \"section_numbering\": false,\n    \"estimated_detail_level\": \"standard\"\n  },\n  \"title\": \"<string>\",\n  \"instructions\": \"\",\n  \"global_queries\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"auto_research\": true,\n  \"questions\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"options\": {\n    \"include_code_examples\": true,\n    \"include_diagrams\": true,\n    \"include_business_rules\": true,\n    \"include_source_references\": true,\n    \"detail_level\": \"standard\",\n    \"output_format\": \"markdown\",\n    \"max_tokens_per_section\": 2000,\n    \"polish\": true,\n    \"polish_instructions\": \"\",\n    \"reference_validation\": \"hybrid\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8910fae2-6e89-406f-919f-2d3a91ab88cf",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    "generate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "stream",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"section_definitions\": [\n    {\n      \"name\": \"string\",\n      \"level\": 2,\n      \"description\": \"\",\n      \"queries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"depends_on\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dependency_context_mode\": \"summary\",\n      \"instructions\": \"\",\n      \"derive_from_context\": false,\n      \"polish\": true,\n      \"polish_instructions\": \"\",\n      \"output_schema\": {},\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        }\n      ],\n      \"research_strategy\": \"legacy\"\n    },\n    {\n      \"name\": \"string\",\n      \"level\": 2,\n      \"description\": \"\",\n      \"queries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"depends_on\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dependency_context_mode\": \"summary\",\n      \"instructions\": \"\",\n      \"derive_from_context\": false,\n      \"polish\": true,\n      \"polish_instructions\": \"\",\n      \"output_schema\": {},\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/SectionDefinition detected>\"\n        }\n      ],\n      \"research_strategy\": \"legacy\"\n    }\n  ],\n  \"document_type\": \"project_specification\",\n  \"style\": {\n    \"tone\": \"technical\",\n    \"uses_tables\": false,\n    \"uses_diagrams\": false,\n    \"uses_code_blocks\": false,\n    \"uses_bullet_lists\": true,\n    \"uses_numbered_lists\": false,\n    \"heading_style\": \"title_case\",\n    \"section_numbering\": false,\n    \"estimated_detail_level\": \"standard\"\n  },\n  \"title\": \"<string>\",\n  \"instructions\": \"\",\n  \"global_queries\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"auto_research\": true,\n  \"questions\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"options\": {\n    \"include_code_examples\": true,\n    \"include_diagrams\": true,\n    \"include_business_rules\": true,\n    \"include_source_references\": true,\n    \"detail_level\": \"standard\",\n    \"output_format\": \"markdown\",\n    \"max_tokens_per_section\": 2000,\n    \"polish\": true,\n    \"polish_instructions\": \"\",\n    \"reference_validation\": \"hybrid\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 655.3622224560085,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bdf0e5e9-e1e2-4fc0-8c91-32379e2f658d",
+          "name": "Generate a document from preset section definitions",
+          "request": {
+            "name": "Generate a document from preset section definitions",
+            "description": {
+              "content": "Generate a document using preset section definitions resolved from the registry.\n\n    Provide a document_type (e.g., \"project_specification\", \"technical_specification\")\n    and optional overrides. Section definitions are automatically resolved.\n\n    **Modes:**\n    - `stream=true` (default): Returns SSE stream with real-time progress events\n    - `stream=false`: Blocks until complete, returns the final GeneratedDocument as JSON",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "documents",
+                "generate",
+                "preset"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "stream",
+                  "value": "true",
+                  "description": "If true, stream SSE progress events."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) Project ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"document_type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"instructions\": \"\",\n  \"global_queries\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"options\": {\n    \"include_code_examples\": true,\n    \"include_diagrams\": true,\n    \"include_business_rules\": true,\n    \"include_source_references\": true,\n    \"detail_level\": \"standard\",\n    \"output_format\": \"markdown\",\n    \"max_tokens_per_section\": 2000,\n    \"polish\": true,\n    \"polish_instructions\": \"\",\n    \"reference_validation\": \"hybrid\"\n  },\n  \"style\": {\n    \"tone\": \"technical\",\n    \"uses_tables\": false,\n    \"uses_diagrams\": false,\n    \"uses_code_blocks\": false,\n    \"uses_bullet_lists\": true,\n    \"uses_numbered_lists\": false,\n    \"heading_style\": \"title_case\",\n    \"section_numbering\": false,\n    \"estimated_detail_level\": \"standard\"\n  },\n  \"section_overrides\": {\n    \"key_0\": {\n      \"key_0\": true\n    },\n    \"key_1\": {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\"\n    },\n    \"key_2\": {\n      \"key_0\": 9054\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "de6aa457-726e-4fef-973a-141db27d5fe3",
+              "name": "SSE stream (stream=true) or GeneratedDocument JSON (stream=false)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    "generate",
+                    "preset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "stream",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"document_type\": \"technical_specification\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"title\": \"string\",\n  \"document_type\": \"custom\",\n  \"metadata\": {\n    \"project_id\": 1782,\n    \"document_type\": \"technical_specification\",\n    \"generated_at\": \"1991-12-23T22:08:44.278Z\",\n    \"project_name\": \"\",\n    \"instructions_used\": \"\",\n    \"template_hash\": \"\",\n    \"sources\": [\n      \"string\",\n      \"string\"\n    ],\n    \"extraction_stats\": {\n      \"key_0\": 2155,\n      \"key_1\": 2338,\n      \"key_2\": 5227,\n      \"key_3\": 4195,\n      \"key_4\": 8025\n    },\n    \"generation_time_seconds\": 0\n  },\n  \"sections\": [\n    {\n      \"name\": \"string\",\n      \"level\": 5,\n      \"content\": \"string\",\n      \"structured_content\": {\n        \"key_0\": false,\n        \"key_1\": \"string\",\n        \"key_2\": false\n      },\n      \"sources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/GeneratedSection detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/GeneratedSection detected>\"\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"level\": 5,\n      \"content\": \"string\",\n      \"structured_content\": {\n        \"key_0\": true,\n        \"key_1\": 1147\n      },\n      \"sources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/GeneratedSection detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/GeneratedSection detected>\"\n        }\n      ]\n    }\n  ],\n  \"content\": \"\",\n  \"request_payload\": {\n    \"key_0\": 5084.515064052532\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "905291fc-9450-4a7a-8acd-8b246edd6098",
+              "name": "Project not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    "generate",
+                    "preset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "stream",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"document_type\": \"technical_specification\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "118b44a4-a6a5-47fa-ae98-d029d6b2ebc3",
+              "name": "Invalid request or unknown document type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    "generate",
+                    "preset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "stream",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"document_type\": \"technical_specification\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d17cf1a4-5f96-4996-bf86-bb80b3f0f2c6",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    "generate",
+                    "preset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "stream",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"document_type\": \"technical_specification\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "61c48dae-0408-4e21-9654-a2464973ad56",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    "generate",
+                    "preset"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "stream",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"document_type\": \"technical_specification\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 655.3622224560085,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "26f239b8-784a-4b40-b6f7-3064f3cfc04c",
+          "name": "List generated documents",
+          "request": {
+            "name": "List generated documents",
+            "description": {
+              "content": "List all generated documents for a project.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "documents"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) Project ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "95371517-a331-4ac1-a56a-478c11f4588c",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"title\": \"string\",\n    \"document_type\": \"string\",\n    \"generated_at\": \"1956-03-30T07:16:51.004Z\",\n    \"project_id\": 6119,\n    \"section_count\": 7013\n  },\n  {\n    \"id\": \"string\",\n    \"title\": \"string\",\n    \"document_type\": \"string\",\n    \"generated_at\": \"1980-11-28T17:26:47.356Z\",\n    \"project_id\": 7950,\n    \"section_count\": 6747\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e49a6c7a-7f67-49a7-8991-186d2932f59e",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9adaaae8-821c-477c-96b8-5bc08944baf1",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 655.3622224560085,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7a59b175-62dc-405a-8ffb-8eaaf00987a2",
+          "name": "Retrieve a generated document",
+          "request": {
+            "name": "Retrieve a generated document",
+            "description": {
+              "content": "Retrieve a previously generated document by its ID.\n\n    The document_id is returned in the 'complete' event when using the\n    POST /projects/{project_id}/documents/generate endpoint.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "documents",
+                ":document_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) Project ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "document_id",
+                  "description": "(Required) Document ID from generation"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f1fdac98-b6dd-4903-b307-4cd433fc2b84",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    ":document_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "document_id",
+                      "description": "(Required) Document ID from generation"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"title\": \"string\",\n  \"document_type\": \"custom\",\n  \"metadata\": {\n    \"project_id\": 1782,\n    \"document_type\": \"technical_specification\",\n    \"generated_at\": \"1991-12-23T22:08:44.278Z\",\n    \"project_name\": \"\",\n    \"instructions_used\": \"\",\n    \"template_hash\": \"\",\n    \"sources\": [\n      \"string\",\n      \"string\"\n    ],\n    \"extraction_stats\": {\n      \"key_0\": 2155,\n      \"key_1\": 2338,\n      \"key_2\": 5227,\n      \"key_3\": 4195,\n      \"key_4\": 8025\n    },\n    \"generation_time_seconds\": 0\n  },\n  \"sections\": [\n    {\n      \"name\": \"string\",\n      \"level\": 5,\n      \"content\": \"string\",\n      \"structured_content\": {\n        \"key_0\": false,\n        \"key_1\": \"string\",\n        \"key_2\": false\n      },\n      \"sources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/GeneratedSection detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/GeneratedSection detected>\"\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"level\": 5,\n      \"content\": \"string\",\n      \"structured_content\": {\n        \"key_0\": true,\n        \"key_1\": 1147\n      },\n      \"sources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/GeneratedSection detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/GeneratedSection detected>\"\n        }\n      ]\n    }\n  ],\n  \"content\": \"\",\n  \"request_payload\": {\n    \"key_0\": 5084.515064052532\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "34434c2c-97c7-4bbc-b024-5101063754bc",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    ":document_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "document_id",
+                      "description": "(Required) Document ID from generation"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ec2943a2-55d0-4738-a3e9-8f36620aca2a",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    ":document_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "document_id",
+                      "description": "(Required) Document ID from generation"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 655.3622224560085,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c722a4d5-ba7f-45c4-91e9-522edf412ccc",
+          "name": "Download generated document as markdown",
+          "request": {
+            "name": "Download generated document as markdown",
+            "description": {
+              "content": "Download the generated document as a markdown file.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "documents",
+                ":document_id",
+                "download"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) Project ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "document_id",
+                  "description": "(Required) Document ID from generation"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5319f8ce-e0ad-44ae-8f9b-e1210a3a5959",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    ":document_id",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "document_id",
+                      "description": "(Required) Document ID from generation"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "62263d84-f4ab-43f6-b35e-ab2df9d959b1",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    ":document_id",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "document_id",
+                      "description": "(Required) Document ID from generation"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4c87fcb2-3722-4943-bb31-c1170f7742c1",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    ":document_id",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "document_id",
+                      "description": "(Required) Document ID from generation"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 655.3622224560085,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3c51fb9b-67f7-41d9-8762-e0721f532cd8",
+          "name": "Regenerate a single section of an existing document",
+          "request": {
+            "name": "Regenerate a single section of an existing document",
+            "description": {
+              "content": "Regenerate one section of a previously generated document.\n\n    Uses the original document's configuration (style, queries, section definitions)\n    and injects dependency context from existing sibling sections.\n\n    Only the requested section is regenerated — dependent sections are NOT\n    cascaded.\n\n    **Modes:**\n    - `stream=true` (default): Returns SSE stream with progress events\n    - `stream=false`: Blocks until complete, returns the updated GeneratedDocument as JSON",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "projects",
+                ":project_id",
+                "documents",
+                ":document_id",
+                "sections",
+                ":section_name",
+                "regenerate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "stream",
+                  "value": "true",
+                  "description": "If true, stream SSE progress events. If false, block until complete and return document JSON."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) Project ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "document_id",
+                  "description": "(Required) Document ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "section_name",
+                  "description": "(Required) Name of the section to regenerate"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"instructions\": \"\",\n  \"polish\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d0c16234-c5e5-467b-b7ec-d6638f18d0ad",
+              "name": "SSE stream (stream=true) or updated GeneratedDocument JSON (stream=false)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    ":document_id",
+                    "sections",
+                    ":section_name",
+                    "regenerate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "stream",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "document_id",
+                      "description": "(Required) Document ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "section_name",
+                      "description": "(Required) Name of the section to regenerate"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"instructions\": \"\",\n  \"polish\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"title\": \"string\",\n  \"document_type\": \"custom\",\n  \"metadata\": {\n    \"project_id\": 1782,\n    \"document_type\": \"technical_specification\",\n    \"generated_at\": \"1991-12-23T22:08:44.278Z\",\n    \"project_name\": \"\",\n    \"instructions_used\": \"\",\n    \"template_hash\": \"\",\n    \"sources\": [\n      \"string\",\n      \"string\"\n    ],\n    \"extraction_stats\": {\n      \"key_0\": 2155,\n      \"key_1\": 2338,\n      \"key_2\": 5227,\n      \"key_3\": 4195,\n      \"key_4\": 8025\n    },\n    \"generation_time_seconds\": 0\n  },\n  \"sections\": [\n    {\n      \"name\": \"string\",\n      \"level\": 5,\n      \"content\": \"string\",\n      \"structured_content\": {\n        \"key_0\": false,\n        \"key_1\": \"string\",\n        \"key_2\": false\n      },\n      \"sources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/GeneratedSection detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/GeneratedSection detected>\"\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"level\": 5,\n      \"content\": \"string\",\n      \"structured_content\": {\n        \"key_0\": true,\n        \"key_1\": 1147\n      },\n      \"sources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"subsections\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/GeneratedSection detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/GeneratedSection detected>\"\n        }\n      ]\n    }\n  ],\n  \"content\": \"\",\n  \"request_payload\": {\n    \"key_0\": 5084.515064052532\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5c8f2812-6aea-4131-a82b-763f6067a7c5",
+              "name": "Project, document, or section not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    ":document_id",
+                    "sections",
+                    ":section_name",
+                    "regenerate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "stream",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "document_id",
+                      "description": "(Required) Document ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "section_name",
+                      "description": "(Required) Name of the section to regenerate"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"instructions\": \"\",\n  \"polish\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9216ee65-f826-4b5e-9d77-c20b4fe8785c",
+              "name": "Invalid request or section definition not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    ":document_id",
+                    "sections",
+                    ":section_name",
+                    "regenerate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "stream",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "document_id",
+                      "description": "(Required) Document ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "section_name",
+                      "description": "(Required) Name of the section to regenerate"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"instructions\": \"\",\n  \"polish\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "85ef46de-2729-412f-b9d5-c23aa0421ffd",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    ":document_id",
+                    "sections",
+                    ":section_name",
+                    "regenerate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "stream",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "document_id",
+                      "description": "(Required) Document ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "section_name",
+                      "description": "(Required) Name of the section to regenerate"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"instructions\": \"\",\n  \"polish\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0167132a-ca07-4eff-b3c4-e585a2a19f3b",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "projects",
+                    ":project_id",
+                    "documents",
+                    ":document_id",
+                    "sections",
+                    ":section_name",
+                    "regenerate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "stream",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Project ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "document_id",
+                      "description": "(Required) Document ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "section_name",
+                      "description": "(Required) Name of the section to regenerate"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"instructions\": \"\",\n  \"polish\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"details\": {\n      \"key_0\": 655.3622224560085,\n      \"key_1\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "0e87a33f-16cb-450a-8efd-33cc13d9cc32",
+    "name": "Crowdbotics API Documentation admin document_generation API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# CoreStory API Overview\n\nThe CoreStory API provides programmatic access to structured insights derived from software source code. It is designed for engineering, architecture, and product teams who need to extract business logic, technical specifications, architectural relationships, and system-level context from complex or legacy codebases.\n\nBy interfacing directly with CoreStory API, users can:\n\n- Generate full Product Requirements Documents (PRDs) from a codebase\n- Extract detailed Technical Specifications for modernization or migration\n- Query a codebase using natural language to surface implementation details, logic paths, dependencies, and architectural insights\n- Construct and visualize knowledge graphs of systems, components, and relationships\n- Ingest, store, and retrieve content from a vector store for AI-powered retrieval-augmented generation (RAG) workflows\n\nCoreStory is especially valuable in contexts where:\n\n- Codebases are large, unstructured, or under-documented\n- Product and engineering teams are onboarding to unfamiliar systems\n- Technical stakeholders require visibility into system design or feature coverage\n- Modernization, replatforming, or M&A due diligence is underway\n\nThe API can be integrated into existing CI/CD pipelines, internal developer portals, architecture review boards, product planning processes, or documentation automation workflows.\n\nAll endpoints support secure authentication and are designed for high-availability, asynchronous workloads. Output formats include JSON, Markdown, and PDF, with flexible formatting options for downstream consumption.\n\nFor step-by-step usage instructions and workflows, refer to the [CoreStory API Quick Start Guide](#section/CoreStory-API-Quick-Start-Guide).\n\n## Features\n\n* **Document Generation**\n    * Generate complete Product Requirements Documents (PRD)\n    * Generate Technical Specifications\n    * Generate individual document sections (executive overview, user personas, etc.)\n    * Format documents in JSON or Markdown\n\n* **Vector Store Management**\n    * Ingest and manage documents in vector store\n    * Query and retrieve document content\n    * Manage document embeddings\n\n* **Context Management**\n    * Manage context for different document types\n    * Set and retrieve PRD context\n    * Support for future context types (technical specs, user stories, etc.)\n\n* **Knowledge Graph**\n    * Generate knowledge graphs from codebase queries\n    * Visualize relationships between code entities\n    * Analyze code structure and dependencies\n\n* **API Endpoints**\n    * `/api/documents/*` - Document generation and formatting\n    * `/api/generate/*` - Document formatting utilities\n    * `/api/vector-store/*` - Vector store management\n    * `/api/agents/*` - AI agent operations\n    * `/api/context/*` - Context management for documents\n    * `/api/graph/*` - Knowledge graph generation and analysis\n\nNote: JWT authentication support coming soon. All endpoints currently provide detailed OpenAPI documentation.\n\n* **Observability**\n    * OpenTelemetry instrumentation for distributed tracing\n    * Prometheus metrics endpoint at `/metrics`\n    * Comprehensive request/response tracking\n    * Custom business metrics\n\n\n\n# CoreStory System Architecture\n\nThis document provides a high-level overview of how the CoreStory platform ingests, analyzes, and serves structured software intelligence through its API. The system is designed to process codebases and related technical artifacts in order to generate product specifications, technical documents, and knowledge graph representations.\n\n---\n\n## Core Components\n\n### 1. **Ingestion Layer**\n\n- Accepts Git URLs, file uploads, or local archives\n- Extracts source files, documentation, and metadata\n- Initiates chunking and embedding via the vector store pipeline\n\n### 2. **Vector Store and Context Engine**\n\n- Stores chunked and embedded documents\n- Supports semantic search and document retrieval\n- Feeds LLMs with scoped context for generation and reasoning\n\n### 3. **LLM Orchestration Layer**\n\n- Fan-out to multiple large language models\n- Handles prompt templating, context injection, and result normalization\n- Evaluates and scores generated outputs\n\n### 4. **Document Generation Engine**\n\n- Produces:\n  - PRDs\n  - Technical Specs\n  - Individual document sections\n  - Markdown and PDF exports\n- Format-flexible output for portals, APIs, and documentation pipelines\n\n### 5. **Graph Construction Module**\n\n- Extracts static and dynamic code relationships\n- Builds DAGs and call graphs of components, services, and files\n- Allows natural-language queries that return graph subviews and LLM explanations\n\n### 6. **Query Engine**\n\n- Accepts free-form questions about codebases\n- Routes queries to code graph, document store, or LLMs\n- Returns structured JSON answers and explanatory text\n\n### 7. **API Gateway**\n\n- Authenticates and rate-limits clients\n- Routes requests to internal services\n- Serves all external-facing endpoints in REST format\n\n---\n\n## Security and Privacy\n\n- All data transfer is encrypted via HTTPS\n- API access is secured using provided auth credentials (JWT tokens coming soon)\n- Uploaded code is only used to generate customer-requested outputs and is not retained indefinitely\n\n---\n\n## Extensibility\n\nThe platform is modular. It can be extended to:\n\n- Add new LLMs for ensemble generation\n- Integrate alternative vector databases\n- Connect to internal developer portals or product management tools via webhook or export endpoints\n\nFor more information, see the Quick Start or contact the CoreStory team.\n\n\n# CoreStory API Quick Start Guide\n\nThe CoreStory API provides programmatic access to structured code intelligence, enabling your team to extract business and technical specifications directly from source code. You can use the API to integrate CoreStory-generated documents into existing workflows, support software modernization and maintenance efforts, or enrich internal platforms with architectural and feature-level metadata.\n\n---\n\n## Overview\n\nThe CoreStory API enables:\n\n- Ingestion of content into a **vector store** for LLM-driven analysis\n- Generation of **Product Requirements Documents (PRDs)** and **Technical Specifications** from code\n- Interrogation of your codebase via a natural language **query engine**\n- Construction of **knowledge graphs** describing code relationships and system architecture\n- Management of **custom document context** and **custom prompts** for improved output relevance and quality\n\nThese capabilities support SDLC workflows such as:\n\n- Application modernization, migration, and maintenance\n- Documentation and auditability of legacy systems\n- Alignment of product, engineering, and architecture teams and systems\n- Developer onboarding and code comprehension\n\n---\n\n**Note for POV customers:** If your codebase has already been ingested as part of a proof-of-value (POV) engagement, you can use your existing authentication credentials and skip step 2 (”Ingest a Codebase or Document Source) of this guide.\n\n## 1. Authentication\n\n```\nPOST /api/auth/login\n```\n\nObtain a JWT for future API calls.\n\n**Request:**\n\n```\n{\n  \"email\": \"you@example.com\",\n  \"password\": \"your-password\"\n}\n```\n\n**Response:**\n\n```\n{\n  \"access_token\": \"...\",\n  \"token_type\": \"bearer\"\n}\n```\n\nInclude this token in all subsequent requests:\n\n```\nAuthorization: Bearer <access_token>\n```\n\n---\n\n## 2. Ingest a Codebase or Document Source\n\n```\nPOST /api/vector-store/ingest\n```\n\nTrigger ingestion of code from a Git repo, ZIP file, or local document directory.\n\n**Example Payload (GitHub):**\n\n```\n{\n  \"source_type\": \"url\",\n  \"source\": \"https://github.com/example/repo.git\",\n  \"force\": true\n}\n```\n\nIngestion automatically chunks, embeds, and summarizes source files for downstream analysis.\n\n<details>\n<summary>Supported File Extensions</summary>\n\n### Programming Languages\n- Python: `.py`, `.pyw`, `.pyx`, `.pyi`\n- JavaScript/TypeScript: `.js`, `.mjs`, `.cjs`, `.ts`, `.jsx`, `.tsx`\n- Java: `.java`, `.class`, `.jar`\n- C/C++: `.c`, `.cpp`, `.cc`, `.cxx`, `.c++`, `.h`, `.hpp`, `.hh`, `.hxx`, `.h++`\n- .NET: `.cs`, `.csx`, `.vb`, `.fs`, `.fsx`, `.fsi`\n- PHP: `.php`, `.php3`, `.php4`, `.php5`, `.phtml`\n- Ruby: `.rb`, `.rbw`, `.rake`, `.gemspec`\n- Go: `.go`, `.mod`, `.sum`\n- Rust: `.rs`, `.rlib`\n- Swift: `.swift`\n- Kotlin: `.kt`, `.kts`, `.ktm`\n- Scala: `.scala`, `.sc`\n- Clojure: `.clj`, `.cljs`, `.cljc`, `.edn`\n- Haskell: `.hs`, `.lhs`\n- OCaml: `.ml`, `.mli`, `.mll`, `.mly`\n- R: `.r`, `.R`, `.rmd`, `.rnw`\n- Objective-C: `.m`, `.mm`\n- Perl: `.pl`, `.pm`, `.t`, `.pod`\n- Shell scripts: `.sh`, `.bash`, `.zsh`, `.fish`, `.ksh`, `.csh`, `.tcsh`\n- PowerShell: `.ps1`, `.psm1`, `.psd1`\n- Windows batch: `.bat`, `.cmd`\n- Lua: `.lua`\n- Dart: `.dart`\n- Elm: `.elm`\n- Elixir: `.ex`, `.exs`\n- Erlang: `.erl`, `.hrl`\n- Julia: `.jl`\n- Nim: `.nim`, `.nims`\n- Crystal: `.cr`\n- D: `.d`\n- Pascal: `.pas`, `.pp`, `.inc`\n- Fortran: `.f`, `.f90`, `.f95`, `.f03`, `.f08`, `.for`, `.ftn`, `.fpp`\n- COBOL: `.cob`, `.cbl`, `.cpy`, `.cobol`, `.bms`, `.ctl`, `.jcl`, `.proc`\n- IBM i (AS/400) RPG ILE: `.rpgle`, `.rpgleinc`\n- IBM i (AS/400) CLLE: `.clle`\n- IBM i (AS/400) DDS: `.pf`, `.lf`, `.dspf`\n- PowerBuilder: `.pbt`, `.pbs`, `.pbr`, `.srw`, `.srd`, `.sru`, `.sra`, `.srp`, `.srf`, `.srq`, `.srs`, `.srm`, `.srj`\n- Ada: `.ada`, `.adb`, `.ads`\n- Assembly: `.asm`, `.s`, `.S`\n- Verilog/SystemVerilog: `.v`, `.vh`, `.sv`, `.svh`\n- VHDL: `.vhd`, `.vhdl`\n- Tcl/Tk: `.tcl`, `.tk`\n- Groovy: `.groovy`, `.gvy`, `.gy`, `.gsh`\n- CoffeeScript: `.coffee`, `.litcoffee`\n- PureScript: `.purs`\n- ReasonML: `.reason`, `.re`, `.rei`\n- Racket/Scheme: `.rkt`, `.scm`, `.ss`\n- Lisp: `.lisp`, `.lsp`, `.l`, `.cl`, `.fasl`\n- Prolog: `.prolog`, `.pro`, `.P`\n- MATLAB: `.matlab`, `.fig`\n- Mathematica: `.mathematica`, `.nb`, `.wl`, `.wls`\n- SageMath: `.sage`, `.spyx`\n- Zig: `.zig`\n- Odin: `.odin`\n- V: `.v3`, `.v2`, `.v1`\n- Pony: `.pony`\n- Red: `.red`, `.reds`\n- Io: `.io`\n- Factor: `.factor`\n- Forth: `.forth`, `.fth`, `.4th`\n- J/K/Q/APL: `.j`, `.k`, `.q`, `.apl`\n- Chapel: `.chapel`, `.chpl`\n- X10: `.x10`\n- Arduino/Processing: `.pde`, `.ino`\n\n### Web Technologies\n- HTML: `.html`, `.htm`, `.xhtml`, `.shtml`\n- CSS/Preprocessors: `.css`, `.scss`, `.sass`, `.less`, `.styl`, `.stylus`\n- Frontend frameworks: `.vue`, `.svelte`\n- JSP: `.jsp`, `.jspx`, `.tag`, `.tagx`\n- ASP.NET: `.asp`, `.aspx`, `.ascx`, `.asax`, `.ashx`, `.asmx`\n- Ruby templates: `.erb`, `.haml`, `.slim`\n- PHP templates: `.twig`, `.blade`\n- Template engines: `.mustache`, `.hbs`, `.handlebars`, `.ejs`, `.pug`, `.jade`, `.liquid`, `.ftl`, `.ftlh`, `.vm`, `.vtl`, `.thymeleaf`\n\n### Configuration/Data\n- JSON: `.json`, `.json5`, `.jsonc`, `.jsonl`, `.ndjson`\n- XML: `.xml`, `.xsd`, `.xsl`, `.xslt`, `.dtd`, `.rng`, `.rnc`\n- YAML/TOML: `.yaml`, `.yml`, `.toml`\n- INI/Cfg/Conf: `.ini`, `.cfg`, `.conf`, `.config`, `.properties`\n- Environment: `.env`, `.envrc`, `.env.local`, `.env.development`, `.env.production`\n- Property lists: `.plist`\n- HOCON: `.hocon`\n- RON/HJSON/CSON: `.ron`, `.hjson`, `.cson`\n\n### Documentation/Text\n- Markdown: `.md`, `.markdown`, `.mdown`, `.mkd`, `.mkdn`\n- Plain text: `.txt`, `.text`\n- reStructuredText: `.rst`, `.rest`\n- AsciiDoc: `.asciidoc`, `.adoc`, `.asc`\n- LaTeX: `.tex`, `.latex`, `.ltx`, `.sty`, `.cls`, `.bib`\n- Org mode: `.org`\n- Wiki markup: `.wiki`, `.mediawiki`\n- Textile/Creole/RDoc: `.textile`, `.creole`, `.rdoc`\n\n### Data Formats\n- Delimited: `.csv`, `.tsv`, `.psv`\n- SQL: `.sql`, `.ddl`, `.dml`, `.plsql`, `.psql`, `.mysql`\n- GraphQL: `.graphql`, `.gql`\n- Protocols: `.proto`, `.protobuf`, `.avro`, `.avsc`, `.avdl`, `.thrift`, `.capnp`, `.fbs`\n- Columnar: `.parquet`, `.orc`, `.arrow`\n\n### Build/Dependency\n- Gradle: `.gradle`, `.gradle.kts`\n- Maven: `.maven`, `.mvn`\n- SBT: `.sbt`\n- CMake: `.cmake`, `.cmake.in`\n- Make: `.make`, `.mk`, `.mak`\n- Docker: `.dockerfile`, `.containerfile`, `.dockerignore`\n- Git: `.gitignore`, `.gitattributes`, `.gitmodules`, `.gitkeep`\n- Mercurial/Subversion/Bazaar: `.hgignore`, `.hgrc`, `.svnignore`, `.bzrignore`\n- EditorConfig: `.editorconfig`\n- Linters/Formatters: `.eslintrc`, `.eslintignore`, `.prettierrc`, `.prettierignore`, `.babelrc`, `.babelignore`\n- Node.js: `.npmrc`, `.npmignore`, `.yarnrc`, `.yarnignore`\n- Python: `.pipfile`, `.pipfile.lock`, `.requirements`, `.requirements.txt`, `.poetry.lock`, `.pyproject.toml`, `.setup.py`, `.setup.cfg`, `.manifest.in`, `.tox.ini`, `.noxfile.py`, `.pre-commit-config.yaml`\n- CI/CD: `.github`, `.gitlab-ci.yml`, `.travis.yml`, `.appveyor.yml`, `.circleci`, `.jenkins`, `.jenkinsfile`, `.azure-pipelines.yml`, `.buildkite.yml`\n- Package Managers: `package.json`, `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `composer.json`, `composer.lock`, `gemfile`, `gemfile.lock`, `cargo.toml`, `cargo.lock`, `go.mod`, `go.sum`, `requirements.txt`, `pipfile`, `pipfile.lock`, `poetry.lock`, `pyproject.toml`, `build.gradle`, `build.gradle.kts`, `settings.gradle`, `gradle.properties`, `pom.xml`, `settings.xml`, `build.sbt`, `plugins.sbt`, `makefile`, `gnumakefile`, `makefile.am`, `makefile.in`, `dockerfile`, `containerfile`, `vagrantfile`, `rakefile`, `guardfile`, `capfile`, `gulpfile.js`, `gruntfile.js`, `webpack.config.js`, `rollup.config.js`, `tsconfig.json`, `jsconfig.json`, `deno.json`, `deno.jsonc`, `mix.exs`, `mix.lock`, `rebar.config`, `rebar.lock`, `project.clj`, `deps.edn`, `stack.yaml`, `cabal.config`, `setup.hs`, `dub.json`, `dub.sdl`, `nimble`, `config.nims`, `shard.yml`, `shard.lock`, `pubspec.yaml`, `pubspec.lock`, `elm.json`, `elm-package.json`, `project.json`, `global.json`, `nuget.config`, `packages.config`, `paket.dependencies`, `paket.lock`, `.log`, `.lock`, `.pid`, `.tmp`, `.temp`, `.patch`, `.diff`, `.spec`, `.rpm`, `.deb`, `.control`, `.pkgbuild`, `.ebuild`, `.formula`, `.port`, `.portfile`, `.nix`, `.bzl`, `.bazel`, `.workspace`, `.buck`, `.buckconfig`, `.pants`, `.pants.ini`, `.please`, `.plzconfig`, `.gn`, `.gni`, `.ninja`, `.waf`, `.wscript`, `.scons`, `.sconstruct`, `.sconscript`\n\n</details>\n\n<details>\n<summary>Configuration Files</summary>\n\n- `requirements.txt`\n- `.gitignore`\n- `.dockerignore`\n- `.editorconfig`\n- `.eslintrc.js`\n- `.eslintrc.json`\n- `.prettierrc.js`\n- `.prettierrc.json`\n- `.babelrc.js`\n- `.babelrc.json`\n\n</details>\n\n---\n\n## 3. Generate a Product Requirements Document (PRD)\n\n**Note**: Generating a PRD or technical specification will replace the existing PRD or technical specification. The new outputs will document your codebase as it was when it was most recently ingested.\n\n```\nPOST /api/documents/prd?format=json\n```\n\nGenerates a structured PRD with:\n\n- Executive Overview\n- User Personas\n- High-Level Requirements\n- User Stories\n- Business Value\n\n**Example Response (truncated):**\n\n```\n{\n  \"content\": {\n    \"executive_overview\": \"Modernize internal authentication platform\",\n    \"user_personas\": [...],\n    \"user_stories\": [...]\n  }\n}\n```\n\n**Tip:** For PRDs or technical specs, use `format=markdown` to return a Markdown-formatted document instead.\n\n---\n\n## 4. Generate a Technical Specification\n\n```\nPOST /api/documents/technical-spec?format=json\n```\n\nReturns system-level implementation details including:\n\n- Architecture and Components\n- Data Models and Relationships\n- User Interface Screens and Components\n- APIs and Integration Points\n- System Interfaces and Specifications\n- Security Considerations\n- Implementation and Deployment Strategy\n\n---\n\n## 5. Query Your Code\n\n```\nPOST /api/graph/query-engine\n```\n\nAsk natural language questions about your codebase to return a structured graph of relationships.\n\n**Example Query:**\n\n```\n{\n  \"query\": \"How does the system determine whether a user has admin privileges when accessing the audit log?\"\n}\n```\n\n**Response (truncated):**\n\n```\n{\n  \"summary\": \"When a user requests access to the audit log, the system checks their assigned roles in `AuthService.getUserRoles`. If 'admin' is present, access is granted. This check occurs in `AuditLogController` before querying the log database. The middleware `CheckPermissions` is also invoked on this route.\"\n}\n```\n\n---\n\n## 6. Format and Retrieve Document Sections\n\nUse these endpoints to extract or reformat specific document sections:\n\n- `/api/documents/sections/{doc_type}` → generate a specific section\n- `/api/documents/format/markdown-output/{doc_type}` → format JSON as Markdown\n- `/api/documents/format/pdf-output/{doc_type}` → export PDF\n\nExample section names:\n\n- `executive-overview`\n- `data-models`\n- `system-architecture`\n- `integration-points`\n\n---\n\n## Questions?\n\nAfter reviewing this guide and the API docs, we recommend scheduling a short Q&A call if you have integration-specific needs or want assistance mapping this to your environment.\n",
+      "type": "text/plain"
+    }
+  }
+}

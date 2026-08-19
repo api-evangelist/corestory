@@ -1,0 +1,136 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin prompts API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "prompts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get custom prompts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/prompts/:project_id/prd/:prd_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "prd_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "step",
+                "value": "",
+                "type": "query",
+                "description": "Optional step to filter by specific prompt"
+              }
+            ]
+          },
+          "docs": "Retrieve all custom prompts for PRD, or a specific prompt if step is provided"
+        },
+        {
+          "info": {
+            "name": "Get a custom prompt by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/prompts/:project_id/prd/:prd_id/:prompt_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "prd_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "prompt_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve a specific custom prompt by its ID"
+        },
+        {
+          "info": {
+            "name": "Get all custom prompts across all PRDs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/prompts/list",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of items per page"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to skip"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query for prompt content and step name"
+              },
+              {
+                "name": "prd_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by PRD ID"
+              }
+            ]
+          },
+          "docs": "Retrieve all custom prompts from all PRDs with pagination"
+        },
+        {
+          "info": {
+            "name": "Get a custom prompt by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/prompts/:prompt_id",
+            "params": [
+              {
+                "name": "prompt_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve a specific custom prompt by its ID"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

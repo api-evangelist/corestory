@@ -1,0 +1,313 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin vector_store API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "vector_store",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Clear the vector store",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/vector-store/:project_id/clear",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Clear the vector store"
+        },
+        {
+          "info": {
+            "name": "Build the latest-filtered partial HNSW index for a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/vector-store/:project_id/latest-index",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Schedule a per-project build of the partial HNSW index scoped to\n``latest='true'`` (COR-3016).\n\nThe build runs ``CONCURRENTLY`` in the background — it can take minutes on\nlarge tables and we don't want to block the request or hold a lock — so this\nreturns ``202`` immediately. It's idempotent (``IF NOT EXISTS``), so\nre-hitting the endpoint is safe."
+        },
+        {
+          "info": {
+            "name": "Ingest data into the vector store",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/vector-store/:project_id/ingest",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Ingest data from a specified source into the vector store"
+        },
+        {
+          "info": {
+            "name": "Get Vector Store Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/vector-store/:project_id/status",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get the status of the vector store"
+        },
+        {
+          "info": {
+            "name": "Side-load vectors directly into the database",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/vector-store/:project_id/side-load",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Insert vector records directly into the PostgreSQL vector store database.\n\n    This endpoint allows you to:\n    * Insert pre-computed vectors with text and metadata\n    * Automatically compute embeddings for text if vectors are not provided\n    * Batch process multiple records for efficiency\n    * Specify custom document IDs or auto-generate UUIDs\n\n    This is useful for:\n    * Migrating data from other vector stores\n    * Bulk loading pre-processed data\n    * Testing with specific vector data\n "
+        },
+        {
+          "info": {
+            "name": "Add documents to the vector store",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/vector-store/:project_id/add-documents",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Adds new documents to the existing vector store.\n\n    This endpoint allows uploading files that will be:\n    * Processed and split into chunks\n    * Embedded using the configured embedding model\n    * Added to the existing vector store\n\n    Supported file types: PDF, TXT, MD, HTML, JSON"
+        },
+        {
+          "info": {
+            "name": "Get vector table schema information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/vector-store/:project_id/schema",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Inspect the structure of the vector store table to understand column names and types.\n\n    This is useful for:\n    * Understanding the exact table structure before side-loading\n    * Debugging database issues\n    * Verifying table creation\n    * Understanding what columns are available for queries"
+        },
+        {
+          "info": {
+            "name": "Export all vectors from the database",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/vector-store/:project_id/export",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of records to export. If not specified, exports all records."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to skip (for pagination)"
+              },
+              {
+                "name": "include_vectors",
+                "value": "",
+                "type": "query",
+                "description": "Whether to include vector embeddings in the export (set to false to reduce size)"
+              }
+            ]
+          },
+          "docs": "Export all vector records from the PostgreSQL vector store for backup or migration purposes.\n\n    This endpoint:\n    * Retrieves all records from the vector table\n    * Returns them in the same format used by the side-load endpoint\n    * Supports pagination for large datasets\n    * Includes full vector embeddings and metadata\n    * Provides statistics about the export operation\n\n    **Use cases:**\n    * Backup vector data before system changes\n    * Migrate data to another vector store\n    * Ana"
+        },
+        {
+          "info": {
+            "name": "Stream export all vectors as JSONL",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/vector-store/:project_id/export/stream",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "batch_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to fetch per database query batch"
+              },
+              {
+                "name": "include_vectors",
+                "value": "",
+                "type": "query",
+                "description": "Whether to include vector embeddings in the export"
+              }
+            ]
+          },
+          "docs": "Stream export all vector records as newline-delimited JSON (JSONL) for memory-efficient processing of large datasets.\n\n    This endpoint:\n    * Streams records one at a time to minimize memory usage\n    * Returns JSONL format (one JSON object per line)\n    * Processes records in batches to avoid database timeouts\n    * Suitable for very large vector stores\n    * Can be imported directly using the side-load endpoint\n\n    **Format:** Each line is a complete VectorRecord JSON object.\n    **Use case"
+        },
+        {
+          "info": {
+            "name": "Import vectors from JSONL file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/vector-store/:project_id/import/stream",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "batch_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to process in each database batch"
+              },
+              {
+                "name": "skip_existing",
+                "value": "",
+                "type": "query",
+                "description": "Skip records that already exist (based on document_id/node_id)"
+              },
+              {
+                "name": "compute_missing_embeddings",
+                "value": "",
+                "type": "query",
+                "description": "Automatically compute embeddings for records without vectors"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Import vector records from a JSONL (JSON Lines) file, typically exported from the export/stream endpoint.\n\n    This endpoint:\n    * Processes JSONL files line by line for memory efficiency\n    * Handles both records with pre-computed vectors and text-only records\n    * Automatically computes embeddings for records without vectors\n    * Processes data in configurable batches for performance\n    * Skips metadata lines (non-record JSON objects)\n    * Provides detailed import statistics and error re"
+        },
+        {
+          "info": {
+            "name": "Cancel ongoing data ingestion",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/vector-store/:project_id/cancel-ingest",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Flip the active ingestion SOTJ job for the project to CANCELLED."
+        },
+        {
+          "info": {
+            "name": "Update metadata for all records in the vector store",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/vector-store/:project_id/update-metadata",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "action",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update metadata for all records in the vector store for a specific project.\n\n    This endpoint:\n    * Updates metadata for all existing records in the project's vector store\n    * Adds standard metadata fields like updated_at timestamp\n    * Preserves existing metadata while adding new fields\n    * Processes records in batches for performance\n\n    **Use cases:**\n    * Add tracking information to existing records\n    * Update metadata after system changes\n    * Standardize metadata across all rec"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

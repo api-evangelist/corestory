@@ -1,0 +1,56 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin webhooks API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "webhooks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/webhooks/stripe"
+          },
+          "docs": "Receives Stripe webhook events. Authenticated via Stripe signature verification."
+        },
+        {
+          "info": {
+            "name": "Handle subscription state changes",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/webhooks/subscriptions",
+            "headers": [
+              {
+                "name": "X-API-Key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Webhook endpoint for external services to update subscription status"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

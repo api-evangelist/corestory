@@ -1,0 +1,57 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin clerk_authentication API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "clerk_authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get current user information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/me"
+          },
+          "docs": "Retrieve the authenticated user's profile information from Clerk API"
+        },
+        {
+          "info": {
+            "name": "Get Session Info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/session"
+          },
+          "docs": "Get current session information.\n\nThis endpoint returns JWT session data without any API calls.\n\nReturns:\n    Session information including expiry time"
+        },
+        {
+          "info": {
+            "name": "Get My Organizations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/me/organizations"
+          },
+          "docs": "Get current user's organizations.\n\nReturns:\n    List of organizations with membership details"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

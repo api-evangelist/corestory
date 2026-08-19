@@ -1,0 +1,268 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin github_integration API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "github_integration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Start GitHub App installation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/github/installations/start",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate a GitHub App installation URL for the authenticated user. The URL includes embedded user context for callback association."
+        },
+        {
+          "info": {
+            "name": "Handle GitHub App installation callback",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/github/installations/callback",
+            "params": [
+              {
+                "name": "installation_id",
+                "value": "",
+                "type": "query",
+                "description": "GitHub installation ID"
+              },
+              {
+                "name": "setup_action",
+                "value": "",
+                "type": "query",
+                "description": "Setup action (install/update/request)"
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query",
+                "description": "State parameter for user association"
+              }
+            ]
+          },
+          "docs": "Callback endpoint invoked by GitHub after app installation. Handles install, update, and pending approval flows."
+        },
+        {
+          "info": {
+            "name": "Remove GitHub installation",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/github/installations/:installation_id",
+            "params": [
+              {
+                "name": "installation_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Remove a GitHub App installation. Soft-deletes locally and uninstalls from GitHub."
+        },
+        {
+          "info": {
+            "name": "List GitHub installations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/github/installations",
+            "params": [
+              {
+                "name": "include_personal",
+                "value": "",
+                "type": "query",
+                "description": "Include personal GitHub User installations"
+              }
+            ]
+          },
+          "docs": "List GitHub App installations accessible to the current user, including organization and personal installations."
+        },
+        {
+          "info": {
+            "name": "Get installations summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/github/installations/summary"
+          },
+          "docs": "Get a summary of GitHub installations with counts and access breakdown by type."
+        },
+        {
+          "info": {
+            "name": "Update installation alias",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/github/installations/:installation_id/alias",
+            "params": [
+              {
+                "name": "installation_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the display alias for a GitHub installation."
+        },
+        {
+          "info": {
+            "name": "List GitHub repositories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/github/installations/:installation_id/repos",
+            "params": [
+              {
+                "name": "installation_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of items per page"
+              }
+            ]
+          },
+          "docs": "List repositories accessible through a GitHub App installation with pagination."
+        },
+        {
+          "info": {
+            "name": "List repository branches",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/github/installations/:installation_id/repo-branches",
+            "params": [
+              {
+                "name": "installation_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "repo_full_name",
+                "value": "",
+                "type": "query",
+                "description": "Full name of the repository"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of branches per page"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search branches by name (case-insensitive substring match)"
+              }
+            ]
+          },
+          "docs": "List branches for a specific repository with pagination support. When `search` is provided, `page` and `limit` are ignored and all matching branches are returned as a single result set."
+        },
+        {
+          "info": {
+            "name": "Get branches for a public GitHub repository",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/github/public-repo-branches",
+            "params": [
+              {
+                "name": "repo_url",
+                "value": "",
+                "type": "query",
+                "description": "Full GitHub repository URL (e.g., https://github.com/owner/repo)"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of branches per page"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search branches by name (case-insensitive substring match)"
+              }
+            ]
+          },
+          "docs": "Fetch available branches from a public GitHub repository using authenticated GitHub App access for better rate limits with pagination support. When `search` is provided, `page` and `limit` are ignored and all matching branches are returned as a single result set."
+        },
+        {
+          "info": {
+            "name": "Get installation status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/github/installations/status",
+            "params": [
+              {
+                "name": "organization_id",
+                "value": "",
+                "type": "query",
+                "description": "Organization ID to check status for"
+              }
+            ]
+          },
+          "docs": "Check the GitHub App installation status for the current user/organization. Returns connected, pending_approval, not_connected, or expired."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

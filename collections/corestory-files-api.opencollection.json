@@ -1,0 +1,126 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin files API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "files",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the complete file manifest for a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/file-manifest",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "include_excluded",
+                "value": "",
+                "type": "query",
+                "description": "Include files excluded during pre-ingestion analysis"
+              },
+              {
+                "name": "ingested_only",
+                "value": "",
+                "type": "query",
+                "description": "Only return files successfully ingested into the vector store"
+              }
+            ]
+          },
+          "docs": "Returns a manifest of files discovered during pre-ingestion analysis. By default only included files are returned. Use include_excluded=true to also return excluded files. Use ingested_only=true to return only files successfully ingested into the vector store."
+        },
+        {
+          "info": {
+            "name": "Stream file content from vector store by file path",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/file-content",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "file_path",
+                "value": "",
+                "type": "query",
+                "description": "The file path to retrieve content for"
+              },
+              {
+                "name": "start_line",
+                "value": "",
+                "type": "query",
+                "description": "Starting line number (1-indexed, inclusive)"
+              },
+              {
+                "name": "end_line",
+                "value": "",
+                "type": "query",
+                "description": "Ending line number (1-indexed, inclusive)"
+              }
+            ]
+          },
+          "docs": "Retrieve the code content of a file from the vector store using its file path. Returns streaming response for memory efficiency."
+        },
+        {
+          "info": {
+            "name": "Get file metadata from vector store",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/projects/:project_id/file-content/metadata",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "file_path",
+                "value": "",
+                "type": "query",
+                "description": "The file path to retrieve metadata for"
+              },
+              {
+                "name": "start_line",
+                "value": "",
+                "type": "query",
+                "description": "Starting line number (1-indexed, inclusive)"
+              },
+              {
+                "name": "end_line",
+                "value": "",
+                "type": "query",
+                "description": "Ending line number (1-indexed, inclusive)"
+              }
+            ]
+          },
+          "docs": "Retrieve aggregated metadata for a file from the vector store including summaries, functions, classes, and interfaces."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,35 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin oauth_discovery API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "oauth_discovery",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Protected Resource Metadata (RFC 9728)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/.well-known/oauth-protected-resource"
+          },
+          "docs": "Advertise the MCP endpoint and point clients at Clerk as the AS."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

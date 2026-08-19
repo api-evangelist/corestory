@@ -1,0 +1,64 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin subscriptions API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "subscriptions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Subscription Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/subscription/status"
+          },
+          "docs": "Retrieve the current subscription status for the authenticated organization."
+        },
+        {
+          "info": {
+            "name": "Get Usage Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/subscriptions/usage",
+            "headers": [
+              {
+                "name": "X-API-Key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "period_start",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "period_end",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieve usage data for the current organization.\n\n    Returns token consumption metrics, project count, and user count\n    for the specified period (defaults to current month).\n\n    Authenticated via API key."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

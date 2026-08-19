@@ -1,0 +1,35 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin github_webhooks API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "github_webhooks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Handle Github Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/webhooks/github"
+          },
+          "docs": "Handle all GitHub webhook events.\n\nThis single endpoint handles all GitHub App events including:\n- Installation events (created, deleted, suspend, unsuspend, new_permissions_accepted)\n- Other GitHub App events"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,104 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Crowdbotics API Documentation admin quality_metrics API",
+    "version": "1.26.2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "quality_metrics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Start Generating Quality Metrics for given artifacts in the background",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/quality-metrics/:project_id/generate",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "coverage_metrics_only",
+                "value": "",
+                "type": "query",
+                "description": "Whether to generate only coverage metrics or full quality metrics"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Start Generating Quality Metrics for given artifacts in the background"
+        },
+        {
+          "info": {
+            "name": "Get quality metrics results",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/quality-metrics/:project_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "The format of the generated document"
+              }
+            ]
+          },
+          "docs": "Retrieve quality metrics evaluation results for a project. Supports JSON and CSV output formats."
+        },
+        {
+          "info": {
+            "name": "Validate a document",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/quality-metrics/validate-doc",
+            "params": [
+              {
+                "name": "doc_type",
+                "value": "",
+                "type": "query",
+                "description": "Type of doc either 'prd' or 'tech_spec'"
+              },
+              {
+                "name": "lines_of_code",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Validate a PRD or Tech Spec document against quality standards. Upload the document file and specify the type."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
