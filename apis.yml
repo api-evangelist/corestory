@@ -35,6 +35,16 @@ modified: '2026-07-18'
 image: https://cdn.prod.website-files.com/68896c42739657d548061137/68b9a4d77efd01ea98d5c962_og_Image%20Generic.png
 tags:
 - Company
+- Artificial Intelligence
+- Code Intelligence
+- Legacy Modernization
+- Developer Tools
+- Code Analysis
+- Documentation
+- MCP
+- Agentic
+tags_raw:
+- Company
 - Ai
 - Code Intelligence
 - Legacy Modernization
@@ -50,6 +60,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Admin
+  tags_raw:
   - admin
   properties:
   - type: OpenAPI
@@ -62,6 +74,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - API Debugging
+  tags_raw:
   - api_debugging
   properties:
   - type: OpenAPI
@@ -74,6 +88,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - API Key Management
+  tags_raw:
   - api_key_management
   properties:
   - type: OpenAPI
@@ -86,6 +102,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Artifacts
+  tags_raw:
   - artifacts
   properties:
   - type: OpenAPI
@@ -98,6 +116,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Billing
+  tags_raw:
   - billing
   properties:
   - type: OpenAPI
@@ -110,6 +130,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Cache
+  tags_raw:
   - cache
   properties:
   - type: OpenAPI
@@ -133,7 +155,8 @@ apis:
   description: The clerk_authentication API from CoreStory — 3 operation(s) for clerk_authentication.
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
-  tags:
+  tags: []
+  tags_raw:
   - clerk_authentication
   properties:
   - type: OpenAPI
@@ -146,6 +169,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Context
+  tags_raw:
   - context
   properties:
   - type: OpenAPI
@@ -158,6 +183,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Conversations
+  tags_raw:
   - conversations
   properties:
   - type: OpenAPI
@@ -170,6 +197,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Discovery
+  tags_raw:
   - discovery
   properties:
   - type: OpenAPI
@@ -181,7 +210,8 @@ apis:
   description: The document_formatters API from CoreStory — 8 operation(s) for document_formatters.
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
-  tags:
+  tags: []
+  tags_raw:
   - document_formatters
   properties:
   - type: OpenAPI
@@ -194,6 +224,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Document Generation
+  tags_raw:
   - document_generation
   properties:
   - type: OpenAPI
@@ -206,6 +238,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Documents
+  tags_raw:
   - documents
   properties:
   - type: OpenAPI
@@ -218,6 +252,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Event
+  tags_raw:
   - events
   properties:
   - type: OpenAPI
@@ -230,6 +266,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - File
+  tags_raw:
   - files
   properties:
   - type: OpenAPI
@@ -242,6 +280,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - GitHub Integration
+  tags_raw:
   - github_integration
   properties:
   - type: OpenAPI
@@ -253,7 +293,8 @@ apis:
   description: The github_webhooks API from CoreStory — 1 operation(s) for github_webhooks.
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
-  tags:
+  tags: []
+  tags_raw:
   - github_webhooks
   properties:
   - type: OpenAPI
@@ -266,6 +307,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Language
+  tags_raw:
   - languages
   properties:
   - type: OpenAPI
@@ -278,6 +321,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Marketplace
+  tags_raw:
   - marketplace
   properties:
   - type: OpenAPI
@@ -290,6 +335,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - MCP Protocol
+  tags_raw:
   - mcp_protocol
   properties:
   - type: OpenAPI
@@ -301,7 +348,8 @@ apis:
   description: The mcp_token_management API from CoreStory — 3 operation(s) for mcp_token_management.
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
-  tags:
+  tags: []
+  tags_raw:
   - mcp_token_management
   properties:
   - type: OpenAPI
@@ -314,6 +362,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Mermaid
+  tags_raw:
   - mermaid
   properties:
   - type: OpenAPI
@@ -326,6 +376,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - OAuth Discovery
+  tags_raw:
   - oauth_discovery
   properties:
   - type: OpenAPI
@@ -350,6 +402,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Organization
+  tags_raw:
   - organizations
   properties:
   - type: OpenAPI
@@ -385,7 +439,8 @@ apis:
   description: The prd_version API from CoreStory — 10 operation(s) for prd_version.
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
-  tags:
+  tags: []
+  tags_raw:
   - prd_version
   properties:
   - type: OpenAPI
@@ -397,7 +452,8 @@ apis:
   description: The pre_ingestion API from CoreStory — 10 operation(s) for pre_ingestion.
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
-  tags:
+  tags: []
+  tags_raw:
   - pre_ingestion
   properties:
   - type: OpenAPI
@@ -410,6 +466,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Project
+  tags_raw:
   - projects
   properties:
   - type: OpenAPI
@@ -422,6 +480,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Prompts
+  tags_raw:
   - prompts
   properties:
   - type: OpenAPI
@@ -434,6 +494,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Quality Metrics
+  tags_raw:
   - quality_metrics
   properties:
   - type: OpenAPI
@@ -446,6 +508,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Real-Time
+  tags_raw:
   - realtime
   properties:
   - type: OpenAPI
@@ -469,7 +533,8 @@ apis:
   description: The sample_projects API from CoreStory — 3 operation(s) for sample_projects.
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
-  tags:
+  tags: []
+  tags_raw:
   - sample_projects
   properties:
   - type: OpenAPI
@@ -482,6 +547,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Sections
+  tags_raw:
   - sections
   properties:
   - type: OpenAPI
@@ -494,6 +561,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Subscription
+  tags_raw:
   - subscriptions
   properties:
   - type: OpenAPI
@@ -506,6 +575,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Sync Status
+  tags_raw:
   - sync-status
   properties:
   - type: OpenAPI
@@ -517,7 +588,8 @@ apis:
   description: The system_overview API from CoreStory — 3 operation(s) for system_overview.
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
-  tags:
+  tags: []
+  tags_raw:
   - system_overview
   properties:
   - type: OpenAPI
@@ -529,7 +601,8 @@ apis:
   description: The tech_spec API from CoreStory — 7 operation(s) for tech_spec.
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
-  tags:
+  tags: []
+  tags_raw:
   - tech_spec
   properties:
   - type: OpenAPI
@@ -542,6 +615,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Update Schedule
+  tags_raw:
   - update-schedule
   properties:
   - type: OpenAPI
@@ -554,6 +629,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - User
+  tags_raw:
   - user
   properties:
   - type: OpenAPI
@@ -566,6 +643,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Vector Store
+  tags_raw:
   - vector_store
   properties:
   - type: OpenAPI
@@ -578,6 +657,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Version
+  tags_raw:
   - version
   properties:
   - type: OpenAPI
@@ -590,6 +671,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Webhook
+  tags_raw:
   - webhooks
   properties:
   - type: OpenAPI
@@ -602,6 +685,8 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
+  - Workflows
+  tags_raw:
   - workflows
   properties:
   - type: OpenAPI
