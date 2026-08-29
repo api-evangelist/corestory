@@ -1,0 +1,110 @@
+slug: corestory
+provider: CoreStory
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 8
+edges:
+- tag: api_key_management
+  spec_file: corestory-api-key-management-api-openapi.yml
+  capability_id: BC-4270.40
+  capability_id_l1: BC-4270
+  capability_name: Developer Identity & Credential Management
+  confidence: 0.8
+  evidence: '''Create a new API key'', ''Refresh (rotate) an API key'', ''Revoke an API key'', schemas
+    ApiKeyCreateResponse, ApiKeyRevokeResponse'
+  reason: Full lifecycle of API credentials (create, list, rotate, update metadata, revoke) issued to
+    consumers of this public API — Developer Identity & Credential Management within the developer platform
+    / API ecosystem. An alternative reading as enterprise IAM (BC-620.20) is possible, hence 0.8 rather
+    than 0.95.
+- tag: prd
+  spec_file: corestory-prd-api-openapi.yml
+  capability_id: BC-4200.20
+  capability_id_l1: BC-4200
+  capability_name: Product Specification Management
+  confidence: 0.8
+  evidence: POST /api/projects/{project_id}/prd/generate 'Generate the PRD sections (no Tech Spec sections)
+    for the project.'; GET '/prd/user-stories/catalog' 'Get a catalog of user stories items for UI faceted
+    browsing.'
+  reason: Generates, retrieves and edits Product Requirements Document sections and user stories for a
+    codebase — capture of intended behaviour and requirements for engineering execution, i.e. Product
+    Specification Management within software product engineering.
+- tag: tech_spec
+  spec_file: corestory-tech-spec-api-openapi.yml
+  capability_id: BC-4200.20
+  capability_id_l1: BC-4200
+  capability_name: Product Specification Management
+  confidence: 0.8
+  evidence: '"Generate the Tech Spec sections (no base PRD sections) for the project."; schemas TechnicalRequirements,
+    UserStory, TechnicalSpecContext'
+  reason: Generation, retrieval and editing of technical specification sections, technical requirements
+    and user stories — capture of intended behaviour and constraints so engineering work can be executed,
+    i.e. Product Specification Management.
+- tag: prd_version
+  spec_file: corestory-prd-version-api-openapi.yml
+  capability_id: BC-4200.20
+  capability_id_l1: BC-4200
+  capability_name: Product Specification Management
+  confidence: 0.78
+  evidence: GET /api/projects/{project_id}/prd/versions 'List the versions of the given PRD (with per-version
+    diffs vs previous)'; POST '.../promote' 'Promote a full PRD version (PRD + tech specs) to be the current
+    one'
+  reason: Versioning, diffing and promotion of PRD and tech-spec documents — lifecycle stewardship of
+    software specification artefacts, so Product Specification Management. Some overlap with document/knowledge
+    versioning, but the artefacts are explicitly PRDs and technical specs.
+- tag: sections
+  spec_file: corestory-sections-api-openapi.yml
+  capability_id: BC-4200.20
+  capability_id_l1: BC-4200
+  capability_name: Product Specification Management
+  confidence: 0.75
+  evidence: '"Generate all sections (PRD + Tech Spec) in background." and "Get a catalog of user-story
+    facets for UI browsing."'
+  reason: Operations author, retrieve and update Product Requirements Document and technical-specification
+    sections including user stories — i.e. capture of intended behaviour and acceptance criteria for engineering
+    work, matching Product Specification Management. Some ambiguity remains as the sections are reverse-engineered
+    from code rather than authored forward.
+- tag: billing
+  spec_file: corestory-billing-api-openapi.yml
+  capability_id: BC-4250.30
+  capability_id_l1: BC-4250
+  capability_name: Invoicing & Statement Management
+  confidence: 0.7
+  evidence: '''List past invoices'', ''Preview upcoming invoice'', ''Create Stripe Checkout session'',
+    schemas UpcomingInvoiceLineItem, InvoiceListResponse'
+  reason: 'Customer-facing subscription billing surface: invoice retrieval and preview plus Stripe checkout/customer-portal
+    sessions. L1 Subscription Billing & Revenue Management is clear; the L2 split between Invoicing &
+    Statement Management and Payment Collection is genuinely mixed, so L2 confidence is only 0.7.'
+- tag: ciu
+  spec_file: corestory-ciu-api-openapi.yml
+  capability_id: BC-4250.10
+  capability_id_l1: BC-4250
+  capability_name: Usage Metering
+  confidence: 0.7
+  evidence: '''List CIU costs per metered action'', ''Get current organization''s CIU balance'', ''Get
+    the CIU ledger history for the current organization'', schemas LedgerEntryResponse, CIUPlanResponse,
+    ActionCostResponse'
+  reason: 'Credit-unit metering for the SaaS offering: per-metered-action costs, org credit balance and
+    a consumption ledger, plus plan listing. This is usage metering feeding rating/charging. Some overlap
+    with Plan & Entitlement Design (CIUPlanResponse, RenewalPeriod) keeps confidence at 0.7.'
+- tag: mcp_token_management
+  spec_file: corestory-mcp-token-management-api-openapi.yml
+  capability_id: BC-4270.40
+  capability_id_l1: BC-4270
+  capability_name: Developer Identity & Credential Management
+  confidence: 0.7
+  evidence: POST /api/mcp-tokens create_mcp_token 'Create a new MCP token'; 'Revoke a token'; schemas
+    MCPTokenCreateRequest, MCPTokenRevokeResponse
+  reason: Issuance, listing, metadata update and revocation of API tokens used by external clients/AI
+    agents to consume the CoreStory API — this is credential stewardship for platform API consumers (Developer
+    Identity & Credential Management). Not an internal enterprise IAM surface, hence the platform-ecosystem
+    capability rather than BC-620.20; confidence held moderate because tokens could equally be framed
+    as generic auth plumbing.
