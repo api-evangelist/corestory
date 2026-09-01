@@ -85,7 +85,8 @@ apis:
   description: The api_debugging API from CoreStory — 2 operation(s) for api_debugging.
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
-  tags: []
+  tags:
+  - API Debugging
   tags_raw:
   - api_debugging
   properties:
@@ -98,7 +99,8 @@ apis:
   description: The api_key_management API from CoreStory — 4 operation(s) for api_key_management.
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
-  tags: []
+  tags:
+  - API Key Management
   tags_raw:
   - api_key_management
   properties:
@@ -140,7 +142,7 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
-  - cache
+  - Cache
   tags_raw:
   - cache
   properties:
@@ -233,7 +235,8 @@ apis:
   description: The document_generation API from CoreStory — 6 operation(s) for document_generation.
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
-  tags: []
+  tags:
+  - Document Generation
   tags_raw:
   - document_generation
   properties:
@@ -288,7 +291,8 @@ apis:
   description: The github_integration API from CoreStory — 10 operation(s) for github_integration.
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
-  tags: []
+  tags:
+  - GitHub Integration
   tags_raw:
   - github_integration
   properties:
@@ -315,7 +319,7 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
-  - languages
+  - Language
   tags_raw:
   - languages
   properties:
@@ -342,7 +346,8 @@ apis:
   description: The mcp_protocol API from CoreStory — 3 operation(s) for mcp_protocol.
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
-  tags: []
+  tags:
+  - MCP Protocol
   tags_raw:
   - mcp_protocol
   properties:
@@ -382,7 +387,8 @@ apis:
   description: The oauth_discovery API from CoreStory — 1 operation(s) for oauth_discovery.
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
-  tags: []
+  tags:
+  - OAuth Discovery
   tags_raw:
   - oauth_discovery
   properties:
@@ -499,7 +505,8 @@ apis:
   description: The quality_metrics API from CoreStory — 3 operation(s) for quality_metrics.
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
-  tags: []
+  tags:
+  - Quality Metrics
   tags_raw:
   - quality_metrics
   properties:
@@ -580,7 +587,7 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
-  - sync-status
+  - Sync Status
   tags_raw:
   - sync-status
   properties:
@@ -620,7 +627,7 @@ apis:
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
   tags:
-  - update-schedule
+  - Update Schedule
   tags_raw:
   - update-schedule
   properties:
@@ -647,7 +654,8 @@ apis:
   description: The vector_store API from CoreStory — 12 operation(s) for vector_store.
   humanURL: https://docs.corestory.ai
   baseURL: https://c2s.corestory.ai
-  tags: []
+  tags:
+  - Vector Store
   tags_raw:
   - vector_store
   properties:
