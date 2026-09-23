@@ -14,7 +14,7 @@ actions:
   update:
   - url: https://c2s.corestory.ai
     description: CoreStory (Crowdbotics platform) production API
-notes: >-
+x-notes: >-
   Non-destructive Overlay 1.0.0 capturing API Evangelist enhancements over the
   harvested spec. The original OpenAPI declares a single relative server ("/");
   this overlay records the real production host (c2s.corestory.ai) and links the
