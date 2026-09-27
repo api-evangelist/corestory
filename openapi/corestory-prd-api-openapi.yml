@@ -510,15 +510,79 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    GenerateAllRequest:
+    PaginationMeta:
       properties:
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        size:
+          type: integer
+          title: Size
+        pages:
+          type: integer
+          title: Pages
+      type: object
+      required:
+      - total
+      - page
+      - size
+      - pages
+      title: PaginationMeta
+    PRDStepsDashedEnum:
+      type: string
+      enum:
+      - executive-overview
+      - user-personas
+      - high-level-requirements
+      - user-stories
+      - security-requirements
+      title: PRDStepsDashedEnum
+      description: All PRD steps with dashed values.
+    PRDCustomPromptRequest:
+      properties:
+        prompt:
+          type: string
+          title: Prompt
+        replacement:
+          type: boolean
+          title: Replacement
+      type: object
+      required:
+      - prompt
+      - replacement
+      title: PRDCustomPromptRequest
+    GeneratePRDCustomPromptItem:
+      properties:
+        section_name:
+          $ref: '#/components/schemas/PRDStepsDashedEnum'
+        prompt:
+          type: string
+          title: Prompt
+        replacement:
+          type: boolean
+          title: Replacement
+          default: false
+      type: object
+      required:
+      - section_name
+      - prompt
+      title: GeneratePRDCustomPromptItem
+    GeneratePRDSectionRequest:
+      properties:
+        custom_prompt:
+          anyOf:
+          - $ref: '#/components/schemas/PRDCustomPromptRequest'
+          - type: 'null'
         language:
           anyOf:
           - type: string
           - type: 'null'
           title: Language
       type: object
-      title: GenerateAllRequest
+      title: GeneratePRDSectionRequest
     ErrorSchema:
       properties:
         error:
@@ -527,22 +591,6 @@ components:
       required:
       - error
       title: ErrorSchema
-    LanguageInfo:
-      properties:
-        code:
-          type: string
-          title: Code
-          description: BCP-47 language code (ja, es, fr-CA).
-        name:
-          type: string
-          title: Name
-          description: Language name in its native script (English, français (Canada)).
-      type: object
-      required:
-      - code
-      - name
-      title: LanguageInfo
-      description: Language information with code and native display name.
     JobStatusSummary:
       properties:
         status:
@@ -577,92 +625,96 @@ components:
       - status
       title: JobStatusSummary
       description: Lightweight status + progress for a single job type (ingestion, PRD generation, etc.).
-    PRDSectionsResponse:
+    PRDContextRequest:
       properties:
-        executive_overview:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Executive Overview
-          description: Executive overview details
-        user_personas:
-          additionalProperties: true
-          type: object
-          title: User Personas
-          description: User personas details
-        high_level_requirements:
-          additionalProperties: true
-          type: object
-          title: High Level Requirements
-          description: High level requirements details
-        user_stories:
-          anyOf:
-          - items: {}
-            type: array
-          - type: string
-          title: User Stories
-          description: User stories details
-        security_requirements:
-          additionalProperties: true
-          type: object
-          title: Security Requirements
-          description: Security requirements details
-        caveats:
-          anyOf:
-          - additionalProperties:
-              type: string
-            type: object
-          - type: 'null'
-          title: Caveats
-          description: Per-section provenance caveats keyed by section name. Only populated for sections whose evidence is documentation-only or mixed; absent when all sections are grounded in code or have no sources.
-        prd_id:
-          type: integer
-          title: Prd Id
-        prd_version_num:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Prd Version Num
-        prd_version_uid:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Prd Version Uid
-        generated_from_commit_sha:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Generated From Commit Sha
-        custom_prompt:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Custom Prompt
-        title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Title
+        context:
+          type: string
+          title: Context
+          description: The context to set for the PRD
+          example: This is the context for the PRD that will be used for document generation.
+      type: object
+      required:
+      - context
+      title: PRDContextRequest
+      description: Request model for setting PRD context.
+    PRDContextResponse:
+      properties:
+        context:
+          type: string
+          title: Context
+          description: The PRD context
         created_at:
           type: string
           format: date-time
           title: Created At
-        updated_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Updated At
-        metadata:
-          additionalProperties: true
-          type: object
-          title: Metadata
-          description: Job metadata including version and version_tag
+          description: When the context was created
       type: object
       required:
-      - prd_id
+      - context
       - created_at
-      title: PRDSectionsResponse
+      title: PRDContextResponse
+      description: Response model for PRD context.
+    GeneratePRDRequest:
+      properties:
+        custom_prompts:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/GeneratePRDCustomPromptItem'
+            type: array
+          - type: 'null'
+          title: Custom Prompts
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+      type: object
+      title: GeneratePRDRequest
+    LanguageInfo:
+      properties:
+        code:
+          type: string
+          title: Code
+          description: BCP-47 language code (ja, es, fr-CA).
+        name:
+          type: string
+          title: Name
+          description: Language name in its native script (English, français (Canada)).
+      type: object
+      required:
+      - code
+      - name
+      title: LanguageInfo
+      description: Language information with code and native display name.
+    BasicSuccessResponse:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: success
+      type: object
+      title: BasicSuccessResponse
+      description: 'Use this for returns for deletes and patches.
+
+        UI ALWAYS needs some payload return. This just standarizes it.'
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
     PRDSingleSectionResponse:
       properties:
         prd_id:
@@ -755,48 +807,101 @@ components:
         Only 1 section is ever output, endpoint sets "don''t output None".
 
         # AKA: Only output the property if it exists.'
-    GeneratePRDSectionRequest:
+    GenerateAllRequest:
       properties:
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+      type: object
+      title: GenerateAllRequest
+    PRDSectionsResponse:
+      properties:
+        executive_overview:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Executive Overview
+          description: Executive overview details
+        user_personas:
+          additionalProperties: true
+          type: object
+          title: User Personas
+          description: User personas details
+        high_level_requirements:
+          additionalProperties: true
+          type: object
+          title: High Level Requirements
+          description: High level requirements details
+        user_stories:
+          anyOf:
+          - items: {}
+            type: array
+          - type: string
+          title: User Stories
+          description: User stories details
+        security_requirements:
+          additionalProperties: true
+          type: object
+          title: Security Requirements
+          description: Security requirements details
+        caveats:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Caveats
+          description: Per-section provenance caveats keyed by section name. Only populated for sections whose evidence is documentation-only or mixed; absent when all sections are grounded in code or have no sources.
+        prd_id:
+          type: integer
+          title: Prd Id
+        prd_version_num:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Prd Version Num
+        prd_version_uid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prd Version Uid
+        generated_from_commit_sha:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Generated From Commit Sha
         custom_prompt:
           anyOf:
-          - $ref: '#/components/schemas/PRDCustomPromptRequest'
+          - type: string
           - type: 'null'
-        language:
+          title: Custom Prompt
+        title:
           anyOf:
           - type: string
           - type: 'null'
-          title: Language
-      type: object
-      title: GeneratePRDSectionRequest
-    PRDCustomPromptRequest:
-      properties:
-        prompt:
+          title: Title
+        created_at:
           type: string
-          title: Prompt
-        replacement:
-          type: boolean
-          title: Replacement
+          format: date-time
+          title: Created At
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+          description: Job metadata including version and version_tag
       type: object
       required:
-      - prompt
-      - replacement
-      title: PRDCustomPromptRequest
-    GeneratePRDRequest:
-      properties:
-        custom_prompts:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/GeneratePRDCustomPromptItem'
-            type: array
-          - type: 'null'
-          title: Custom Prompts
-        language:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Language
-      type: object
-      title: GeneratePRDRequest
+      - prd_id
+      - created_at
+      title: PRDSectionsResponse
     PRDGenerateResponse:
       properties:
         content:
@@ -818,111 +923,6 @@ components:
       - metadata
       title: PRDGenerateResponse
       description: Response model for PRD generation
-    PRDContextRequest:
-      properties:
-        context:
-          type: string
-          title: Context
-          description: The context to set for the PRD
-          example: This is the context for the PRD that will be used for document generation.
-      type: object
-      required:
-      - context
-      title: PRDContextRequest
-      description: Request model for setting PRD context.
-    PRDStepsDashedEnum:
-      type: string
-      enum:
-      - executive-overview
-      - user-personas
-      - high-level-requirements
-      - user-stories
-      - security-requirements
-      title: PRDStepsDashedEnum
-      description: All PRD steps with dashed values.
-    PRDContextResponse:
-      properties:
-        context:
-          type: string
-          title: Context
-          description: The PRD context
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: When the context was created
-      type: object
-      required:
-      - context
-      - created_at
-      title: PRDContextResponse
-      description: Response model for PRD context.
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
-    GeneratePRDCustomPromptItem:
-      properties:
-        section_name:
-          $ref: '#/components/schemas/PRDStepsDashedEnum'
-        prompt:
-          type: string
-          title: Prompt
-        replacement:
-          type: boolean
-          title: Replacement
-          default: false
-      type: object
-      required:
-      - section_name
-      - prompt
-      title: GeneratePRDCustomPromptItem
-    PaginationMeta:
-      properties:
-        total:
-          type: integer
-          title: Total
-        page:
-          type: integer
-          title: Page
-        size:
-          type: integer
-          title: Size
-        pages:
-          type: integer
-          title: Pages
-      type: object
-      required:
-      - total
-      - page
-      - size
-      - pages
-      title: PaginationMeta
-    BasicSuccessResponse:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: success
-      type: object
-      title: BasicSuccessResponse
-      description: 'Use this for returns for deletes and patches.
-
-        UI ALWAYS needs some payload return. This just standarizes it.'
   securitySchemes:
     BearerAuth:
       type: http

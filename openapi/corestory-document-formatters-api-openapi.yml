@@ -670,39 +670,6 @@ paths:
           description: Internal server error
 components:
   schemas:
-    PDFJobStatus:
-      type: string
-      enum:
-      - pending
-      - processing
-      - completed
-      - failed
-      title: PDFJobStatus
-      description: Status of a PDF generation job.
-    AllPRDStepsDashedEnum:
-      type: string
-      enum:
-      - executive-overview
-      - user-personas
-      - high-level-requirements
-      - user-stories
-      - security-requirements
-      - system-architecture
-      - data-models
-      - user-interface
-      - api-specifications
-      - interface-specifications
-      - integration-points
-      - security-considerations
-      - tech-user-stories
-      - implementation-strategy
-      - retriever-api-specification
-      - retriever-interface-specification
-      - retriever-data-models
-      - retriever-classes
-      - retriever-summary
-      title: AllPRDStepsDashedEnum
-      description: All PRD steps with dashed values.
     PDFAsyncResponse:
       properties:
         job_id:
@@ -742,82 +709,6 @@ components:
       required:
       - error
       title: ErrorSchema
-    app__models__enums__DocumentType:
-      type: string
-      enum:
-      - prd
-      - technical-spec
-      - document-section
-      title: DocumentType
-      description: Enum for document types.
-    DocxOutputRequest:
-      properties:
-        markdown:
-          type: string
-          title: Markdown
-          description: Markdown content to convert
-        project_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Project Id
-          description: Optional project ID for cache namespacing
-      type: object
-      required:
-      - markdown
-      title: DocxOutputRequest
-      description: Request model for Word document (.docx) output from markdown input.
-      examples:
-      - markdown: '# My Document
-
-
-          This is markdown content to export as Word.'
-    DocumentFormatResponse:
-      properties:
-        markdown:
-          type: string
-          title: Markdown
-          description: The formatted document in markdown format
-        metadata:
-          additionalProperties: true
-          type: object
-          title: Metadata
-          description: Additional metadata about the formatting operation
-      type: object
-      required:
-      - markdown
-      - metadata
-      title: DocumentFormatResponse
-      description: Response model for document formatting.
-    TableOfContentsRequest:
-      properties:
-        markdown:
-          type: string
-          title: Markdown
-          description: The markdown content to generate table of contents from
-      type: object
-      required:
-      - markdown
-      title: TableOfContentsRequest
-      description: Request model for table of contents generation.
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
     PDFOutputRequest:
       properties:
         markdown:
@@ -840,6 +731,115 @@ components:
 
 
           This is markdown content from an artifact download.'
+    AllPRDStepsDashedEnum:
+      type: string
+      enum:
+      - executive-overview
+      - user-personas
+      - high-level-requirements
+      - user-stories
+      - security-requirements
+      - system-architecture
+      - data-models
+      - user-interface
+      - api-specifications
+      - interface-specifications
+      - integration-points
+      - security-considerations
+      - tech-user-stories
+      - implementation-strategy
+      - retriever-api-specification
+      - retriever-interface-specification
+      - retriever-data-models
+      - retriever-classes
+      - retriever-summary
+      title: AllPRDStepsDashedEnum
+      description: All PRD steps with dashed values.
+    DocxOutputRequest:
+      properties:
+        markdown:
+          type: string
+          title: Markdown
+          description: Markdown content to convert
+        project_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Project Id
+          description: Optional project ID for cache namespacing
+      type: object
+      required:
+      - markdown
+      title: DocxOutputRequest
+      description: Request model for Word document (.docx) output from markdown input.
+      examples:
+      - markdown: '# My Document
+
+
+          This is markdown content to export as Word.'
+    app__models__enums__DocumentType:
+      type: string
+      enum:
+      - prd
+      - technical-spec
+      - document-section
+      title: DocumentType
+      description: Enum for document types.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    DocumentFormatResponse:
+      properties:
+        markdown:
+          type: string
+          title: Markdown
+          description: The formatted document in markdown format
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+          description: Additional metadata about the formatting operation
+      type: object
+      required:
+      - markdown
+      - metadata
+      title: DocumentFormatResponse
+      description: Response model for document formatting.
+    PDFJobStatus:
+      type: string
+      enum:
+      - pending
+      - processing
+      - completed
+      - failed
+      title: PDFJobStatus
+      description: Status of a PDF generation job.
+    TableOfContentsRequest:
+      properties:
+        markdown:
+          type: string
+          title: Markdown
+          description: The markdown content to generate table of contents from
+      type: object
+      required:
+      - markdown
+      title: TableOfContentsRequest
+      description: Request model for table of contents generation.
   securitySchemes:
     BearerAuth:
       type: http

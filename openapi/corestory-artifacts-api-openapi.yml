@@ -198,151 +198,6 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    CreateArtifactResponse:
-      properties:
-        status:
-          $ref: '#/components/schemas/Status'
-          description: Status of the artifact generation process
-        artifact_id:
-          type: string
-          title: Artifact Id
-          description: UUID of the created artifact
-      type: object
-      required:
-      - status
-      - artifact_id
-      title: CreateArtifactResponse
-      description: 'Response model for artifact creation.
-
-
-        This model represents the result of an artifact generation request,
-
-        including the artifact ID and processing status.'
-      examples:
-      - artifact_id: 123e4567-e89b-12d3-a456-426614174000
-        status: pending
-      - artifact_id: 987e6543-e21b-43c1-b567-524413627001
-        status: completed
-      - artifact_id: 456e7890-e12b-34d5-c678-625514738002
-        status: failed
-    CreateArtifactRequest:
-      properties:
-        source_type:
-          type: string
-          const: conversation
-          title: Source Type
-          description: Type of source entity (e.g., 'conversation')
-        source_id:
-          type: integer
-          exclusiveMinimum: 0.0
-          title: Source Id
-          description: ID of the source entity
-        mode:
-          anyOf:
-          - $ref: '#/components/schemas/Mode'
-          - type: 'null'
-          description: 'Export mode for conversation artifacts: ''transcript'' for raw messages, ''synthesized'' for AI-processed content'
-          default: transcript
-      type: object
-      required:
-      - source_type
-      - source_id
-      title: CreateArtifactRequest
-      description: 'Request model for creating an artifact.
-
-
-        This model defines the input required to generate an artifact from a source entity.
-
-        Currently supports conversations, with extensibility for future source types.'
-      examples:
-      - mode: transcript
-        source_id: 123
-        source_type: conversation
-      - mode: synthesized
-        source_id: 456
-        source_type: conversation
-    ListArtifactsResponse:
-      properties:
-        artifacts:
-          items:
-            $ref: '#/components/schemas/ArtifactItem'
-          type: array
-          title: Artifacts
-          description: List of artifacts in the project
-        total:
-          type: integer
-          title: Total
-          description: Total number of artifacts
-        page:
-          type: integer
-          title: Page
-          description: Current page number
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of items per page
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages
-      type: object
-      required:
-      - artifacts
-      - total
-      - page
-      - page_size
-      - total_pages
-      title: ListArtifactsResponse
-      description: Response model for listing artifacts with pagination.
-      examples:
-      - artifacts:
-        - created_at: '2025-10-21T14:30:00Z'
-          created_by: user-uuid-123
-          description: Artifact exported from conversation 123
-          id: 123e4567-e89b-12d3-a456-426614174000
-          mode: transcript
-          source_id: '123'
-          source_type: conversation
-          status: completed
-          title: My Conversation Export
-        page: 1
-        page_size: 10
-        total: 25
-        total_pages: 3
-    ArtifactUpdateRequest:
-      properties:
-        markdown_content:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Markdown Content
-          description: The new markdown content for the artifact
-        title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Title
-          description: The new title for the artifact
-      type: object
-      required:
-      - markdown_content
-      - title
-      title: ArtifactUpdateRequest
-      description: Request model for updating an artifact's markdown content.
-      examples:
-      - markdown_content: '# Updated Artifact Content
-
-
-          This is the updated content of the artifact.'
-        title: Updated Artifact Title
     ArtifactItem:
       properties:
         id:
@@ -407,6 +262,76 @@ components:
         source_type: conversation
         status: completed
         title: My Conversation Export
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    ArtifactUpdateRequest:
+      properties:
+        markdown_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Markdown Content
+          description: The new markdown content for the artifact
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+          description: The new title for the artifact
+      type: object
+      required:
+      - markdown_content
+      - title
+      title: ArtifactUpdateRequest
+      description: Request model for updating an artifact's markdown content.
+      examples:
+      - markdown_content: '# Updated Artifact Content
+
+
+          This is the updated content of the artifact.'
+        title: Updated Artifact Title
+    CreateArtifactRequest:
+      properties:
+        source_type:
+          type: string
+          const: conversation
+          title: Source Type
+          description: Type of source entity (e.g., 'conversation')
+        source_id:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Source Id
+          description: ID of the source entity
+        mode:
+          anyOf:
+          - $ref: '#/components/schemas/Mode'
+          - type: 'null'
+          description: 'Export mode for conversation artifacts: ''transcript'' for raw messages, ''synthesized'' for AI-processed content'
+          default: transcript
+      type: object
+      required:
+      - source_type
+      - source_id
+      title: CreateArtifactRequest
+      description: 'Request model for creating an artifact.
+
+
+        This model defines the input required to generate an artifact from a source entity.
+
+        Currently supports conversations, with extensibility for future source types.'
+      examples:
+      - mode: transcript
+        source_id: 123
+        source_type: conversation
+      - mode: synthesized
+        source_id: 456
+        source_type: conversation
     ErrorBody:
       properties:
         message:
@@ -425,12 +350,68 @@ components:
       - message
       - type
       title: ErrorBody
+    ListArtifactsResponse:
+      properties:
+        artifacts:
+          items:
+            $ref: '#/components/schemas/ArtifactItem'
+          type: array
+          title: Artifacts
+          description: List of artifacts in the project
+        total:
+          type: integer
+          title: Total
+          description: Total number of artifacts
+        page:
+          type: integer
+          title: Page
+          description: Current page number
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of items per page
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages
+      type: object
+      required:
+      - artifacts
+      - total
+      - page
+      - page_size
+      - total_pages
+      title: ListArtifactsResponse
+      description: Response model for listing artifacts with pagination.
+      examples:
+      - artifacts:
+        - created_at: '2025-10-21T14:30:00Z'
+          created_by: user-uuid-123
+          description: Artifact exported from conversation 123
+          id: 123e4567-e89b-12d3-a456-426614174000
+          mode: transcript
+          source_id: '123'
+          source_type: conversation
+          status: completed
+          title: My Conversation Export
+        page: 1
+        page_size: 10
+        total: 25
+        total_pages: 3
     Mode:
       type: string
       enum:
       - synthesized
       - transcript
       title: Mode
+    Status:
+      type: string
+      enum:
+      - not_started
+      - pending
+      - completed
+      - failed
+      title: Status
     GetArtifactResponse:
       properties:
         id:
@@ -509,14 +490,33 @@ components:
         source_type: conversation
         status: completed
         title: My Conversation Export
-    Status:
-      type: string
-      enum:
-      - not_started
-      - pending
-      - completed
-      - failed
-      title: Status
+    CreateArtifactResponse:
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+          description: Status of the artifact generation process
+        artifact_id:
+          type: string
+          title: Artifact Id
+          description: UUID of the created artifact
+      type: object
+      required:
+      - status
+      - artifact_id
+      title: CreateArtifactResponse
+      description: 'Response model for artifact creation.
+
+
+        This model represents the result of an artifact generation request,
+
+        including the artifact ID and processing status.'
+      examples:
+      - artifact_id: 123e4567-e89b-12d3-a456-426614174000
+        status: pending
+      - artifact_id: 987e6543-e21b-43c1-b567-524413627001
+        status: completed
+      - artifact_id: 456e7890-e12b-34d5-c678-625514738002
+        status: failed
   securitySchemes:
     BearerAuth:
       type: http

@@ -187,6 +187,58 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
+    MCPTokenRevokeResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Token identifier
+        name:
+          type: string
+          title: Name
+          description: Token name
+        revoked_at:
+          type: string
+          format: date-time
+          title: Revoked At
+          description: When token was revoked
+        revoked_by:
+          type: string
+          title: Revoked By
+          description: User who revoked the token
+        message:
+          type: string
+          title: Message
+          description: Success message
+          default: Token successfully revoked
+      type: object
+      required:
+      - id
+      - name
+      - revoked_at
+      - revoked_by
+      title: MCPTokenRevokeResponse
+      description: Response after revoking a token.
+    MCPTokenUpdateRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+            maxLength: 100
+            minLength: 1
+          - type: 'null'
+          title: Name
+          description: New token name
+        description:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Description
+          description: New token description
+      type: object
+      title: MCPTokenUpdateRequest
+      description: Request to update token metadata.
     MCPTokenResponse:
       properties:
         id:
@@ -269,58 +321,6 @@ components:
       required:
       - error
       title: ErrorSchema
-    MCPTokenRevokeResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: Token identifier
-        name:
-          type: string
-          title: Name
-          description: Token name
-        revoked_at:
-          type: string
-          format: date-time
-          title: Revoked At
-          description: When token was revoked
-        revoked_by:
-          type: string
-          title: Revoked By
-          description: User who revoked the token
-        message:
-          type: string
-          title: Message
-          description: Success message
-          default: Token successfully revoked
-      type: object
-      required:
-      - id
-      - name
-      - revoked_at
-      - revoked_by
-      title: MCPTokenRevokeResponse
-      description: Response after revoking a token.
-    MCPTokenUpdateRequest:
-      properties:
-        name:
-          anyOf:
-          - type: string
-            maxLength: 100
-            minLength: 1
-          - type: 'null'
-          title: Name
-          description: New token name
-        description:
-          anyOf:
-          - type: string
-            maxLength: 500
-          - type: 'null'
-          title: Description
-          description: New token description
-      type: object
-      title: MCPTokenUpdateRequest
-      description: Request to update token metadata.
     MCPTokenListResponse:
       properties:
         tokens:
@@ -349,6 +349,24 @@ components:
       - revoked_count
       title: MCPTokenListResponse
       description: Response for listing tokens.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
     MCPTokenCreateRequest:
       properties:
         name:
@@ -471,24 +489,6 @@ components:
       - token
       title: MCPTokenCreateResponse
       description: Response when creating a new token (includes full token ONCE).
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
   securitySchemes:
     BearerAuth:
       type: http

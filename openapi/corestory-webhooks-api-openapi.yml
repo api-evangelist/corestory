@@ -69,6 +69,21 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
+    WebhookAction:
+      type: string
+      enum:
+      - activated
+      - suspended
+      - unsubscribed
+      - reinstated
+      - renewed
+      - activated_failed
+      - suspended_failed
+      - unsubscribed_failed
+      - reinstated_failed
+      - renewed_failed
+      title: WebhookAction
+      description: Webhook action types.
     SubscriptionStatus:
       type: string
       enum:
@@ -78,14 +93,6 @@ components:
       - failed
       title: SubscriptionStatus
       description: Subscription status enum.
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
     StripeWebhookResponse:
       properties:
         status:
@@ -116,6 +123,14 @@ components:
       - status
       title: WebhookSuccessResponse
       description: Webhook success response.
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
     SubscriptionWebhookPayload:
       properties:
         organization_id:
@@ -163,21 +178,6 @@ components:
       - stripe
       title: SubscriptionProvider
       description: Subscription provider enum.
-    WebhookAction:
-      type: string
-      enum:
-      - activated
-      - suspended
-      - unsubscribed
-      - reinstated
-      - renewed
-      - activated_failed
-      - suspended_failed
-      - unsubscribed_failed
-      - reinstated_failed
-      - renewed_failed
-      title: WebhookAction
-      description: Webhook action types.
     ErrorBody:
       properties:
         message:

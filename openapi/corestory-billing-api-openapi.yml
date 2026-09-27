@@ -96,41 +96,18 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    ErrorSchema:
+    InvoiceListResponse:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        invoices:
+          items:
+            $ref: '#/components/schemas/InvoiceResponse'
+          type: array
+          title: Invoices
       type: object
       required:
-      - error
-      title: ErrorSchema
-    UpcomingInvoiceResponse:
-      properties:
-        upcoming_invoice:
-          anyOf:
-          - $ref: '#/components/schemas/UpcomingInvoiceDetail'
-          - type: 'null'
-          description: Upcoming invoice preview, or null if not applicable
-      type: object
-      title: UpcomingInvoiceResponse
-      description: Response for the upcoming invoice endpoint. Null when no active Stripe subscription.
-    UpcomingInvoiceLineItem:
-      properties:
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Line item description
-        amount:
-          type: integer
-          title: Amount
-          description: Amount in smallest currency unit (e.g. cents)
-      type: object
-      required:
-      - amount
-      title: UpcomingInvoiceLineItem
-      description: A single line item on an upcoming invoice.
+      - invoices
+      title: InvoiceListResponse
+      description: List of invoices for an organization.
     UpcomingInvoiceDetail:
       properties:
         amount_due:
@@ -165,6 +142,62 @@ components:
       - period_end
       title: UpcomingInvoiceDetail
       description: Preview of the next Stripe invoice.
+    BillingSessionResponse:
+      properties:
+        url:
+          type: string
+          maxLength: 2083
+          minLength: 1
+          format: uri
+          title: Url
+      type: object
+      required:
+      - url
+      title: BillingSessionResponse
+      description: Response containing a Stripe session URL (checkout or portal).
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    UpcomingInvoiceLineItem:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Line item description
+        amount:
+          type: integer
+          title: Amount
+          description: Amount in smallest currency unit (e.g. cents)
+      type: object
+      required:
+      - amount
+      title: UpcomingInvoiceLineItem
+      description: A single line item on an upcoming invoice.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
     InvoiceResponse:
       properties:
         id:
@@ -221,49 +254,16 @@ components:
       - created
       title: InvoiceResponse
       description: A single Stripe invoice.
-    InvoiceListResponse:
+    UpcomingInvoiceResponse:
       properties:
-        invoices:
-          items:
-            $ref: '#/components/schemas/InvoiceResponse'
-          type: array
-          title: Invoices
+        upcoming_invoice:
+          anyOf:
+          - $ref: '#/components/schemas/UpcomingInvoiceDetail'
+          - type: 'null'
+          description: Upcoming invoice preview, or null if not applicable
       type: object
-      required:
-      - invoices
-      title: InvoiceListResponse
-      description: List of invoices for an organization.
-    BillingSessionResponse:
-      properties:
-        url:
-          type: string
-          maxLength: 2083
-          minLength: 1
-          format: uri
-          title: Url
-      type: object
-      required:
-      - url
-      title: BillingSessionResponse
-      description: Response containing a Stripe session URL (checkout or portal).
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
+      title: UpcomingInvoiceResponse
+      description: Response for the upcoming invoice endpoint. Null when no active Stripe subscription.
   securitySchemes:
     BearerAuth:
       type: http

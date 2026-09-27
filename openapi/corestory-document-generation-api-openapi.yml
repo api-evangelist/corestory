@@ -398,6 +398,17 @@ paths:
           description: Invalid request or section definition not found
 components:
   schemas:
+    QueryItem:
+      properties:
+        topic:
+          type: string
+          title: Topic
+          description: The research query/question
+      type: object
+      required:
+      - topic
+      title: QueryItem
+      description: A research query.
     DocumentOptions:
       properties:
         include_code_examples:
@@ -468,6 +479,106 @@ components:
       type: object
       title: DocumentOptions
       description: Options for document generation.
+    SectionRegenerationRequest:
+      properties:
+        instructions:
+          type: string
+          title: Instructions
+          description: Custom instructions for this regeneration. Merged with original document instructions.
+          default: ''
+        polish:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Polish
+          description: Override polish setting for this regeneration. None = use original document setting.
+      type: object
+      title: SectionRegenerationRequest
+      description: Request body for regenerating a single section of an existing document.
+    GeneratedDocument:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Unique document ID
+        title:
+          type: string
+          title: Title
+          description: Document title
+        document_type:
+          $ref: '#/components/schemas/DocumentType-Output'
+        sections:
+          items:
+            $ref: '#/components/schemas/GeneratedSection'
+          type: array
+          title: Sections
+        content:
+          type: string
+          title: Content
+          description: Full assembled markdown content
+          default: ''
+        metadata:
+          $ref: '#/components/schemas/DocumentMetadata'
+        request_payload:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Request Payload
+          description: Original generation request payload for re-running
+      type: object
+      required:
+      - id
+      - title
+      - document_type
+      - metadata
+      title: GeneratedDocument
+      description: Complete generated document.
+    DocumentMetadata:
+      properties:
+        generated_at:
+          type: string
+          format: date-time
+          title: Generated At
+        project_id:
+          type: integer
+          title: Project Id
+        project_name:
+          type: string
+          title: Project Name
+          default: ''
+        document_type:
+          $ref: '#/components/schemas/DocumentType-Output'
+        instructions_used:
+          type: string
+          title: Instructions Used
+          default: ''
+        template_hash:
+          type: string
+          title: Template Hash
+          default: ''
+        sources:
+          items:
+            type: string
+          type: array
+          title: Sources
+          description: All source files referenced
+        extraction_stats:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Extraction Stats
+          description: Stats like features_found, rules_found, etc.
+        generation_time_seconds:
+          type: number
+          title: Generation Time Seconds
+          default: 0.0
+      type: object
+      required:
+      - project_id
+      - document_type
+      title: DocumentMetadata
+      description: Metadata about the generated document.
     ErrorSchema:
       properties:
         error:
@@ -476,6 +587,340 @@ components:
       required:
       - error
       title: ErrorSchema
+    PresetDocumentRequest:
+      properties:
+        document_type:
+          $ref: '#/components/schemas/app__documents__schemas__DocumentType'
+          description: Document type whose preset definitions to use
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+          description: Document title. If not provided, auto-generated from document_type.
+        instructions:
+          type: string
+          title: Instructions
+          description: Custom instructions (focus areas, exclusions, etc.)
+          default: ''
+        global_queries:
+          items:
+            type: string
+          type: array
+          title: Global Queries
+          description: Queries to run for all sections
+        options:
+          $ref: '#/components/schemas/DocumentOptions'
+          description: Generation options
+        style:
+          anyOf:
+          - $ref: '#/components/schemas/TemplateStyle'
+          - type: 'null'
+          description: Writing style override
+        section_overrides:
+          anyOf:
+          - additionalProperties:
+              additionalProperties: true
+              type: object
+            type: object
+          - type: 'null'
+          title: Section Overrides
+          description: Per-section field overrides. Maps section name to dict of SectionDefinition field overrides.
+      additionalProperties: false
+      type: object
+      required:
+      - document_type
+      title: PresetDocumentRequest
+      description: 'Request to generate a document using preset section definitions.
+
+
+        Section definitions are resolved from the SectionDefinitionRegistry
+
+        based on document_type. Supports optional per-section overrides.'
+    DocumentGenerationRequest:
+      properties:
+        document_type:
+          $ref: '#/components/schemas/app__documents__schemas__DocumentType'
+          description: Type of document to generate
+          default: project_specification
+        section_definitions:
+          items:
+            $ref: '#/components/schemas/SectionDefinition'
+          type: array
+          title: Section Definitions
+          description: Explicit section definitions. Sections are generated in the order specified.
+        style:
+          anyOf:
+          - $ref: '#/components/schemas/TemplateStyle'
+          - type: 'null'
+          description: Writing style. If not provided, uses sensible defaults based on document_type.
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+          description: Document title.
+        instructions:
+          type: string
+          title: Instructions
+          description: Custom instructions (focus areas, exclusions, etc.)
+          default: ''
+        global_queries:
+          items:
+            type: string
+          type: array
+          title: Global Queries
+          description: Queries to run for all sections (e.g., 'What is the purpose of this system?')
+        auto_research:
+          type: boolean
+          title: Auto Research
+          description: Auto-generate relevant queries for each section based on its content type
+          default: true
+        questions:
+          items:
+            type: string
+          type: array
+          title: Questions
+          description: (Deprecated) Use global_queries instead. Questions applied to all sections.
+        options:
+          $ref: '#/components/schemas/DocumentOptions'
+          description: Generation options
+      additionalProperties: false
+      type: object
+      required:
+      - section_definitions
+      title: DocumentGenerationRequest
+      description: "Request to generate a dynamic document.\n\nProvide `section_definitions` for full control over document structure,\nalong with optional `style`, `title`, and `instructions`.\n\nExample:\n    DocumentGenerationRequest(\n        title=\"MyApp Technical Specification\",\n        document_type=DocumentType.TECH_SPEC,\n        style=TemplateStyle(tone=\"formal\", uses_tables=True),\n        section_definitions=[\n            SectionDefinition(name=\"Overview\", level=2, queries=[\"What does the system do?\"]),\n            SectionDefinition(name=\"Architecture\", level=2, depends_on=[\"Overview\"]),\n        ],\n    )"
+    app__documents__schemas__DocumentType:
+      type: string
+      enum:
+      - project_specification
+      - technical_specification
+      - api_documentation
+      - architecture_document
+      - user_guide
+      - custom
+      title: DocumentType
+      description: Known document types with specialized handling.
+    DocumentMetadataSummary:
+      properties:
+        id:
+          type: string
+          title: Id
+        title:
+          type: string
+          title: Title
+        document_type:
+          type: string
+          title: Document Type
+        generated_at:
+          type: string
+          format: date-time
+          title: Generated At
+        project_id:
+          type: integer
+          title: Project Id
+        section_count:
+          type: integer
+          title: Section Count
+      type: object
+      required:
+      - id
+      - title
+      - document_type
+      - generated_at
+      - project_id
+      - section_count
+      title: DocumentMetadataSummary
+      description: Summary metadata for listing documents.
+    DocumentType-Output:
+      type: string
+      enum:
+      - project_specification
+      - technical_specification
+      - api_documentation
+      - architecture_document
+      - user_guide
+      - custom
+      title: DocumentType
+      description: Known document types with specialized handling.
+    DocumentEvent:
+      description: Event emitted during document generation.
+      properties:
+        event_type:
+          default: progress
+          title: Event Type
+          type: string
+        stage:
+          description: Current generation stage
+          title: Stage
+          type: string
+        progress:
+          description: Overall progress
+          maximum: 1.0
+          minimum: 0.0
+          title: Progress
+          type: number
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Message
+        section:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Current section being generated
+          title: Section
+        extraction_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Current extraction type if extracting
+          title: Extraction Type
+        items_found:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Number of items found during extraction
+          title: Items Found
+        document_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Document ID when complete
+          title: Document Id
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Error message if failed
+          title: Error
+      required:
+      - stage
+      - progress
+      title: DocumentEvent
+      type: object
+    GeneratedSection:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Section heading
+        level:
+          type: integer
+          maximum: 6.0
+          minimum: 1.0
+          title: Level
+          description: Heading level
+        content:
+          type: string
+          title: Content
+          description: Generated markdown content
+        structured_content:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Structured Content
+          description: Structured JSON content when an output_schema was used. Takes precedence over `content` for legacy PRDStep storage.
+        sources:
+          items:
+            type: string
+          type: array
+          title: Sources
+          description: Source files referenced
+        subsections:
+          items:
+            $ref: '#/components/schemas/GeneratedSection'
+          type: array
+          title: Subsections
+          description: Generated subsections
+      type: object
+      required:
+      - name
+      - level
+      - content
+      title: GeneratedSection
+      description: A generated section of the document.
+    TemplateStyle:
+      properties:
+        tone:
+          type: string
+          enum:
+          - formal
+          - technical
+          - casual
+          - mixed
+          title: Tone
+          default: technical
+        uses_tables:
+          type: boolean
+          title: Uses Tables
+          default: false
+        uses_diagrams:
+          type: boolean
+          title: Uses Diagrams
+          default: false
+        uses_code_blocks:
+          type: boolean
+          title: Uses Code Blocks
+          default: false
+        uses_bullet_lists:
+          type: boolean
+          title: Uses Bullet Lists
+          default: true
+        uses_numbered_lists:
+          type: boolean
+          title: Uses Numbered Lists
+          default: false
+        heading_style:
+          type: string
+          enum:
+          - title_case
+          - sentence_case
+          - uppercase
+          title: Heading Style
+          default: title_case
+        section_numbering:
+          type: boolean
+          title: Section Numbering
+          default: false
+        estimated_detail_level:
+          type: string
+          enum:
+          - brief
+          - standard
+          - detailed
+          title: Estimated Detail Level
+          default: standard
+      type: object
+      title: TemplateStyle
+      description: Writing style characteristics extracted from template.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
     SectionDefinition:
       properties:
         name:
@@ -563,451 +1008,6 @@ components:
       - name
       title: SectionDefinition
       description: "Complete section definition for document generation.\n\nCombines section identity (name, level) with generation configuration\n(queries, depends_on, etc.) in a single model. This is the only section\nmodel used throughout the pipeline.\n\nExample:\n    SectionDefinition(\n        name=\"User Stories\",\n        level=2,\n        description=\"User stories derived from requirements\",\n        depends_on=[\"Requirements\"],\n        derive_from_context=True,\n        instructions=\"Generate user stories in standard format with acceptance criteria.\",\n        subsections=[\n            SectionDefinition(\n                name=\"Authentication Stories\",\n                queries=[\"What authentication user stories can be derived?\"],\n            ),\n            SectionDefinition(\n                name=\"Payment Stories\",\n                queries=[\"What payment user stories can be derived?\"],\n            ),\n        ],\n    )"
-    GeneratedDocument:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: Unique document ID
-        title:
-          type: string
-          title: Title
-          description: Document title
-        document_type:
-          $ref: '#/components/schemas/DocumentType-Output'
-        sections:
-          items:
-            $ref: '#/components/schemas/GeneratedSection'
-          type: array
-          title: Sections
-        content:
-          type: string
-          title: Content
-          description: Full assembled markdown content
-          default: ''
-        metadata:
-          $ref: '#/components/schemas/DocumentMetadata'
-        request_payload:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Request Payload
-          description: Original generation request payload for re-running
-      type: object
-      required:
-      - id
-      - title
-      - document_type
-      - metadata
-      title: GeneratedDocument
-      description: Complete generated document.
-    SectionRegenerationRequest:
-      properties:
-        instructions:
-          type: string
-          title: Instructions
-          description: Custom instructions for this regeneration. Merged with original document instructions.
-          default: ''
-        polish:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Polish
-          description: Override polish setting for this regeneration. None = use original document setting.
-      type: object
-      title: SectionRegenerationRequest
-      description: Request body for regenerating a single section of an existing document.
-    TemplateStyle:
-      properties:
-        tone:
-          type: string
-          enum:
-          - formal
-          - technical
-          - casual
-          - mixed
-          title: Tone
-          default: technical
-        uses_tables:
-          type: boolean
-          title: Uses Tables
-          default: false
-        uses_diagrams:
-          type: boolean
-          title: Uses Diagrams
-          default: false
-        uses_code_blocks:
-          type: boolean
-          title: Uses Code Blocks
-          default: false
-        uses_bullet_lists:
-          type: boolean
-          title: Uses Bullet Lists
-          default: true
-        uses_numbered_lists:
-          type: boolean
-          title: Uses Numbered Lists
-          default: false
-        heading_style:
-          type: string
-          enum:
-          - title_case
-          - sentence_case
-          - uppercase
-          title: Heading Style
-          default: title_case
-        section_numbering:
-          type: boolean
-          title: Section Numbering
-          default: false
-        estimated_detail_level:
-          type: string
-          enum:
-          - brief
-          - standard
-          - detailed
-          title: Estimated Detail Level
-          default: standard
-      type: object
-      title: TemplateStyle
-      description: Writing style characteristics extracted from template.
-    QueryItem:
-      properties:
-        topic:
-          type: string
-          title: Topic
-          description: The research query/question
-      type: object
-      required:
-      - topic
-      title: QueryItem
-      description: A research query.
-    GeneratedSection:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Section heading
-        level:
-          type: integer
-          maximum: 6.0
-          minimum: 1.0
-          title: Level
-          description: Heading level
-        content:
-          type: string
-          title: Content
-          description: Generated markdown content
-        structured_content:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Structured Content
-          description: Structured JSON content when an output_schema was used. Takes precedence over `content` for legacy PRDStep storage.
-        sources:
-          items:
-            type: string
-          type: array
-          title: Sources
-          description: Source files referenced
-        subsections:
-          items:
-            $ref: '#/components/schemas/GeneratedSection'
-          type: array
-          title: Subsections
-          description: Generated subsections
-      type: object
-      required:
-      - name
-      - level
-      - content
-      title: GeneratedSection
-      description: A generated section of the document.
-    DocumentGenerationRequest:
-      properties:
-        document_type:
-          $ref: '#/components/schemas/app__documents__schemas__DocumentType'
-          description: Type of document to generate
-          default: project_specification
-        section_definitions:
-          items:
-            $ref: '#/components/schemas/SectionDefinition'
-          type: array
-          title: Section Definitions
-          description: Explicit section definitions. Sections are generated in the order specified.
-        style:
-          anyOf:
-          - $ref: '#/components/schemas/TemplateStyle'
-          - type: 'null'
-          description: Writing style. If not provided, uses sensible defaults based on document_type.
-        title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Title
-          description: Document title.
-        instructions:
-          type: string
-          title: Instructions
-          description: Custom instructions (focus areas, exclusions, etc.)
-          default: ''
-        global_queries:
-          items:
-            type: string
-          type: array
-          title: Global Queries
-          description: Queries to run for all sections (e.g., 'What is the purpose of this system?')
-        auto_research:
-          type: boolean
-          title: Auto Research
-          description: Auto-generate relevant queries for each section based on its content type
-          default: true
-        questions:
-          items:
-            type: string
-          type: array
-          title: Questions
-          description: (Deprecated) Use global_queries instead. Questions applied to all sections.
-        options:
-          $ref: '#/components/schemas/DocumentOptions'
-          description: Generation options
-      additionalProperties: false
-      type: object
-      required:
-      - section_definitions
-      title: DocumentGenerationRequest
-      description: "Request to generate a dynamic document.\n\nProvide `section_definitions` for full control over document structure,\nalong with optional `style`, `title`, and `instructions`.\n\nExample:\n    DocumentGenerationRequest(\n        title=\"MyApp Technical Specification\",\n        document_type=DocumentType.TECH_SPEC,\n        style=TemplateStyle(tone=\"formal\", uses_tables=True),\n        section_definitions=[\n            SectionDefinition(name=\"Overview\", level=2, queries=[\"What does the system do?\"]),\n            SectionDefinition(name=\"Architecture\", level=2, depends_on=[\"Overview\"]),\n        ],\n    )"
-    DocumentMetadataSummary:
-      properties:
-        id:
-          type: string
-          title: Id
-        title:
-          type: string
-          title: Title
-        document_type:
-          type: string
-          title: Document Type
-        generated_at:
-          type: string
-          format: date-time
-          title: Generated At
-        project_id:
-          type: integer
-          title: Project Id
-        section_count:
-          type: integer
-          title: Section Count
-      type: object
-      required:
-      - id
-      - title
-      - document_type
-      - generated_at
-      - project_id
-      - section_count
-      title: DocumentMetadataSummary
-      description: Summary metadata for listing documents.
-    DocumentEvent:
-      description: Event emitted during document generation.
-      properties:
-        event_type:
-          default: progress
-          title: Event Type
-          type: string
-        stage:
-          description: Current generation stage
-          title: Stage
-          type: string
-        progress:
-          description: Overall progress
-          maximum: 1.0
-          minimum: 0.0
-          title: Progress
-          type: number
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Message
-        section:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          description: Current section being generated
-          title: Section
-        extraction_type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          description: Current extraction type if extracting
-          title: Extraction Type
-        items_found:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          default: null
-          description: Number of items found during extraction
-          title: Items Found
-        document_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          description: Document ID when complete
-          title: Document Id
-        error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          description: Error message if failed
-          title: Error
-      required:
-      - stage
-      - progress
-      title: DocumentEvent
-      type: object
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
-    DocumentType-Output:
-      type: string
-      enum:
-      - project_specification
-      - technical_specification
-      - api_documentation
-      - architecture_document
-      - user_guide
-      - custom
-      title: DocumentType
-      description: Known document types with specialized handling.
-    DocumentMetadata:
-      properties:
-        generated_at:
-          type: string
-          format: date-time
-          title: Generated At
-        project_id:
-          type: integer
-          title: Project Id
-        project_name:
-          type: string
-          title: Project Name
-          default: ''
-        document_type:
-          $ref: '#/components/schemas/DocumentType-Output'
-        instructions_used:
-          type: string
-          title: Instructions Used
-          default: ''
-        template_hash:
-          type: string
-          title: Template Hash
-          default: ''
-        sources:
-          items:
-            type: string
-          type: array
-          title: Sources
-          description: All source files referenced
-        extraction_stats:
-          additionalProperties:
-            type: integer
-          type: object
-          title: Extraction Stats
-          description: Stats like features_found, rules_found, etc.
-        generation_time_seconds:
-          type: number
-          title: Generation Time Seconds
-          default: 0.0
-      type: object
-      required:
-      - project_id
-      - document_type
-      title: DocumentMetadata
-      description: Metadata about the generated document.
-    app__documents__schemas__DocumentType:
-      type: string
-      enum:
-      - project_specification
-      - technical_specification
-      - api_documentation
-      - architecture_document
-      - user_guide
-      - custom
-      title: DocumentType
-      description: Known document types with specialized handling.
-    PresetDocumentRequest:
-      properties:
-        document_type:
-          $ref: '#/components/schemas/app__documents__schemas__DocumentType'
-          description: Document type whose preset definitions to use
-        title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Title
-          description: Document title. If not provided, auto-generated from document_type.
-        instructions:
-          type: string
-          title: Instructions
-          description: Custom instructions (focus areas, exclusions, etc.)
-          default: ''
-        global_queries:
-          items:
-            type: string
-          type: array
-          title: Global Queries
-          description: Queries to run for all sections
-        options:
-          $ref: '#/components/schemas/DocumentOptions'
-          description: Generation options
-        style:
-          anyOf:
-          - $ref: '#/components/schemas/TemplateStyle'
-          - type: 'null'
-          description: Writing style override
-        section_overrides:
-          anyOf:
-          - additionalProperties:
-              additionalProperties: true
-              type: object
-            type: object
-          - type: 'null'
-          title: Section Overrides
-          description: Per-section field overrides. Maps section name to dict of SectionDefinition field overrides.
-      additionalProperties: false
-      type: object
-      required:
-      - document_type
-      title: PresetDocumentRequest
-      description: 'Request to generate a document using preset section definitions.
-
-
-        Section definitions are resolved from the SectionDefinitionRegistry
-
-        based on document_type. Supports optional per-section overrides.'
   securitySchemes:
     BearerAuth:
       type: http

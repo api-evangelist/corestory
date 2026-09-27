@@ -121,13 +121,6 @@ components:
       required:
       - error
       title: ErrorSchema
-    OnboardingPathType:
-      type: string
-      enum:
-      - ide_first
-      - docs_first
-      title: OnboardingPathType
-      description: User's preferred onboarding workflow path.
     UserOnboardingProfileResponse:
       properties:
         id:
@@ -203,38 +196,13 @@ components:
         role: developer
         updated_at: '2026-01-01T00:00:00Z'
         user_id: 550e8400-e29b-41d4-a716-446655440001
-    RecentConversationsResponse:
-      properties:
-        conversations:
-          items:
-            $ref: '#/components/schemas/RecentConversationItem'
-          type: array
-          title: Conversations
-          description: List of recent conversations with their details
-      type: object
-      required:
-      - conversations
-      title: RecentConversationsResponse
-      description: Response schema for recent conversations
-    UserActivityStatsResponse:
-      properties:
-        total_codebases:
-          type: integer
-          title: Total Codebases
-          description: Total number of projects (codebases) created or accessible to the user
-        total_conversations:
-          type: integer
-          title: Total Conversations
-          description: Total number of conversations across all of the user's projects
-      type: object
-      required:
-      - total_codebases
-      - total_conversations
-      title: UserActivityStatsResponse
-      description: User's activity statistics
-      example:
-        total_codebases: 5
-        total_conversations: 12
+    OnboardingPathType:
+      type: string
+      enum:
+      - ide_first
+      - docs_first
+      title: OnboardingPathType
+      description: User's preferred onboarding workflow path.
     RecentConversationItem:
       properties:
         id:
@@ -268,17 +236,25 @@ components:
       - created_at
       title: RecentConversationItem
       description: A single recent conversation entry.
-    UserRole:
-      type: string
-      enum:
-      - developer
-      - engineering_manager
-      - architect
-      - business_analyst
-      - product_manager
-      - compliance_audit
-      title: UserRole
-      description: User's professional role for onboarding profile.
+    UserActivityStatsResponse:
+      properties:
+        total_codebases:
+          type: integer
+          title: Total Codebases
+          description: Total number of projects (codebases) created or accessible to the user
+        total_conversations:
+          type: integer
+          title: Total Conversations
+          description: Total number of conversations across all of the user's projects
+      type: object
+      required:
+      - total_codebases
+      - total_conversations
+      title: UserActivityStatsResponse
+      description: User's activity statistics
+      example:
+        total_codebases: 5
+        total_conversations: 12
     ErrorBody:
       properties:
         message:
@@ -297,6 +273,30 @@ components:
       - message
       - type
       title: ErrorBody
+    UserRole:
+      type: string
+      enum:
+      - developer
+      - engineering_manager
+      - architect
+      - business_analyst
+      - product_manager
+      - compliance_audit
+      title: UserRole
+      description: User's professional role for onboarding profile.
+    RecentConversationsResponse:
+      properties:
+        conversations:
+          items:
+            $ref: '#/components/schemas/RecentConversationItem'
+          type: array
+          title: Conversations
+          description: List of recent conversations with their details
+      type: object
+      required:
+      - conversations
+      title: RecentConversationsResponse
+      description: Response schema for recent conversations
     UserOnboardingProfileUpsertRequest:
       properties:
         role:

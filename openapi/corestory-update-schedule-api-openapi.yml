@@ -68,14 +68,6 @@ paths:
           description: Not found
 components:
   schemas:
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
     UpdateScheduleResponse:
       properties:
         id:
@@ -155,14 +147,6 @@ components:
       - updated_at
       title: UpdateScheduleResponse
       description: Response for org update schedule, includes computed fields.
-    ScheduleCadence:
-      type: string
-      enum:
-      - daily
-      - weekly
-      - monthly
-      title: ScheduleCadence
-      description: How frequently the org schedule runs.
     UpdateScheduleUpsert:
       properties:
         cadence:
@@ -198,6 +182,22 @@ components:
       - time
       title: UpdateScheduleUpsert
       description: Create or update an org update schedule. Single atomic operation.
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    ScheduleCadence:
+      type: string
+      enum:
+      - daily
+      - weekly
+      - monthly
+      title: ScheduleCadence
+      description: How frequently the org schedule runs.
     ErrorBody:
       properties:
         message:

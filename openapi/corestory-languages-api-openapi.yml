@@ -39,6 +39,30 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    LanguageInfo:
+      properties:
+        code:
+          type: string
+          title: Code
+          description: BCP-47 language code (ja, es, fr-CA).
+        name:
+          type: string
+          title: Name
+          description: Language name in its native script (English, français (Canada)).
+      type: object
+      required:
+      - code
+      - name
+      title: LanguageInfo
+      description: Language information with code and native display name.
     ErrorBody:
       properties:
         message:
@@ -57,14 +81,6 @@ components:
       - message
       - type
       title: ErrorBody
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
     LanguageListResponse:
       properties:
         languages:
@@ -77,22 +93,6 @@ components:
       - languages
       title: LanguageListResponse
       description: Response containing available languages.
-    LanguageInfo:
-      properties:
-        code:
-          type: string
-          title: Code
-          description: BCP-47 language code (ja, es, fr-CA).
-        name:
-          type: string
-          title: Name
-          description: Language name in its native script (English, français (Canada)).
-      type: object
-      required:
-      - code
-      - name
-      title: LanguageInfo
-      description: Language information with code and native display name.
   securitySchemes:
     BearerAuth:
       type: http

@@ -102,6 +102,27 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
+    ArchitectureAlternative:
+      properties:
+        pattern_id:
+          type: string
+          title: Pattern Id
+        label:
+          type: string
+          title: Label
+        score:
+          type: number
+          title: Score
+        tier:
+          type: string
+          title: Tier
+      type: object
+      required:
+      - pattern_id
+      - label
+      - score
+      - tier
+      title: ArchitectureAlternative
     ErrorSchema:
       properties:
         error:
@@ -110,56 +131,6 @@ components:
       required:
       - error
       title: ErrorSchema
-    CodeQualityOverview:
-      properties:
-        indicators:
-          additionalProperties: true
-          type: object
-          title: Indicators
-      additionalProperties: true
-      type: object
-      title: CodeQualityOverview
-      description: Thin wrapper over code_quality_indicators from code_analysis.
-    SystemOverviewResponse:
-      properties:
-        architecture:
-          anyOf:
-          - $ref: '#/components/schemas/ArchitectureOverview'
-          - type: 'null'
-        tech_stack:
-          anyOf:
-          - $ref: '#/components/schemas/TechStackOverview'
-          - type: 'null'
-        code_quality:
-          anyOf:
-          - $ref: '#/components/schemas/CodeQualityOverview'
-          - type: 'null'
-        health_signals:
-          anyOf:
-          - {}
-          - type: 'null'
-          title: Health Signals
-          description: Not yet implemented
-        security:
-          anyOf:
-          - {}
-          - type: 'null'
-          title: Security
-          description: Not yet implemented
-        suggested_actions:
-          anyOf:
-          - {}
-          - type: 'null'
-          title: Suggested Actions
-          description: Not yet implemented
-        metadata:
-          $ref: '#/components/schemas/SIOMetadata'
-      additionalProperties: false
-      type: object
-      required:
-      - metadata
-      title: SystemOverviewResponse
-      description: Complete SIO payload returned when analysis is available.
     RegenerationTriggerResponse:
       properties:
         status:
@@ -185,148 +156,6 @@ components:
       - job_id
       title: RegenerationTriggerResponse
       description: Returned when regeneration is successfully triggered.
-    RegenerationEstimateResponse:
-      properties:
-        estimated_cost:
-          type: number
-          title: Estimated Cost
-          description: CIU cost for regeneration
-        available_balance:
-          type: number
-          title: Available Balance
-          description: Organization's current available CIUs
-        can_regenerate:
-          type: boolean
-          title: Can Regenerate
-          description: Whether the organization has enough CIUs
-      type: object
-      required:
-      - estimated_cost
-      - available_balance
-      - can_regenerate
-      title: RegenerationEstimateResponse
-      description: CIU cost estimate for SIO regeneration.
-    ArchitectureOverview:
-      properties:
-        pattern_id:
-          type: string
-          title: Pattern Id
-        label:
-          type: string
-          title: Label
-        score:
-          type: number
-          title: Score
-        tier:
-          type: string
-          title: Tier
-        explanation:
-          anyOf:
-          - $ref: '#/components/schemas/ArchitectureExplanation'
-          - type: 'null'
-        low_confidence_guidance:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Low Confidence Guidance
-      type: object
-      required:
-      - pattern_id
-      - label
-      - score
-      - tier
-      title: ArchitectureOverview
-    ArchitectureExplanation:
-      properties:
-        summary:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Summary
-        detected_signals:
-          items:
-            type: string
-          type: array
-          title: Detected Signals
-        key_drivers:
-          items:
-            type: string
-          type: array
-          title: Key Drivers
-        alternative_interpretation:
-          anyOf:
-          - $ref: '#/components/schemas/ArchitectureAlternative'
-          - type: 'null'
-        confidence_alignment:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Confidence Alignment
-      type: object
-      title: ArchitectureExplanation
-    ArchitectureAlternative:
-      properties:
-        pattern_id:
-          type: string
-          title: Pattern Id
-        label:
-          type: string
-          title: Label
-        score:
-          type: number
-          title: Score
-        tier:
-          type: string
-          title: Tier
-      type: object
-      required:
-      - pattern_id
-      - label
-      - score
-      - tier
-      title: ArchitectureAlternative
-    SIOMetadata:
-      properties:
-        generated_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Generated At
-        snapshot_fingerprint:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Snapshot Fingerprint
-          description: Commit SHA of the ingested codebase version
-        is_stale:
-          type: boolean
-          title: Is Stale
-          default: false
-        schema_version:
-          type: string
-          title: Schema Version
-          default: '1.0'
-      type: object
-      title: SIOMetadata
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
     TechStackOverview:
       properties:
         primary_language:
@@ -379,6 +208,177 @@ components:
       type: object
       title: SystemOverviewProcessingResponse
       description: Returned with HTTP 202 when the analysis pipeline is still running.
+    SIOMetadata:
+      properties:
+        generated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Generated At
+        snapshot_fingerprint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Snapshot Fingerprint
+          description: Commit SHA of the ingested codebase version
+        is_stale:
+          type: boolean
+          title: Is Stale
+          default: false
+        schema_version:
+          type: string
+          title: Schema Version
+          default: '1.0'
+      type: object
+      title: SIOMetadata
+    SystemOverviewResponse:
+      properties:
+        architecture:
+          anyOf:
+          - $ref: '#/components/schemas/ArchitectureOverview'
+          - type: 'null'
+        tech_stack:
+          anyOf:
+          - $ref: '#/components/schemas/TechStackOverview'
+          - type: 'null'
+        code_quality:
+          anyOf:
+          - $ref: '#/components/schemas/CodeQualityOverview'
+          - type: 'null'
+        health_signals:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Health Signals
+          description: Not yet implemented
+        security:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Security
+          description: Not yet implemented
+        suggested_actions:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Suggested Actions
+          description: Not yet implemented
+        metadata:
+          $ref: '#/components/schemas/SIOMetadata'
+      additionalProperties: false
+      type: object
+      required:
+      - metadata
+      title: SystemOverviewResponse
+      description: Complete SIO payload returned when analysis is available.
+    ArchitectureExplanation:
+      properties:
+        summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary
+        detected_signals:
+          items:
+            type: string
+          type: array
+          title: Detected Signals
+        key_drivers:
+          items:
+            type: string
+          type: array
+          title: Key Drivers
+        alternative_interpretation:
+          anyOf:
+          - $ref: '#/components/schemas/ArchitectureAlternative'
+          - type: 'null'
+        confidence_alignment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Confidence Alignment
+      type: object
+      title: ArchitectureExplanation
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    CodeQualityOverview:
+      properties:
+        indicators:
+          additionalProperties: true
+          type: object
+          title: Indicators
+      additionalProperties: true
+      type: object
+      title: CodeQualityOverview
+      description: Thin wrapper over code_quality_indicators from code_analysis.
+    RegenerationEstimateResponse:
+      properties:
+        estimated_cost:
+          type: number
+          title: Estimated Cost
+          description: CIU cost for regeneration
+        available_balance:
+          type: number
+          title: Available Balance
+          description: Organization's current available CIUs
+        can_regenerate:
+          type: boolean
+          title: Can Regenerate
+          description: Whether the organization has enough CIUs
+      type: object
+      required:
+      - estimated_cost
+      - available_balance
+      - can_regenerate
+      title: RegenerationEstimateResponse
+      description: CIU cost estimate for SIO regeneration.
+    ArchitectureOverview:
+      properties:
+        pattern_id:
+          type: string
+          title: Pattern Id
+        label:
+          type: string
+          title: Label
+        score:
+          type: number
+          title: Score
+        tier:
+          type: string
+          title: Tier
+        explanation:
+          anyOf:
+          - $ref: '#/components/schemas/ArchitectureExplanation'
+          - type: 'null'
+        low_confidence_guidance:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Low Confidence Guidance
+      type: object
+      required:
+      - pattern_id
+      - label
+      - score
+      - tier
+      title: ArchitectureOverview
   securitySchemes:
     BearerAuth:
       type: http

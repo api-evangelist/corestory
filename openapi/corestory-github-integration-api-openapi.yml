@@ -459,180 +459,6 @@ paths:
           description: Not found
 components:
   schemas:
-    GitHubRepository:
-      properties:
-        name:
-          type: string
-          title: Name
-        full_name:
-          type: string
-          title: Full Name
-        owner:
-          $ref: '#/components/schemas/GitHubRepoOwner'
-        private:
-          type: boolean
-          title: Private
-        html_url:
-          type: string
-          title: Html Url
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-        pushed_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Pushed At
-        git_url:
-          type: string
-          title: Git Url
-        ssh_url:
-          type: string
-          title: Ssh Url
-        clone_url:
-          type: string
-          title: Clone Url
-        size:
-          type: integer
-          title: Size
-        language:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Language
-        archived:
-          type: boolean
-          title: Archived
-        disabled:
-          type: boolean
-          title: Disabled
-        visibility:
-          type: string
-          title: Visibility
-        default_branch:
-          type: string
-          title: Default Branch
-        permissions:
-          additionalProperties:
-            type: boolean
-          type: object
-          title: Permissions
-      type: object
-      required:
-      - name
-      - full_name
-      - owner
-      - private
-      - html_url
-      - description
-      - pushed_at
-      - git_url
-      - ssh_url
-      - clone_url
-      - size
-      - language
-      - archived
-      - disabled
-      - visibility
-      - default_branch
-      - permissions
-      title: GitHubRepository
-      description: GitHub repository information
-    ErrorResponseSchema:
-      properties:
-        error:
-          type: string
-          title: Error
-          description: Error message
-        detail:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Detail
-          description: Detailed error information
-      type: object
-      required:
-      - error
-      title: ErrorResponseSchema
-      description: Schema for error responses
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    GitHubRepoOwner:
-      properties:
-        login:
-          type: string
-          title: Login
-        type:
-          type: string
-          title: Type
-      type: object
-      required:
-      - login
-      - type
-      title: GitHubRepoOwner
-      description: GitHub repository owner information
-    BranchesListResponse:
-      properties:
-        results:
-          items:
-            type: string
-          type: array
-          title: Results
-        count:
-          type: integer
-          title: Count
-        repo_full_name:
-          type: string
-          title: Repo Full Name
-        installation_id:
-          type: integer
-          title: Installation Id
-        page:
-          type: integer
-          title: Page
-        limit:
-          type: integer
-          title: Limit
-        has_next:
-          type: boolean
-          title: Has Next
-      type: object
-      required:
-      - results
-      - count
-      - repo_full_name
-      - installation_id
-      - page
-      - limit
-      - has_next
-      title: BranchesListResponse
-      description: Response for listing branches in a repository with pagination
-    InstallationRequest:
-      properties:
-        next_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Next Url
-          description: Optional dashboard URL to redirect after installation
-        github_app_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Github App Key
-          description: Optional GitHub app key override (e.g. 'new'). Old UI should not send this.
-      type: object
-      title: InstallationRequest
-      description: Request model for starting installation
     InstallationStatusResponse:
       properties:
         status:
@@ -658,6 +484,56 @@ components:
       - status
       title: InstallationStatusResponse
       description: Response for checking installation status
+    PublicRepoBranchesResponse:
+      properties:
+        results:
+          items:
+            type: string
+          type: array
+          title: Results
+        count:
+          type: integer
+          title: Count
+        repo_full_name:
+          type: string
+          title: Repo Full Name
+        default_branch:
+          type: string
+          title: Default Branch
+        limit:
+          type: integer
+          title: Limit
+        page:
+          type: integer
+          title: Page
+        has_next:
+          type: boolean
+          title: Has Next
+          default: false
+      type: object
+      required:
+      - results
+      - count
+      - repo_full_name
+      - default_branch
+      - limit
+      - page
+      title: PublicRepoBranchesResponse
+      description: Response for public repository branches
+    GitHubRepoOwner:
+      properties:
+        login:
+          type: string
+          title: Login
+        type:
+          type: string
+          title: Type
+      type: object
+      required:
+      - login
+      - type
+      title: GitHubRepoOwner
+      description: GitHub repository owner information
     InstallationListItem:
       properties:
         id:
@@ -748,6 +624,129 @@ components:
       - visibility
       title: InstallationListItem
       description: Enhanced installation list item with visibility info
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    GitHubRepository:
+      properties:
+        name:
+          type: string
+          title: Name
+        full_name:
+          type: string
+          title: Full Name
+        owner:
+          $ref: '#/components/schemas/GitHubRepoOwner'
+        private:
+          type: boolean
+          title: Private
+        html_url:
+          type: string
+          title: Html Url
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        pushed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Pushed At
+        git_url:
+          type: string
+          title: Git Url
+        ssh_url:
+          type: string
+          title: Ssh Url
+        clone_url:
+          type: string
+          title: Clone Url
+        size:
+          type: integer
+          title: Size
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+        archived:
+          type: boolean
+          title: Archived
+        disabled:
+          type: boolean
+          title: Disabled
+        visibility:
+          type: string
+          title: Visibility
+        default_branch:
+          type: string
+          title: Default Branch
+        permissions:
+          additionalProperties:
+            type: boolean
+          type: object
+          title: Permissions
+      type: object
+      required:
+      - name
+      - full_name
+      - owner
+      - private
+      - html_url
+      - description
+      - pushed_at
+      - git_url
+      - ssh_url
+      - clone_url
+      - size
+      - language
+      - archived
+      - disabled
+      - visibility
+      - default_branch
+      - permissions
+      title: GitHubRepository
+      description: GitHub repository information
+    DetailedInstallationResponse:
+      properties:
+        installations:
+          items:
+            $ref: '#/components/schemas/InstallationListItem'
+          type: array
+          title: Installations
+        installation_count:
+          type: integer
+          title: Installation Count
+      type: object
+      required:
+      - installations
+      - installation_count
+      title: DetailedInstallationResponse
+      description: Response model for detailed installation information
+    ErrorResponseSchema:
+      properties:
+        error:
+          type: string
+          title: Error
+          description: Error message
+        detail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Detail
+          description: Detailed error information
+      type: object
+      required:
+      - error
+      title: ErrorResponseSchema
+      description: Schema for error responses
     ErrorBody:
       properties:
         message:
@@ -766,7 +765,24 @@ components:
       - message
       - type
       title: ErrorBody
-    PublicRepoBranchesResponse:
+    InstallationRequest:
+      properties:
+        next_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Url
+          description: Optional dashboard URL to redirect after installation
+        github_app_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Github App Key
+          description: Optional GitHub app key override (e.g. 'new'). Old UI should not send this.
+      type: object
+      title: InstallationRequest
+      description: Request model for starting installation
+    BranchesListResponse:
       properties:
         results:
           items:
@@ -779,29 +795,39 @@ components:
         repo_full_name:
           type: string
           title: Repo Full Name
-        default_branch:
-          type: string
-          title: Default Branch
-        limit:
+        installation_id:
           type: integer
-          title: Limit
+          title: Installation Id
         page:
           type: integer
           title: Page
+        limit:
+          type: integer
+          title: Limit
         has_next:
           type: boolean
           title: Has Next
-          default: false
       type: object
       required:
       - results
       - count
       - repo_full_name
-      - default_branch
-      - limit
+      - installation_id
       - page
-      title: PublicRepoBranchesResponse
-      description: Response for public repository branches
+      - limit
+      - has_next
+      title: BranchesListResponse
+      description: Response for listing branches in a repository with pagination
+    StartInstallationResponse:
+      properties:
+        installation_url:
+          type: string
+          title: Installation Url
+      type: object
+      required:
+      - installation_url
+      title: StartInstallationResponse
+      description: Response for starting installation
     PaginatedReposListResponse:
       properties:
         results:
@@ -834,32 +860,6 @@ components:
       - limit
       - page
       title: PaginatedReposListResponse
-    DetailedInstallationResponse:
-      properties:
-        installations:
-          items:
-            $ref: '#/components/schemas/InstallationListItem'
-          type: array
-          title: Installations
-        installation_count:
-          type: integer
-          title: Installation Count
-      type: object
-      required:
-      - installations
-      - installation_count
-      title: DetailedInstallationResponse
-      description: Response model for detailed installation information
-    StartInstallationResponse:
-      properties:
-        installation_url:
-          type: string
-          title: Installation Url
-      type: object
-      required:
-      - installation_url
-      title: StartInstallationResponse
-      description: Response for starting installation
   securitySchemes:
     BearerAuth:
       type: http

@@ -447,28 +447,65 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    Feature-Input:
+    LanguageInfo:
       properties:
+        code:
+          type: string
+          title: Code
+          description: BCP-47 language code (ja, es, fr-CA).
         name:
           type: string
           title: Name
-          description: Name of the feature
-        description:
-          type: string
-          title: Description
-          description: Description of the feature
-        category:
+          description: Language name in its native script (English, français (Canada)).
+      type: object
+      required:
+      - code
+      - name
+      title: LanguageInfo
+      description: Language information with code and native display name.
+    GenerateAllRequest:
+      properties:
+        language:
           anyOf:
           - type: string
           - type: 'null'
-          title: Category
-          description: Category of the feature
+          title: Language
+      type: object
+      title: GenerateAllRequest
+    PRDGenerateResponse:
+      properties:
+        content:
+          title: Content
+          description: The generated document content (dict for JSON format, str for markdown format)
+        format:
+          type: string
+          title: Format
+          description: The format of the document (json or markdown)
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+          description: Additional metadata about the document
       type: object
       required:
-      - name
-      - description
-      title: Feature
-      description: Model for a feature in the technical specification.
+      - content
+      - format
+      - metadata
+      title: PRDGenerateResponse
+      description: Response model for PRD generation
+    GeneratePRDSectionRequest:
+      properties:
+        custom_prompt:
+          anyOf:
+          - $ref: '#/components/schemas/PRDCustomPromptRequest'
+          - type: 'null'
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+      type: object
+      title: GeneratePRDSectionRequest
     NewReference:
       properties:
         file_name:
@@ -492,19 +529,145 @@ components:
       required:
       - file_name
       title: NewReference
-    GeneratePRDSectionRequest:
+    ErrorBody:
       properties:
-        custom_prompt:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    TechSpecSectionsResponse:
+      properties:
+        system_architecture:
           anyOf:
-          - $ref: '#/components/schemas/PRDCustomPromptRequest'
+          - additionalProperties: true
+            type: object
+          - type: string
+          title: System Architecture
+          description: System architecture details
+        data_models:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          title: Data Models
+          description: Data models details
+        user_interface:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          title: User Interface
+          description: User interface details
+        api_specifications:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          title: Api Specifications
+          description: API specifications details
+        interface_specifications:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          title: Interface Specifications
+          description: Interface specifications details
+        integration_points:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          title: Integration Points
+          description: Integration points details
+        security_considerations:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          title: Security Considerations
+          description: Security considerations details
+        implementation_strategy:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          title: Implementation Strategy
+          description: Implementation strategy details
+        tech_user_stories:
+          anyOf:
+          - items: {}
+            type: array
+          - type: string
+          title: Tech User Stories
+          description: User stories details
+        caveats:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
           - type: 'null'
-        language:
+          title: Caveats
+          description: Per-section provenance caveats keyed by section name. Only populated for sections whose evidence is documentation-only or mixed; absent when all sections are grounded in code or have no sources.
+        prd_id:
+          type: integer
+          title: Prd Id
+        prd_version_num:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Prd Version Num
+        prd_version_uid:
           anyOf:
           - type: string
           - type: 'null'
-          title: Language
+          title: Prd Version Uid
+        generated_from_commit_sha:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Generated From Commit Sha
+        custom_prompt:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Custom Prompt
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+          description: Job metadata including version and version_tag
       type: object
-      title: GeneratePRDSectionRequest
+      required:
+      - prd_id
+      - created_at
+      title: TechSpecSectionsResponse
     TechnicalRequirements:
       properties:
         requirement:
@@ -537,48 +700,50 @@ components:
       - requirement
       - reference
       title: TechnicalRequirements
-    PRDGenerateResponse:
+    Reference:
       properties:
-        content:
-          title: Content
-          description: The generated document content (dict for JSON format, str for markdown format)
-        format:
+        file_name:
           type: string
-          title: Format
-          description: The format of the document (json or markdown)
-        metadata:
-          additionalProperties: true
-          type: object
-          title: Metadata
-          description: Additional metadata about the document
+          title: File Name
+          description: Name of the file where the reference was found (just the filename, e.g., 'COCRDLIC.cbl').
+        line_number:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Line Number
+          description: Line number where the reference was found in the code.
+        reference_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reference Text
+          description: Textual content of the reference. Class, method name, or other relevant information.
+        file_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: File Path
+          description: 'Full relative path to the file from repository root (e.g., ''app/cbl/COCRDLIC.cbl''). Extract from the Source: lines in the context if available.'
       type: object
       required:
-      - content
-      - format
-      - metadata
-      title: PRDGenerateResponse
-      description: Response model for PRD generation
-    TechnicalSpecContext:
+      - file_name
+      title: Reference
+    GenerateTechSpecCustomPromptItem:
       properties:
-        features:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/Feature-Input'
-            type: array
-          - type: 'null'
-          title: Features
-          description: Optional list of features to use for generation
-        user_stories:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/UserStory'
-            type: array
-          - type: 'null'
-          title: User Stories
-          description: Optional list of user stories to generate code from
+        section_name:
+          $ref: '#/components/schemas/TechSpecStepsDashedEnum'
+        prompt:
+          type: string
+          title: Prompt
+        replacement:
+          type: boolean
+          title: Replacement
+          default: false
       type: object
-      title: TechnicalSpecContext
-      description: Context model for technical specification generation.
+      required:
+      - section_name
+      - prompt
+      title: GenerateTechSpecCustomPromptItem
     TechSpecSingleSectionResponse:
       properties:
         prd_id:
@@ -702,64 +867,6 @@ components:
         Only 1 section is ever output, endpoint sets "don''t output None".
 
         # AKA: Only output the property if it exists.'
-    BasicSuccessResponse:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: success
-      type: object
-      title: BasicSuccessResponse
-      description: 'Use this for returns for deletes and patches.
-
-        UI ALWAYS needs some payload return. This just standarizes it.'
-    GenerateAllRequest:
-      properties:
-        language:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Language
-      type: object
-      title: GenerateAllRequest
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    TechSpecStepsDashedEnum:
-      type: string
-      enum:
-      - system-architecture
-      - data-models
-      - user-interface
-      - api-specifications
-      - interface-specifications
-      - integration-points
-      - security-considerations
-      - tech-user-stories
-      - implementation-strategy
-      title: TechSpecStepsDashedEnum
-      description: All tech spec steps with dashed values.
-    LanguageInfo:
-      properties:
-        code:
-          type: string
-          title: Code
-          description: BCP-47 language code (ja, es, fr-CA).
-        name:
-          type: string
-          title: Name
-          description: Language name in its native script (English, français (Canada)).
-      type: object
-      required:
-      - code
-      - name
-      title: LanguageInfo
-      description: Language information with code and native display name.
     GenerateTechSpecRequest:
       properties:
         custom_prompts:
@@ -780,257 +887,6 @@ components:
           title: Language
       type: object
       title: GenerateTechSpecRequest
-    PaginationMeta:
-      properties:
-        total:
-          type: integer
-          title: Total
-        page:
-          type: integer
-          title: Page
-        size:
-          type: integer
-          title: Size
-        pages:
-          type: integer
-          title: Pages
-      type: object
-      required:
-      - total
-      - page
-      - size
-      - pages
-      title: PaginationMeta
-    JobStatusSummary:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: Current job status
-        progress:
-          type: number
-          title: Progress
-          description: Progress percentage (0-100)
-          default: 0.0
-        created_by:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Created By
-          description: User ID who triggered this job
-        failure_type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Failure Type
-          description: Short categorical failure tag set only when the job is FAILED. Lets the UI render category-specific guidance without parsing the message. See `app.orchestrations.ingestion.failure_handler.classify_failure` for the authoritative set of values.
-        failure_reason:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Failure Reason
-          description: Human-readable failure message safe to show in the UI. Set only when the job is FAILED.
-      type: object
-      required:
-      - status
-      title: JobStatusSummary
-      description: Lightweight status + progress for a single job type (ingestion, PRD generation, etc.).
-    TechSpecSectionsResponse:
-      properties:
-        system_architecture:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: string
-          title: System Architecture
-          description: System architecture details
-        data_models:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: string
-          title: Data Models
-          description: Data models details
-        user_interface:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: string
-          title: User Interface
-          description: User interface details
-        api_specifications:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: string
-          title: Api Specifications
-          description: API specifications details
-        interface_specifications:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: string
-          title: Interface Specifications
-          description: Interface specifications details
-        integration_points:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: string
-          title: Integration Points
-          description: Integration points details
-        security_considerations:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: string
-          title: Security Considerations
-          description: Security considerations details
-        implementation_strategy:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: string
-          title: Implementation Strategy
-          description: Implementation strategy details
-        tech_user_stories:
-          anyOf:
-          - items: {}
-            type: array
-          - type: string
-          title: Tech User Stories
-          description: User stories details
-        caveats:
-          anyOf:
-          - additionalProperties:
-              type: string
-            type: object
-          - type: 'null'
-          title: Caveats
-          description: Per-section provenance caveats keyed by section name. Only populated for sections whose evidence is documentation-only or mixed; absent when all sections are grounded in code or have no sources.
-        prd_id:
-          type: integer
-          title: Prd Id
-        prd_version_num:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Prd Version Num
-        prd_version_uid:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Prd Version Uid
-        generated_from_commit_sha:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Generated From Commit Sha
-        custom_prompt:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Custom Prompt
-        title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Title
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        updated_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Updated At
-        metadata:
-          additionalProperties: true
-          type: object
-          title: Metadata
-          description: Job metadata including version and version_tag
-      type: object
-      required:
-      - prd_id
-      - created_at
-      title: TechSpecSectionsResponse
-    GenerateTechSpecCustomPromptItem:
-      properties:
-        section_name:
-          $ref: '#/components/schemas/TechSpecStepsDashedEnum'
-        prompt:
-          type: string
-          title: Prompt
-        replacement:
-          type: boolean
-          title: Replacement
-          default: false
-      type: object
-      required:
-      - section_name
-      - prompt
-      title: GenerateTechSpecCustomPromptItem
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
-    Reference:
-      properties:
-        file_name:
-          type: string
-          title: File Name
-          description: Name of the file where the reference was found (just the filename, e.g., 'COCRDLIC.cbl').
-        line_number:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Line Number
-          description: Line number where the reference was found in the code.
-        reference_text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Reference Text
-          description: Textual content of the reference. Class, method name, or other relevant information.
-        file_path:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: File Path
-          description: 'Full relative path to the file from repository root (e.g., ''app/cbl/COCRDLIC.cbl''). Extract from the Source: lines in the context if available.'
-      type: object
-      required:
-      - file_name
-      title: Reference
-    PRDCustomPromptRequest:
-      properties:
-        prompt:
-          type: string
-          title: Prompt
-        replacement:
-          type: boolean
-          title: Replacement
-      type: object
-      required:
-      - prompt
-      - replacement
-      title: PRDCustomPromptRequest
     UserStory:
       properties:
         epic_name:
@@ -1085,6 +941,150 @@ components:
       - references
       - user_persona
       title: UserStory
+    PaginationMeta:
+      properties:
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        size:
+          type: integer
+          title: Size
+        pages:
+          type: integer
+          title: Pages
+      type: object
+      required:
+      - total
+      - page
+      - size
+      - pages
+      title: PaginationMeta
+    TechSpecStepsDashedEnum:
+      type: string
+      enum:
+      - system-architecture
+      - data-models
+      - user-interface
+      - api-specifications
+      - interface-specifications
+      - integration-points
+      - security-considerations
+      - tech-user-stories
+      - implementation-strategy
+      title: TechSpecStepsDashedEnum
+      description: All tech spec steps with dashed values.
+    PRDCustomPromptRequest:
+      properties:
+        prompt:
+          type: string
+          title: Prompt
+        replacement:
+          type: boolean
+          title: Replacement
+      type: object
+      required:
+      - prompt
+      - replacement
+      title: PRDCustomPromptRequest
+    JobStatusSummary:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Current job status
+        progress:
+          type: number
+          title: Progress
+          description: Progress percentage (0-100)
+          default: 0.0
+        created_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created By
+          description: User ID who triggered this job
+        failure_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Failure Type
+          description: Short categorical failure tag set only when the job is FAILED. Lets the UI render category-specific guidance without parsing the message. See `app.orchestrations.ingestion.failure_handler.classify_failure` for the authoritative set of values.
+        failure_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Failure Reason
+          description: Human-readable failure message safe to show in the UI. Set only when the job is FAILED.
+      type: object
+      required:
+      - status
+      title: JobStatusSummary
+      description: Lightweight status + progress for a single job type (ingestion, PRD generation, etc.).
+    Feature-Input:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the feature
+        description:
+          type: string
+          title: Description
+          description: Description of the feature
+        category:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Category
+          description: Category of the feature
+      type: object
+      required:
+      - name
+      - description
+      title: Feature
+      description: Model for a feature in the technical specification.
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    TechnicalSpecContext:
+      properties:
+        features:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Feature-Input'
+            type: array
+          - type: 'null'
+          title: Features
+          description: Optional list of features to use for generation
+        user_stories:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/UserStory'
+            type: array
+          - type: 'null'
+          title: User Stories
+          description: Optional list of user stories to generate code from
+      type: object
+      title: TechnicalSpecContext
+      description: Context model for technical specification generation.
+    BasicSuccessResponse:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: success
+      type: object
+      title: BasicSuccessResponse
+      description: 'Use this for returns for deletes and patches.
+
+        UI ALWAYS needs some payload return. This just standarizes it.'
   securitySchemes:
     BearerAuth:
       type: http

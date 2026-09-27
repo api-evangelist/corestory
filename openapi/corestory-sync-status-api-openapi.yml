@@ -94,6 +94,34 @@ paths:
           description: Not found
 components:
   schemas:
+    PaginationMeta:
+      properties:
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        size:
+          type: integer
+          title: Size
+        pages:
+          type: integer
+          title: Pages
+      type: object
+      required:
+      - total
+      - page
+      - size
+      - pages
+      title: PaginationMeta
+    SyncMode:
+      type: string
+      enum:
+      - manual
+      - auto
+      title: SyncMode
+      description: Whether a project syncs manually or automatically with its repo.
     ErrorSchema:
       properties:
         error:
@@ -102,6 +130,81 @@ components:
       required:
       - error
       title: ErrorSchema
+    SyncStatusResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/SyncStatusItem'
+          type: array
+          title: Items
+          description: List of items
+        pagination:
+          $ref: '#/components/schemas/PaginationMeta'
+          description: Pagination metadata
+        summary:
+          $ref: '#/components/schemas/SyncStatusSummary'
+          description: Org-wide aggregates (unaffected by filters)
+      type: object
+      required:
+      - items
+      - pagination
+      - summary
+      title: SyncStatusResponse
+      description: Paginated project sync-status list with org-wide summary aggregates.
+    ProjectSyncStatus:
+      type: string
+      enum:
+      - up_to_date
+      - updating
+      - stale
+      - failed
+      - couldnt_process
+      title: ProjectSyncStatus
+      description: Sync/processing status for a project in the org roster.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    SyncStatusSummary:
+      properties:
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total projects across the organization ignoring filter
+        auto_count:
+          type: integer
+          title: Auto Count
+          description: Projects with sync_mode=auto across the org
+        blocked_count:
+          type: integer
+          title: Blocked Count
+          description: Projects with status=couldnt_process across the org
+        is_ciu_exhausted:
+          type: boolean
+          title: Is Ciu Exhausted
+          description: Whether the org has run out of CIUs
+      type: object
+      required:
+      - total_count
+      - auto_count
+      - blocked_count
+      - is_ciu_exhausted
+      title: SyncStatusSummary
+      description: Org-wide aggregates rendered as page-level chrome. Not affected by filters.
     SyncStatusItem:
       properties:
         project_id:
@@ -133,109 +236,6 @@ components:
       - status
       title: SyncStatusItem
       description: A single project row in the org project sync-status list.
-    ProjectSyncStatus:
-      type: string
-      enum:
-      - up_to_date
-      - updating
-      - stale
-      - failed
-      - couldnt_process
-      title: ProjectSyncStatus
-      description: Sync/processing status for a project in the org roster.
-    SyncStatusResponse:
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/SyncStatusItem'
-          type: array
-          title: Items
-          description: List of items
-        pagination:
-          $ref: '#/components/schemas/PaginationMeta'
-          description: Pagination metadata
-        summary:
-          $ref: '#/components/schemas/SyncStatusSummary'
-          description: Org-wide aggregates (unaffected by filters)
-      type: object
-      required:
-      - items
-      - pagination
-      - summary
-      title: SyncStatusResponse
-      description: Paginated project sync-status list with org-wide summary aggregates.
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
-    PaginationMeta:
-      properties:
-        total:
-          type: integer
-          title: Total
-        page:
-          type: integer
-          title: Page
-        size:
-          type: integer
-          title: Size
-        pages:
-          type: integer
-          title: Pages
-      type: object
-      required:
-      - total
-      - page
-      - size
-      - pages
-      title: PaginationMeta
-    SyncMode:
-      type: string
-      enum:
-      - manual
-      - auto
-      title: SyncMode
-      description: Whether a project syncs manually or automatically with its repo.
-    SyncStatusSummary:
-      properties:
-        total_count:
-          type: integer
-          title: Total Count
-          description: Total projects across the organization ignoring filter
-        auto_count:
-          type: integer
-          title: Auto Count
-          description: Projects with sync_mode=auto across the org
-        blocked_count:
-          type: integer
-          title: Blocked Count
-          description: Projects with status=couldnt_process across the org
-        is_ciu_exhausted:
-          type: boolean
-          title: Is Ciu Exhausted
-          description: Whether the org has run out of CIUs
-      type: object
-      required:
-      - total_count
-      - auto_count
-      - blocked_count
-      - is_ciu_exhausted
-      title: SyncStatusSummary
-      description: Org-wide aggregates rendered as page-level chrome. Not affected by filters.
   securitySchemes:
     BearerAuth:
       type: http

@@ -343,6 +343,19 @@ components:
       required:
       - error
       title: ErrorSchema
+    CacheTTLUpdate:
+      properties:
+        ttl_seconds:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Ttl Seconds
+          description: New TTL value in seconds (must be positive)
+          example: 7200
+      type: object
+      required:
+      - ttl_seconds
+      title: CacheTTLUpdate
+      description: Request model for updating cache TTL
     CacheSetRequest:
       properties:
         entries:
@@ -401,19 +414,6 @@ components:
       - metadata
       title: CacheEntry
       description: Model for a single cache entry
-    CacheTTLUpdate:
-      properties:
-        ttl_seconds:
-          type: integer
-          exclusiveMinimum: 0.0
-          title: Ttl Seconds
-          description: New TTL value in seconds (must be positive)
-          example: 7200
-      type: object
-      required:
-      - ttl_seconds
-      title: CacheTTLUpdate
-      description: Request model for updating cache TTL
   securitySchemes:
     BearerAuth:
       type: http

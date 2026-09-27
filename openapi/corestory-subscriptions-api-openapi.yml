@@ -148,6 +148,31 @@ components:
       - total_users
       title: UsageDataResponse
       description: Response model for organization usage data.
+    SubscriptionProvider:
+      type: string
+      enum:
+      - ms_marketplace
+      - stripe
+      title: SubscriptionProvider
+      description: Subscription provider enum.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
     SubscriptionStatusResponse:
       properties:
         status:
@@ -253,31 +278,6 @@ components:
       - status
       title: SubscriptionStatusResponse
       description: Response model for organization subscription status.
-    SubscriptionProvider:
-      type: string
-      enum:
-      - ms_marketplace
-      - stripe
-      title: SubscriptionProvider
-      description: Subscription provider enum.
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
   securitySchemes:
     BearerAuth:
       type: http

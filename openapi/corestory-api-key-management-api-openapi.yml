@@ -251,34 +251,162 @@ components:
       required:
       - error
       title: ErrorSchema
-    ApiKeyRefreshRequest:
+    ApiKeyUpdateRequest:
       properties:
+        name:
+          anyOf:
+          - type: string
+            maxLength: 100
+            minLength: 1
+          - type: 'null'
+          title: Name
+          description: New key name
+        description:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Description
+          description: New key description
+      type: object
+      title: ApiKeyUpdateRequest
+      description: Request to update key metadata.
+    ApiKeyResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Key identifier
+        name:
+          type: string
+          title: Name
+          description: Key name
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Key description
+        key_prefix:
+          type: string
+          title: Key Prefix
+          description: Display-safe key prefix (csk_abc...xyz)
         scope_type:
           type: string
-          enum:
-          - user
-          - project
-          - organization
           title: Scope Type
-          description: Scope type of the key to refresh
+          description: 'Scope type: ''user'', ''project'', or ''organization'''
         project_id:
           anyOf:
           - type: integer
           - type: 'null'
           title: Project Id
-          description: Project ID (required when scope is 'project')
-        expires_days:
+          description: Project ID for project-scoped keys
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: When the key was created
+        expires_at:
+          type: string
+          format: date-time
+          title: Expires At
+          description: When the key expires
+        last_used_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Used At
+          description: Last time key was used
+        usage_count:
           type: integer
-          maximum: 730.0
-          minimum: 1.0
-          title: Expires Days
-          description: Validity for the new key in days (1-730 days)
-          default: 365
+          title: Usage Count
+          description: Number of times key was used
+        revoked_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Revoked At
+          description: When key was revoked (if revoked)
+        revoked_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Revoked By
+          description: User who revoked the key
+        is_active:
+          type: boolean
+          title: Is Active
+          description: Whether key is active (not revoked/expired)
+        is_revoked:
+          type: boolean
+          title: Is Revoked
+          description: Whether key is revoked
+        is_expired:
+          type: boolean
+          title: Is Expired
+          description: Whether key is expired
       type: object
       required:
+      - id
+      - name
+      - key_prefix
       - scope_type
-      title: ApiKeyRefreshRequest
-      description: Request to refresh (rotate) an API key.
+      - created_at
+      - expires_at
+      - usage_count
+      - is_active
+      - is_revoked
+      - is_expired
+      title: ApiKeyResponse
+      description: Response for key metadata (without sensitive data).
+    ApiKeyListResponse:
+      properties:
+        keys:
+          items:
+            $ref: '#/components/schemas/ApiKeyResponse'
+          type: array
+          title: Keys
+          description: List of keys
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of keys
+        active_count:
+          type: integer
+          title: Active Count
+          description: Number of active keys
+        revoked_count:
+          type: integer
+          title: Revoked Count
+          description: Number of revoked keys
+      type: object
+      required:
+      - keys
+      - total_count
+      - active_count
+      - revoked_count
+      title: ApiKeyListResponse
+      description: Response for listing keys.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
     ApiKeyCreateResponse:
       properties:
         id:
@@ -379,26 +507,6 @@ components:
       - key
       title: ApiKeyCreateResponse
       description: Response when creating a new key (includes full key ONCE).
-    ApiKeyUpdateRequest:
-      properties:
-        name:
-          anyOf:
-          - type: string
-            maxLength: 100
-            minLength: 1
-          - type: 'null'
-          title: Name
-          description: New key name
-        description:
-          anyOf:
-          - type: string
-            maxLength: 500
-          - type: 'null'
-          title: Description
-          description: New key description
-      type: object
-      title: ApiKeyUpdateRequest
-      description: Request to update key metadata.
     ApiKeyCreateRequest:
       properties:
         name:
@@ -484,142 +592,34 @@ components:
       - revoked_by
       title: ApiKeyRevokeResponse
       description: Response after revoking a key.
-    ApiKeyListResponse:
+    ApiKeyRefreshRequest:
       properties:
-        keys:
-          items:
-            $ref: '#/components/schemas/ApiKeyResponse'
-          type: array
-          title: Keys
-          description: List of keys
-        total_count:
-          type: integer
-          title: Total Count
-          description: Total number of keys
-        active_count:
-          type: integer
-          title: Active Count
-          description: Number of active keys
-        revoked_count:
-          type: integer
-          title: Revoked Count
-          description: Number of revoked keys
-      type: object
-      required:
-      - keys
-      - total_count
-      - active_count
-      - revoked_count
-      title: ApiKeyListResponse
-      description: Response for listing keys.
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
-    ApiKeyResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: Key identifier
-        name:
-          type: string
-          title: Name
-          description: Key name
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Key description
-        key_prefix:
-          type: string
-          title: Key Prefix
-          description: Display-safe key prefix (csk_abc...xyz)
         scope_type:
           type: string
+          enum:
+          - user
+          - project
+          - organization
           title: Scope Type
-          description: 'Scope type: ''user'', ''project'', or ''organization'''
+          description: Scope type of the key to refresh
         project_id:
           anyOf:
           - type: integer
           - type: 'null'
           title: Project Id
-          description: Project ID for project-scoped keys
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: When the key was created
-        expires_at:
-          type: string
-          format: date-time
-          title: Expires At
-          description: When the key expires
-        last_used_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Used At
-          description: Last time key was used
-        usage_count:
+          description: Project ID (required when scope is 'project')
+        expires_days:
           type: integer
-          title: Usage Count
-          description: Number of times key was used
-        revoked_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Revoked At
-          description: When key was revoked (if revoked)
-        revoked_by:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Revoked By
-          description: User who revoked the key
-        is_active:
-          type: boolean
-          title: Is Active
-          description: Whether key is active (not revoked/expired)
-        is_revoked:
-          type: boolean
-          title: Is Revoked
-          description: Whether key is revoked
-        is_expired:
-          type: boolean
-          title: Is Expired
-          description: Whether key is expired
+          maximum: 730.0
+          minimum: 1.0
+          title: Expires Days
+          description: Validity for the new key in days (1-730 days)
+          default: 365
       type: object
       required:
-      - id
-      - name
-      - key_prefix
       - scope_type
-      - created_at
-      - expires_at
-      - usage_count
-      - is_active
-      - is_revoked
-      - is_expired
-      title: ApiKeyResponse
-      description: Response for key metadata (without sensitive data).
+      title: ApiKeyRefreshRequest
+      description: Request to refresh (rotate) an API key.
   securitySchemes:
     BearerAuth:
       type: http

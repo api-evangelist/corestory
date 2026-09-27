@@ -190,6 +190,25 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
+    SampleProjectDetail:
+      properties:
+        language:
+          type: string
+          maxLength: 64
+          minLength: 1
+          title: Language
+        project_id:
+          type: integer
+          title: Project Id
+        id:
+          type: integer
+          title: Id
+      type: object
+      required:
+      - language
+      - project_id
+      - id
+      title: SampleProjectDetail
     ErrorSchema:
       properties:
         error:
@@ -218,6 +237,35 @@ components:
       required:
       - new_project_id
       title: ClonedSampleProjectResponse
+    BasicSuccessResponse:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: success
+      type: object
+      title: BasicSuccessResponse
+      description: 'Use this for returns for deletes and patches.
+
+        UI ALWAYS needs some payload return. This just standarizes it.'
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
     SampleProjectCreate:
       properties:
         language:
@@ -249,54 +297,6 @@ components:
           title: Project Id
       type: object
       title: SampleProjectUpdate
-    SampleProjectDetail:
-      properties:
-        language:
-          type: string
-          maxLength: 64
-          minLength: 1
-          title: Language
-        project_id:
-          type: integer
-          title: Project Id
-        id:
-          type: integer
-          title: Id
-      type: object
-      required:
-      - language
-      - project_id
-      - id
-      title: SampleProjectDetail
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
-    BasicSuccessResponse:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: success
-      type: object
-      title: BasicSuccessResponse
-      description: 'Use this for returns for deletes and patches.
-
-        UI ALWAYS needs some payload return. This just standarizes it.'
   securitySchemes:
     BearerAuth:
       type: http

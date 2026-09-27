@@ -98,6 +98,27 @@ paths:
           description: Not found
 components:
   schemas:
+    JobStatus:
+      type: string
+      enum:
+      - not_started
+      - running
+      - completed
+      - failed
+      - cancelled
+      title: JobStatus
+      description: Job status enumeration
+    PinWorkspaceRequest:
+      properties:
+        project_id:
+          type: integer
+          title: Project Id
+          description: ID of the workspace (project) to pin.
+      type: object
+      required:
+      - project_id
+      title: PinWorkspaceRequest
+      description: Body for pinning a workspace.
     ErrorSchema:
       properties:
         error:
@@ -106,6 +127,16 @@ components:
       required:
       - error
       title: ErrorSchema
+    ProjectSyncStatus:
+      type: string
+      enum:
+      - up_to_date
+      - updating
+      - stale
+      - failed
+      - couldnt_process
+      title: ProjectSyncStatus
+      description: Sync/processing status for a project in the org roster.
     PinnedWorkspaceItem:
       properties:
         project_id:
@@ -154,37 +185,6 @@ components:
       - pinned_at
       title: PinnedWorkspaceItem
       description: A single pinned workspace, annotated with workspace metadata for display.
-    PinWorkspaceRequest:
-      properties:
-        project_id:
-          type: integer
-          title: Project Id
-          description: ID of the workspace (project) to pin.
-      type: object
-      required:
-      - project_id
-      title: PinWorkspaceRequest
-      description: Body for pinning a workspace.
-    ProjectSyncStatus:
-      type: string
-      enum:
-      - up_to_date
-      - updating
-      - stale
-      - failed
-      - couldnt_process
-      title: ProjectSyncStatus
-      description: Sync/processing status for a project in the org roster.
-    JobStatus:
-      type: string
-      enum:
-      - not_started
-      - running
-      - completed
-      - failed
-      - cancelled
-      title: JobStatus
-      description: Job status enumeration
     ErrorBody:
       properties:
         message:
