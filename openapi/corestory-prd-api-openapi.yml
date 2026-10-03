@@ -510,6 +510,80 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
+    PRDGenerateResponse:
+      properties:
+        content:
+          title: Content
+          description: The generated document content (dict for JSON format, str for markdown format)
+        format:
+          type: string
+          title: Format
+          description: The format of the document (json or markdown)
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+          description: Additional metadata about the document
+      type: object
+      required:
+      - content
+      - format
+      - metadata
+      title: PRDGenerateResponse
+      description: Response model for PRD generation
+    PRDStepsDashedEnum:
+      type: string
+      enum:
+      - executive-overview
+      - user-personas
+      - high-level-requirements
+      - user-stories
+      - security-requirements
+      title: PRDStepsDashedEnum
+      description: All PRD steps with dashed values.
+    GenerateAllRequest:
+      properties:
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+      type: object
+      title: GenerateAllRequest
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    GeneratePRDRequest:
+      properties:
+        custom_prompts:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/GeneratePRDCustomPromptItem'
+            type: array
+          - type: 'null'
+          title: Custom Prompts
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+      type: object
+      title: GeneratePRDRequest
     PaginationMeta:
       properties:
         total:
@@ -531,45 +605,6 @@ components:
       - size
       - pages
       title: PaginationMeta
-    PRDStepsDashedEnum:
-      type: string
-      enum:
-      - executive-overview
-      - user-personas
-      - high-level-requirements
-      - user-stories
-      - security-requirements
-      title: PRDStepsDashedEnum
-      description: All PRD steps with dashed values.
-    PRDCustomPromptRequest:
-      properties:
-        prompt:
-          type: string
-          title: Prompt
-        replacement:
-          type: boolean
-          title: Replacement
-      type: object
-      required:
-      - prompt
-      - replacement
-      title: PRDCustomPromptRequest
-    GeneratePRDCustomPromptItem:
-      properties:
-        section_name:
-          $ref: '#/components/schemas/PRDStepsDashedEnum'
-        prompt:
-          type: string
-          title: Prompt
-        replacement:
-          type: boolean
-          title: Replacement
-          default: false
-      type: object
-      required:
-      - section_name
-      - prompt
-      title: GeneratePRDCustomPromptItem
     GeneratePRDSectionRequest:
       properties:
         custom_prompt:
@@ -583,14 +618,6 @@ components:
           title: Language
       type: object
       title: GeneratePRDSectionRequest
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
     JobStatusSummary:
       properties:
         status:
@@ -625,6 +652,22 @@ components:
       - status
       title: JobStatusSummary
       description: Lightweight status + progress for a single job type (ingestion, PRD generation, etc.).
+    GeneratePRDCustomPromptItem:
+      properties:
+        section_name:
+          $ref: '#/components/schemas/PRDStepsDashedEnum'
+        prompt:
+          type: string
+          title: Prompt
+        replacement:
+          type: boolean
+          title: Replacement
+          default: false
+      type: object
+      required:
+      - section_name
+      - prompt
+      title: GeneratePRDCustomPromptItem
     PRDContextRequest:
       properties:
         context:
@@ -637,84 +680,6 @@ components:
       - context
       title: PRDContextRequest
       description: Request model for setting PRD context.
-    PRDContextResponse:
-      properties:
-        context:
-          type: string
-          title: Context
-          description: The PRD context
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: When the context was created
-      type: object
-      required:
-      - context
-      - created_at
-      title: PRDContextResponse
-      description: Response model for PRD context.
-    GeneratePRDRequest:
-      properties:
-        custom_prompts:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/GeneratePRDCustomPromptItem'
-            type: array
-          - type: 'null'
-          title: Custom Prompts
-        language:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Language
-      type: object
-      title: GeneratePRDRequest
-    LanguageInfo:
-      properties:
-        code:
-          type: string
-          title: Code
-          description: BCP-47 language code (ja, es, fr-CA).
-        name:
-          type: string
-          title: Name
-          description: Language name in its native script (English, français (Canada)).
-      type: object
-      required:
-      - code
-      - name
-      title: LanguageInfo
-      description: Language information with code and native display name.
-    BasicSuccessResponse:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: success
-      type: object
-      title: BasicSuccessResponse
-      description: 'Use this for returns for deletes and patches.
-
-        UI ALWAYS needs some payload return. This just standarizes it.'
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
     PRDSingleSectionResponse:
       properties:
         prd_id:
@@ -807,15 +772,23 @@ components:
         Only 1 section is ever output, endpoint sets "don''t output None".
 
         # AKA: Only output the property if it exists.'
-    GenerateAllRequest:
+    PRDContextResponse:
       properties:
-        language:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Language
+        context:
+          type: string
+          title: Context
+          description: The PRD context
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: When the context was created
       type: object
-      title: GenerateAllRequest
+      required:
+      - context
+      - created_at
+      title: PRDContextResponse
+      description: Response model for PRD context.
     PRDSectionsResponse:
       properties:
         executive_overview:
@@ -902,27 +875,54 @@ components:
       - prd_id
       - created_at
       title: PRDSectionsResponse
-    PRDGenerateResponse:
+    ErrorSchema:
       properties:
-        content:
-          title: Content
-          description: The generated document content (dict for JSON format, str for markdown format)
-        format:
-          type: string
-          title: Format
-          description: The format of the document (json or markdown)
-        metadata:
-          additionalProperties: true
-          type: object
-          title: Metadata
-          description: Additional metadata about the document
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       type: object
       required:
-      - content
-      - format
-      - metadata
-      title: PRDGenerateResponse
-      description: Response model for PRD generation
+      - error
+      title: ErrorSchema
+    PRDCustomPromptRequest:
+      properties:
+        prompt:
+          type: string
+          title: Prompt
+        replacement:
+          type: boolean
+          title: Replacement
+      type: object
+      required:
+      - prompt
+      - replacement
+      title: PRDCustomPromptRequest
+    BasicSuccessResponse:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: success
+      type: object
+      title: BasicSuccessResponse
+      description: 'Use this for returns for deletes and patches.
+
+        UI ALWAYS needs some payload return. This just standarizes it.'
+    LanguageInfo:
+      properties:
+        code:
+          type: string
+          title: Code
+          description: BCP-47 language code (ja, es, fr-CA).
+        name:
+          type: string
+          title: Name
+          description: Language name in its native script (English, français (Canada)).
+      type: object
+      required:
+      - code
+      - name
+      title: LanguageInfo
+      description: Language information with code and native display name.
   securitySchemes:
     BearerAuth:
       type: http

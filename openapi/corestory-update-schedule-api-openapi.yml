@@ -68,6 +68,32 @@ paths:
           description: Not found
 components:
   schemas:
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    ScheduleCadence:
+      type: string
+      enum:
+      - daily
+      - weekly
+      - monthly
+      title: ScheduleCadence
+      description: How frequently the org schedule runs.
     UpdateScheduleResponse:
       properties:
         id:
@@ -147,6 +173,14 @@ components:
       - updated_at
       title: UpdateScheduleResponse
       description: Response for org update schedule, includes computed fields.
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
     UpdateScheduleUpsert:
       properties:
         cadence:
@@ -182,40 +216,6 @@ components:
       - time
       title: UpdateScheduleUpsert
       description: Create or update an org update schedule. Single atomic operation.
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    ScheduleCadence:
-      type: string
-      enum:
-      - daily
-      - weekly
-      - monthly
-      title: ScheduleCadence
-      description: How frequently the org schedule runs.
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
   securitySchemes:
     BearerAuth:
       type: http

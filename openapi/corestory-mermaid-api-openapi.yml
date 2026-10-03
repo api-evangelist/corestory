@@ -47,24 +47,6 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    MermaidFixResponse:
-      properties:
-        code:
-          type: string
-          title: Code
-          description: The corrected Mermaid diagram code
-      type: object
-      required:
-      - code
-      title: MermaidFixResponse
     MermaidFixRequest:
       properties:
         code:
@@ -104,6 +86,24 @@ components:
       - message
       - type
       title: ErrorBody
+    MermaidFixResponse:
+      properties:
+        code:
+          type: string
+          title: Code
+          description: The corrected Mermaid diagram code
+      type: object
+      required:
+      - code
+      title: MermaidFixResponse
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
   securitySchemes:
     BearerAuth:
       type: http

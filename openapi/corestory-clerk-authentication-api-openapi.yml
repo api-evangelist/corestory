@@ -95,14 +95,24 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    ErrorSchema:
+    ErrorBody:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
       type: object
       required:
-      - error
-      title: ErrorSchema
+      - message
+      - type
+      title: ErrorBody
     User:
       properties:
         id:
@@ -163,24 +173,14 @@ components:
       - id
       title: User
       description: User model with data fetched from Clerk API.
-    ErrorBody:
+    ErrorSchema:
       properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       type: object
       required:
-      - message
-      - type
-      title: ErrorBody
+      - error
+      title: ErrorSchema
   securitySchemes:
     BearerAuth:
       type: http

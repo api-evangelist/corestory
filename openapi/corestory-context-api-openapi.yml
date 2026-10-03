@@ -95,32 +95,6 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
     PRDContextRequest:
       properties:
         context:
@@ -150,6 +124,32 @@ components:
       - created_at
       title: PRDContextResponse
       description: Response model for PRD context.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
   securitySchemes:
     BearerAuth:
       type: http

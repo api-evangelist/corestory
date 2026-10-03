@@ -158,14 +158,24 @@ components:
       required:
       - file
       title: Body_validate_document
-    ErrorSchema:
+    ErrorBody:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
       type: object
       required:
-      - error
-      title: ErrorSchema
+      - message
+      - type
+      title: ErrorBody
     Body_generate_quality_metrics:
       properties:
         prd_file:
@@ -186,24 +196,14 @@ components:
           default: ''
       type: object
       title: Body_generate_quality_metrics
-    ErrorBody:
+    ErrorSchema:
       properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       type: object
       required:
-      - message
-      - type
-      title: ErrorBody
+      - error
+      title: ErrorSchema
   securitySchemes:
     BearerAuth:
       type: http

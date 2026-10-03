@@ -404,90 +404,33 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    PaginationMeta:
+    ReingestionTriggerRequest:
       properties:
-        total:
-          type: integer
-          title: Total
-        page:
-          type: integer
-          title: Page
-        size:
-          type: integer
-          title: Size
-        pages:
-          type: integer
-          title: Pages
+        regenerate_docs:
+          type: boolean
+          title: Regenerate Docs
+          description: Whether to regenerate PRD/TechSpec after ingestion
+          default: false
+        application_context:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application Context
+          description: Update project application context before reingestion
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+          description: BCP-47 language code for document generation (ja, es, fr-CA).
+        force:
+          type: boolean
+          title: Force
+          description: Force re-ingestion of every document instead of skipping ones already in the vector store. Use this after extractor/schema changes when existing chunks need to be re-processed.
+          default: false
       type: object
-      required:
-      - total
-      - page
-      - size
-      - pages
-      title: PaginationMeta
-    CIUEstimate:
-      properties:
-        min:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Min
-          description: Minimum estimated CIU cost
-        max:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Max
-          description: Maximum estimated CIU cost
-      type: object
-      required:
-      - min
-      - max
-      title: CIUEstimate
-      description: Estimated CIU cost for reingestion.
-    PaginatedResponse_IngestionEventResponse_:
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/IngestionEventResponse'
-          type: array
-          title: Items
-          description: List of items
-        pagination:
-          $ref: '#/components/schemas/PaginationMeta'
-          description: Pagination metadata
-      type: object
-      required:
-      - items
-      - pagination
-      title: PaginatedResponse[IngestionEventResponse]
-    DocImpact:
-      properties:
-        prd:
-          $ref: '#/components/schemas/DocImpactGroup'
-        tech_spec:
-          $ref: '#/components/schemas/DocImpactGroup'
-      type: object
-      title: DocImpact
-      description: Doc-section changes an ingestion event produced, grouped by document.
-    FileChanges:
-      properties:
-        added:
-          items:
-            type: string
-          type: array
-          title: Added
-        modified:
-          items:
-            type: string
-          type: array
-          title: Modified
-        removed:
-          items:
-            type: string
-          type: array
-          title: Removed
-      type: object
-      title: FileChanges
-      description: Categorized file paths changed between last ingestion and latest commit.
+      title: ReingestionTriggerRequest
+      description: Request to trigger reingestion
     DocImpactGroup:
       properties:
         sections_added:
@@ -511,6 +454,24 @@ components:
       type: object
       title: DocImpactGroup
       description: Section-level changes for a single document (PRD or Tech Spec).
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
     ReingestionTriggerResponse:
       properties:
         message:
@@ -551,95 +512,6 @@ components:
       - project_id
       title: ReingestionTriggerResponse
       description: Response when reingestion is triggered
-    ReingestionTriggerRequest:
-      properties:
-        regenerate_docs:
-          type: boolean
-          title: Regenerate Docs
-          description: Whether to regenerate PRD/TechSpec after ingestion
-          default: false
-        application_context:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Application Context
-          description: Update project application context before reingestion
-        language:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Language
-          description: BCP-47 language code for document generation (ja, es, fr-CA).
-        force:
-          type: boolean
-          title: Force
-          description: Force re-ingestion of every document instead of skipping ones already in the vector store. Use this after extractor/schema changes when existing chunks need to be re-processed.
-          default: false
-      type: object
-      title: ReingestionTriggerRequest
-      description: Request to trigger reingestion
-    ReingestionAnalysisResponse:
-      properties:
-        job_id:
-          type: integer
-          title: Job Id
-        status:
-          $ref: '#/components/schemas/PreIngestionStatus'
-        progress:
-          type: number
-          title: Progress
-          description: Progress percentage 0-100
-          default: 0.0
-        failure_type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Failure Type
-          description: Short categorical failure tag set only when the job is FAILED. Lets the UI render category-specific guidance without parsing the message. See `app.utils.pre_ingestion.classify_pre_ingestion_failure` for the authoritative set of values.
-        failure_reason:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Failure Reason
-          description: Human-readable, sanitized failure message safe to show in the UI. Set only when the job is FAILED.
-      type: object
-      required:
-      - job_id
-      - status
-      title: ReingestionAnalysisResponse
-      description: Response for pre-reingestion analysis
-    DocImpactResponse:
-      properties:
-        doc_impact:
-          $ref: '#/components/schemas/DocImpact'
-      type: object
-      title: DocImpactResponse
-    PreIngestionStatus:
-      type: string
-      enum:
-      - started
-      - cloning
-      - parsing
-      - analyzed
-      - completed
-      - failed
-      title: PreIngestionStatus
-      description: PreIngestion status enumeration
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    TriggerType:
-      type: string
-      enum:
-      - manual
-      - automatic
-      title: TriggerType
-      description: How an ingestion event was triggered.
     PaginatedFilePathResponse:
       properties:
         results:
@@ -659,41 +531,6 @@ components:
       - results
       - pagination
       title: PaginatedFilePathResponse
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
-    FileChangeSummary:
-      properties:
-        added_count:
-          type: integer
-          title: Added Count
-          default: 0
-        modified_count:
-          type: integer
-          title: Modified Count
-          default: 0
-        removed_count:
-          type: integer
-          title: Removed Count
-          default: 0
-      type: object
-      title: FileChangeSummary
-      description: Summary counts of file changes between last ingestion and latest commit.
     ReingestionAnalysisCoverageResponse:
       properties:
         total_files:
@@ -758,6 +595,127 @@ components:
       - exclusion_reasons
       title: ReingestionAnalysisCoverageResponse
       description: Coverage results from analysis, including file change summary and CIU estimate.
+    DocImpact:
+      properties:
+        prd:
+          $ref: '#/components/schemas/DocImpactGroup'
+        tech_spec:
+          $ref: '#/components/schemas/DocImpactGroup'
+      type: object
+      title: DocImpact
+      description: Doc-section changes an ingestion event produced, grouped by document.
+    FileChanges:
+      properties:
+        added:
+          items:
+            type: string
+          type: array
+          title: Added
+        modified:
+          items:
+            type: string
+          type: array
+          title: Modified
+        removed:
+          items:
+            type: string
+          type: array
+          title: Removed
+      type: object
+      title: FileChanges
+      description: Categorized file paths changed between last ingestion and latest commit.
+    PaginationMeta:
+      properties:
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        size:
+          type: integer
+          title: Size
+        pages:
+          type: integer
+          title: Pages
+      type: object
+      required:
+      - total
+      - page
+      - size
+      - pages
+      title: PaginationMeta
+    ReingestionAnalysisResponse:
+      properties:
+        job_id:
+          type: integer
+          title: Job Id
+        status:
+          $ref: '#/components/schemas/PreIngestionStatus'
+        progress:
+          type: number
+          title: Progress
+          description: Progress percentage 0-100
+          default: 0.0
+        failure_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Failure Type
+          description: Short categorical failure tag set only when the job is FAILED. Lets the UI render category-specific guidance without parsing the message. See `app.utils.pre_ingestion.classify_pre_ingestion_failure` for the authoritative set of values.
+        failure_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Failure Reason
+          description: Human-readable, sanitized failure message safe to show in the UI. Set only when the job is FAILED.
+      type: object
+      required:
+      - job_id
+      - status
+      title: ReingestionAnalysisResponse
+      description: Response for pre-reingestion analysis
+    PreIngestionStatus:
+      type: string
+      enum:
+      - started
+      - cloning
+      - parsing
+      - analyzed
+      - completed
+      - failed
+      title: PreIngestionStatus
+      description: PreIngestion status enumeration
+    PaginatedResponse_IngestionEventResponse_:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/IngestionEventResponse'
+          type: array
+          title: Items
+          description: List of items
+        pagination:
+          $ref: '#/components/schemas/PaginationMeta'
+          description: Pagination metadata
+      type: object
+      required:
+      - items
+      - pagination
+      title: PaginatedResponse[IngestionEventResponse]
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    DocImpactResponse:
+      properties:
+        doc_impact:
+          $ref: '#/components/schemas/DocImpact'
+      type: object
+      title: DocImpactResponse
     IngestionEventResponse:
       properties:
         id:
@@ -837,6 +795,48 @@ components:
       - trigger_type
       - regenerated_docs
       title: IngestionEventResponse
+    FileChangeSummary:
+      properties:
+        added_count:
+          type: integer
+          title: Added Count
+          default: 0
+        modified_count:
+          type: integer
+          title: Modified Count
+          default: 0
+        removed_count:
+          type: integer
+          title: Removed Count
+          default: 0
+      type: object
+      title: FileChangeSummary
+      description: Summary counts of file changes between last ingestion and latest commit.
+    CIUEstimate:
+      properties:
+        min:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Min
+          description: Minimum estimated CIU cost
+        max:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Max
+          description: Maximum estimated CIU cost
+      type: object
+      required:
+      - min
+      - max
+      title: CIUEstimate
+      description: Estimated CIU cost for reingestion.
+    TriggerType:
+      type: string
+      enum:
+      - manual
+      - automatic
+      title: TriggerType
+      description: How an ingestion event was triggered.
   securitySchemes:
     BearerAuth:
       type: http

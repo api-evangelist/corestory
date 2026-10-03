@@ -309,6 +309,24 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
     CacheEntryMetadata:
       properties:
         created_at:
@@ -335,14 +353,6 @@ components:
       - is_expired
       title: CacheEntryMetadata
       description: Metadata for a cache entry
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
     CacheTTLUpdate:
       properties:
         ttl_seconds:
@@ -369,24 +379,6 @@ components:
       - entries
       title: CacheSetRequest
       description: Request model for setting cache entries
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
     CacheEntry:
       properties:
         cache_key:
@@ -414,6 +406,14 @@ components:
       - metadata
       title: CacheEntry
       description: Model for a single cache entry
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
   securitySchemes:
     BearerAuth:
       type: http

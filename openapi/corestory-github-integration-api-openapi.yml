@@ -459,67 +459,6 @@ paths:
           description: Not found
 components:
   schemas:
-    InstallationStatusResponse:
-      properties:
-        status:
-          type: string
-          title: Status
-        installation_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Installation Id
-        github_org:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Github Org
-        request_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Request Id
-      type: object
-      required:
-      - status
-      title: InstallationStatusResponse
-      description: Response for checking installation status
-    PublicRepoBranchesResponse:
-      properties:
-        results:
-          items:
-            type: string
-          type: array
-          title: Results
-        count:
-          type: integer
-          title: Count
-        repo_full_name:
-          type: string
-          title: Repo Full Name
-        default_branch:
-          type: string
-          title: Default Branch
-        limit:
-          type: integer
-          title: Limit
-        page:
-          type: integer
-          title: Page
-        has_next:
-          type: boolean
-          title: Has Next
-          default: false
-      type: object
-      required:
-      - results
-      - count
-      - repo_full_name
-      - default_branch
-      - limit
-      - page
-      title: PublicRepoBranchesResponse
-      description: Response for public repository branches
     GitHubRepoOwner:
       properties:
         login:
@@ -534,104 +473,56 @@ components:
       - type
       title: GitHubRepoOwner
       description: GitHub repository owner information
-    InstallationListItem:
+    ErrorBody:
       properties:
-        id:
-          type: integer
-          title: Id
-        installation_id:
-          type: integer
-          title: Installation Id
-        account_login:
+        message:
           type: string
-          title: Account Login
-        account_type:
+          title: Message
+        type:
           type: string
-          title: Account Type
-        alias:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Alias
-        target_type:
-          type: string
-          title: Target Type
-        repository_selection:
-          type: string
-          title: Repository Selection
-        permissions:
+          title: Type
+        details:
           additionalProperties: true
           type: object
-          title: Permissions
-        is_active:
-          type: boolean
-          title: Is Active
-        installed_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Installed At
-        installed_by_user_id:
-          type: string
-          title: Installed By User Id
-        is_personal:
-          type: boolean
-          title: Is Personal
-        visibility:
-          type: string
-          title: Visibility
-        created_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Created At
-        expires_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Expires At
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-          default: ''
-        status_code:
-          type: integer
-          title: Status Code
-          default: 400
-        github_app_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Github App Key
+          title: Details
+          description: Optional extra context for the error.
       type: object
       required:
-      - id
-      - installation_id
-      - account_login
-      - account_type
-      - alias
-      - target_type
-      - repository_selection
-      - permissions
-      - is_active
-      - installed_at
-      - installed_by_user_id
-      - is_personal
-      - visibility
-      title: InstallationListItem
-      description: Enhanced installation list item with visibility info
-    ErrorSchema:
+      - message
+      - type
+      title: ErrorBody
+    PaginatedReposListResponse:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        results:
+          items:
+            $ref: '#/components/schemas/GitHubRepository'
+          type: array
+          title: Results
+        count:
+          type: integer
+          title: Count
+        limit:
+          type: integer
+          title: Limit
+        page:
+          type: integer
+          title: Page
+        has_next:
+          type: boolean
+          title: Has Next
+          default: false
+        installation_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Installation Id
       type: object
       required:
-      - error
-      title: ErrorSchema
+      - results
+      - count
+      - limit
+      - page
+      title: PaginatedReposListResponse
     GitHubRepository:
       properties:
         name:
@@ -730,41 +621,6 @@ components:
       - installation_count
       title: DetailedInstallationResponse
       description: Response model for detailed installation information
-    ErrorResponseSchema:
-      properties:
-        error:
-          type: string
-          title: Error
-          description: Error message
-        detail:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Detail
-          description: Detailed error information
-      type: object
-      required:
-      - error
-      title: ErrorResponseSchema
-      description: Schema for error responses
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
     InstallationRequest:
       properties:
         next_url:
@@ -782,6 +638,146 @@ components:
       type: object
       title: InstallationRequest
       description: Request model for starting installation
+    InstallationListItem:
+      properties:
+        id:
+          type: integer
+          title: Id
+        installation_id:
+          type: integer
+          title: Installation Id
+        account_login:
+          type: string
+          title: Account Login
+        account_type:
+          type: string
+          title: Account Type
+        alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Alias
+        target_type:
+          type: string
+          title: Target Type
+        repository_selection:
+          type: string
+          title: Repository Selection
+        permissions:
+          additionalProperties: true
+          type: object
+          title: Permissions
+        is_active:
+          type: boolean
+          title: Is Active
+        installed_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Installed At
+        installed_by_user_id:
+          type: string
+          title: Installed By User Id
+        is_personal:
+          type: boolean
+          title: Is Personal
+        visibility:
+          type: string
+          title: Visibility
+        created_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Created At
+        expires_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Expires At
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+          default: ''
+        status_code:
+          type: integer
+          title: Status Code
+          default: 400
+        github_app_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Github App Key
+      type: object
+      required:
+      - id
+      - installation_id
+      - account_login
+      - account_type
+      - alias
+      - target_type
+      - repository_selection
+      - permissions
+      - is_active
+      - installed_at
+      - installed_by_user_id
+      - is_personal
+      - visibility
+      title: InstallationListItem
+      description: Enhanced installation list item with visibility info
+    ErrorResponseSchema:
+      properties:
+        error:
+          type: string
+          title: Error
+          description: Error message
+        detail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Detail
+          description: Detailed error information
+      type: object
+      required:
+      - error
+      title: ErrorResponseSchema
+      description: Schema for error responses
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    InstallationStatusResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+        installation_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Installation Id
+        github_org:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Github Org
+        request_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Request Id
+      type: object
+      required:
+      - status
+      title: InstallationStatusResponse
+      description: Response for checking installation status
     BranchesListResponse:
       properties:
         results:
@@ -828,16 +824,22 @@ components:
       - installation_url
       title: StartInstallationResponse
       description: Response for starting installation
-    PaginatedReposListResponse:
+    PublicRepoBranchesResponse:
       properties:
         results:
           items:
-            $ref: '#/components/schemas/GitHubRepository'
+            type: string
           type: array
           title: Results
         count:
           type: integer
           title: Count
+        repo_full_name:
+          type: string
+          title: Repo Full Name
+        default_branch:
+          type: string
+          title: Default Branch
         limit:
           type: integer
           title: Limit
@@ -848,18 +850,16 @@ components:
           type: boolean
           title: Has Next
           default: false
-        installation_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Installation Id
       type: object
       required:
       - results
       - count
+      - repo_full_name
+      - default_branch
       - limit
       - page
-      title: PaginatedReposListResponse
+      title: PublicRepoBranchesResponse
+      description: Response for public repository branches
   securitySchemes:
     BearerAuth:
       type: http

@@ -76,14 +76,6 @@ paths:
           description: Internal server error
 components:
   schemas:
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
     ErrorBody:
       properties:
         message:
@@ -102,6 +94,14 @@ components:
       - message
       - type
       title: ErrorBody
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
   securitySchemes:
     BearerAuth:
       type: http

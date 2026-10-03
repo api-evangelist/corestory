@@ -398,87 +398,6 @@ paths:
           description: Invalid request or section definition not found
 components:
   schemas:
-    QueryItem:
-      properties:
-        topic:
-          type: string
-          title: Topic
-          description: The research query/question
-      type: object
-      required:
-      - topic
-      title: QueryItem
-      description: A research query.
-    DocumentOptions:
-      properties:
-        include_code_examples:
-          type: boolean
-          title: Include Code Examples
-          description: Include code snippets where relevant
-          default: true
-        include_diagrams:
-          type: boolean
-          title: Include Diagrams
-          description: Generate Mermaid diagrams
-          default: true
-        include_business_rules:
-          type: boolean
-          title: Include Business Rules
-          description: Include business rules section
-          default: true
-        include_source_references:
-          type: boolean
-          title: Include Source References
-          description: Include references to source files
-          default: true
-        detail_level:
-          type: string
-          enum:
-          - brief
-          - standard
-          - detailed
-          title: Detail Level
-          description: Level of detail in generated content
-          default: standard
-        output_format:
-          type: string
-          enum:
-          - markdown
-          - html
-          - pdf
-          title: Output Format
-          description: Output format
-          default: markdown
-        max_tokens_per_section:
-          type: integer
-          maximum: 10000.0
-          minimum: 500.0
-          title: Max Tokens Per Section
-          description: Approximate max tokens per section
-          default: 2000
-        polish:
-          type: boolean
-          title: Polish
-          description: Whether to polish sections. Each section is polished individually after generation. Per-section polish settings in SectionDefinition can override this.
-          default: true
-        polish_instructions:
-          type: string
-          title: Polish Instructions
-          description: Custom instructions for the polishing step (e.g., 'relate user stories to functional requirements')
-          default: ''
-        reference_validation:
-          type: string
-          enum:
-          - hybrid
-          - llm
-          - none
-          title: Reference Validation
-          description: 'Post-generation reference validation mode. ''hybrid'' (default): regex structural checks + semantic LLM validation for compliance claims, personas, packages, data models, and unformatted file paths, followed by a single LLM correction call if issues are found. ''llm'': legacy LLM extraction-only mode — extracts all references via structured LLM call and cross-checks against the manifest. ''none'': skip post-generation validation.'
-          default: hybrid
-      additionalProperties: false
-      type: object
-      title: DocumentOptions
-      description: Options for document generation.
     SectionRegenerationRequest:
       properties:
         instructions:
@@ -495,45 +414,17 @@ components:
       type: object
       title: SectionRegenerationRequest
       description: Request body for regenerating a single section of an existing document.
-    GeneratedDocument:
+    QueryItem:
       properties:
-        id:
+        topic:
           type: string
-          title: Id
-          description: Unique document ID
-        title:
-          type: string
-          title: Title
-          description: Document title
-        document_type:
-          $ref: '#/components/schemas/DocumentType-Output'
-        sections:
-          items:
-            $ref: '#/components/schemas/GeneratedSection'
-          type: array
-          title: Sections
-        content:
-          type: string
-          title: Content
-          description: Full assembled markdown content
-          default: ''
-        metadata:
-          $ref: '#/components/schemas/DocumentMetadata'
-        request_payload:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Request Payload
-          description: Original generation request payload for re-running
+          title: Topic
+          description: The research query/question
       type: object
       required:
-      - id
-      - title
-      - document_type
-      - metadata
-      title: GeneratedDocument
-      description: Complete generated document.
+      - topic
+      title: QueryItem
+      description: A research query.
     DocumentMetadata:
       properties:
         generated_at:
@@ -579,14 +470,24 @@ components:
       - document_type
       title: DocumentMetadata
       description: Metadata about the generated document.
-    ErrorSchema:
+    ErrorBody:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
       type: object
       required:
-      - error
-      title: ErrorSchema
+      - message
+      - type
+      title: ErrorBody
     PresetDocumentRequest:
       properties:
         document_type:
@@ -637,6 +538,48 @@ components:
         Section definitions are resolved from the SectionDefinitionRegistry
 
         based on document_type. Supports optional per-section overrides.'
+    DocumentMetadataSummary:
+      properties:
+        id:
+          type: string
+          title: Id
+        title:
+          type: string
+          title: Title
+        document_type:
+          type: string
+          title: Document Type
+        generated_at:
+          type: string
+          format: date-time
+          title: Generated At
+        project_id:
+          type: integer
+          title: Project Id
+        section_count:
+          type: integer
+          title: Section Count
+      type: object
+      required:
+      - id
+      - title
+      - document_type
+      - generated_at
+      - project_id
+      - section_count
+      title: DocumentMetadataSummary
+      description: Summary metadata for listing documents.
+    DocumentType-Output:
+      type: string
+      enum:
+      - project_specification
+      - technical_specification
+      - api_documentation
+      - architecture_document
+      - user_guide
+      - custom
+      title: DocumentType
+      description: Known document types with specialized handling.
     DocumentGenerationRequest:
       properties:
         document_type:
@@ -691,122 +634,45 @@ components:
       - section_definitions
       title: DocumentGenerationRequest
       description: "Request to generate a dynamic document.\n\nProvide `section_definitions` for full control over document structure,\nalong with optional `style`, `title`, and `instructions`.\n\nExample:\n    DocumentGenerationRequest(\n        title=\"MyApp Technical Specification\",\n        document_type=DocumentType.TECH_SPEC,\n        style=TemplateStyle(tone=\"formal\", uses_tables=True),\n        section_definitions=[\n            SectionDefinition(name=\"Overview\", level=2, queries=[\"What does the system do?\"]),\n            SectionDefinition(name=\"Architecture\", level=2, depends_on=[\"Overview\"]),\n        ],\n    )"
-    app__documents__schemas__DocumentType:
-      type: string
-      enum:
-      - project_specification
-      - technical_specification
-      - api_documentation
-      - architecture_document
-      - user_guide
-      - custom
-      title: DocumentType
-      description: Known document types with specialized handling.
-    DocumentMetadataSummary:
+    GeneratedDocument:
       properties:
         id:
           type: string
           title: Id
+          description: Unique document ID
         title:
           type: string
           title: Title
+          description: Document title
         document_type:
+          $ref: '#/components/schemas/DocumentType-Output'
+        sections:
+          items:
+            $ref: '#/components/schemas/GeneratedSection'
+          type: array
+          title: Sections
+        content:
           type: string
-          title: Document Type
-        generated_at:
-          type: string
-          format: date-time
-          title: Generated At
-        project_id:
-          type: integer
-          title: Project Id
-        section_count:
-          type: integer
-          title: Section Count
+          title: Content
+          description: Full assembled markdown content
+          default: ''
+        metadata:
+          $ref: '#/components/schemas/DocumentMetadata'
+        request_payload:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Request Payload
+          description: Original generation request payload for re-running
       type: object
       required:
       - id
       - title
       - document_type
-      - generated_at
-      - project_id
-      - section_count
-      title: DocumentMetadataSummary
-      description: Summary metadata for listing documents.
-    DocumentType-Output:
-      type: string
-      enum:
-      - project_specification
-      - technical_specification
-      - api_documentation
-      - architecture_document
-      - user_guide
-      - custom
-      title: DocumentType
-      description: Known document types with specialized handling.
-    DocumentEvent:
-      description: Event emitted during document generation.
-      properties:
-        event_type:
-          default: progress
-          title: Event Type
-          type: string
-        stage:
-          description: Current generation stage
-          title: Stage
-          type: string
-        progress:
-          description: Overall progress
-          maximum: 1.0
-          minimum: 0.0
-          title: Progress
-          type: number
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Message
-        section:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          description: Current section being generated
-          title: Section
-        extraction_type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          description: Current extraction type if extracting
-          title: Extraction Type
-        items_found:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          default: null
-          description: Number of items found during extraction
-          title: Items Found
-        document_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          description: Document ID when complete
-          title: Document Id
-        error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          description: Error message if failed
-          title: Error
-      required:
-      - stage
-      - progress
-      title: DocumentEvent
-      type: object
+      - metadata
+      title: GeneratedDocument
+      description: Complete generated document.
     GeneratedSection:
       properties:
         name:
@@ -903,24 +769,25 @@ components:
       type: object
       title: TemplateStyle
       description: Writing style characteristics extracted from template.
-    ErrorBody:
+    app__documents__schemas__DocumentType:
+      type: string
+      enum:
+      - project_specification
+      - technical_specification
+      - api_documentation
+      - architecture_document
+      - user_guide
+      - custom
+      title: DocumentType
+      description: Known document types with specialized handling.
+    ErrorSchema:
       properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       type: object
       required:
-      - message
-      - type
-      title: ErrorBody
+      - error
+      title: ErrorSchema
     SectionDefinition:
       properties:
         name:
@@ -1008,6 +875,139 @@ components:
       - name
       title: SectionDefinition
       description: "Complete section definition for document generation.\n\nCombines section identity (name, level) with generation configuration\n(queries, depends_on, etc.) in a single model. This is the only section\nmodel used throughout the pipeline.\n\nExample:\n    SectionDefinition(\n        name=\"User Stories\",\n        level=2,\n        description=\"User stories derived from requirements\",\n        depends_on=[\"Requirements\"],\n        derive_from_context=True,\n        instructions=\"Generate user stories in standard format with acceptance criteria.\",\n        subsections=[\n            SectionDefinition(\n                name=\"Authentication Stories\",\n                queries=[\"What authentication user stories can be derived?\"],\n            ),\n            SectionDefinition(\n                name=\"Payment Stories\",\n                queries=[\"What payment user stories can be derived?\"],\n            ),\n        ],\n    )"
+    DocumentEvent:
+      description: Event emitted during document generation.
+      properties:
+        event_type:
+          default: progress
+          title: Event Type
+          type: string
+        stage:
+          description: Current generation stage
+          title: Stage
+          type: string
+        progress:
+          description: Overall progress
+          maximum: 1.0
+          minimum: 0.0
+          title: Progress
+          type: number
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Message
+        section:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Current section being generated
+          title: Section
+        extraction_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Current extraction type if extracting
+          title: Extraction Type
+        items_found:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Number of items found during extraction
+          title: Items Found
+        document_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Document ID when complete
+          title: Document Id
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Error message if failed
+          title: Error
+      required:
+      - stage
+      - progress
+      title: DocumentEvent
+      type: object
+    DocumentOptions:
+      properties:
+        include_code_examples:
+          type: boolean
+          title: Include Code Examples
+          description: Include code snippets where relevant
+          default: true
+        include_diagrams:
+          type: boolean
+          title: Include Diagrams
+          description: Generate Mermaid diagrams
+          default: true
+        include_business_rules:
+          type: boolean
+          title: Include Business Rules
+          description: Include business rules section
+          default: true
+        include_source_references:
+          type: boolean
+          title: Include Source References
+          description: Include references to source files
+          default: true
+        detail_level:
+          type: string
+          enum:
+          - brief
+          - standard
+          - detailed
+          title: Detail Level
+          description: Level of detail in generated content
+          default: standard
+        output_format:
+          type: string
+          enum:
+          - markdown
+          - html
+          - pdf
+          title: Output Format
+          description: Output format
+          default: markdown
+        max_tokens_per_section:
+          type: integer
+          maximum: 10000.0
+          minimum: 500.0
+          title: Max Tokens Per Section
+          description: Approximate max tokens per section
+          default: 2000
+        polish:
+          type: boolean
+          title: Polish
+          description: Whether to polish sections. Each section is polished individually after generation. Per-section polish settings in SectionDefinition can override this.
+          default: true
+        polish_instructions:
+          type: string
+          title: Polish Instructions
+          description: Custom instructions for the polishing step (e.g., 'relate user stories to functional requirements')
+          default: ''
+        reference_validation:
+          type: string
+          enum:
+          - hybrid
+          - llm
+          - none
+          title: Reference Validation
+          description: 'Post-generation reference validation mode. ''hybrid'' (default): regex structural checks + semantic LLM validation for compliance claims, personas, packages, data models, and unformatted file paths, followed by a single LLM correction call if issues are found. ''llm'': legacy LLM extraction-only mode — extracts all references via structured LLM call and cross-checks against the manifest. ''none'': skip post-generation validation.'
+          default: hybrid
+      additionalProperties: false
+      type: object
+      title: DocumentOptions
+      description: Options for document generation.
   securitySchemes:
     BearerAuth:
       type: http

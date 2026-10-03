@@ -526,32 +526,151 @@ paths:
           description: Workflow not found
 components:
   schemas:
-    WorkflowDocumentUpdate:
+    WorkflowDocumentGenerateAccepted:
       properties:
+        job_id:
+          type: string
+          title: Job Id
+        detail:
+          type: string
+          title: Detail
+          default: Document generation started
+      type: object
+      required:
+      - job_id
+      title: WorkflowDocumentGenerateAccepted
+      description: Response returned when document generation is accepted (202).
+    StepSuggestion:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Unique identifier for the suggestion
+        text:
+          type: string
+          title: Text
+          description: Short label displayed as a chip
+        full_message:
+          type: string
+          title: Full Message
+          description: Complete message to send when clicked
+        type:
+          type: string
+          enum:
+          - action
+          - confirm
+          - clarify
+          - example
+          title: Type
+          description: Type of suggestion determining its visual style
+        icon:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Icon
+          description: Icon name for frontend styling
+      type: object
+      required:
+      - id
+      - text
+      - full_message
+      - type
+      title: StepSuggestion
+      description: A suggestion chip for a workflow step.
+      example:
+        full_message: Please scan my codebase to identify the main features.
+        icon: Search
+        id: scan-codebase
+        text: Scan my codebase
+        type: action
+    WorkflowCreate:
+      properties:
+        workflow_type:
+          type: string
+          title: Workflow Type
+          description: Type of workflow (must exist in workflow definitions)
+          examples:
+          - user-stories
+          - jira-tickets
+          - api-docs
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+          description: BCP-47 language code for workflow responses (ja, pt-BR). When set, all assistant messages and generated documents will use this language.
+      type: object
+      required:
+      - workflow_type
+      title: WorkflowCreate
+      description: Request schema for creating a workflow.
+    WorkflowMessageResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Unique message identifier
+        workflow_id:
+          type: string
+          title: Workflow Id
+          description: Parent workflow ID
+        role:
+          type: string
+          title: Role
+          description: Message role (user or assistant)
         content:
           type: string
-          maxLength: 1000000
-          minLength: 1
           title: Content
-          description: Updated markdown content
+          description: Message content
+        step_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Step Id
+          description: Workflow step ID
+        evaluation:
+          anyOf:
+          - $ref: '#/components/schemas/StepEvaluationResponse'
+          - type: 'null'
+          description: Step completion evaluation
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: When the message was created
       type: object
       required:
+      - id
+      - workflow_id
+      - role
       - content
-      title: WorkflowDocumentUpdate
-      description: Request schema for updating a workflow document.
-    WorkflowMessagesListResponse:
+      - created_at
+      title: WorkflowMessageResponse
+      description: Response schema for a single workflow message.
+    ErrorSchema:
       properties:
-        messages:
-          items:
-            $ref: '#/components/schemas/WorkflowMessageResponse'
-          type: array
-          title: Messages
-          description: Ordered list of messages
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       type: object
       required:
-      - messages
-      title: WorkflowMessagesListResponse
-      description: Response schema for listing workflow messages.
+      - error
+      title: ErrorSchema
+    PaginatedResponse_WorkflowDocumentResponse_:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/WorkflowDocumentResponse'
+          type: array
+          title: Items
+          description: List of items
+        pagination:
+          $ref: '#/components/schemas/PaginationMeta'
+          description: Pagination metadata
+      type: object
+      required:
+      - items
+      - pagination
+      title: PaginatedResponse[WorkflowDocumentResponse]
     WorkflowResponse:
       properties:
         id:
@@ -630,49 +749,32 @@ components:
         updated_at: '2024-01-15T10:35:00Z'
         user_id: user_2abc123
         workflow_type: user-stories
-    StepSuggestion:
+    PaginatedResponse_WorkflowResponse_:
       properties:
-        id:
-          type: string
-          title: Id
-          description: Unique identifier for the suggestion
-        text:
-          type: string
-          title: Text
-          description: Short label displayed as a chip
-        full_message:
-          type: string
-          title: Full Message
-          description: Complete message to send when clicked
-        type:
-          type: string
-          enum:
-          - action
-          - confirm
-          - clarify
-          - example
-          title: Type
-          description: Type of suggestion determining its visual style
-        icon:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Icon
-          description: Icon name for frontend styling
+        items:
+          items:
+            $ref: '#/components/schemas/WorkflowResponse'
+          type: array
+          title: Items
+          description: List of items
+        pagination:
+          $ref: '#/components/schemas/PaginationMeta'
+          description: Pagination metadata
       type: object
       required:
-      - id
-      - text
-      - full_message
-      - type
-      title: StepSuggestion
-      description: A suggestion chip for a workflow step.
-      example:
-        full_message: Please scan my codebase to identify the main features.
-        icon: Search
-        id: scan-codebase
-        text: Scan my codebase
-        type: action
+      - items
+      - pagination
+      title: PaginatedResponse[WorkflowResponse]
+    WorkflowStatus:
+      type: string
+      enum:
+      - pending
+      - in_progress
+      - completed
+      - failed
+      - cancelled
+      title: WorkflowStatus
+      description: Workflow status enumeration.
     WorkflowDefinition:
       properties:
         id:
@@ -733,32 +835,80 @@ components:
           id: feature-identification
           suggestions: []
           title: Feature Identification
-    WorkflowMessageCreate:
+    WorkflowStep:
       properties:
-        content:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Content
-          description: Message content for regular messages
-        step_action:
-          anyOf:
-          - type: string
-            enum:
-            - advance
-            - back
-            - complete
-          - type: 'null'
-          title: Step Action
-          description: Step navigation action
-        was_skipped:
-          type: boolean
-          title: Was Skipped
-          description: Only with step_action=advance
-          default: false
+        id:
+          type: string
+          title: Id
+          description: Unique identifier for the step
+        title:
+          type: string
+          title: Title
+          description: Display title for the step
+        description:
+          type: string
+          title: Description
+          description: Brief description of what this step accomplishes
+        completion_criteria:
+          items:
+            type: string
+          type: array
+          title: Completion Criteria
+          description: Criteria for step completion evaluation
+        suggestions:
+          items:
+            $ref: '#/components/schemas/StepSuggestion'
+          type: array
+          title: Suggestions
+          description: Suggested responses for this step
       type: object
-      title: WorkflowMessageCreate
-      description: Request schema for sending a message or performing a step action.
+      required:
+      - id
+      - title
+      - description
+      title: WorkflowStep
+      description: A step within a workflow definition.
+      example:
+        description: Identify features to document
+        id: feature-identification
+        suggestions:
+        - full_message: Please scan my codebase to identify the main features.
+          icon: Search
+          id: scan-codebase
+          text: Scan my codebase
+          type: action
+        title: Feature Identification
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    WorkflowMessagesListResponse:
+      properties:
+        messages:
+          items:
+            $ref: '#/components/schemas/WorkflowMessageResponse'
+          type: array
+          title: Messages
+          description: Ordered list of messages
+      type: object
+      required:
+      - messages
+      title: WorkflowMessagesListResponse
+      description: Response schema for listing workflow messages.
     WorkflowDefinitionSummary:
       properties:
         id:
@@ -802,6 +952,163 @@ components:
         estimated_duration: 10-15 min
         id: user-stories
         name: Generate User Stories
+    PaginationMeta:
+      properties:
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        size:
+          type: integer
+          title: Size
+        pages:
+          type: integer
+          title: Pages
+      type: object
+      required:
+      - total
+      - page
+      - size
+      - pages
+      title: PaginationMeta
+    WorkflowMessageCreate:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content
+          description: Message content for regular messages
+        step_action:
+          anyOf:
+          - type: string
+            enum:
+            - advance
+            - back
+            - complete
+          - type: 'null'
+          title: Step Action
+          description: Step navigation action
+        was_skipped:
+          type: boolean
+          title: Was Skipped
+          description: Only with step_action=advance
+          default: false
+      type: object
+      title: WorkflowMessageCreate
+      description: Request schema for sending a message or performing a step action.
+    WorkflowUpdate:
+      properties:
+        status:
+          anyOf:
+          - $ref: '#/components/schemas/WorkflowStatus'
+          - type: 'null'
+          description: New status for the workflow
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+          description: BCP-47 language code for workflow responses (ja, pt-BR).
+      type: object
+      title: WorkflowUpdate
+      description: Request schema for updating a workflow.
+    WorkflowDocumentUpdate:
+      properties:
+        content:
+          type: string
+          maxLength: 1000000
+          minLength: 1
+          title: Content
+          description: Updated markdown content
+      type: object
+      required:
+      - content
+      title: WorkflowDocumentUpdate
+      description: Request schema for updating a workflow document.
+    WorkflowDocumentResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        workflow_id:
+          type: string
+          title: Workflow Id
+        document_type:
+          type: string
+          title: Document Type
+        content:
+          type: string
+          title: Content
+        content_json:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Content Json
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+      type: object
+      required:
+      - id
+      - workflow_id
+      - document_type
+      - content
+      - created_at
+      - updated_at
+      title: WorkflowDocumentResponse
+      description: Response schema for a workflow document.
+    StepEvaluationResponse:
+      properties:
+        is_complete:
+          type: boolean
+          title: Is Complete
+          description: Whether the step requirements have been satisfied
+        confidence:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Confidence
+          description: Confidence score from 0 to 1
+        step_summary:
+          type: string
+          title: Step Summary
+          description: Brief description of what was accomplished
+        collected_data:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Collected Data
+          description: Structured data extracted from conversation
+        reasoning:
+          type: string
+          title: Reasoning
+          description: Brief explanation citing specific user inputs
+          default: ''
+        missing_info:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Missing Info
+          description: Information still needed
+      type: object
+      required:
+      - is_complete
+      - confidence
+      - step_summary
+      title: StepEvaluationResponse
+      description: Structured result from the step-completion evaluator.
     WorkflowDetailResponse:
       properties:
         id:
@@ -884,313 +1191,6 @@ components:
         updated_at: '2024-01-15T10:35:00Z'
         user_id: user_2abc123
         workflow_type: user-stories
-    WorkflowMessageResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: Unique message identifier
-        workflow_id:
-          type: string
-          title: Workflow Id
-          description: Parent workflow ID
-        role:
-          type: string
-          title: Role
-          description: Message role (user or assistant)
-        content:
-          type: string
-          title: Content
-          description: Message content
-        step_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Step Id
-          description: Workflow step ID
-        evaluation:
-          anyOf:
-          - $ref: '#/components/schemas/StepEvaluationResponse'
-          - type: 'null'
-          description: Step completion evaluation
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: When the message was created
-      type: object
-      required:
-      - id
-      - workflow_id
-      - role
-      - content
-      - created_at
-      title: WorkflowMessageResponse
-      description: Response schema for a single workflow message.
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
-    WorkflowDocumentGenerateAccepted:
-      properties:
-        job_id:
-          type: string
-          title: Job Id
-        detail:
-          type: string
-          title: Detail
-          default: Document generation started
-      type: object
-      required:
-      - job_id
-      title: WorkflowDocumentGenerateAccepted
-      description: Response returned when document generation is accepted (202).
-    PaginatedResponse_WorkflowDocumentResponse_:
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/WorkflowDocumentResponse'
-          type: array
-          title: Items
-          description: List of items
-        pagination:
-          $ref: '#/components/schemas/PaginationMeta'
-          description: Pagination metadata
-      type: object
-      required:
-      - items
-      - pagination
-      title: PaginatedResponse[WorkflowDocumentResponse]
-    PaginatedResponse_WorkflowResponse_:
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/WorkflowResponse'
-          type: array
-          title: Items
-          description: List of items
-        pagination:
-          $ref: '#/components/schemas/PaginationMeta'
-          description: Pagination metadata
-      type: object
-      required:
-      - items
-      - pagination
-      title: PaginatedResponse[WorkflowResponse]
-    WorkflowStep:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: Unique identifier for the step
-        title:
-          type: string
-          title: Title
-          description: Display title for the step
-        description:
-          type: string
-          title: Description
-          description: Brief description of what this step accomplishes
-        completion_criteria:
-          items:
-            type: string
-          type: array
-          title: Completion Criteria
-          description: Criteria for step completion evaluation
-        suggestions:
-          items:
-            $ref: '#/components/schemas/StepSuggestion'
-          type: array
-          title: Suggestions
-          description: Suggested responses for this step
-      type: object
-      required:
-      - id
-      - title
-      - description
-      title: WorkflowStep
-      description: A step within a workflow definition.
-      example:
-        description: Identify features to document
-        id: feature-identification
-        suggestions:
-        - full_message: Please scan my codebase to identify the main features.
-          icon: Search
-          id: scan-codebase
-          text: Scan my codebase
-          type: action
-        title: Feature Identification
-    StepEvaluationResponse:
-      properties:
-        is_complete:
-          type: boolean
-          title: Is Complete
-          description: Whether the step requirements have been satisfied
-        confidence:
-          type: number
-          maximum: 1.0
-          minimum: 0.0
-          title: Confidence
-          description: Confidence score from 0 to 1
-        step_summary:
-          type: string
-          title: Step Summary
-          description: Brief description of what was accomplished
-        collected_data:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Collected Data
-          description: Structured data extracted from conversation
-        reasoning:
-          type: string
-          title: Reasoning
-          description: Brief explanation citing specific user inputs
-          default: ''
-        missing_info:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Missing Info
-          description: Information still needed
-      type: object
-      required:
-      - is_complete
-      - confidence
-      - step_summary
-      title: StepEvaluationResponse
-      description: Structured result from the step-completion evaluator.
-    WorkflowStatus:
-      type: string
-      enum:
-      - pending
-      - in_progress
-      - completed
-      - failed
-      - cancelled
-      title: WorkflowStatus
-      description: Workflow status enumeration.
-    PaginationMeta:
-      properties:
-        total:
-          type: integer
-          title: Total
-        page:
-          type: integer
-          title: Page
-        size:
-          type: integer
-          title: Size
-        pages:
-          type: integer
-          title: Pages
-      type: object
-      required:
-      - total
-      - page
-      - size
-      - pages
-      title: PaginationMeta
-    WorkflowCreate:
-      properties:
-        workflow_type:
-          type: string
-          title: Workflow Type
-          description: Type of workflow (must exist in workflow definitions)
-          examples:
-          - user-stories
-          - jira-tickets
-          - api-docs
-        language:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Language
-          description: BCP-47 language code for workflow responses (ja, pt-BR). When set, all assistant messages and generated documents will use this language.
-      type: object
-      required:
-      - workflow_type
-      title: WorkflowCreate
-      description: Request schema for creating a workflow.
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    WorkflowDocumentResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-        workflow_id:
-          type: string
-          title: Workflow Id
-        document_type:
-          type: string
-          title: Document Type
-        content:
-          type: string
-          title: Content
-        content_json:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Content Json
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-      type: object
-      required:
-      - id
-      - workflow_id
-      - document_type
-      - content
-      - created_at
-      - updated_at
-      title: WorkflowDocumentResponse
-      description: Response schema for a workflow document.
-    WorkflowUpdate:
-      properties:
-        status:
-          anyOf:
-          - $ref: '#/components/schemas/WorkflowStatus'
-          - type: 'null'
-          description: New status for the workflow
-        language:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Language
-          description: BCP-47 language code for workflow responses (ja, pt-BR).
-      type: object
-      title: WorkflowUpdate
-      description: Request schema for updating a workflow.
   securitySchemes:
     BearerAuth:
       type: http

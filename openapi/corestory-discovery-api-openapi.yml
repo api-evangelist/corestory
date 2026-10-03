@@ -189,6 +189,21 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
+    SuggestedQuestionListResponse:
+      properties:
+        suggested_questions:
+          items:
+            $ref: '#/components/schemas/SuggestedQuestionResponse'
+          type: array
+          title: Suggested Questions
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - suggested_questions
+      - total
+      title: SuggestedQuestionListResponse
     Feature-Output:
       properties:
         name:
@@ -209,6 +224,47 @@ components:
       - description
       - category
       title: Feature
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    QuestionsResponse:
+      properties:
+        questions:
+          items:
+            $ref: '#/components/schemas/Question'
+          type: array
+          title: Questions
+          description: List of suggested questions
+        total:
+          type: integer
+          title: Total
+          description: Total number of questions
+        limit:
+          type: integer
+          title: Limit
+          description: Maximum number of questions requested
+      type: object
+      required:
+      - questions
+      - total
+      - limit
+      title: QuestionsResponse
+      description: Response model for the questions endpoint
     ErrorSchema:
       properties:
         error:
@@ -238,62 +294,6 @@ components:
       - complexity
       title: Question
       description: Model for a suggested question
-    SuggestedQuestionListResponse:
-      properties:
-        suggested_questions:
-          items:
-            $ref: '#/components/schemas/SuggestedQuestionResponse'
-          type: array
-          title: Suggested Questions
-        total:
-          type: integer
-          title: Total
-      type: object
-      required:
-      - suggested_questions
-      - total
-      title: SuggestedQuestionListResponse
-    QuestionsResponse:
-      properties:
-        questions:
-          items:
-            $ref: '#/components/schemas/Question'
-          type: array
-          title: Questions
-          description: List of suggested questions
-        total:
-          type: integer
-          title: Total
-          description: Total number of questions
-        limit:
-          type: integer
-          title: Limit
-          description: Maximum number of questions requested
-      type: object
-      required:
-      - questions
-      - total
-      - limit
-      title: QuestionsResponse
-      description: Response model for the questions endpoint
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
     SuggestedQuestionResponse:
       properties:
         id:

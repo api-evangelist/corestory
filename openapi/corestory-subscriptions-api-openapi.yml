@@ -89,14 +89,24 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    ErrorSchema:
+    ErrorBody:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
       type: object
       required:
-      - error
-      title: ErrorSchema
+      - message
+      - type
+      title: ErrorBody
     UsageDataResponse:
       properties:
         period_start:
@@ -148,31 +158,6 @@ components:
       - total_users
       title: UsageDataResponse
       description: Response model for organization usage data.
-    SubscriptionProvider:
-      type: string
-      enum:
-      - ms_marketplace
-      - stripe
-      title: SubscriptionProvider
-      description: Subscription provider enum.
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
     SubscriptionStatusResponse:
       properties:
         status:
@@ -278,6 +263,21 @@ components:
       - status
       title: SubscriptionStatusResponse
       description: Response model for organization subscription status.
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    SubscriptionProvider:
+      type: string
+      enum:
+      - ms_marketplace
+      - stripe
+      title: SubscriptionProvider
+      description: Subscription provider enum.
   securitySchemes:
     BearerAuth:
       type: http

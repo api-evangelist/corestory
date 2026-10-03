@@ -243,14 +243,77 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    ErrorSchema:
+    ApiKeyCreateRequest:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        name:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Name
+          description: User-friendly key name
+          examples:
+          - CI/CD Pipeline
+          - Development Server
+          - Production API
+        description:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Description
+          description: Optional description for the key
+          examples:
+          - Used for automated deployments
+          - Local development testing
+        expires_days:
+          type: integer
+          maximum: 730.0
+          minimum: 1.0
+          title: Expires Days
+          description: Key validity in days (1-730 days)
+          default: 365
+          examples:
+          - 30
+          - 90
+          - 365
+        scope_type:
+          type: string
+          enum:
+          - user
+          - project
+          - organization
+          title: Scope Type
+          description: 'Scope type: ''user'' for full user permissions, ''project'' for project-scoped, ''organization'' for M2M keys'
+          default: user
+        project_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Project Id
+          description: Project ID (required when scope_type is 'project')
       type: object
       required:
-      - error
-      title: ErrorSchema
+      - name
+      title: ApiKeyCreateRequest
+      description: Request to create a new API key.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
     ApiKeyUpdateRequest:
       properties:
         name:
@@ -361,52 +424,38 @@ components:
       - is_expired
       title: ApiKeyResponse
       description: Response for key metadata (without sensitive data).
-    ApiKeyListResponse:
+    ApiKeyRevokeResponse:
       properties:
-        keys:
-          items:
-            $ref: '#/components/schemas/ApiKeyResponse'
-          type: array
-          title: Keys
-          description: List of keys
-        total_count:
-          type: integer
-          title: Total Count
-          description: Total number of keys
-        active_count:
-          type: integer
-          title: Active Count
-          description: Number of active keys
-        revoked_count:
-          type: integer
-          title: Revoked Count
-          description: Number of revoked keys
-      type: object
-      required:
-      - keys
-      - total_count
-      - active_count
-      - revoked_count
-      title: ApiKeyListResponse
-      description: Response for listing keys.
-    ErrorBody:
-      properties:
+        id:
+          type: string
+          title: Id
+          description: Key identifier
+        name:
+          type: string
+          title: Name
+          description: Key name
+        revoked_at:
+          type: string
+          format: date-time
+          title: Revoked At
+          description: When key was revoked
+        revoked_by:
+          type: string
+          title: Revoked By
+          description: User who revoked the key
         message:
           type: string
           title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
+          description: Success message
+          default: API key successfully revoked
       type: object
       required:
-      - message
-      - type
-      title: ErrorBody
+      - id
+      - name
+      - revoked_at
+      - revoked_by
+      title: ApiKeyRevokeResponse
+      description: Response after revoking a key.
     ApiKeyCreateResponse:
       properties:
         id:
@@ -507,91 +556,14 @@ components:
       - key
       title: ApiKeyCreateResponse
       description: Response when creating a new key (includes full key ONCE).
-    ApiKeyCreateRequest:
+    ErrorSchema:
       properties:
-        name:
-          type: string
-          maxLength: 100
-          minLength: 1
-          title: Name
-          description: User-friendly key name
-          examples:
-          - CI/CD Pipeline
-          - Development Server
-          - Production API
-        description:
-          anyOf:
-          - type: string
-            maxLength: 500
-          - type: 'null'
-          title: Description
-          description: Optional description for the key
-          examples:
-          - Used for automated deployments
-          - Local development testing
-        expires_days:
-          type: integer
-          maximum: 730.0
-          minimum: 1.0
-          title: Expires Days
-          description: Key validity in days (1-730 days)
-          default: 365
-          examples:
-          - 30
-          - 90
-          - 365
-        scope_type:
-          type: string
-          enum:
-          - user
-          - project
-          - organization
-          title: Scope Type
-          description: 'Scope type: ''user'' for full user permissions, ''project'' for project-scoped, ''organization'' for M2M keys'
-          default: user
-        project_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Project Id
-          description: Project ID (required when scope_type is 'project')
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       type: object
       required:
-      - name
-      title: ApiKeyCreateRequest
-      description: Request to create a new API key.
-    ApiKeyRevokeResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: Key identifier
-        name:
-          type: string
-          title: Name
-          description: Key name
-        revoked_at:
-          type: string
-          format: date-time
-          title: Revoked At
-          description: When key was revoked
-        revoked_by:
-          type: string
-          title: Revoked By
-          description: User who revoked the key
-        message:
-          type: string
-          title: Message
-          description: Success message
-          default: API key successfully revoked
-      type: object
-      required:
-      - id
-      - name
-      - revoked_at
-      - revoked_by
-      title: ApiKeyRevokeResponse
-      description: Response after revoking a key.
+      - error
+      title: ErrorSchema
     ApiKeyRefreshRequest:
       properties:
         scope_type:
@@ -620,6 +592,34 @@ components:
       - scope_type
       title: ApiKeyRefreshRequest
       description: Request to refresh (rotate) an API key.
+    ApiKeyListResponse:
+      properties:
+        keys:
+          items:
+            $ref: '#/components/schemas/ApiKeyResponse'
+          type: array
+          title: Keys
+          description: List of keys
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of keys
+        active_count:
+          type: integer
+          title: Active Count
+          description: Number of active keys
+        revoked_count:
+          type: integer
+          title: Revoked Count
+          description: Number of revoked keys
+      type: object
+      required:
+      - keys
+      - total_count
+      - active_count
+      - revoked_count
+      title: ApiKeyListResponse
+      description: Response for listing keys.
   securitySchemes:
     BearerAuth:
       type: http

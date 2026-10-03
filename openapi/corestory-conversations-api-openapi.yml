@@ -881,61 +881,100 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    ChatPersona:
-      type: string
-      enum:
-      - general
-      - developer
-      - business_analyst
-      - product_manager
-      - project_manager
-      - designer
-      title: ChatPersona
-      description: Personas for chat behavior customization
-    QueryRequest:
+    ConversationExportResponse:
       properties:
-        query:
+        id:
+          type: integer
+          title: Id
+          description: Conversation ID (original conversation if this was imported)
+        title:
           type: string
-          title: Query
-        reasoning_mode:
-          type: boolean
-          title: Reasoning Mode
-          default: false
-        model:
-          anyOf:
-          - type: string
-            pattern: ^[a-zA-Z0-9][a-zA-Z0-9._-]{0,63}$
-          - type: 'null'
-          title: Model
-          description: LLM model for this request (e.g. claude-sonnet-4-0, gpt-4o). Auto-detects provider from model name prefix.
-        language:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Language
-          description: BCP-47 language code for responses (ja, es, fr-CA).
-        include_source_markers:
-          type: boolean
-          title: Include Source Markers
-          description: When true, sources are numbered ([1], [2]) and the LLM adds inline citations.
-          default: false
-        verify_build_claims:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Verify Build Claims
-          description: Per-request override for post-synthesis build/dependency claim verification. When true, package/tool claims in the answer are cross-checked against build-manifest metadata stored during ingestion (trades streaming latency for claim accuracy). When false, verification is skipped for this request. When omitted (null), the server falls back to the BUILD_CLAIM_VERIFICATION_ENABLED environment setting.
+          title: Title
+          description: Conversation title
+        created_by:
+          type: string
+          format: uuid
+          title: Created By
+          description: User ID who originally created this conversation
+        project_id:
+          type: integer
+          title: Project Id
+          description: Project ID this conversation belongs to
+        link:
+          type: string
+          title: Link
+          description: 'Shareable URL path for importing this conversation. Format: /projects/{project_id}/conversations/{conversation_id}/import'
       type: object
       required:
-      - query
-      title: QueryRequest
-    FeedbackType:
+      - id
+      - title
+      - created_by
+      - project_id
+      - link
+      title: ConversationExportResponse
+      description: 'Response model for conversation export/sharing.
+
+
+        Contains the conversation details and a shareable link that other users
+
+        can use to import the conversation into their own account.
+
+        If the conversation was previously imported, returns the link to the original conversation.'
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    ConversationSettingsRequest:
+      properties:
+        persona:
+          anyOf:
+          - $ref: '#/components/schemas/ChatPersona'
+          - type: 'null'
+        context_scope:
+          anyOf:
+          - $ref: '#/components/schemas/ContextScope'
+          - type: 'null'
+      type: object
+      title: ConversationSettingsRequest
+      description: 'Request model for updating conversation settings (deprecated: use UpdateConversationRequest)'
+    ImportStatus:
       type: string
       enum:
-      - thumbs_up
-      - thumbs_down
-      title: FeedbackType
-      description: Types of user feedback
+      - original
+      - pending
+      - in_progress
+      - completed
+      - failed
+      title: ImportStatus
+    ConversationCreateRequest:
+      properties:
+        title:
+          type: string
+          title: Title
+        context:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Context
+        persona:
+          anyOf:
+          - $ref: '#/components/schemas/ChatPersona'
+          - type: 'null'
+        context_scope:
+          anyOf:
+          - $ref: '#/components/schemas/ContextScope'
+          - type: 'null'
+      type: object
+      required:
+      - title
+      title: ConversationCreateRequest
+      description: Request model for creating a conversation
     UpdateConversationRequest:
       properties:
         title:
@@ -966,72 +1005,17 @@ components:
       type: object
       title: UpdateConversationRequest
       description: Request model for partially updating conversation details
-    ConversationMeta:
-      properties:
-        message_count:
-          type: integer
-          title: Message Count
-          description: Total number of messages in the conversation
-          default: 0
-        last_message_preview:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Message Preview
-          description: Preview of the last message content (up to 100 chars)
-        last_message_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Message At
-          description: Timestamp of the last message
-      type: object
-      title: ConversationMeta
-      description: Metadata about conversation messages.
-    MessageFeedbackResponse:
-      properties:
-        message_id:
-          type: integer
-          title: Message Id
-          description: ID of the chat message
-        feedback_type:
-          $ref: '#/components/schemas/FeedbackType'
-          description: The current feedback type on the message
-      type: object
-      required:
-      - message_id
-      - feedback_type
-      title: MessageFeedbackResponse
-      description: Response model for message feedback operations
-    ConversationSettingsResponse:
-      properties:
-        conversation_id:
-          type: integer
-          title: Conversation Id
-        persona:
-          $ref: '#/components/schemas/ChatPersona'
-        context_scope:
-          $ref: '#/components/schemas/ContextScope'
-        created_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Created At
-        updated_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Updated At
-      type: object
-      required:
-      - conversation_id
-      - persona
-      - context_scope
-      - created_at
-      - updated_at
-      title: ConversationSettingsResponse
-      description: 'Response model for conversation settings (deprecated: settings now in ConversationResponse)'
+    ChatPersona:
+      type: string
+      enum:
+      - general
+      - developer
+      - business_analyst
+      - product_manager
+      - project_manager
+      - designer
+      title: ChatPersona
+      description: Personas for chat behavior customization
     SourceReferenceResponse:
       properties:
         id:
@@ -1077,6 +1061,89 @@ components:
       - snippet
       title: SourceReferenceResponse
       description: Response model for source references
+    ConversationOrigin:
+      type: string
+      enum:
+      - ui
+      - mcp
+      title: ConversationOrigin
+      description: Origin source of conversation creation
+    ChatMessageResponse:
+      properties:
+        id:
+          type: integer
+          title: Id
+          description: Chat message ID
+        conversation_id:
+          type: integer
+          title: Conversation Id
+          description: Conversation ID this message belongs to
+        role:
+          type: string
+          title: Role
+          description: Role of the message sender (e.g., 'user', 'assistant')
+        content:
+          type: string
+          title: Content
+          description: Content of the chat message
+        created_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created At
+          description: When the message was created
+        updated_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Updated At
+          description: When the message was last updated
+        has_sources:
+          type: boolean
+          title: Has Sources
+          description: Indicates if the message has source references
+          default: false
+        feedback:
+          anyOf:
+          - $ref: '#/components/schemas/FeedbackType'
+          - type: 'null'
+          description: Feedback for the message, if any
+      type: object
+      required:
+      - id
+      - conversation_id
+      - role
+      - content
+      - created_at
+      - updated_at
+      - feedback
+      title: ChatMessageResponse
+      description: Response model for chat message data
+    FeedbackType:
+      type: string
+      enum:
+      - thumbs_up
+      - thumbs_down
+      title: FeedbackType
+      description: Types of user feedback
+    ContextScope:
+      type: string
+      enum:
+      - automatic
+      - artifacts
+      - code
+      title: ContextScope
+      description: Context scope for knowledge retrieval
+    MessageFeedbackRequest:
+      properties:
+        feedback_type:
+          $ref: '#/components/schemas/FeedbackType'
+          description: Type of feedback (e.g., thumbs_up, thumbs_down)
+      type: object
+      required:
+      - feedback_type
+      title: MessageFeedbackRequest
+      description: Request model for providing feedback on a chat message
     ErrorBody:
       properties:
         message:
@@ -1095,19 +1162,71 @@ components:
       - message
       - type
       title: ErrorBody
-    ConversationSettingsRequest:
+    QueryRequest:
       properties:
-        persona:
+        query:
+          type: string
+          title: Query
+        reasoning_mode:
+          type: boolean
+          title: Reasoning Mode
+          default: false
+        model:
           anyOf:
-          - $ref: '#/components/schemas/ChatPersona'
+          - type: string
+            pattern: ^[a-zA-Z0-9][a-zA-Z0-9._-]{0,63}$
           - type: 'null'
-        context_scope:
+          title: Model
+          description: LLM model for this request (e.g. claude-sonnet-4-0, gpt-4o). Auto-detects provider from model name prefix.
+        language:
           anyOf:
-          - $ref: '#/components/schemas/ContextScope'
+          - type: string
           - type: 'null'
+          title: Language
+          description: BCP-47 language code for responses (ja, es, fr-CA).
+        include_source_markers:
+          type: boolean
+          title: Include Source Markers
+          description: When true, sources are numbered ([1], [2]) and the LLM adds inline citations.
+          default: false
+        verify_build_claims:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Verify Build Claims
+          description: Per-request override for post-synthesis build/dependency claim verification. When true, package/tool claims in the answer are cross-checked against build-manifest metadata stored during ingestion (trades streaming latency for claim accuracy). When false, verification is skipped for this request. When omitted (null), the server falls back to the BUILD_CLAIM_VERIFICATION_ENABLED environment setting.
       type: object
-      title: ConversationSettingsRequest
-      description: 'Request model for updating conversation settings (deprecated: use UpdateConversationRequest)'
+      required:
+      - query
+      title: QueryRequest
+    PaginatedConversationListResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/ConversationResponse'
+          type: array
+          title: Results
+          description: List of conversations
+        count:
+          type: integer
+          title: Count
+          description: Total number of conversations
+        limit:
+          type: integer
+          title: Limit
+          description: Items per page
+        offset:
+          type: integer
+          title: Offset
+          description: Items skipped
+      type: object
+      required:
+      - results
+      - count
+      - limit
+      - offset
+      title: PaginatedConversationListResponse
+      description: Response model for paginated conversation list
     ConversationResponse:
       properties:
         id:
@@ -1193,147 +1312,6 @@ components:
       - is_read_only
       title: ConversationResponse
       description: Response model for conversation data with settings and metadata
-    ChatMessageResponse:
-      properties:
-        id:
-          type: integer
-          title: Id
-          description: Chat message ID
-        conversation_id:
-          type: integer
-          title: Conversation Id
-          description: Conversation ID this message belongs to
-        role:
-          type: string
-          title: Role
-          description: Role of the message sender (e.g., 'user', 'assistant')
-        content:
-          type: string
-          title: Content
-          description: Content of the chat message
-        created_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Created At
-          description: When the message was created
-        updated_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Updated At
-          description: When the message was last updated
-        has_sources:
-          type: boolean
-          title: Has Sources
-          description: Indicates if the message has source references
-          default: false
-        feedback:
-          anyOf:
-          - $ref: '#/components/schemas/FeedbackType'
-          - type: 'null'
-          description: Feedback for the message, if any
-      type: object
-      required:
-      - id
-      - conversation_id
-      - role
-      - content
-      - created_at
-      - updated_at
-      - feedback
-      title: ChatMessageResponse
-      description: Response model for chat message data
-    ContextScope:
-      type: string
-      enum:
-      - automatic
-      - artifacts
-      - code
-      title: ContextScope
-      description: Context scope for knowledge retrieval
-    PaginatedConversationListResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/ConversationResponse'
-          type: array
-          title: Results
-          description: List of conversations
-        count:
-          type: integer
-          title: Count
-          description: Total number of conversations
-        limit:
-          type: integer
-          title: Limit
-          description: Items per page
-        offset:
-          type: integer
-          title: Offset
-          description: Items skipped
-      type: object
-      required:
-      - results
-      - count
-      - limit
-      - offset
-      title: PaginatedConversationListResponse
-      description: Response model for paginated conversation list
-    ConversationOrigin:
-      type: string
-      enum:
-      - ui
-      - mcp
-      title: ConversationOrigin
-      description: Origin source of conversation creation
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    ConversationExportResponse:
-      properties:
-        id:
-          type: integer
-          title: Id
-          description: Conversation ID (original conversation if this was imported)
-        title:
-          type: string
-          title: Title
-          description: Conversation title
-        created_by:
-          type: string
-          format: uuid
-          title: Created By
-          description: User ID who originally created this conversation
-        project_id:
-          type: integer
-          title: Project Id
-          description: Project ID this conversation belongs to
-        link:
-          type: string
-          title: Link
-          description: 'Shareable URL path for importing this conversation. Format: /projects/{project_id}/conversations/{conversation_id}/import'
-      type: object
-      required:
-      - id
-      - title
-      - created_by
-      - project_id
-      - link
-      title: ConversationExportResponse
-      description: 'Response model for conversation export/sharing.
-
-
-        Contains the conversation details and a shareable link that other users
-
-        can use to import the conversation into their own account.
-
-        If the conversation was previously imported, returns the link to the original conversation.'
     ImportConversationResponse:
       properties:
         id:
@@ -1425,50 +1403,72 @@ components:
       - is_read_only
       title: ImportConversationResponse
       description: Response model for imported conversation with backward-compatible status field.
-    ConversationCreateRequest:
+    ConversationMeta:
       properties:
-        title:
-          type: string
-          title: Title
-        context:
+        message_count:
+          type: integer
+          title: Message Count
+          description: Total number of messages in the conversation
+          default: 0
+        last_message_preview:
           anyOf:
-          - items:
-              type: string
-            type: array
+          - type: string
           - type: 'null'
-          title: Context
+          title: Last Message Preview
+          description: Preview of the last message content (up to 100 chars)
+        last_message_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Message At
+          description: Timestamp of the last message
+      type: object
+      title: ConversationMeta
+      description: Metadata about conversation messages.
+    ConversationSettingsResponse:
+      properties:
+        conversation_id:
+          type: integer
+          title: Conversation Id
         persona:
-          anyOf:
-          - $ref: '#/components/schemas/ChatPersona'
-          - type: 'null'
+          $ref: '#/components/schemas/ChatPersona'
         context_scope:
+          $ref: '#/components/schemas/ContextScope'
+        created_at:
           anyOf:
-          - $ref: '#/components/schemas/ContextScope'
+          - type: string
           - type: 'null'
+          title: Created At
+        updated_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Updated At
       type: object
       required:
-      - title
-      title: ConversationCreateRequest
-      description: Request model for creating a conversation
-    ImportStatus:
-      type: string
-      enum:
-      - original
-      - pending
-      - in_progress
-      - completed
-      - failed
-      title: ImportStatus
-    MessageFeedbackRequest:
+      - conversation_id
+      - persona
+      - context_scope
+      - created_at
+      - updated_at
+      title: ConversationSettingsResponse
+      description: 'Response model for conversation settings (deprecated: settings now in ConversationResponse)'
+    MessageFeedbackResponse:
       properties:
+        message_id:
+          type: integer
+          title: Message Id
+          description: ID of the chat message
         feedback_type:
           $ref: '#/components/schemas/FeedbackType'
-          description: Type of feedback (e.g., thumbs_up, thumbs_down)
+          description: The current feedback type on the message
       type: object
       required:
+      - message_id
       - feedback_type
-      title: MessageFeedbackRequest
-      description: Request model for providing feedback on a chat message
+      title: MessageFeedbackResponse
+      description: Response model for message feedback operations
   securitySchemes:
     BearerAuth:
       type: http

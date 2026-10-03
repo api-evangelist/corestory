@@ -376,40 +376,33 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    PaginationMeta:
+    GenerateAllRequest:
       properties:
-        total:
-          type: integer
-          title: Total
-        page:
-          type: integer
-          title: Page
-        size:
-          type: integer
-          title: Size
-        pages:
-          type: integer
-          title: Pages
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
       type: object
-      required:
-      - total
-      - page
-      - size
-      - pages
-      title: PaginationMeta
-    PRDCustomPromptRequest:
+      title: GenerateAllRequest
+    ErrorBody:
       properties:
-        prompt:
+        message:
           type: string
-          title: Prompt
-        replacement:
-          type: boolean
-          title: Replacement
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
       type: object
       required:
-      - prompt
-      - replacement
-      title: PRDCustomPromptRequest
+      - message
+      - type
+      title: ErrorBody
     SectionResponse:
       properties:
         prd_id:
@@ -485,6 +478,27 @@ components:
         requested. The `section_name` field identifies the section in dashed form
 
         (e.g. ''executive-overview'').'
+    PaginationMeta:
+      properties:
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        size:
+          type: integer
+          title: Size
+        pages:
+          type: integer
+          title: Pages
+      type: object
+      required:
+      - total
+      - page
+      - size
+      - pages
+      title: PaginationMeta
     GeneratePRDSectionRequest:
       properties:
         custom_prompt:
@@ -498,33 +512,6 @@ components:
           title: Language
       type: object
       title: GeneratePRDSectionRequest
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    DocumentSectionsDashedEnum:
-      type: string
-      enum:
-      - executive-overview
-      - user-personas
-      - high-level-requirements
-      - user-stories
-      - security-requirements
-      - system-architecture
-      - data-models
-      - user-interface
-      - api-specifications
-      - interface-specifications
-      - integration-points
-      - security-considerations
-      - tech-user-stories
-      - implementation-strategy
-      title: DocumentSectionsDashedEnum
-      description: PRD + tech-spec sections only (no retriever). Use for user-facing endpoints.
     AllSectionsResponse:
       properties:
         system_architecture:
@@ -676,6 +663,53 @@ components:
       - created_at
       title: AllSectionsResponse
       description: Combined PRD + Tech-Spec sections response for unified /sections/ endpoint.
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    SpecFormat:
+      type: string
+      enum:
+      - legacy
+      - dga
+      - spec_v2
+      title: SpecFormat
+      description: 'Self-documenting label for the format a generated spec is in.
+
+
+        Derived from ``content_version`` and surfaced on API responses so the
+
+        viewer (and any API consumer) renders the right experience without
+
+        guessing from which fields happen to be present.'
+    PRDCustomPromptRequest:
+      properties:
+        prompt:
+          type: string
+          title: Prompt
+        replacement:
+          type: boolean
+          title: Replacement
+      type: object
+      required:
+      - prompt
+      - replacement
+      title: PRDCustomPromptRequest
+    BasicSuccessResponse:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: success
+      type: object
+      title: BasicSuccessResponse
+      description: 'Use this for returns for deletes and patches.
+
+        UI ALWAYS needs some payload return. This just standarizes it.'
     LanguageInfo:
       properties:
         code:
@@ -692,59 +726,25 @@ components:
       - name
       title: LanguageInfo
       description: Language information with code and native display name.
-    BasicSuccessResponse:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: success
-      type: object
-      title: BasicSuccessResponse
-      description: 'Use this for returns for deletes and patches.
-
-        UI ALWAYS needs some payload return. This just standarizes it.'
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
-    GenerateAllRequest:
-      properties:
-        language:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Language
-      type: object
-      title: GenerateAllRequest
-    SpecFormat:
+    DocumentSectionsDashedEnum:
       type: string
       enum:
-      - legacy
-      - dga
-      - spec_v2
-      title: SpecFormat
-      description: 'Self-documenting label for the format a generated spec is in.
-
-
-        Derived from ``content_version`` and surfaced on API responses so the
-
-        viewer (and any API consumer) renders the right experience without
-
-        guessing from which fields happen to be present.'
+      - executive-overview
+      - user-personas
+      - high-level-requirements
+      - user-stories
+      - security-requirements
+      - system-architecture
+      - data-models
+      - user-interface
+      - api-specifications
+      - interface-specifications
+      - integration-points
+      - security-considerations
+      - tech-user-stories
+      - implementation-strategy
+      title: DocumentSectionsDashedEnum
+      description: PRD + tech-spec sections only (no retriever). Use for user-facing endpoints.
   securitySchemes:
     BearerAuth:
       type: http

@@ -179,119 +179,23 @@ paths:
           description: File or vector store not found
 components:
   schemas:
-    InterfaceInfo:
+    ClassInfo:
       properties:
         name:
           type: string
           title: Name
-          description: Interface type (mainframe, desktop, web, mobile, terminal, api)
+          description: Class name
         summary:
           anyOf:
           - type: string
           - type: 'null'
           title: Summary
-          description: Technology used
+          description: AI-generated summary
       type: object
       required:
       - name
-      title: InterfaceInfo
-      description: Interface name and summary.
-    FileManifestItem:
-      properties:
-        path:
-          type: string
-          title: Path
-          description: Full file path relative to the repository root
-        file_name:
-          type: string
-          title: File Name
-          description: Base file name derived from path
-        status:
-          type: string
-          enum:
-          - included
-          - excluded
-          title: Status
-          description: Whether the file was included or excluded during pre-ingestion
-        ingested:
-          type: boolean
-          title: Ingested
-          description: Whether the file has been ingested into the vector store
-        exclusion_reason:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Exclusion Reason
-          description: Reason for exclusion, null for included files
-        creation_date:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Creation Date
-          description: File creation date (ISO 8601)
-        last_modified_date:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Modified Date
-          description: Last modified date (ISO 8601)
-        first_ingested_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: First Ingested At
-          description: When the file was first ingested (ISO 8601)
-        last_ingested_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Ingested At
-          description: When the file was last ingested (ISO 8601)
-      type: object
-      required:
-      - path
-      - file_name
-      - status
-      - ingested
-      title: FileManifestItem
-      description: A single file entry in the project file manifest.
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    PRDReferenceContext:
-      properties:
-        section_name:
-          type: string
-          title: Section Name
-          description: Section name in dashed format (e.g. 'executive-overview', 'user-stories')
-        reference_text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Reference Text
-          description: Short description of what this file contributes to the section
-        line_number:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Line Number
-          description: Line number in the file that was referenced
-        index_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Index Id
-          description: Array index of the entity within the section (e.g. user story index)
-      type: object
-      required:
-      - section_name
-      title: PRDReferenceContext
-      description: A PRD section that references this file.
+      title: ClassInfo
+      description: Class name and summary.
     FileContentMetadata:
       properties:
         file_path:
@@ -386,6 +290,41 @@ components:
       - file_name
       title: FileContentMetadata
       description: Metadata response for file content retrieval.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    InterfaceInfo:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Interface type (mainframe, desktop, web, mobile, terminal, api)
+        summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary
+          description: Technology used
+      type: object
+      required:
+      - name
+      title: InterfaceInfo
+      description: Interface name and summary.
     FileManifestResponse:
       properties:
         project_id:
@@ -424,41 +363,102 @@ components:
       - files
       title: FileManifestResponse
       description: Complete file manifest for a project.
-    ErrorBody:
+    PRDReferenceContext:
       properties:
-        message:
+        section_name:
           type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
-    ClassInfo:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Class name
-        summary:
+          title: Section Name
+          description: Section name in dashed format (e.g. 'executive-overview', 'user-stories')
+        reference_text:
           anyOf:
           - type: string
           - type: 'null'
-          title: Summary
-          description: AI-generated summary
+          title: Reference Text
+          description: Short description of what this file contributes to the section
+        line_number:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Line Number
+          description: Line number in the file that was referenced
+        index_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Index Id
+          description: Array index of the entity within the section (e.g. user story index)
       type: object
       required:
-      - name
-      title: ClassInfo
-      description: Class name and summary.
+      - section_name
+      title: PRDReferenceContext
+      description: A PRD section that references this file.
+    FileManifestItem:
+      properties:
+        path:
+          type: string
+          title: Path
+          description: Full file path relative to the repository root
+        file_name:
+          type: string
+          title: File Name
+          description: Base file name derived from path
+        status:
+          type: string
+          enum:
+          - included
+          - excluded
+          title: Status
+          description: Whether the file was included or excluded during pre-ingestion
+        ingested:
+          type: boolean
+          title: Ingested
+          description: Whether the file has been ingested into the vector store
+        exclusion_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Exclusion Reason
+          description: Reason for exclusion, null for included files
+        creation_date:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Creation Date
+          description: File creation date (ISO 8601)
+        last_modified_date:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Modified Date
+          description: Last modified date (ISO 8601)
+        first_ingested_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Ingested At
+          description: When the file was first ingested (ISO 8601)
+        last_ingested_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Ingested At
+          description: When the file was last ingested (ISO 8601)
+      type: object
+      required:
+      - path
+      - file_name
+      - status
+      - ingested
+      title: FileManifestItem
+      description: A single file entry in the project file manifest.
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
     FunctionInfo:
       properties:
         name:

@@ -482,6 +482,162 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
+    DocumentSectionsDashedEnum:
+      type: string
+      enum:
+      - executive-overview
+      - user-personas
+      - high-level-requirements
+      - user-stories
+      - security-requirements
+      - system-architecture
+      - data-models
+      - user-interface
+      - api-specifications
+      - interface-specifications
+      - integration-points
+      - security-considerations
+      - tech-user-stories
+      - implementation-strategy
+      title: DocumentSectionsDashedEnum
+      description: PRD + tech-spec sections only (no retriever). Use for user-facing endpoints.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    PRDVersionItemResponse:
+      properties:
+        uid:
+          type: string
+          title: Uid
+        prd_id:
+          type: integer
+          title: Prd Id
+        version_num:
+          type: integer
+          title: Version Num
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        parent_version_uid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parent Version Uid
+        generated_from_commit_sha:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Generated From Commit Sha
+        created_by_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created By Id
+        created_by_fullname:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created By Fullname
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        active_version:
+          type: boolean
+          title: Active Version
+          default: false
+        custom_prompt:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Custom Prompt
+        language:
+          anyOf:
+          - $ref: '#/components/schemas/LanguageInfo'
+          - type: 'null'
+      type: object
+      required:
+      - uid
+      - prd_id
+      - version_num
+      - created_at
+      title: PRDVersionItemResponse
+    BasicSuccessResponse:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: success
+      type: object
+      title: BasicSuccessResponse
+      description: 'Use this for returns for deletes and patches.
+
+        UI ALWAYS needs some payload return. This just standarizes it.'
+    PRDVersionUpdateRequest:
+      properties:
+        title:
+          anyOf:
+          - type: string
+            maxLength: 100
+          - type: 'null'
+          title: Title
+          description: New title for this PRD version
+      additionalProperties: false
+      type: object
+      title: PRDVersionUpdateRequest
+      description: Allowed updatable fields on a PRD Version.
+    ImportStepsResponse:
+      properties:
+        steps_created:
+          type: integer
+          title: Steps Created
+        step_names:
+          items:
+            type: string
+          type: array
+          title: Step Names
+          description: Dashed step names that were created.
+      type: object
+      required:
+      - steps_created
+      - step_names
+      title: ImportStepsResponse
+      description: Response for a successful import-steps call.
+    ImportStepsRequest:
+      additionalProperties: true
+      type: object
+      title: ImportStepsRequest
+      description: 'Request body for bulk-importing PRD/TechSpec step content.
+
+
+        Accepts a flat JSON object mapping dashed step names to content.
+
+        Validates that the dict is non-empty and all keys are recognised step names.'
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
     PRDVersionItemListResponse:
       properties:
         results:
@@ -515,35 +671,6 @@ components:
       - implementation-strategy
       title: TechSpecStepsDashedEnum
       description: All tech spec steps with dashed values.
-    PRDVersionDiffResponse:
-      properties:
-        changed_sections:
-          items:
-            type: string
-          type: array
-          title: Changed Sections
-          description: Section names that differ from version to version.
-      type: object
-      title: PRDVersionDiffResponse
-    DocumentSectionsDashedEnum:
-      type: string
-      enum:
-      - executive-overview
-      - user-personas
-      - high-level-requirements
-      - user-stories
-      - security-requirements
-      - system-architecture
-      - data-models
-      - user-interface
-      - api-specifications
-      - interface-specifications
-      - integration-points
-      - security-considerations
-      - tech-user-stories
-      - implementation-strategy
-      title: DocumentSectionsDashedEnum
-      description: PRD + tech-spec sections only (no retriever). Use for user-facing endpoints.
     PRDVersionItemWithDiffResponse:
       properties:
         uid:
@@ -615,100 +742,6 @@ components:
       description: 'Subclass the item fields above and add the diff''d sections from the previous version
 
         in the history of versions.'
-    ImportStepsRequest:
-      additionalProperties: true
-      type: object
-      title: ImportStepsRequest
-      description: 'Request body for bulk-importing PRD/TechSpec step content.
-
-
-        Accepts a flat JSON object mapping dashed step names to content.
-
-        Validates that the dict is non-empty and all keys are recognised step names.'
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    PRDVersionItemResponse:
-      properties:
-        uid:
-          type: string
-          title: Uid
-        prd_id:
-          type: integer
-          title: Prd Id
-        version_num:
-          type: integer
-          title: Version Num
-        title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Title
-        parent_version_uid:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Parent Version Uid
-        generated_from_commit_sha:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Generated From Commit Sha
-        created_by_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Created By Id
-        created_by_fullname:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Created By Fullname
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        active_version:
-          type: boolean
-          title: Active Version
-          default: false
-        custom_prompt:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Custom Prompt
-        language:
-          anyOf:
-          - $ref: '#/components/schemas/LanguageInfo'
-          - type: 'null'
-      type: object
-      required:
-      - uid
-      - prd_id
-      - version_num
-      - created_at
-      title: PRDVersionItemResponse
-    LanguageInfo:
-      properties:
-        code:
-          type: string
-          title: Code
-          description: BCP-47 language code (ja, es, fr-CA).
-        name:
-          type: string
-          title: Name
-          description: Language name in its native script (English, français (Canada)).
-      type: object
-      required:
-      - code
-      - name
-      title: LanguageInfo
-      description: Language information with code and native display name.
     PRDVersionItemWithDiffListResponse:
       properties:
         results:
@@ -728,65 +761,32 @@ components:
       - results
       title: PRDVersionItemWithDiffListResponse
       description: Response model for paginated list of versions for a PRD.
-    BasicSuccessResponse:
+    LanguageInfo:
       properties:
-        detail:
+        code:
           type: string
-          title: Detail
-          default: success
-      type: object
-      title: BasicSuccessResponse
-      description: 'Use this for returns for deletes and patches.
-
-        UI ALWAYS needs some payload return. This just standarizes it.'
-    ErrorBody:
-      properties:
-        message:
+          title: Code
+          description: BCP-47 language code (ja, es, fr-CA).
+        name:
           type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
+          title: Name
+          description: Language name in its native script (English, français (Canada)).
       type: object
       required:
-      - message
-      - type
-      title: ErrorBody
-    ImportStepsResponse:
+      - code
+      - name
+      title: LanguageInfo
+      description: Language information with code and native display name.
+    PRDVersionDiffResponse:
       properties:
-        steps_created:
-          type: integer
-          title: Steps Created
-        step_names:
+        changed_sections:
           items:
             type: string
           type: array
-          title: Step Names
-          description: Dashed step names that were created.
+          title: Changed Sections
+          description: Section names that differ from version to version.
       type: object
-      required:
-      - steps_created
-      - step_names
-      title: ImportStepsResponse
-      description: Response for a successful import-steps call.
-    PRDVersionUpdateRequest:
-      properties:
-        title:
-          anyOf:
-          - type: string
-            maxLength: 100
-          - type: 'null'
-          title: Title
-          description: New title for this PRD version
-      additionalProperties: false
-      type: object
-      title: PRDVersionUpdateRequest
-      description: Allowed updatable fields on a PRD Version.
+      title: PRDVersionDiffResponse
   securitySchemes:
     BearerAuth:
       type: http

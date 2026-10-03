@@ -203,78 +203,6 @@ paths:
           description: Internal server error
 components:
   schemas:
-    PaginatedPromptListResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/PromptResponse'
-          type: array
-          title: Results
-        count:
-          type: integer
-          title: Count
-        limit:
-          type: integer
-          title: Limit
-        offset:
-          type: integer
-          title: Offset
-      type: object
-      required:
-      - results
-      - count
-      - limit
-      - offset
-      title: PaginatedPromptListResponse
-    AllPRDStepsEnum:
-      type: string
-      enum:
-      - executive_overview
-      - user_personas
-      - high_level_requirements
-      - user_stories
-      - security_requirements
-      - system_architecture
-      - data_models
-      - user_interface
-      - api_specifications
-      - interface_specifications
-      - integration_points
-      - security_considerations
-      - tech_user_stories
-      - implementation_strategy
-      - retriever_api_specification
-      - retriever_interface_specification
-      - retriever_data_models
-      - retriever_classes
-      - retriever_summary
-      title: AllPRDStepsEnum
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
     PromptResponse:
       properties:
         id:
@@ -330,6 +258,70 @@ components:
         replacement: false
         step: user_stories
         updated_at: '2025-01-01T00:00:00'
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    PaginatedPromptListResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/PromptResponse'
+          type: array
+          title: Results
+        count:
+          type: integer
+          title: Count
+        limit:
+          type: integer
+          title: Limit
+        offset:
+          type: integer
+          title: Offset
+      type: object
+      required:
+      - results
+      - count
+      - limit
+      - offset
+      title: PaginatedPromptListResponse
+    AllPRDStepsEnum:
+      type: string
+      enum:
+      - executive_overview
+      - user_personas
+      - high_level_requirements
+      - user_stories
+      - security_requirements
+      - system_architecture
+      - data_models
+      - user_interface
+      - api_specifications
+      - interface_specifications
+      - integration_points
+      - security_considerations
+      - tech_user_stories
+      - implementation_strategy
+      - retriever_api_specification
+      - retriever_interface_specification
+      - retriever_data_models
+      - retriever_classes
+      - retriever_summary
+      title: AllPRDStepsEnum
     PromptListResponse:
       properties:
         prompts:
@@ -349,6 +341,14 @@ components:
       - prompts
       title: PromptListResponse
       description: Response model for a list of prompts
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
   securitySchemes:
     BearerAuth:
       type: http

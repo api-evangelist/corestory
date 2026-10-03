@@ -108,35 +108,24 @@ components:
       - cancelled
       title: JobStatus
       description: Job status enumeration
-    PinWorkspaceRequest:
+    ErrorBody:
       properties:
-        project_id:
-          type: integer
-          title: Project Id
-          description: ID of the workspace (project) to pin.
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
       type: object
       required:
-      - project_id
-      title: PinWorkspaceRequest
-      description: Body for pinning a workspace.
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    ProjectSyncStatus:
-      type: string
-      enum:
-      - up_to_date
-      - updating
-      - stale
-      - failed
-      - couldnt_process
-      title: ProjectSyncStatus
-      description: Sync/processing status for a project in the org roster.
+      - message
+      - type
+      title: ErrorBody
     PinnedWorkspaceItem:
       properties:
         project_id:
@@ -185,24 +174,35 @@ components:
       - pinned_at
       title: PinnedWorkspaceItem
       description: A single pinned workspace, annotated with workspace metadata for display.
-    ErrorBody:
+    PinWorkspaceRequest:
       properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
+        project_id:
+          type: integer
+          title: Project Id
+          description: ID of the workspace (project) to pin.
       type: object
       required:
-      - message
-      - type
-      title: ErrorBody
+      - project_id
+      title: PinWorkspaceRequest
+      description: Body for pinning a workspace.
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    ProjectSyncStatus:
+      type: string
+      enum:
+      - up_to_date
+      - updating
+      - stale
+      - failed
+      - couldnt_process
+      title: ProjectSyncStatus
+      description: Sync/processing status for a project in the org roster.
   securitySchemes:
     BearerAuth:
       type: http

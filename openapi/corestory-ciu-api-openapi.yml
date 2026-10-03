@@ -190,13 +190,91 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    RenewalPeriod:
-      type: string
-      enum:
-      - monthly
-      - yearly
-      title: RenewalPeriod
-      description: Renewal period options for CIU plans and balances.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    LedgerEntryResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Ledger entry ID
+        action_type:
+          type: string
+          title: Action Type
+          description: Metered action that incurred CIU cost
+        entry_type:
+          type: string
+          title: Entry Type
+          description: Whether this entry is a credit or debit
+        ciu_change:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Ciu Change
+          description: CIU change on this action
+        status:
+          type: string
+          title: Status
+          description: Status of the ledger entry (e.g., 'pending', 'completed', 'failed')
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: When the ledger entry was created
+        balance_snapshot:
+          anyOf:
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          - type: 'null'
+          title: Balance Snapshot
+          description: Organization's CIU balance after this entry was applied
+      type: object
+      required:
+      - id
+      - action_type
+      - entry_type
+      - ciu_change
+      - status
+      - created_at
+      - balance_snapshot
+      title: LedgerEntryResponse
+      description: Response schema for a single CIU ledger entry.
+    LedgerHistoryResponse:
+      properties:
+        entries:
+          items:
+            $ref: '#/components/schemas/LedgerEntryResponse'
+          type: array
+          title: Entries
+          description: List of ledger entries for the organization
+        pagination:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Pagination
+          description: Pagination details, if applicable
+      type: object
+      required:
+      - entries
+      - pagination
+      title: LedgerHistoryResponse
+      description: Response schema for an organization's CIU ledger history.
     OrganizationCIUBalanceResponse:
       properties:
         id:
@@ -259,14 +337,6 @@ components:
       - plan
       title: OrganizationCIUBalanceResponse
       description: Response schema for an organization's CIU balance.
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
     ActionCostsResponse:
       properties:
         actions:
@@ -280,116 +350,6 @@ components:
       - actions
       title: ActionCostsResponse
       description: Response schema listing all metered action costs.
-    OrganizationCIUBalanceUpdate:
-      properties:
-        organization_id:
-          type: string
-          minLength: 1
-          title: Organization Id
-          description: Clerk organization ID
-        total_cius:
-          anyOf:
-          - type: number
-            minimum: 0.0
-          - type: string
-            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          - type: 'null'
-          title: Total Cius
-          description: Total CIUs allocated
-        consumed_cius:
-          anyOf:
-          - type: number
-            minimum: 0.0
-          - type: string
-            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          - type: 'null'
-          title: Consumed Cius
-          description: CIUs consumed
-      type: object
-      required:
-      - organization_id
-      title: OrganizationCIUBalanceUpdate
-      description: Request schema for updating an organization CIU balance.
-    LedgerHistoryResponse:
-      properties:
-        entries:
-          items:
-            $ref: '#/components/schemas/LedgerEntryResponse'
-          type: array
-          title: Entries
-          description: List of ledger entries for the organization
-        pagination:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Pagination
-          description: Pagination details, if applicable
-      type: object
-      required:
-      - entries
-      - pagination
-      title: LedgerHistoryResponse
-      description: Response schema for an organization's CIU ledger history.
-    ActionType:
-      type: string
-      enum:
-      - chat
-      - mcp_query
-      - workflow
-      - doc_generation
-      - ingestion
-      - plan_assignment
-      - monthly_renewal
-      - manual_adjustment
-      title: ActionType
-      description: Types of actions that can affect CIU balances.
-    LedgerEntryResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: Ledger entry ID
-        action_type:
-          type: string
-          title: Action Type
-          description: Metered action that incurred CIU cost
-        entry_type:
-          type: string
-          title: Entry Type
-          description: Whether this entry is a credit or debit
-        ciu_change:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Ciu Change
-          description: CIU change on this action
-        status:
-          type: string
-          title: Status
-          description: Status of the ledger entry (e.g., 'pending', 'completed', 'failed')
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: When the ledger entry was created
-        balance_snapshot:
-          anyOf:
-          - type: string
-            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          - type: 'null'
-          title: Balance Snapshot
-          description: Organization's CIU balance after this entry was applied
-      type: object
-      required:
-      - id
-      - action_type
-      - entry_type
-      - ciu_change
-      - status
-      - created_at
-      - balance_snapshot
-      title: LedgerEntryResponse
-      description: Response schema for a single CIU ledger entry.
     ActionCostResponse:
       properties:
         action:
@@ -407,24 +367,13 @@ components:
       - cost
       title: ActionCostResponse
       description: Cost of a single metered action.
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
+    RenewalPeriod:
+      type: string
+      enum:
+      - monthly
+      - yearly
+      title: RenewalPeriod
+      description: Renewal period options for CIU plans and balances.
     CIUPlanResponse:
       properties:
         id:
@@ -501,6 +450,57 @@ components:
       - updated_at
       title: CIUPlanResponse
       description: Response schema for a CIU plan.
+    OrganizationCIUBalanceUpdate:
+      properties:
+        organization_id:
+          type: string
+          minLength: 1
+          title: Organization Id
+          description: Clerk organization ID
+        total_cius:
+          anyOf:
+          - type: number
+            minimum: 0.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          - type: 'null'
+          title: Total Cius
+          description: Total CIUs allocated
+        consumed_cius:
+          anyOf:
+          - type: number
+            minimum: 0.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          - type: 'null'
+          title: Consumed Cius
+          description: CIUs consumed
+      type: object
+      required:
+      - organization_id
+      title: OrganizationCIUBalanceUpdate
+      description: Request schema for updating an organization CIU balance.
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    ActionType:
+      type: string
+      enum:
+      - chat
+      - mcp_query
+      - workflow
+      - doc_generation
+      - ingestion
+      - plan_assignment
+      - monthly_renewal
+      - manual_adjustment
+      title: ActionType
+      description: Types of actions that can affect CIU balances.
   securitySchemes:
     BearerAuth:
       type: http
