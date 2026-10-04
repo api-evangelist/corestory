@@ -102,31 +102,6 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    RegenerationTriggerResponse:
-      properties:
-        status:
-          type: string
-          const: started
-          title: Status
-          default: started
-        message:
-          type: string
-          title: Message
-          default: System Intelligence Overview regeneration has been started
-        estimated_cost:
-          type: number
-          title: Estimated Cost
-          description: CIU cost deducted for this regeneration
-        job_id:
-          type: string
-          title: Job Id
-          description: SOTJ job id tracking
-      type: object
-      required:
-      - estimated_cost
-      - job_id
-      title: RegenerationTriggerResponse
-      description: Returned when regeneration is successfully triggered.
     ArchitectureOverview:
       properties:
         pattern_id:
@@ -157,59 +132,31 @@ components:
       - score
       - tier
       title: ArchitectureOverview
-    SystemOverviewProcessingResponse:
+    RegenerationTriggerResponse:
       properties:
         status:
           type: string
-          const: processing
+          const: started
           title: Status
-          default: processing
+          default: started
         message:
           type: string
           title: Message
-          default: Analysis is still in progress
-      type: object
-      title: SystemOverviewProcessingResponse
-      description: Returned with HTTP 202 when the analysis pipeline is still running.
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
-    ArchitectureAlternative:
-      properties:
-        pattern_id:
-          type: string
-          title: Pattern Id
-        label:
-          type: string
-          title: Label
-        score:
+          default: System Intelligence Overview regeneration has been started
+        estimated_cost:
           type: number
-          title: Score
-        tier:
+          title: Estimated Cost
+          description: CIU cost deducted for this regeneration
+        job_id:
           type: string
-          title: Tier
+          title: Job Id
+          description: SOTJ job id tracking
       type: object
       required:
-      - pattern_id
-      - label
-      - score
-      - tier
-      title: ArchitectureAlternative
+      - estimated_cost
+      - job_id
+      title: RegenerationTriggerResponse
+      description: Returned when regeneration is successfully triggered.
     SIOMetadata:
       properties:
         generated_at:
@@ -234,6 +181,49 @@ components:
           default: '1.0'
       type: object
       title: SIOMetadata
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    ArchitectureAlternative:
+      properties:
+        pattern_id:
+          type: string
+          title: Pattern Id
+        label:
+          type: string
+          title: Label
+        score:
+          type: number
+          title: Score
+        tier:
+          type: string
+          title: Tier
+      type: object
+      required:
+      - pattern_id
+      - label
+      - score
+      - tier
+      title: ArchitectureAlternative
+    SystemOverviewProcessingResponse:
+      properties:
+        status:
+          type: string
+          const: processing
+          title: Status
+          default: processing
+        message:
+          type: string
+          title: Message
+          default: Analysis is still in progress
+      type: object
+      title: SystemOverviewProcessingResponse
+      description: Returned with HTTP 202 when the analysis pipeline is still running.
     TechStackOverview:
       properties:
         primary_language:
@@ -272,16 +262,6 @@ components:
       type: object
       title: TechStackOverview
       description: Reshaped view of language_breakdown + framework_tech_stack + infrastructure + dependencies.
-    CodeQualityOverview:
-      properties:
-        indicators:
-          additionalProperties: true
-          type: object
-          title: Indicators
-      additionalProperties: true
-      type: object
-      title: CodeQualityOverview
-      description: Thin wrapper over code_quality_indicators from code_analysis.
     RegenerationEstimateResponse:
       properties:
         estimated_cost:
@@ -331,14 +311,16 @@ components:
           title: Confidence Alignment
       type: object
       title: ArchitectureExplanation
-    ErrorSchema:
+    CodeQualityOverview:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        indicators:
+          additionalProperties: true
+          type: object
+          title: Indicators
+      additionalProperties: true
       type: object
-      required:
-      - error
-      title: ErrorSchema
+      title: CodeQualityOverview
+      description: Thin wrapper over code_quality_indicators from code_analysis.
     SystemOverviewResponse:
       properties:
         architecture:
@@ -379,6 +361,24 @@ components:
       - metadata
       title: SystemOverviewResponse
       description: Complete SIO payload returned when analysis is available.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
   securitySchemes:
     BearerAuth:
       type: http

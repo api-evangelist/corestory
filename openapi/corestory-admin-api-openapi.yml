@@ -242,23 +242,20 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    TokenTotals:
+    UserStoriesBucket:
       properties:
-        input_tokens:
+        bucket:
+          type: string
+          title: Bucket
+        count:
           type: integer
-          title: Input Tokens
-        output_tokens:
-          type: integer
-          title: Output Tokens
-        total_tokens:
-          type: integer
-          title: Total Tokens
+          title: Count
       type: object
       required:
-      - input_tokens
-      - output_tokens
-      - total_tokens
-      title: TokenTotals
+      - bucket
+      - count
+      title: UserStoriesBucket
+      description: Bucket for user stories per project histogram.
     TopCountRow:
       properties:
         id:
@@ -278,55 +275,245 @@ components:
       - name
       - count
       title: TopCountRow
-    AdminMetricsPrimaryLanguages:
+    AdminUserListResponse:
       properties:
-        counts:
+        items:
+          items:
+            $ref: '#/components/schemas/AdminUserSummary'
+          type: array
+          title: Items
+          description: List of user summaries
+        total:
+          type: integer
+          title: Total
+          description: Total number of users
+        limit:
+          type: integer
+          title: Limit
+          description: Page size
+        offset:
+          type: integer
+          title: Offset
+          description: Current offset
+      type: object
+      required:
+      - items
+      - total
+      - limit
+      - offset
+      title: AdminUserListResponse
+      description: Paginated response for admin user listing.
+    AdminOrganizationOwner:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Owner full name
+        email:
+          type: string
+          title: Email
+          description: Owner email
+      type: object
+      required:
+      - name
+      - email
+      title: AdminOrganizationOwner
+      description: Owner summary resolved from the org:owner membership.
+    AdminMetricsResponse:
+      properties:
+        kpis:
+          $ref: '#/components/schemas/AdminMetricsKPIs'
+        tokens:
+          $ref: '#/components/schemas/AdminMetricsTokens'
+        users_orgs:
+          $ref: '#/components/schemas/AdminMetricsUsersOrgs'
+        project_performance:
+          $ref: '#/components/schemas/AdminMetricsProjectPerformance'
+        code_ingestion:
+          $ref: '#/components/schemas/AdminMetricsCodeIngestion'
+        data_audit_totals:
+          $ref: '#/components/schemas/AdminMetricsDataAuditTotals'
+        conversations:
+          $ref: '#/components/schemas/AdminMetricsConversations'
+        jobs:
+          $ref: '#/components/schemas/AdminMetricsJobs'
+        user_stories_buckets:
+          items:
+            $ref: '#/components/schemas/UserStoriesBucket'
+          type: array
+          title: User Stories Buckets
+        prd_version_buckets:
+          items:
+            $ref: '#/components/schemas/PrdVersionBucket'
+          type: array
+          title: Prd Version Buckets
+        projects_per_org_buckets:
+          items:
+            $ref: '#/components/schemas/ProjectsPerOrgBucket'
+          type: array
+          title: Projects Per Org Buckets
+        primary_languages:
+          $ref: '#/components/schemas/AdminMetricsPrimaryLanguages'
+        credit_usage:
+          $ref: '#/components/schemas/AdminMetricsCreditUsage'
+      type: object
+      required:
+      - kpis
+      - tokens
+      - users_orgs
+      - project_performance
+      - code_ingestion
+      - data_audit_totals
+      - conversations
+      - jobs
+      - user_stories_buckets
+      - prd_version_buckets
+      - projects_per_org_buckets
+      - primary_languages
+      - credit_usage
+      title: AdminMetricsResponse
+    AdminMetricsDataAuditTotals:
+      properties:
+        users:
+          type: integer
+          title: Users
+        non_corestory_users:
+          type: integer
+          title: Non Corestory Users
+        organizations:
+          type: integer
+          title: Organizations
+        github_installations:
+          type: integer
+          title: Github Installations
+        projects:
+          type: integer
+          title: Projects
+        sotj_jobs:
+          type: integer
+          title: Sotj Jobs
+        prds:
+          type: integer
+          title: Prds
+        prd_versions:
+          type: integer
+          title: Prd Versions
+        prd_multi_version_pct:
+          type: number
+          title: Prd Multi Version Pct
+        conversations:
+          type: integer
+          title: Conversations
+        custom_prompts:
+          type: integer
+          title: Custom Prompts
+      type: object
+      required:
+      - users
+      - non_corestory_users
+      - organizations
+      - github_installations
+      - projects
+      - sotj_jobs
+      - prds
+      - prd_versions
+      - prd_multi_version_pct
+      - conversations
+      - custom_prompts
+      title: AdminMetricsDataAuditTotals
+    CreditUsageByAction:
+      properties:
+        action_type:
+          type: string
+          title: Action Type
+        total_amount:
+          type: number
+          title: Total Amount
+        percentage:
+          type: number
+          title: Percentage
+      type: object
+      required:
+      - action_type
+      - total_amount
+      - percentage
+      title: CreditUsageByAction
+      description: Breakdown of credit usage by action type (for pie chart).
+    AdminMetricsUsersOrgs:
+      properties:
+        users_per_org:
           items:
             additionalProperties: true
             type: object
           type: array
-          title: Counts
-      type: object
-      required:
-      - counts
-      title: AdminMetricsPrimaryLanguages
-    AdminMetricsConversations:
-      properties:
-        total_conversations:
+          title: Users Per Org
+        single_user_org_count:
           type: integer
-          title: Total Conversations
-        conversations_per_project:
+          title: Single User Org Count
+        projects_per_org_stats:
           $ref: '#/components/schemas/MinMaxAvg'
-        messages_per_conversation:
+        top_orgs_by_project_count:
+          items:
+            $ref: '#/components/schemas/TopCountRow'
+          type: array
+          title: Top Orgs By Project Count
+        top_users_by_projects_created:
+          items:
+            $ref: '#/components/schemas/TopCountRow'
+          type: array
+          title: Top Users By Projects Created
+      type: object
+      required:
+      - users_per_org
+      - single_user_org_count
+      - projects_per_org_stats
+      - top_orgs_by_project_count
+      - top_users_by_projects_created
+      title: AdminMetricsUsersOrgs
+    AdminMetricsProjectPerformance:
+      properties:
+        ingestion_seconds:
           $ref: '#/components/schemas/MinMaxAvg'
+          default:
+            min: 0.0
+            max: 0.0
+            avg: 0.0
+        prd_seconds:
+          $ref: '#/components/schemas/MinMaxAvg'
+          default:
+            min: 0.0
+            max: 0.0
+            avg: 0.0
+        tech_spec_seconds:
+          $ref: '#/components/schemas/MinMaxAvg'
+          default:
+            min: 0.0
+            max: 0.0
+            avg: 0.0
       type: object
-      required:
-      - total_conversations
-      - conversations_per_project
-      - messages_per_conversation
-      title: AdminMetricsConversations
-    ProjectsPerOrgBucket:
+      title: AdminMetricsProjectPerformance
+    MinMaxAvg:
       properties:
-        bucket:
-          type: string
-          title: Bucket
-        org_count:
-          type: integer
-          title: Org Count
+        min:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Min
+          default: 0
+        max:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max
+          default: 0
+        avg:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Avg
+          default: 0
       type: object
-      required:
-      - bucket
-      - org_count
-      title: ProjectsPerOrgBucket
-      description: Bucket for projects per organization histogram.
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
+      title: MinMaxAvg
     AdminUserSummary:
       properties:
         id:
@@ -373,6 +560,99 @@ components:
       - id
       title: AdminUserSummary
       description: Summary of a Clerk user for the admin listing endpoint.
+    PipelineMetricsResponse:
+      properties:
+        repo_url:
+          type: string
+          title: Repo Url
+          description: The repo URL fragment used to filter projects.
+        total_runs:
+          type: integer
+          title: Total Runs
+        runs:
+          items:
+            $ref: '#/components/schemas/PipelineRunMetrics'
+          type: array
+          title: Runs
+          description: Pipeline runs ordered by created_at ascending.
+      type: object
+      required:
+      - repo_url
+      - total_runs
+      - runs
+      title: PipelineMetricsResponse
+      description: Response for the pipeline metrics endpoint.
+    AdminUserMetadataUpdate:
+      properties:
+        is_superuser:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Superuser
+          description: Grant or revoke superuser privileges
+        is_internal:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Internal
+          description: Mark or unmark as CoreStory internal employee
+      type: object
+      title: AdminUserMetadataUpdate
+      description: Partial update payload for user role metadata.
+    AdminMetricsPrimaryLanguages:
+      properties:
+        counts:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Counts
+      type: object
+      required:
+      - counts
+      title: AdminMetricsPrimaryLanguages
+    AdminOrganizationListResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/AdminOrganizationSummary'
+          type: array
+          title: Items
+          description: List of organization summaries
+        total:
+          type: integer
+          title: Total
+          description: Total number of organizations
+        limit:
+          type: integer
+          title: Limit
+          description: Page size
+        offset:
+          type: integer
+          title: Offset
+          description: Current offset
+      type: object
+      required:
+      - items
+      - total
+      - limit
+      - offset
+      title: AdminOrganizationListResponse
+      description: Paginated response for admin organization listing.
+    AdminMetricsTokens:
+      properties:
+        all_time:
+          $ref: '#/components/schemas/TokenTotals'
+        last_30d:
+          $ref: '#/components/schemas/TokenTotals'
+        per_project:
+          $ref: '#/components/schemas/MinMaxAvg'
+      type: object
+      required:
+      - all_time
+      - last_30d
+      - per_project
+      title: AdminMetricsTokens
     TopAmountRow:
       properties:
         id:
@@ -393,6 +673,23 @@ components:
       - amount
       title: TopAmountRow
       description: Like TopCountRow but with a decimal amount instead of an integer count.
+    TokenTotals:
+      properties:
+        input_tokens:
+          type: integer
+          title: Input Tokens
+        output_tokens:
+          type: integer
+          title: Output Tokens
+        total_tokens:
+          type: integer
+          title: Total Tokens
+      type: object
+      required:
+      - input_tokens
+      - output_tokens
+      - total_tokens
+      title: TokenTotals
     AdminMetricsCreditUsage:
       properties:
         total_credits_used:
@@ -427,86 +724,178 @@ components:
       - usage_by_action_type
       title: AdminMetricsCreditUsage
       description: Credit (CIU) usage section for admin metrics.
-    AdminUserListResponse:
+    AdminMetricsKPIs:
       properties:
-        items:
-          items:
-            $ref: '#/components/schemas/AdminUserSummary'
-          type: array
-          title: Items
-          description: List of user summaries
-        total:
+        total_users:
           type: integer
-          title: Total
-          description: Total number of users
-        limit:
+          title: Total Users
+        total_organizations:
           type: integer
-          title: Limit
-          description: Page size
-        offset:
+          title: Total Organizations
+        total_projects:
           type: integer
-          title: Offset
-          description: Current offset
+          title: Total Projects
+        active_projects_30d:
+          type: integer
+          title: Active Projects 30D
+        total_loc_ingested:
+          type: integer
+          title: Total Loc Ingested
+        total_files_ingested:
+          type: integer
+          title: Total Files Ingested
       type: object
       required:
-      - items
-      - total
-      - limit
-      - offset
-      title: AdminUserListResponse
-      description: Paginated response for admin user listing.
-    AdminOrganizationListResponse:
+      - total_users
+      - total_organizations
+      - total_projects
+      - active_projects_30d
+      - total_loc_ingested
+      - total_files_ingested
+      title: AdminMetricsKPIs
+    AdminOrganizationSummary:
       properties:
-        items:
-          items:
-            $ref: '#/components/schemas/AdminOrganizationSummary'
-          type: array
-          title: Items
-          description: List of organization summaries
-        total:
+        organization_id:
+          type: string
+          title: Organization Id
+          description: Internal organization UUID
+        organization_name:
+          type: string
+          title: Organization Name
+          description: Organization name
+        plan_tier:
+          type: string
+          title: Plan Tier
+          description: 'Plan tier: free / pro / enterprise'
+          default: free
+        subscription_status:
+          type: string
+          title: Subscription Status
+          description: 'Subscription status: active / suspended / canceled / none'
+          default: none
+        owner:
+          anyOf:
+          - $ref: '#/components/schemas/AdminOrganizationOwner'
+          - type: 'null'
+          description: Organization owner, null if no org:owner exists
+        members_count:
           type: integer
-          title: Total
-          description: Total number of organizations
-        limit:
+          title: Members Count
+          description: Number of members
+          default: 0
+        projects_count:
           type: integer
-          title: Limit
-          description: Page size
-        offset:
-          type: integer
-          title: Offset
-          description: Current offset
+          title: Projects Count
+          description: Number of projects
+          default: 0
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Organization creation date
       type: object
       required:
-      - items
-      - total
-      - limit
-      - offset
-      title: AdminOrganizationListResponse
-      description: Paginated response for admin organization listing.
-    AdminMetricsJobs:
+      - organization_id
+      - organization_name
+      - created_at
+      title: AdminOrganizationSummary
+      description: Summary of an organization for the admin listing endpoint.
+    ProjectsPerOrgBucket:
       properties:
-        total_jobs:
+        bucket:
+          type: string
+          title: Bucket
+        org_count:
           type: integer
-          title: Total Jobs
-        not_started:
+          title: Org Count
+      type: object
+      required:
+      - bucket
+      - org_count
+      title: ProjectsPerOrgBucket
+      description: Bucket for projects per organization histogram.
+    BalanceRow:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        amount:
+          type: number
+          title: Amount
+        pct:
+          type: number
+          title: Pct
+      type: object
+      required:
+      - id
+      - name
+      - amount
+      - pct
+      title: BalanceRow
+      description: Organization balance with remaining credits and percentage remaining.
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    PrdVersionBucket:
+      properties:
+        bucket:
+          type: string
+          title: Bucket
+        prd_count:
           type: integer
-          title: Not Started
-        running:
+          title: Prd Count
+      type: object
+      required:
+      - bucket
+      - prd_count
+      title: PrdVersionBucket
+      description: Bucket for PRD version count histogram.
+    AdminMetricsConversations:
+      properties:
+        total_conversations:
           type: integer
-          title: Running
-        failed_jobs_by_type:
+          title: Total Conversations
+        conversations_per_project:
+          $ref: '#/components/schemas/MinMaxAvg'
+        messages_per_conversation:
+          $ref: '#/components/schemas/MinMaxAvg'
+      type: object
+      required:
+      - total_conversations
+      - conversations_per_project
+      - messages_per_conversation
+      title: AdminMetricsConversations
+    AdminMetricsCodeIngestion:
+      properties:
+        loc_stats:
+          $ref: '#/components/schemas/MinMaxAvg'
+        files_ingested_stats:
+          $ref: '#/components/schemas/MinMaxAvg'
+        source_type_counts:
           items:
             additionalProperties: true
             type: object
           type: array
-          title: Failed Jobs By Type
+          title: Source Type Counts
+        unsupported_file_counts_stats:
+          $ref: '#/components/schemas/MinMaxAvg'
       type: object
       required:
-      - total_jobs
-      - not_started
-      - running
-      - failed_jobs_by_type
-      title: AdminMetricsJobs
+      - loc_stats
+      - files_ingested_stats
+      - source_type_counts
+      - unsupported_file_counts_stats
+      title: AdminMetricsCodeIngestion
     PipelineRunMetrics:
       properties:
         project_id:
@@ -628,165 +1017,6 @@ components:
       - created_at
       title: PipelineRunMetrics
       description: Timing metrics for a single pipeline run.
-    AdminUserMetadataUpdate:
-      properties:
-        is_superuser:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Is Superuser
-          description: Grant or revoke superuser privileges
-        is_internal:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Is Internal
-          description: Mark or unmark as CoreStory internal employee
-      type: object
-      title: AdminUserMetadataUpdate
-      description: Partial update payload for user role metadata.
-    AdminMetricsResponse:
-      properties:
-        kpis:
-          $ref: '#/components/schemas/AdminMetricsKPIs'
-        tokens:
-          $ref: '#/components/schemas/AdminMetricsTokens'
-        users_orgs:
-          $ref: '#/components/schemas/AdminMetricsUsersOrgs'
-        project_performance:
-          $ref: '#/components/schemas/AdminMetricsProjectPerformance'
-        code_ingestion:
-          $ref: '#/components/schemas/AdminMetricsCodeIngestion'
-        data_audit_totals:
-          $ref: '#/components/schemas/AdminMetricsDataAuditTotals'
-        conversations:
-          $ref: '#/components/schemas/AdminMetricsConversations'
-        jobs:
-          $ref: '#/components/schemas/AdminMetricsJobs'
-        user_stories_buckets:
-          items:
-            $ref: '#/components/schemas/UserStoriesBucket'
-          type: array
-          title: User Stories Buckets
-        prd_version_buckets:
-          items:
-            $ref: '#/components/schemas/PrdVersionBucket'
-          type: array
-          title: Prd Version Buckets
-        projects_per_org_buckets:
-          items:
-            $ref: '#/components/schemas/ProjectsPerOrgBucket'
-          type: array
-          title: Projects Per Org Buckets
-        primary_languages:
-          $ref: '#/components/schemas/AdminMetricsPrimaryLanguages'
-        credit_usage:
-          $ref: '#/components/schemas/AdminMetricsCreditUsage'
-      type: object
-      required:
-      - kpis
-      - tokens
-      - users_orgs
-      - project_performance
-      - code_ingestion
-      - data_audit_totals
-      - conversations
-      - jobs
-      - user_stories_buckets
-      - prd_version_buckets
-      - projects_per_org_buckets
-      - primary_languages
-      - credit_usage
-      title: AdminMetricsResponse
-    BalanceRow:
-      properties:
-        id:
-          type: string
-          title: Id
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-        amount:
-          type: number
-          title: Amount
-        pct:
-          type: number
-          title: Pct
-      type: object
-      required:
-      - id
-      - name
-      - amount
-      - pct
-      title: BalanceRow
-      description: Organization balance with remaining credits and percentage remaining.
-    AdminMetricsTokens:
-      properties:
-        all_time:
-          $ref: '#/components/schemas/TokenTotals'
-        last_30d:
-          $ref: '#/components/schemas/TokenTotals'
-        per_project:
-          $ref: '#/components/schemas/MinMaxAvg'
-      type: object
-      required:
-      - all_time
-      - last_30d
-      - per_project
-      title: AdminMetricsTokens
-    AdminMetricsCodeIngestion:
-      properties:
-        loc_stats:
-          $ref: '#/components/schemas/MinMaxAvg'
-        files_ingested_stats:
-          $ref: '#/components/schemas/MinMaxAvg'
-        source_type_counts:
-          items:
-            additionalProperties: true
-            type: object
-          type: array
-          title: Source Type Counts
-        unsupported_file_counts_stats:
-          $ref: '#/components/schemas/MinMaxAvg'
-      type: object
-      required:
-      - loc_stats
-      - files_ingested_stats
-      - source_type_counts
-      - unsupported_file_counts_stats
-      title: AdminMetricsCodeIngestion
-    UserStoriesBucket:
-      properties:
-        bucket:
-          type: string
-          title: Bucket
-        count:
-          type: integer
-          title: Count
-      type: object
-      required:
-      - bucket
-      - count
-      title: UserStoriesBucket
-      description: Bucket for user stories per project histogram.
-    AdminOrganizationOwner:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Owner full name
-        email:
-          type: string
-          title: Email
-          description: Owner email
-      type: object
-      required:
-      - name
-      - email
-      title: AdminOrganizationOwner
-      description: Owner summary resolved from the org:owner membership.
     ErrorBody:
       properties:
         message:
@@ -805,260 +1035,30 @@ components:
       - message
       - type
       title: ErrorBody
-    AdminMetricsKPIs:
+    AdminMetricsJobs:
       properties:
-        total_users:
+        total_jobs:
           type: integer
-          title: Total Users
-        total_organizations:
+          title: Total Jobs
+        not_started:
           type: integer
-          title: Total Organizations
-        total_projects:
+          title: Not Started
+        running:
           type: integer
-          title: Total Projects
-        active_projects_30d:
-          type: integer
-          title: Active Projects 30D
-        total_loc_ingested:
-          type: integer
-          title: Total Loc Ingested
-        total_files_ingested:
-          type: integer
-          title: Total Files Ingested
-      type: object
-      required:
-      - total_users
-      - total_organizations
-      - total_projects
-      - active_projects_30d
-      - total_loc_ingested
-      - total_files_ingested
-      title: AdminMetricsKPIs
-    AdminMetricsProjectPerformance:
-      properties:
-        ingestion_seconds:
-          $ref: '#/components/schemas/MinMaxAvg'
-          default:
-            min: 0.0
-            max: 0.0
-            avg: 0.0
-        prd_seconds:
-          $ref: '#/components/schemas/MinMaxAvg'
-          default:
-            min: 0.0
-            max: 0.0
-            avg: 0.0
-        tech_spec_seconds:
-          $ref: '#/components/schemas/MinMaxAvg'
-          default:
-            min: 0.0
-            max: 0.0
-            avg: 0.0
-      type: object
-      title: AdminMetricsProjectPerformance
-    AdminOrganizationSummary:
-      properties:
-        organization_id:
-          type: string
-          title: Organization Id
-          description: Internal organization UUID
-        organization_name:
-          type: string
-          title: Organization Name
-          description: Organization name
-        plan_tier:
-          type: string
-          title: Plan Tier
-          description: 'Plan tier: free / pro / enterprise'
-          default: free
-        subscription_status:
-          type: string
-          title: Subscription Status
-          description: 'Subscription status: active / suspended / canceled / none'
-          default: none
-        owner:
-          anyOf:
-          - $ref: '#/components/schemas/AdminOrganizationOwner'
-          - type: 'null'
-          description: Organization owner, null if no org:owner exists
-        members_count:
-          type: integer
-          title: Members Count
-          description: Number of members
-          default: 0
-        projects_count:
-          type: integer
-          title: Projects Count
-          description: Number of projects
-          default: 0
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Organization creation date
-      type: object
-      required:
-      - organization_id
-      - organization_name
-      - created_at
-      title: AdminOrganizationSummary
-      description: Summary of an organization for the admin listing endpoint.
-    PipelineMetricsResponse:
-      properties:
-        repo_url:
-          type: string
-          title: Repo Url
-          description: The repo URL fragment used to filter projects.
-        total_runs:
-          type: integer
-          title: Total Runs
-        runs:
-          items:
-            $ref: '#/components/schemas/PipelineRunMetrics'
-          type: array
-          title: Runs
-          description: Pipeline runs ordered by created_at ascending.
-      type: object
-      required:
-      - repo_url
-      - total_runs
-      - runs
-      title: PipelineMetricsResponse
-      description: Response for the pipeline metrics endpoint.
-    MinMaxAvg:
-      properties:
-        min:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Min
-          default: 0
-        max:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Max
-          default: 0
-        avg:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Avg
-          default: 0
-      type: object
-      title: MinMaxAvg
-    AdminMetricsDataAuditTotals:
-      properties:
-        users:
-          type: integer
-          title: Users
-        non_corestory_users:
-          type: integer
-          title: Non Corestory Users
-        organizations:
-          type: integer
-          title: Organizations
-        github_installations:
-          type: integer
-          title: Github Installations
-        projects:
-          type: integer
-          title: Projects
-        sotj_jobs:
-          type: integer
-          title: Sotj Jobs
-        prds:
-          type: integer
-          title: Prds
-        prd_versions:
-          type: integer
-          title: Prd Versions
-        prd_multi_version_pct:
-          type: number
-          title: Prd Multi Version Pct
-        conversations:
-          type: integer
-          title: Conversations
-        custom_prompts:
-          type: integer
-          title: Custom Prompts
-      type: object
-      required:
-      - users
-      - non_corestory_users
-      - organizations
-      - github_installations
-      - projects
-      - sotj_jobs
-      - prds
-      - prd_versions
-      - prd_multi_version_pct
-      - conversations
-      - custom_prompts
-      title: AdminMetricsDataAuditTotals
-    AdminMetricsUsersOrgs:
-      properties:
-        users_per_org:
+          title: Running
+        failed_jobs_by_type:
           items:
             additionalProperties: true
             type: object
           type: array
-          title: Users Per Org
-        single_user_org_count:
-          type: integer
-          title: Single User Org Count
-        projects_per_org_stats:
-          $ref: '#/components/schemas/MinMaxAvg'
-        top_orgs_by_project_count:
-          items:
-            $ref: '#/components/schemas/TopCountRow'
-          type: array
-          title: Top Orgs By Project Count
-        top_users_by_projects_created:
-          items:
-            $ref: '#/components/schemas/TopCountRow'
-          type: array
-          title: Top Users By Projects Created
+          title: Failed Jobs By Type
       type: object
       required:
-      - users_per_org
-      - single_user_org_count
-      - projects_per_org_stats
-      - top_orgs_by_project_count
-      - top_users_by_projects_created
-      title: AdminMetricsUsersOrgs
-    CreditUsageByAction:
-      properties:
-        action_type:
-          type: string
-          title: Action Type
-        total_amount:
-          type: number
-          title: Total Amount
-        percentage:
-          type: number
-          title: Percentage
-      type: object
-      required:
-      - action_type
-      - total_amount
-      - percentage
-      title: CreditUsageByAction
-      description: Breakdown of credit usage by action type (for pie chart).
-    PrdVersionBucket:
-      properties:
-        bucket:
-          type: string
-          title: Bucket
-        prd_count:
-          type: integer
-          title: Prd Count
-      type: object
-      required:
-      - bucket
-      - prd_count
-      title: PrdVersionBucket
-      description: Bucket for PRD version count histogram.
+      - total_jobs
+      - not_started
+      - running
+      - failed_jobs_by_type
+      title: AdminMetricsJobs
   securitySchemes:
     BearerAuth:
       type: http

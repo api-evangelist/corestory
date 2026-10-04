@@ -173,70 +173,17 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    CatalogListItem:
+    CatalogListResponse:
       properties:
-        id:
-          type: string
-          title: Id
-        name:
-          type: string
-          title: Name
-        description:
-          type: string
-          title: Description
-        icon_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Icon Url
-        publisher:
-          type: string
-          title: Publisher
-        trust_badge:
-          $ref: '#/components/schemas/TrustBadge'
-        connection_type:
-          $ref: '#/components/schemas/ConnectionType'
-        auth_type:
-          type: string
-          title: Auth Type
-        capability:
-          $ref: '#/components/schemas/CapabilitySummary'
-        configuration_schema:
+        items:
           items:
-            $ref: '#/components/schemas/ConfigurationField'
+            $ref: '#/components/schemas/CatalogListItem'
           type: array
-          title: Configuration Schema
-        is_active:
-          type: boolean
-          title: Is Active
-        display_order:
-          type: integer
-          title: Display Order
-        connection_status:
-          $ref: '#/components/schemas/ConnectionStatus'
+          title: Items
       type: object
       required:
-      - id
-      - name
-      - description
-      - icon_url
-      - publisher
-      - trust_badge
-      - connection_type
-      - auth_type
-      - capability
-      - configuration_schema
-      - is_active
-      - display_order
-      - connection_status
-      title: CatalogListItem
-      description: Catalog entry annotated with the caller's connection status.
-    ConnectionType:
-      type: string
-      enum:
-      - oauth_2_0
-      title: ConnectionType
-      description: How a connector authenticates.
+      - items
+      title: CatalogListResponse
     CatalogDetail:
       properties:
         id:
@@ -321,35 +268,91 @@ components:
       - connection_status
       title: CatalogDetail
       description: Catalog detail adds the caller's current connection record (non-secret).
-    Body_update_marketplace_configuration:
+    ErrorSchema:
       properties:
-        values:
-          additionalProperties: true
-          type: object
-          title: Values
-          description: Map keyed by configuration_schema.key.
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       type: object
       required:
-      - values
-      title: Body_update_marketplace_configuration
-    ErrorBody:
+      - error
+      title: ErrorSchema
+    CapabilitySummary:
       properties:
-        message:
+        id:
           type: string
-          title: Message
-        type:
+          title: Id
+        label:
           type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
+          title: Label
+        operations:
+          items:
+            type: string
+          type: array
+          title: Operations
       type: object
       required:
-      - message
-      - type
-      title: ErrorBody
+      - id
+      - label
+      - operations
+      title: CapabilitySummary
+    CatalogListItem:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+        icon_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Icon Url
+        publisher:
+          type: string
+          title: Publisher
+        trust_badge:
+          $ref: '#/components/schemas/TrustBadge'
+        connection_type:
+          $ref: '#/components/schemas/ConnectionType'
+        auth_type:
+          type: string
+          title: Auth Type
+        capability:
+          $ref: '#/components/schemas/CapabilitySummary'
+        configuration_schema:
+          items:
+            $ref: '#/components/schemas/ConfigurationField'
+          type: array
+          title: Configuration Schema
+        is_active:
+          type: boolean
+          title: Is Active
+        display_order:
+          type: integer
+          title: Display Order
+        connection_status:
+          $ref: '#/components/schemas/ConnectionStatus'
+      type: object
+      required:
+      - id
+      - name
+      - description
+      - icon_url
+      - publisher
+      - trust_badge
+      - connection_type
+      - auth_type
+      - capability
+      - configuration_schema
+      - is_active
+      - display_order
+      - connection_status
+      title: CatalogListItem
+      description: Catalog entry annotated with the caller's connection status.
     OAuthStartResponse:
       properties:
         authorization_url:
@@ -366,25 +369,20 @@ components:
       - state
       title: OAuthStartResponse
       description: Response from ``POST /marketplace/connectors/{id}/oauth/start``.
-    CatalogListResponse:
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/CatalogListItem'
-          type: array
-          title: Items
-      type: object
-      required:
-      - items
-      title: CatalogListResponse
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
+    ConnectionType:
+      type: string
+      enum:
+      - oauth_2_0
+      title: ConnectionType
+      description: How a connector authenticates.
+    TrustBadge:
+      type: string
+      enum:
+      - verified
+      - corestory
+      - community
+      title: TrustBadge
+      description: Trust signal shown on the catalog card.
     ConnectionStatus:
       type: string
       enum:
@@ -448,33 +446,35 @@ components:
       - required
       title: ConfigurationField
       description: One field descriptor in a connector's configuration schema.
-    CapabilitySummary:
+    Body_update_marketplace_configuration:
       properties:
-        id:
-          type: string
-          title: Id
-        label:
-          type: string
-          title: Label
-        operations:
-          items:
-            type: string
-          type: array
-          title: Operations
+        values:
+          additionalProperties: true
+          type: object
+          title: Values
+          description: Map keyed by configuration_schema.key.
       type: object
       required:
-      - id
-      - label
-      - operations
-      title: CapabilitySummary
-    TrustBadge:
-      type: string
-      enum:
-      - verified
-      - corestory
-      - community
-      title: TrustBadge
-      description: Trust signal shown on the catalog card.
+      - values
+      title: Body_update_marketplace_configuration
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
   securitySchemes:
     BearerAuth:
       type: http

@@ -94,6 +94,42 @@ paths:
           description: Not found
 components:
   schemas:
+    SyncStatusResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/SyncStatusItem'
+          type: array
+          title: Items
+          description: List of items
+        pagination:
+          $ref: '#/components/schemas/PaginationMeta'
+          description: Pagination metadata
+        summary:
+          $ref: '#/components/schemas/SyncStatusSummary'
+          description: Org-wide aggregates (unaffected by filters)
+      type: object
+      required:
+      - items
+      - pagination
+      - summary
+      title: SyncStatusResponse
+      description: Paginated project sync-status list with org-wide summary aggregates.
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    SyncMode:
+      type: string
+      enum:
+      - manual
+      - auto
+      title: SyncMode
+      description: Whether a project syncs manually or automatically with its repo.
     SyncStatusSummary:
       properties:
         total_count:
@@ -120,24 +156,16 @@ components:
       - is_ciu_exhausted
       title: SyncStatusSummary
       description: Org-wide aggregates rendered as page-level chrome. Not affected by filters.
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
+    ProjectSyncStatus:
+      type: string
+      enum:
+      - up_to_date
+      - updating
+      - stale
+      - failed
+      - couldnt_process
+      title: ProjectSyncStatus
+      description: Sync/processing status for a project in the org roster.
     SyncStatusItem:
       properties:
         project_id:
@@ -169,27 +197,6 @@ components:
       - status
       title: SyncStatusItem
       description: A single project row in the org project sync-status list.
-    SyncStatusResponse:
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/SyncStatusItem'
-          type: array
-          title: Items
-          description: List of items
-        pagination:
-          $ref: '#/components/schemas/PaginationMeta'
-          description: Pagination metadata
-        summary:
-          $ref: '#/components/schemas/SyncStatusSummary'
-          description: Org-wide aggregates (unaffected by filters)
-      type: object
-      required:
-      - items
-      - pagination
-      - summary
-      title: SyncStatusResponse
-      description: Paginated project sync-status list with org-wide summary aggregates.
     PaginationMeta:
       properties:
         total:
@@ -211,31 +218,24 @@ components:
       - size
       - pages
       title: PaginationMeta
-    SyncMode:
-      type: string
-      enum:
-      - manual
-      - auto
-      title: SyncMode
-      description: Whether a project syncs manually or automatically with its repo.
-    ErrorSchema:
+    ErrorBody:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
       type: object
       required:
-      - error
-      title: ErrorSchema
-    ProjectSyncStatus:
-      type: string
-      enum:
-      - up_to_date
-      - updating
-      - stale
-      - failed
-      - couldnt_process
-      title: ProjectSyncStatus
-      description: Sync/processing status for a project in the org roster.
+      - message
+      - type
+      title: ErrorBody
   securitySchemes:
     BearerAuth:
       type: http

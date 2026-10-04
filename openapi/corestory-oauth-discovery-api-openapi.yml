@@ -72,6 +72,14 @@ components:
         Hand-rolled (rather than importing ``mcp.shared.auth``) so the Resource
 
         Server has no dependency on the MCP SDK package.'
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
     ErrorBody:
       properties:
         message:
@@ -90,14 +98,6 @@ components:
       - message
       - type
       title: ErrorBody
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
   securitySchemes:
     BearerAuth:
       type: http

@@ -35,21 +35,6 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    WhoAmIResponse:
-      properties:
-        pod:
-          type: string
-          title: Pod
-        local_topics:
-          additionalProperties:
-            type: integer
-          type: object
-          title: Local Topics
-      type: object
-      required:
-      - pod
-      - local_topics
-      title: WhoAmIResponse
     ErrorBody:
       properties:
         message:
@@ -76,6 +61,21 @@ components:
       required:
       - error
       title: ErrorSchema
+    WhoAmIResponse:
+      properties:
+        pod:
+          type: string
+          title: Pod
+        local_topics:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Local Topics
+      type: object
+      required:
+      - pod
+      - local_topics
+      title: WhoAmIResponse
   securitySchemes:
     BearerAuth:
       type: http

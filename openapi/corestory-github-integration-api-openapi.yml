@@ -459,70 +459,6 @@ paths:
           description: Not found
 components:
   schemas:
-    GitHubRepoOwner:
-      properties:
-        login:
-          type: string
-          title: Login
-        type:
-          type: string
-          title: Type
-      type: object
-      required:
-      - login
-      - type
-      title: GitHubRepoOwner
-      description: GitHub repository owner information
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
-    PaginatedReposListResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/GitHubRepository'
-          type: array
-          title: Results
-        count:
-          type: integer
-          title: Count
-        limit:
-          type: integer
-          title: Limit
-        page:
-          type: integer
-          title: Page
-        has_next:
-          type: boolean
-          title: Has Next
-          default: false
-        installation_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Installation Id
-      type: object
-      required:
-      - results
-      - count
-      - limit
-      - page
-      title: PaginatedReposListResponse
     GitHubRepository:
       properties:
         name:
@@ -605,6 +541,67 @@ components:
       - permissions
       title: GitHubRepository
       description: GitHub repository information
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    ErrorResponseSchema:
+      properties:
+        error:
+          type: string
+          title: Error
+          description: Error message
+        detail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Detail
+          description: Detailed error information
+      type: object
+      required:
+      - error
+      title: ErrorResponseSchema
+      description: Schema for error responses
+    BranchesListResponse:
+      properties:
+        results:
+          items:
+            type: string
+          type: array
+          title: Results
+        count:
+          type: integer
+          title: Count
+        repo_full_name:
+          type: string
+          title: Repo Full Name
+        installation_id:
+          type: integer
+          title: Installation Id
+        page:
+          type: integer
+          title: Page
+        limit:
+          type: integer
+          title: Limit
+        has_next:
+          type: boolean
+          title: Has Next
+      type: object
+      required:
+      - results
+      - count
+      - repo_full_name
+      - installation_id
+      - page
+      - limit
+      - has_next
+      title: BranchesListResponse
+      description: Response for listing branches in a repository with pagination
     DetailedInstallationResponse:
       properties:
         installations:
@@ -621,23 +618,30 @@ components:
       - installation_count
       title: DetailedInstallationResponse
       description: Response model for detailed installation information
-    InstallationRequest:
+    StartInstallationResponse:
       properties:
-        next_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Next Url
-          description: Optional dashboard URL to redirect after installation
-        github_app_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Github App Key
-          description: Optional GitHub app key override (e.g. 'new'). Old UI should not send this.
+        installation_url:
+          type: string
+          title: Installation Url
       type: object
-      title: InstallationRequest
-      description: Request model for starting installation
+      required:
+      - installation_url
+      title: StartInstallationResponse
+      description: Response for starting installation
+    GitHubRepoOwner:
+      properties:
+        login:
+          type: string
+          title: Login
+        type:
+          type: string
+          title: Type
+      type: object
+      required:
+      - login
+      - type
+      title: GitHubRepoOwner
+      description: GitHub repository owner information
     InstallationListItem:
       properties:
         id:
@@ -728,102 +732,38 @@ components:
       - visibility
       title: InstallationListItem
       description: Enhanced installation list item with visibility info
-    ErrorResponseSchema:
-      properties:
-        error:
-          type: string
-          title: Error
-          description: Error message
-        detail:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Detail
-          description: Detailed error information
-      type: object
-      required:
-      - error
-      title: ErrorResponseSchema
-      description: Schema for error responses
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    InstallationStatusResponse:
-      properties:
-        status:
-          type: string
-          title: Status
-        installation_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Installation Id
-        github_org:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Github Org
-        request_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Request Id
-      type: object
-      required:
-      - status
-      title: InstallationStatusResponse
-      description: Response for checking installation status
-    BranchesListResponse:
+    PaginatedReposListResponse:
       properties:
         results:
           items:
-            type: string
+            $ref: '#/components/schemas/GitHubRepository'
           type: array
           title: Results
         count:
           type: integer
           title: Count
-        repo_full_name:
-          type: string
-          title: Repo Full Name
-        installation_id:
-          type: integer
-          title: Installation Id
-        page:
-          type: integer
-          title: Page
         limit:
           type: integer
           title: Limit
+        page:
+          type: integer
+          title: Page
         has_next:
           type: boolean
           title: Has Next
+          default: false
+        installation_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Installation Id
       type: object
       required:
       - results
       - count
-      - repo_full_name
-      - installation_id
-      - page
       - limit
-      - has_next
-      title: BranchesListResponse
-      description: Response for listing branches in a repository with pagination
-    StartInstallationResponse:
-      properties:
-        installation_url:
-          type: string
-          title: Installation Url
-      type: object
-      required:
-      - installation_url
-      title: StartInstallationResponse
-      description: Response for starting installation
+      - page
+      title: PaginatedReposListResponse
     PublicRepoBranchesResponse:
       properties:
         results:
@@ -860,6 +800,66 @@ components:
       - page
       title: PublicRepoBranchesResponse
       description: Response for public repository branches
+    InstallationRequest:
+      properties:
+        next_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Url
+          description: Optional dashboard URL to redirect after installation
+        github_app_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Github App Key
+          description: Optional GitHub app key override (e.g. 'new'). Old UI should not send this.
+      type: object
+      title: InstallationRequest
+      description: Request model for starting installation
+    InstallationStatusResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+        installation_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Installation Id
+        github_org:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Github Org
+        request_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Request Id
+      type: object
+      required:
+      - status
+      title: InstallationStatusResponse
+      description: Response for checking installation status
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
   securitySchemes:
     BearerAuth:
       type: http

@@ -39,6 +39,18 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
+    LanguageListResponse:
+      properties:
+        languages:
+          items:
+            $ref: '#/components/schemas/LanguageInfo'
+          type: array
+          title: Languages
+      type: object
+      required:
+      - languages
+      title: LanguageListResponse
+      description: Response containing available languages.
     LanguageInfo:
       properties:
         code:
@@ -55,18 +67,14 @@ components:
       - name
       title: LanguageInfo
       description: Language information with code and native display name.
-    LanguageListResponse:
+    ErrorSchema:
       properties:
-        languages:
-          items:
-            $ref: '#/components/schemas/LanguageInfo'
-          type: array
-          title: Languages
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       type: object
       required:
-      - languages
-      title: LanguageListResponse
-      description: Response containing available languages.
+      - error
+      title: ErrorSchema
     ErrorBody:
       properties:
         message:
@@ -85,14 +93,6 @@ components:
       - message
       - type
       title: ErrorBody
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
   securitySchemes:
     BearerAuth:
       type: http

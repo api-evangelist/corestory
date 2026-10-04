@@ -309,50 +309,14 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    ErrorBody:
+    ErrorSchema:
       properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       type: object
       required:
-      - message
-      - type
-      title: ErrorBody
-    CacheEntryMetadata:
-      properties:
-        created_at:
-          type: number
-          title: Created At
-          description: Timestamp when the entry was created
-        ttl_seconds:
-          type: integer
-          title: Ttl Seconds
-          description: TTL in seconds
-        ttl_remaining:
-          type: number
-          title: Ttl Remaining
-          description: Remaining TTL in seconds
-        is_expired:
-          type: boolean
-          title: Is Expired
-          description: Whether the entry has expired
-      type: object
-      required:
-      - created_at
-      - ttl_seconds
-      - ttl_remaining
-      - is_expired
-      title: CacheEntryMetadata
-      description: Metadata for a cache entry
+      - error
+      title: ErrorSchema
     CacheTTLUpdate:
       properties:
         ttl_seconds:
@@ -379,6 +343,32 @@ components:
       - entries
       title: CacheSetRequest
       description: Request model for setting cache entries
+    CacheEntryMetadata:
+      properties:
+        created_at:
+          type: number
+          title: Created At
+          description: Timestamp when the entry was created
+        ttl_seconds:
+          type: integer
+          title: Ttl Seconds
+          description: TTL in seconds
+        ttl_remaining:
+          type: number
+          title: Ttl Remaining
+          description: Remaining TTL in seconds
+        is_expired:
+          type: boolean
+          title: Is Expired
+          description: Whether the entry has expired
+      type: object
+      required:
+      - created_at
+      - ttl_seconds
+      - ttl_remaining
+      - is_expired
+      title: CacheEntryMetadata
+      description: Metadata for a cache entry
     CacheEntry:
       properties:
         cache_key:
@@ -406,14 +396,24 @@ components:
       - metadata
       title: CacheEntry
       description: Model for a single cache entry
-    ErrorSchema:
+    ErrorBody:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
       type: object
       required:
-      - error
-      title: ErrorSchema
+      - message
+      - type
+      title: ErrorBody
   securitySchemes:
     BearerAuth:
       type: http

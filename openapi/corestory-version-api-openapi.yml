@@ -60,13 +60,6 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    BuildType:
-      type: string
-      enum:
-      - docker
-      - local
-      title: BuildType
-      description: Enumeration of supported build types.
     VersionResponse:
       properties:
         version:
@@ -119,6 +112,14 @@ components:
         version: 1.2.3
       - build_type: local
         version: 0.0.0-dev
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
     ErrorBody:
       properties:
         message:
@@ -137,14 +138,13 @@ components:
       - message
       - type
       title: ErrorBody
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
+    BuildType:
+      type: string
+      enum:
+      - docker
+      - local
+      title: BuildType
+      description: Enumeration of supported build types.
   securitySchemes:
     BearerAuth:
       type: http

@@ -670,6 +670,45 @@ paths:
           description: Internal server error
 components:
   schemas:
+    PDFOutputRequest:
+      properties:
+        markdown:
+          type: string
+          title: Markdown
+          description: Markdown content to convert
+        project_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Project Id
+          description: Optional project ID for cache namespacing
+      type: object
+      required:
+      - markdown
+      title: PDFOutputRequest
+      description: Request model for PDF output from markdown input.
+      examples:
+      - markdown: '# My Document
+
+
+          This is markdown content from an artifact download.'
+    PDFJobStatus:
+      type: string
+      enum:
+      - pending
+      - processing
+      - completed
+      - failed
+      title: PDFJobStatus
+      description: Status of a PDF generation job.
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
     AllPRDStepsDashedEnum:
       type: string
       enum:
@@ -720,47 +759,6 @@ components:
       - document-section
       title: DocumentType
       description: Enum for document types.
-    TableOfContentsRequest:
-      properties:
-        markdown:
-          type: string
-          title: Markdown
-          description: The markdown content to generate table of contents from
-      type: object
-      required:
-      - markdown
-      title: TableOfContentsRequest
-      description: Request model for table of contents generation.
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    PDFOutputRequest:
-      properties:
-        markdown:
-          type: string
-          title: Markdown
-          description: Markdown content to convert
-        project_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Project Id
-          description: Optional project ID for cache namespacing
-      type: object
-      required:
-      - markdown
-      title: PDFOutputRequest
-      description: Request model for PDF output from markdown input.
-      examples:
-      - markdown: '# My Document
-
-
-          This is markdown content from an artifact download.'
     PDFAsyncResponse:
       properties:
         job_id:
@@ -792,23 +790,17 @@ components:
       - stream_url
       title: PDFAsyncResponse
       description: Response for async PDF generation initiation.
-    DocumentFormatResponse:
+    TableOfContentsRequest:
       properties:
         markdown:
           type: string
           title: Markdown
-          description: The formatted document in markdown format
-        metadata:
-          additionalProperties: true
-          type: object
-          title: Metadata
-          description: Additional metadata about the formatting operation
+          description: The markdown content to generate table of contents from
       type: object
       required:
       - markdown
-      - metadata
-      title: DocumentFormatResponse
-      description: Response model for document formatting.
+      title: TableOfContentsRequest
+      description: Request model for table of contents generation.
     DocxOutputRequest:
       properties:
         markdown:
@@ -831,15 +823,23 @@ components:
 
 
           This is markdown content to export as Word.'
-    PDFJobStatus:
-      type: string
-      enum:
-      - pending
-      - processing
-      - completed
-      - failed
-      title: PDFJobStatus
-      description: Status of a PDF generation job.
+    DocumentFormatResponse:
+      properties:
+        markdown:
+          type: string
+          title: Markdown
+          description: The formatted document in markdown format
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+          description: Additional metadata about the formatting operation
+      type: object
+      required:
+      - markdown
+      - metadata
+      title: DocumentFormatResponse
+      description: Response model for document formatting.
   securitySchemes:
     BearerAuth:
       type: http

@@ -69,15 +69,6 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    StripeWebhookResponse:
-      properties:
-        status:
-          type: string
-          title: Status
-          default: ok
-      type: object
-      title: StripeWebhookResponse
-      description: Response for Stripe webhook acknowledgement.
     WebhookSuccessResponse:
       properties:
         success:
@@ -99,24 +90,29 @@ components:
       - status
       title: WebhookSuccessResponse
       description: Webhook success response.
-    ErrorBody:
+    WebhookAction:
+      type: string
+      enum:
+      - activated
+      - suspended
+      - unsubscribed
+      - reinstated
+      - renewed
+      - activated_failed
+      - suspended_failed
+      - unsubscribed_failed
+      - reinstated_failed
+      - renewed_failed
+      title: WebhookAction
+      description: Webhook action types.
+    ErrorSchema:
       properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       type: object
       required:
-      - message
-      - type
-      title: ErrorBody
+      - error
+      title: ErrorSchema
     SubscriptionWebhookPayload:
       properties:
         organization_id:
@@ -157,36 +153,15 @@ components:
       - action
       title: SubscriptionWebhookPayload
       description: "Webhook payload from Southworks subscription service.\n\nAttributes:\n    organization_id: Clerk organization ID\n    provider: Subscription provider\n    provider_subscription_id: Provider's subscription identifier\n    plan_id: Plan identifier (e.g., 'enterprise-monthly')\n    status: New subscription status\n    action: Action that triggered the webhook"
-    WebhookAction:
-      type: string
-      enum:
-      - activated
-      - suspended
-      - unsubscribed
-      - reinstated
-      - renewed
-      - activated_failed
-      - suspended_failed
-      - unsubscribed_failed
-      - reinstated_failed
-      - renewed_failed
-      title: WebhookAction
-      description: Webhook action types.
-    ErrorSchema:
+    StripeWebhookResponse:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        status:
+          type: string
+          title: Status
+          default: ok
       type: object
-      required:
-      - error
-      title: ErrorSchema
-    SubscriptionProvider:
-      type: string
-      enum:
-      - ms_marketplace
-      - stripe
-      title: SubscriptionProvider
-      description: Subscription provider enum.
+      title: StripeWebhookResponse
+      description: Response for Stripe webhook acknowledgement.
     SubscriptionStatus:
       type: string
       enum:
@@ -196,6 +171,31 @@ components:
       - failed
       title: SubscriptionStatus
       description: Subscription status enum.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    SubscriptionProvider:
+      type: string
+      enum:
+      - ms_marketplace
+      - stripe
+      title: SubscriptionProvider
+      description: Subscription provider enum.
   securitySchemes:
     BearerAuth:
       type: http

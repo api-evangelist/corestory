@@ -376,15 +376,46 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    GenerateAllRequest:
+    PRDCustomPromptRequest:
       properties:
-        language:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Language
+        prompt:
+          type: string
+          title: Prompt
+        replacement:
+          type: boolean
+          title: Replacement
       type: object
-      title: GenerateAllRequest
+      required:
+      - prompt
+      - replacement
+      title: PRDCustomPromptRequest
+    DocumentSectionsDashedEnum:
+      type: string
+      enum:
+      - executive-overview
+      - user-personas
+      - high-level-requirements
+      - user-stories
+      - security-requirements
+      - system-architecture
+      - data-models
+      - user-interface
+      - api-specifications
+      - interface-specifications
+      - integration-points
+      - security-considerations
+      - tech-user-stories
+      - implementation-strategy
+      title: DocumentSectionsDashedEnum
+      description: PRD + tech-spec sections only (no retriever). Use for user-facing endpoints.
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
     ErrorBody:
       properties:
         message:
@@ -403,6 +434,57 @@ components:
       - message
       - type
       title: ErrorBody
+    BasicSuccessResponse:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: success
+      type: object
+      title: BasicSuccessResponse
+      description: 'Use this for returns for deletes and patches.
+
+        UI ALWAYS needs some payload return. This just standarizes it.'
+    SpecFormat:
+      type: string
+      enum:
+      - legacy
+      - dga
+      - spec_v2
+      title: SpecFormat
+      description: 'Self-documenting label for the format a generated spec is in.
+
+
+        Derived from ``content_version`` and surfaced on API responses so the
+
+        viewer (and any API consumer) renders the right experience without
+
+        guessing from which fields happen to be present.'
+    LanguageInfo:
+      properties:
+        code:
+          type: string
+          title: Code
+          description: BCP-47 language code (ja, es, fr-CA).
+        name:
+          type: string
+          title: Name
+          description: Language name in its native script (English, français (Canada)).
+      type: object
+      required:
+      - code
+      - name
+      title: LanguageInfo
+      description: Language information with code and native display name.
+    GenerateAllRequest:
+      properties:
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+      type: object
+      title: GenerateAllRequest
     SectionResponse:
       properties:
         prd_id:
@@ -478,40 +560,6 @@ components:
         requested. The `section_name` field identifies the section in dashed form
 
         (e.g. ''executive-overview'').'
-    PaginationMeta:
-      properties:
-        total:
-          type: integer
-          title: Total
-        page:
-          type: integer
-          title: Page
-        size:
-          type: integer
-          title: Size
-        pages:
-          type: integer
-          title: Pages
-      type: object
-      required:
-      - total
-      - page
-      - size
-      - pages
-      title: PaginationMeta
-    GeneratePRDSectionRequest:
-      properties:
-        custom_prompt:
-          anyOf:
-          - $ref: '#/components/schemas/PRDCustomPromptRequest'
-          - type: 'null'
-        language:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Language
-      type: object
-      title: GeneratePRDSectionRequest
     AllSectionsResponse:
       properties:
         system_architecture:
@@ -663,88 +711,40 @@ components:
       - created_at
       title: AllSectionsResponse
       description: Combined PRD + Tech-Spec sections response for unified /sections/ endpoint.
-    ErrorSchema:
+    PaginationMeta:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        size:
+          type: integer
+          title: Size
+        pages:
+          type: integer
+          title: Pages
       type: object
       required:
-      - error
-      title: ErrorSchema
-    SpecFormat:
-      type: string
-      enum:
-      - legacy
-      - dga
-      - spec_v2
-      title: SpecFormat
-      description: 'Self-documenting label for the format a generated spec is in.
-
-
-        Derived from ``content_version`` and surfaced on API responses so the
-
-        viewer (and any API consumer) renders the right experience without
-
-        guessing from which fields happen to be present.'
-    PRDCustomPromptRequest:
+      - total
+      - page
+      - size
+      - pages
+      title: PaginationMeta
+    GeneratePRDSectionRequest:
       properties:
-        prompt:
-          type: string
-          title: Prompt
-        replacement:
-          type: boolean
-          title: Replacement
+        custom_prompt:
+          anyOf:
+          - $ref: '#/components/schemas/PRDCustomPromptRequest'
+          - type: 'null'
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
       type: object
-      required:
-      - prompt
-      - replacement
-      title: PRDCustomPromptRequest
-    BasicSuccessResponse:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: success
-      type: object
-      title: BasicSuccessResponse
-      description: 'Use this for returns for deletes and patches.
-
-        UI ALWAYS needs some payload return. This just standarizes it.'
-    LanguageInfo:
-      properties:
-        code:
-          type: string
-          title: Code
-          description: BCP-47 language code (ja, es, fr-CA).
-        name:
-          type: string
-          title: Name
-          description: Language name in its native script (English, français (Canada)).
-      type: object
-      required:
-      - code
-      - name
-      title: LanguageInfo
-      description: Language information with code and native display name.
-    DocumentSectionsDashedEnum:
-      type: string
-      enum:
-      - executive-overview
-      - user-personas
-      - high-level-requirements
-      - user-stories
-      - security-requirements
-      - system-architecture
-      - data-models
-      - user-interface
-      - api-specifications
-      - interface-specifications
-      - integration-points
-      - security-considerations
-      - tech-user-stories
-      - implementation-strategy
-      title: DocumentSectionsDashedEnum
-      description: PRD + tech-spec sections only (no retriever). Use for user-facing endpoints.
+      title: GeneratePRDSectionRequest
   securitySchemes:
     BearerAuth:
       type: http

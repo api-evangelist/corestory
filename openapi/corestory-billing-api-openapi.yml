@@ -96,6 +96,14 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
     InvoiceListResponse:
       properties:
         invoices:
@@ -108,58 +116,6 @@ components:
       - invoices
       title: InvoiceListResponse
       description: List of invoices for an organization.
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
-    UpcomingInvoiceDetail:
-      properties:
-        amount_due:
-          type: integer
-          title: Amount Due
-          description: Total amount due in smallest currency unit
-        currency:
-          type: string
-          title: Currency
-          description: Three-letter ISO currency code
-        period_start:
-          type: string
-          format: date-time
-          title: Period Start
-          description: Start of the billing period
-        period_end:
-          type: string
-          format: date-time
-          title: Period End
-          description: End of the billing period
-        lines:
-          items:
-            $ref: '#/components/schemas/UpcomingInvoiceLineItem'
-          type: array
-          title: Lines
-          description: Invoice line items
-      type: object
-      required:
-      - amount_due
-      - currency
-      - period_start
-      - period_end
-      title: UpcomingInvoiceDetail
-      description: Preview of the next Stripe invoice.
     UpcomingInvoiceLineItem:
       properties:
         description:
@@ -177,14 +133,6 @@ components:
       - amount
       title: UpcomingInvoiceLineItem
       description: A single line item on an upcoming invoice.
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
     InvoiceResponse:
       properties:
         id:
@@ -251,6 +199,58 @@ components:
       type: object
       title: UpcomingInvoiceResponse
       description: Response for the upcoming invoice endpoint. Null when no active Stripe subscription.
+    UpcomingInvoiceDetail:
+      properties:
+        amount_due:
+          type: integer
+          title: Amount Due
+          description: Total amount due in smallest currency unit
+        currency:
+          type: string
+          title: Currency
+          description: Three-letter ISO currency code
+        period_start:
+          type: string
+          format: date-time
+          title: Period Start
+          description: Start of the billing period
+        period_end:
+          type: string
+          format: date-time
+          title: Period End
+          description: End of the billing period
+        lines:
+          items:
+            $ref: '#/components/schemas/UpcomingInvoiceLineItem'
+          type: array
+          title: Lines
+          description: Invoice line items
+      type: object
+      required:
+      - amount_due
+      - currency
+      - period_start
+      - period_end
+      title: UpcomingInvoiceDetail
+      description: Preview of the next Stripe invoice.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
     BillingSessionResponse:
       properties:
         url:

@@ -147,17 +147,6 @@ paths:
           description: Internal Server Error
 components:
   schemas:
-    Body_validate_document:
-      properties:
-        file:
-          type: string
-          contentMediaType: application/octet-stream
-          title: File
-          description: File containing PRD or Tech Spec artifacts
-      type: object
-      required:
-      - file
-      title: Body_validate_document
     ErrorBody:
       properties:
         message:
@@ -176,6 +165,25 @@ components:
       - message
       - type
       title: ErrorBody
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    Body_validate_document:
+      properties:
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+          description: File containing PRD or Tech Spec artifacts
+      type: object
+      required:
+      - file
+      title: Body_validate_document
     Body_generate_quality_metrics:
       properties:
         prd_file:
@@ -196,14 +204,6 @@ components:
           default: ''
       type: object
       title: Body_generate_quality_metrics
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
   securitySchemes:
     BearerAuth:
       type: http

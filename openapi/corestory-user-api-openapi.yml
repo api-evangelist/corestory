@@ -113,6 +113,33 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
+    UserActivityStatsResponse:
+      properties:
+        total_codebases:
+          type: integer
+          title: Total Codebases
+          description: Total number of projects (codebases) created or accessible to the user
+        total_conversations:
+          type: integer
+          title: Total Conversations
+          description: Total number of conversations across all of the user's projects
+      type: object
+      required:
+      - total_codebases
+      - total_conversations
+      title: UserActivityStatsResponse
+      description: User's activity statistics
+      example:
+        total_codebases: 5
+        total_conversations: 12
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
     RecentConversationItem:
       properties:
         id:
@@ -146,56 +173,6 @@ components:
       - created_at
       title: RecentConversationItem
       description: A single recent conversation entry.
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
-    RecentConversationsResponse:
-      properties:
-        conversations:
-          items:
-            $ref: '#/components/schemas/RecentConversationItem'
-          type: array
-          title: Conversations
-          description: List of recent conversations with their details
-      type: object
-      required:
-      - conversations
-      title: RecentConversationsResponse
-      description: Response schema for recent conversations
-    UserActivityStatsResponse:
-      properties:
-        total_codebases:
-          type: integer
-          title: Total Codebases
-          description: Total number of projects (codebases) created or accessible to the user
-        total_conversations:
-          type: integer
-          title: Total Conversations
-          description: Total number of conversations across all of the user's projects
-      type: object
-      required:
-      - total_codebases
-      - total_conversations
-      title: UserActivityStatsResponse
-      description: User's activity statistics
-      example:
-        total_codebases: 5
-        total_conversations: 12
     UserOnboardingProfileResponse:
       properties:
         id:
@@ -271,32 +248,24 @@ components:
         role: developer
         updated_at: '2026-01-01T00:00:00Z'
         user_id: 550e8400-e29b-41d4-a716-446655440001
-    UserRole:
-      type: string
-      enum:
-      - developer
-      - engineering_manager
-      - architect
-      - business_analyst
-      - product_manager
-      - compliance_audit
-      title: UserRole
-      description: User's professional role for onboarding profile.
-    OnboardingPathType:
-      type: string
-      enum:
-      - ide_first
-      - docs_first
-      title: OnboardingPathType
-      description: User's preferred onboarding workflow path.
-    ErrorSchema:
+    ErrorBody:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
       type: object
       required:
-      - error
-      title: ErrorSchema
+      - message
+      - type
+      title: ErrorBody
     UserOnboardingProfileUpsertRequest:
       properties:
         role:
@@ -337,6 +306,37 @@ components:
         role, goals, and path_type are required (needed for creation).
 
         preferences and completed_at are optional.'
+    UserRole:
+      type: string
+      enum:
+      - developer
+      - engineering_manager
+      - architect
+      - business_analyst
+      - product_manager
+      - compliance_audit
+      title: UserRole
+      description: User's professional role for onboarding profile.
+    OnboardingPathType:
+      type: string
+      enum:
+      - ide_first
+      - docs_first
+      title: OnboardingPathType
+      description: User's preferred onboarding workflow path.
+    RecentConversationsResponse:
+      properties:
+        conversations:
+          items:
+            $ref: '#/components/schemas/RecentConversationItem'
+          type: array
+          title: Conversations
+          description: List of recent conversations with their details
+      type: object
+      required:
+      - conversations
+      title: RecentConversationsResponse
+      description: Response schema for recent conversations
   securitySchemes:
     BearerAuth:
       type: http

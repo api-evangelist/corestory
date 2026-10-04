@@ -98,34 +98,14 @@ paths:
           description: Not found
 components:
   schemas:
-    JobStatus:
-      type: string
-      enum:
-      - not_started
-      - running
-      - completed
-      - failed
-      - cancelled
-      title: JobStatus
-      description: Job status enumeration
-    ErrorBody:
+    ErrorSchema:
       properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       type: object
       required:
-      - message
-      - type
-      title: ErrorBody
+      - error
+      title: ErrorSchema
     PinnedWorkspaceItem:
       properties:
         project_id:
@@ -174,6 +154,26 @@ components:
       - pinned_at
       title: PinnedWorkspaceItem
       description: A single pinned workspace, annotated with workspace metadata for display.
+    ProjectSyncStatus:
+      type: string
+      enum:
+      - up_to_date
+      - updating
+      - stale
+      - failed
+      - couldnt_process
+      title: ProjectSyncStatus
+      description: Sync/processing status for a project in the org roster.
+    JobStatus:
+      type: string
+      enum:
+      - not_started
+      - running
+      - completed
+      - failed
+      - cancelled
+      title: JobStatus
+      description: Job status enumeration
     PinWorkspaceRequest:
       properties:
         project_id:
@@ -185,24 +185,24 @@ components:
       - project_id
       title: PinWorkspaceRequest
       description: Body for pinning a workspace.
-    ErrorSchema:
+    ErrorBody:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
       type: object
       required:
-      - error
-      title: ErrorSchema
-    ProjectSyncStatus:
-      type: string
-      enum:
-      - up_to_date
-      - updating
-      - stale
-      - failed
-      - couldnt_process
-      title: ProjectSyncStatus
-      description: Sync/processing status for a project in the org roster.
+      - message
+      - type
+      title: ErrorBody
   securitySchemes:
     BearerAuth:
       type: http

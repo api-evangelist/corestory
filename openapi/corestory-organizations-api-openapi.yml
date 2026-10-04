@@ -799,350 +799,27 @@ paths:
           description: Not found
 components:
   schemas:
-    IngestionConfigPatch:
+    SyncStatusResponse:
       properties:
-        supported_extensions:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Supported Extensions
-          description: Additional file extensions to process. Merged with current config (additive).
-          examples:
-          - - .gltf
-            - .proto
-        binary_extensions:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Binary Extensions
-          description: Additional binary file extensions to skip. Merged with current config (additive).
-          examples:
-          - - .glb
-            - .fbx
-      type: object
-      title: IngestionConfigPatch
-      description: Schema for additively merging extensions into ingestion configuration (PATCH).
-    PinnedWorkspaceItem:
-      properties:
-        project_id:
-          type: integer
-          title: Project Id
-          description: Workspace (project) ID.
-        name:
-          type: string
-          title: Name
-          description: Workspace name.
-        repo_slug:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Repo Slug
-          description: Repository slug in 'owner/repo' form, if known.
-        status:
-          $ref: '#/components/schemas/ProjectSyncStatus'
-          description: Current ingestion/sync status of the workspace.
-        pinned_at:
-          type: string
-          format: date-time
-          title: Pinned At
-          description: When the workspace was pinned (drives pin order).
-        is_stale:
-          type: boolean
-          title: Is Stale
-          description: Whether the workspace intelligence is out of sync with the repo.
-          default: false
-        last_ingested_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Ingested At
-          description: Timestamp of the last successful ingestion.
-        ingestion_status:
-          $ref: '#/components/schemas/JobStatus'
-          description: Status of the workspace's latest ingestion job.
-          default: not_started
-      type: object
-      required:
-      - project_id
-      - name
-      - status
-      - pinned_at
-      title: PinnedWorkspaceItem
-      description: A single pinned workspace, annotated with workspace metadata for display.
-    PinWorkspaceRequest:
-      properties:
-        project_id:
-          type: integer
-          title: Project Id
-          description: ID of the workspace (project) to pin.
-      type: object
-      required:
-      - project_id
-      title: PinWorkspaceRequest
-      description: Body for pinning a workspace.
-    EnterpriseProvisionResponse:
-      properties:
-        organization_id:
-          type: string
-          title: Organization Id
-          description: Organization database ID
-        clerk_org_id:
-          type: string
-          title: Clerk Org Id
-          description: Clerk organization ID
-        plan:
-          type: string
-          title: Plan
-          description: Plan tier name
-        total_cius:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Total Cius
-          description: Total CIUs allocated
-        consumed_cius:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Consumed Cius
-          description: CIUs consumed in current cycle
-        available_cius:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Available Cius
-          description: Remaining available CIUs
-        renewal_date:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Renewal Date
-          description: Next renewal date
-        provisioned_at:
-          type: string
-          format: date-time
-          title: Provisioned At
-          description: When the provisioning occurred
-      type: object
-      required:
-      - organization_id
-      - clerk_org_id
-      - plan
-      - total_cius
-      - consumed_cius
-      - available_cius
-      - renewal_date
-      - provisioned_at
-      title: EnterpriseProvisionResponse
-      description: Response after successfully provisioning an org onto the Enterprise plan.
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    SyncFromClerkResponse:
-      properties:
-        organization:
-          $ref: '#/components/schemas/OrganizationResponse'
-        members_synced:
-          type: integer
-          title: Members Synced
-          default: 0
-        members_failed:
-          type: integer
-          title: Members Failed
-          default: 0
-        message:
-          type: string
-          title: Message
-      type: object
-      required:
-      - organization
-      - message
-      title: SyncFromClerkResponse
-      description: Response from Clerk sync operation.
-    UpdateMemberRoleRequest:
-      properties:
-        role_id:
-          type: string
-          title: Role Id
-          description: New role ID
-      type: object
-      required:
-      - role_id
-      title: UpdateMemberRoleRequest
-      description: Request to update a member's role.
-    IngestionConfigResponse:
-      properties:
-        supported_extensions:
+        items:
           items:
-            type: string
+            $ref: '#/components/schemas/SyncStatusItem'
           type: array
-          title: Supported Extensions
-          description: List of supported file extensions
-        binary_extensions:
-          items:
-            type: string
-          type: array
-          title: Binary Extensions
-          description: List of binary file extensions
-        is_custom:
-          type: boolean
-          title: Is Custom
-          description: True if organization has custom config, False if using defaults
-        supported_extensions_count:
-          type: integer
-          title: Supported Extensions Count
-          description: Number of supported extensions
-        binary_extensions_count:
-          type: integer
-          title: Binary Extensions Count
-          description: Number of binary extensions
+          title: Items
+          description: List of items
+        pagination:
+          $ref: '#/components/schemas/PaginationMeta'
+          description: Pagination metadata
+        summary:
+          $ref: '#/components/schemas/SyncStatusSummary'
+          description: Org-wide aggregates (unaffected by filters)
       type: object
       required:
-      - supported_extensions
-      - binary_extensions
-      - is_custom
-      - supported_extensions_count
-      - binary_extensions_count
-      title: IngestionConfigResponse
-      description: Schema for ingestion configuration response.
-    GrantCreditsRequest:
-      properties:
-        amount:
-          type: integer
-          exclusiveMinimum: 0.0
-          title: Amount
-          description: Number of CIU credits to grant (must be a whole number)
-        reason:
-          type: string
-          maxLength: 500
-          minLength: 1
-          title: Reason
-          description: Reason for granting credits (required)
-      type: object
-      required:
-      - amount
-      - reason
-      title: GrantCreditsRequest
-      description: Request schema for manually granting CIU credits to an organization.
-    SyncFromClerkRequest:
-      properties:
-        clerk_org_id:
-          type: string
-          title: Clerk Org Id
-          description: Clerk organization ID to sync
-        sync_members:
-          type: boolean
-          title: Sync Members
-          description: Whether to sync members
-          default: true
-      type: object
-      required:
-      - clerk_org_id
-      title: SyncFromClerkRequest
-      description: Request to sync organization from Clerk.
-    AddMemberRequest:
-      properties:
-        user_clerk_id:
-          type: string
-          title: User Clerk Id
-          description: Clerk user ID to add
-        role_id:
-          type: string
-          title: Role Id
-          description: Role to assign
-          default: org:member
-      type: object
-      required:
-      - user_clerk_id
-      title: AddMemberRequest
-      description: Request to add a member to an organization.
-    UserSummary:
-      properties:
-        id:
-          type: string
-          title: Id
-        email:
-          type: string
-          title: Email
-        first_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: First Name
-        last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Name
-        clerk_uid:
-          type: string
-          title: Clerk Uid
-      type: object
-      required:
-      - id
-      - email
-      - clerk_uid
-      title: UserSummary
-      description: Summary of user for membership responses.
-    EnterpriseProvisionRequest:
-      properties:
-        plan_slug:
-          anyOf:
-          - type: string
-            maxLength: 64
-          - type: 'null'
-          title: Plan Slug
-          description: Slug of the sales-managed plan to provision onto (e.g. 'business', 'enterprise_1m', 'enterprise_10m'). Defaults to the largest Enterprise bracket.
-        reason:
-          anyOf:
-          - type: string
-            maxLength: 500
-          - type: 'null'
-          title: Reason
-          description: Provisioning reason for audit trail, e.g. 'Contract signed 2026-03-01'
-      type: object
-      title: EnterpriseProvisionRequest
-      description: Request body for provisioning an org onto a sales-managed plan.
-    IngestionConfigUpdate:
-      properties:
-        supported_extensions:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Supported Extensions
-          description: List of file extensions to process (e.g., ['.py', '.js']). Overrides global defaults.
-          examples:
-          - - .py
-            - .js
-            - .ts
-            - .tsx
-            - .jsx
-        binary_extensions:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Binary Extensions
-          description: List of binary file extensions to skip (e.g., ['.png', '.jpg']). Overrides global defaults.
-          examples:
-          - - .png
-            - .jpg
-            - .pdf
-            - .exe
-      type: object
-      title: IngestionConfigUpdate
-      description: Schema for fully replacing ingestion configuration (PUT).
+      - items
+      - pagination
+      - summary
+      title: SyncStatusResponse
+      description: Paginated project sync-status list with org-wide summary aggregates.
     EnterpriseDowngradeResponse:
       properties:
         organization_id:
@@ -1170,48 +847,48 @@ components:
       - downgraded_at
       title: EnterpriseDowngradeResponse
       description: Response after successfully downgrading an org from the Enterprise plan.
-    ErrorBody:
+    GrantCreditsResponse:
       properties:
-        message:
+        credits_added:
+          type: integer
+          title: Credits Added
+          description: Number of CIU credits that were added
+        new_balance:
           type: string
-          title: Message
-        type:
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: New Balance
+          description: The organization's total CIU balance after the grant
+        provisioned_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Provisioned By
+          description: Clerk user ID of the superuser who granted the credits
+        reason:
           type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
+          title: Reason
+          description: Reason for granting credits
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: When the credits were granted
       type: object
       required:
-      - message
-      - type
-      title: ErrorBody
-    OrganizationUpdate:
-      properties:
-        name:
-          anyOf:
-          - type: string
-            maxLength: 255
-            minLength: 1
-          - type: 'null'
-          title: Name
-        slug:
-          anyOf:
-          - type: string
-            maxLength: 255
-          - type: 'null'
-          title: Slug
-        timezone:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Timezone
-          description: IANA timezone, e.g. 'America/New_York'.
-      type: object
-      title: OrganizationUpdate
-      description: Schema for updating an organization.
+      - credits_added
+      - new_balance
+      - reason
+      - created_at
+      title: GrantCreditsResponse
+      description: Response schema for manually granted CIU credits.
+    ScheduleCadence:
+      type: string
+      enum:
+      - daily
+      - weekly
+      - monthly
+      title: ScheduleCadence
+      description: How frequently the org schedule runs.
     UpdateScheduleResponse:
       properties:
         id:
@@ -1291,6 +968,135 @@ components:
       - updated_at
       title: UpdateScheduleResponse
       description: Response for org update schedule, includes computed fields.
+    IngestionConfigUpdate:
+      properties:
+        supported_extensions:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Supported Extensions
+          description: List of file extensions to process (e.g., ['.py', '.js']). Overrides global defaults.
+          examples:
+          - - .py
+            - .js
+            - .ts
+            - .tsx
+            - .jsx
+        binary_extensions:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Binary Extensions
+          description: List of binary file extensions to skip (e.g., ['.png', '.jpg']). Overrides global defaults.
+          examples:
+          - - .png
+            - .jpg
+            - .pdf
+            - .exe
+      type: object
+      title: IngestionConfigUpdate
+      description: Schema for fully replacing ingestion configuration (PUT).
+    IngestionConfigResponse:
+      properties:
+        supported_extensions:
+          items:
+            type: string
+          type: array
+          title: Supported Extensions
+          description: List of supported file extensions
+        binary_extensions:
+          items:
+            type: string
+          type: array
+          title: Binary Extensions
+          description: List of binary file extensions
+        is_custom:
+          type: boolean
+          title: Is Custom
+          description: True if organization has custom config, False if using defaults
+        supported_extensions_count:
+          type: integer
+          title: Supported Extensions Count
+          description: Number of supported extensions
+        binary_extensions_count:
+          type: integer
+          title: Binary Extensions Count
+          description: Number of binary extensions
+      type: object
+      required:
+      - supported_extensions
+      - binary_extensions
+      - is_custom
+      - supported_extensions_count
+      - binary_extensions_count
+      title: IngestionConfigResponse
+      description: Schema for ingestion configuration response.
+    OrganizationInvitationResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        email_address:
+          type: string
+          title: Email Address
+        role:
+          type: string
+          title: Role
+        status:
+          type: string
+          title: Status
+        created_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Created At
+      type: object
+      required:
+      - id
+      - email_address
+      - role
+      - status
+      title: OrganizationInvitationResponse
+      description: Response from creating an organization invitation.
+    UpdateScheduleUpsert:
+      properties:
+        cadence:
+          $ref: '#/components/schemas/ScheduleCadence'
+        day_of_week:
+          anyOf:
+          - type: integer
+            maximum: 6.0
+            minimum: 0.0
+          - type: 'null'
+          title: Day Of Week
+          description: 0=Monday..6=Sunday. Required when weekly.
+        day_of_month:
+          anyOf:
+          - type: integer
+            maximum: 28.0
+            minimum: 1.0
+          - type: 'null'
+          title: Day Of Month
+          description: 1-28. Required when monthly.
+        time:
+          type: string
+          pattern: ^([01]\d|2[0-3]):(00|30)$
+          title: Time
+          description: HH:MM in 24h format. Must be on a 30-minute boundary (e.g. 09:00, 09:30).
+        doc_sync:
+          type: boolean
+          title: Doc Sync
+          default: true
+      type: object
+      required:
+      - cadence
+      - time
+      title: UpdateScheduleUpsert
+      description: Create or update an org update schedule. Single atomic operation.
     OrganizationWithMembers:
       properties:
         name:
@@ -1349,79 +1155,165 @@ components:
       - updated_at
       title: OrganizationWithMembers
       description: Organization with members list.
-    ProjectSyncStatus:
-      type: string
-      enum:
-      - up_to_date
-      - updating
-      - stale
-      - failed
-      - couldnt_process
-      title: ProjectSyncStatus
-      description: Sync/processing status for a project in the org roster.
-    InviteMemberRequest:
+    SyncFromClerkResponse:
       properties:
-        email_address:
+        organization:
+          $ref: '#/components/schemas/OrganizationResponse'
+        members_synced:
+          type: integer
+          title: Members Synced
+          default: 0
+        members_failed:
+          type: integer
+          title: Members Failed
+          default: 0
+        message:
           type: string
-          format: email
-          title: Email Address
-          description: Email address to send the invitation to.
-        role:
+          title: Message
+      type: object
+      required:
+      - organization
+      - message
+      title: SyncFromClerkResponse
+      description: Response from Clerk sync operation.
+    SetPersonalResponse:
+      properties:
+        success:
+          type: boolean
+          title: Success
+        organization_id:
           type: string
-          enum:
-          - org:member
-          - org:admin
-          - org:owner
-          - org:collaborator
-          title: Role
-          description: Role to assign the invited user.
+          title: Organization Id
+      type: object
+      required:
+      - success
+      - organization_id
+      title: SetPersonalResponse
+      description: Response from marking an organization as personal.
+    AddMemberRequest:
+      properties:
+        user_clerk_id:
+          type: string
+          title: User Clerk Id
+          description: Clerk user ID to add
+        role_id:
+          type: string
+          title: Role Id
+          description: Role to assign
           default: org:member
-        redirect_url:
+      type: object
+      required:
+      - user_clerk_id
+      title: AddMemberRequest
+      description: Request to add a member to an organization.
+    EnterpriseProvisionResponse:
+      properties:
+        organization_id:
+          type: string
+          title: Organization Id
+          description: Organization database ID
+        clerk_org_id:
+          type: string
+          title: Clerk Org Id
+          description: Clerk organization ID
+        plan:
+          type: string
+          title: Plan
+          description: Plan tier name
+        total_cius:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Total Cius
+          description: Total CIUs allocated
+        consumed_cius:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Consumed Cius
+          description: CIUs consumed in current cycle
+        available_cius:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Available Cius
+          description: Remaining available CIUs
+        renewal_date:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Renewal Date
+          description: Next renewal date
+        provisioned_at:
+          type: string
+          format: date-time
+          title: Provisioned At
+          description: When the provisioning occurred
+      type: object
+      required:
+      - organization_id
+      - clerk_org_id
+      - plan
+      - total_cius
+      - consumed_cius
+      - available_cius
+      - renewal_date
+      - provisioned_at
+      title: EnterpriseProvisionResponse
+      description: Response after successfully provisioning an org onto the Enterprise plan.
+    UserSummary:
+      properties:
+        id:
+          type: string
+          title: Id
+        email:
+          type: string
+          title: Email
+        first_name:
           anyOf:
           - type: string
           - type: 'null'
-          title: Redirect Url
-          description: URL the invitee lands on after accepting the invitation.
-      type: object
-      required:
-      - email_address
-      title: InviteMemberRequest
-      description: Request to invite a member to an organization via email.
-    UpdateScheduleUpsert:
-      properties:
-        cadence:
-          $ref: '#/components/schemas/ScheduleCadence'
-        day_of_week:
+          title: First Name
+        last_name:
           anyOf:
-          - type: integer
-            maximum: 6.0
-            minimum: 0.0
+          - type: string
           - type: 'null'
-          title: Day Of Week
-          description: 0=Monday..6=Sunday. Required when weekly.
-        day_of_month:
-          anyOf:
-          - type: integer
-            maximum: 28.0
-            minimum: 1.0
-          - type: 'null'
-          title: Day Of Month
-          description: 1-28. Required when monthly.
-        time:
+          title: Last Name
+        clerk_uid:
           type: string
-          pattern: ^([01]\d|2[0-3]):(00|30)$
-          title: Time
-          description: HH:MM in 24h format. Must be on a 30-minute boundary (e.g. 09:00, 09:30).
-        doc_sync:
-          type: boolean
-          title: Doc Sync
-          default: true
+          title: Clerk Uid
       type: object
       required:
-      - cadence
-      - time
-      title: UpdateScheduleUpsert
-      description: Create or update an org update schedule. Single atomic operation.
+      - id
+      - email
+      - clerk_uid
+      title: UserSummary
+      description: Summary of user for membership responses.
+    IngestionConfigPatch:
+      properties:
+        supported_extensions:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Supported Extensions
+          description: Additional file extensions to process. Merged with current config (additive).
+          examples:
+          - - .gltf
+            - .proto
+        binary_extensions:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Binary Extensions
+          description: Additional binary file extensions to skip. Merged with current config (additive).
+          examples:
+          - - .glb
+            - .fbx
+      type: object
+      title: IngestionConfigPatch
+      description: Schema for additively merging extensions into ingestion configuration (PATCH).
     OrgMembershipResponse:
       properties:
         role_id:
@@ -1454,16 +1346,34 @@ components:
       - is_owner
       title: OrgMembershipResponse
       description: Schema for organization membership API response.
-    JobStatus:
-      type: string
-      enum:
-      - not_started
-      - running
-      - completed
-      - failed
-      - cancelled
-      title: JobStatus
-      description: Job status enumeration
+    InviteMemberRequest:
+      properties:
+        email_address:
+          type: string
+          format: email
+          title: Email Address
+          description: Email address to send the invitation to.
+        role:
+          type: string
+          enum:
+          - org:member
+          - org:admin
+          - org:owner
+          - org:collaborator
+          title: Role
+          description: Role to assign the invited user.
+          default: org:member
+        redirect_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Redirect Url
+          description: URL the invitee lands on after accepting the invitation.
+      type: object
+      required:
+      - email_address
+      title: InviteMemberRequest
+      description: Request to invite a member to an organization via email.
     SyncStatusSummary:
       properties:
         total_count:
@@ -1490,58 +1400,68 @@ components:
       - is_ciu_exhausted
       title: SyncStatusSummary
       description: Org-wide aggregates rendered as page-level chrome. Not affected by filters.
-    SyncStatusItem:
+    ProjectSyncStatus:
+      type: string
+      enum:
+      - up_to_date
+      - updating
+      - stale
+      - failed
+      - couldnt_process
+      title: ProjectSyncStatus
+      description: Sync/processing status for a project in the org roster.
+    JobStatus:
+      type: string
+      enum:
+      - not_started
+      - running
+      - completed
+      - failed
+      - cancelled
+      title: JobStatus
+      description: Job status enumeration
+    EnterpriseDowngradeRequest:
+      properties:
+        reason:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Reason
+          description: Downgrade reason for audit trail, e.g. 'Contract ended 2026-03-24'
+      type: object
+      title: EnterpriseDowngradeRequest
+      description: Request body for downgrading an org from the Enterprise plan.
+    GrantCreditsRequest:
+      properties:
+        amount:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Amount
+          description: Number of CIU credits to grant (must be a whole number)
+        reason:
+          type: string
+          maxLength: 500
+          minLength: 1
+          title: Reason
+          description: Reason for granting credits (required)
+      type: object
+      required:
+      - amount
+      - reason
+      title: GrantCreditsRequest
+      description: Request schema for manually granting CIU credits to an organization.
+    PinWorkspaceRequest:
       properties:
         project_id:
           type: integer
           title: Project Id
-          description: Project ID
-        name:
-          type: string
-          title: Name
-          description: Project name
-        sync_mode:
-          $ref: '#/components/schemas/SyncMode'
-          description: Manual or Auto
-        status:
-          $ref: '#/components/schemas/ProjectSyncStatus'
-          description: Current sync/processing status
-        last_ingested_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Ingested At
-          description: Last successful ingestion timestamp
+          description: ID of the workspace (project) to pin.
       type: object
       required:
       - project_id
-      - name
-      - sync_mode
-      - status
-      title: SyncStatusItem
-      description: A single project row in the org project sync-status list.
-    SyncStatusResponse:
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/SyncStatusItem'
-          type: array
-          title: Items
-          description: List of items
-        pagination:
-          $ref: '#/components/schemas/PaginationMeta'
-          description: Pagination metadata
-        summary:
-          $ref: '#/components/schemas/SyncStatusSummary'
-          description: Org-wide aggregates (unaffected by filters)
-      type: object
-      required:
-      - items
-      - pagination
-      - summary
-      title: SyncStatusResponse
-      description: Paginated project sync-status list with org-wide summary aggregates.
+      title: PinWorkspaceRequest
+      description: Body for pinning a workspace.
     PaginationMeta:
       properties:
         total:
@@ -1563,108 +1483,25 @@ components:
       - size
       - pages
       title: PaginationMeta
-    OrganizationInvitationResponse:
+    UpdateMemberRoleRequest:
       properties:
-        id:
+        role_id:
           type: string
-          title: Id
-        email_address:
-          type: string
-          title: Email Address
-        role:
-          type: string
-          title: Role
-        status:
-          type: string
-          title: Status
-        created_at:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Created At
+          title: Role Id
+          description: New role ID
       type: object
       required:
-      - id
-      - email_address
-      - role
-      - status
-      title: OrganizationInvitationResponse
-      description: Response from creating an organization invitation.
-    ScheduleCadence:
-      type: string
-      enum:
-      - daily
-      - weekly
-      - monthly
-      title: ScheduleCadence
-      description: How frequently the org schedule runs.
-    SyncMode:
-      type: string
-      enum:
-      - manual
-      - auto
-      title: SyncMode
-      description: Whether a project syncs manually or automatically with its repo.
-    SetPersonalResponse:
+      - role_id
+      title: UpdateMemberRoleRequest
+      description: Request to update a member's role.
+    ErrorSchema:
       properties:
-        success:
-          type: boolean
-          title: Success
-        organization_id:
-          type: string
-          title: Organization Id
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       type: object
       required:
-      - success
-      - organization_id
-      title: SetPersonalResponse
-      description: Response from marking an organization as personal.
-    EnterpriseDowngradeRequest:
-      properties:
-        reason:
-          anyOf:
-          - type: string
-            maxLength: 500
-          - type: 'null'
-          title: Reason
-          description: Downgrade reason for audit trail, e.g. 'Contract ended 2026-03-24'
-      type: object
-      title: EnterpriseDowngradeRequest
-      description: Request body for downgrading an org from the Enterprise plan.
-    GrantCreditsResponse:
-      properties:
-        credits_added:
-          type: integer
-          title: Credits Added
-          description: Number of CIU credits that were added
-        new_balance:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: New Balance
-          description: The organization's total CIU balance after the grant
-        provisioned_by:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Provisioned By
-          description: Clerk user ID of the superuser who granted the credits
-        reason:
-          type: string
-          title: Reason
-          description: Reason for granting credits
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: When the credits were granted
-      type: object
-      required:
-      - credits_added
-      - new_balance
-      - reason
-      - created_at
-      title: GrantCreditsResponse
-      description: Response schema for manually granted CIU credits.
+      - error
+      title: ErrorSchema
     OrganizationResponse:
       properties:
         name:
@@ -1717,6 +1554,169 @@ components:
       - updated_at
       title: OrganizationResponse
       description: Schema for organization API response.
+    SyncFromClerkRequest:
+      properties:
+        clerk_org_id:
+          type: string
+          title: Clerk Org Id
+          description: Clerk organization ID to sync
+        sync_members:
+          type: boolean
+          title: Sync Members
+          description: Whether to sync members
+          default: true
+      type: object
+      required:
+      - clerk_org_id
+      title: SyncFromClerkRequest
+      description: Request to sync organization from Clerk.
+    PinnedWorkspaceItem:
+      properties:
+        project_id:
+          type: integer
+          title: Project Id
+          description: Workspace (project) ID.
+        name:
+          type: string
+          title: Name
+          description: Workspace name.
+        repo_slug:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Repo Slug
+          description: Repository slug in 'owner/repo' form, if known.
+        status:
+          $ref: '#/components/schemas/ProjectSyncStatus'
+          description: Current ingestion/sync status of the workspace.
+        pinned_at:
+          type: string
+          format: date-time
+          title: Pinned At
+          description: When the workspace was pinned (drives pin order).
+        is_stale:
+          type: boolean
+          title: Is Stale
+          description: Whether the workspace intelligence is out of sync with the repo.
+          default: false
+        last_ingested_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Ingested At
+          description: Timestamp of the last successful ingestion.
+        ingestion_status:
+          $ref: '#/components/schemas/JobStatus'
+          description: Status of the workspace's latest ingestion job.
+          default: not_started
+      type: object
+      required:
+      - project_id
+      - name
+      - status
+      - pinned_at
+      title: PinnedWorkspaceItem
+      description: A single pinned workspace, annotated with workspace metadata for display.
+    SyncMode:
+      type: string
+      enum:
+      - manual
+      - auto
+      title: SyncMode
+      description: Whether a project syncs manually or automatically with its repo.
+    OrganizationUpdate:
+      properties:
+        name:
+          anyOf:
+          - type: string
+            maxLength: 255
+            minLength: 1
+          - type: 'null'
+          title: Name
+        slug:
+          anyOf:
+          - type: string
+            maxLength: 255
+          - type: 'null'
+          title: Slug
+        timezone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Timezone
+          description: IANA timezone, e.g. 'America/New_York'.
+      type: object
+      title: OrganizationUpdate
+      description: Schema for updating an organization.
+    SyncStatusItem:
+      properties:
+        project_id:
+          type: integer
+          title: Project Id
+          description: Project ID
+        name:
+          type: string
+          title: Name
+          description: Project name
+        sync_mode:
+          $ref: '#/components/schemas/SyncMode'
+          description: Manual or Auto
+        status:
+          $ref: '#/components/schemas/ProjectSyncStatus'
+          description: Current sync/processing status
+        last_ingested_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Ingested At
+          description: Last successful ingestion timestamp
+      type: object
+      required:
+      - project_id
+      - name
+      - sync_mode
+      - status
+      title: SyncStatusItem
+      description: A single project row in the org project sync-status list.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    EnterpriseProvisionRequest:
+      properties:
+        plan_slug:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Plan Slug
+          description: Slug of the sales-managed plan to provision onto (e.g. 'business', 'enterprise_1m', 'enterprise_10m'). Defaults to the largest Enterprise bracket.
+        reason:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Reason
+          description: Provisioning reason for audit trail, e.g. 'Contract signed 2026-03-01'
+      type: object
+      title: EnterpriseProvisionRequest
+      description: Request body for provisioning an org onto a sales-managed plan.
   securitySchemes:
     BearerAuth:
       type: http

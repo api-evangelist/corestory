@@ -189,59 +189,6 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    SuggestedQuestionListResponse:
-      properties:
-        suggested_questions:
-          items:
-            $ref: '#/components/schemas/SuggestedQuestionResponse'
-          type: array
-          title: Suggested Questions
-        total:
-          type: integer
-          title: Total
-      type: object
-      required:
-      - suggested_questions
-      - total
-      title: SuggestedQuestionListResponse
-    Feature-Output:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Concise feature name in plain text, no markdown.
-        description:
-          type: string
-          title: Description
-          description: Plain text description of the feature. No markdown formatting.
-        category:
-          type: string
-          title: Category
-          description: Category or Epic of the identified feature.
-      type: object
-      required:
-      - name
-      - description
-      - category
-      title: Feature
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
     QuestionsResponse:
       properties:
         questions:
@@ -273,6 +220,44 @@ components:
       required:
       - error
       title: ErrorSchema
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    Feature-Output:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Concise feature name in plain text, no markdown.
+        description:
+          type: string
+          title: Description
+          description: Plain text description of the feature. No markdown formatting.
+        category:
+          type: string
+          title: Category
+          description: Category or Epic of the identified feature.
+      type: object
+      required:
+      - name
+      - description
+      - category
+      title: Feature
     Question:
       properties:
         text:
@@ -331,6 +316,21 @@ components:
       - created_at
       - updated_at
       title: SuggestedQuestionResponse
+    SuggestedQuestionListResponse:
+      properties:
+        suggested_questions:
+          items:
+            $ref: '#/components/schemas/SuggestedQuestionResponse'
+          type: array
+          title: Suggested Questions
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - suggested_questions
+      - total
+      title: SuggestedQuestionListResponse
   securitySchemes:
     BearerAuth:
       type: http

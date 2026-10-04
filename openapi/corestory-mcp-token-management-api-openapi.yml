@@ -187,6 +187,14 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
     MCPTokenListResponse:
       properties:
         tokens:
@@ -215,24 +223,58 @@ components:
       - revoked_count
       title: MCPTokenListResponse
       description: Response for listing tokens.
-    ErrorBody:
+    MCPTokenRevokeResponse:
       properties:
+        id:
+          type: string
+          title: Id
+          description: Token identifier
+        name:
+          type: string
+          title: Name
+          description: Token name
+        revoked_at:
+          type: string
+          format: date-time
+          title: Revoked At
+          description: When token was revoked
+        revoked_by:
+          type: string
+          title: Revoked By
+          description: User who revoked the token
         message:
           type: string
           title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
+          description: Success message
+          default: Token successfully revoked
       type: object
       required:
-      - message
-      - type
-      title: ErrorBody
+      - id
+      - name
+      - revoked_at
+      - revoked_by
+      title: MCPTokenRevokeResponse
+      description: Response after revoking a token.
+    MCPTokenUpdateRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+            maxLength: 100
+            minLength: 1
+          - type: 'null'
+          title: Name
+          description: New token name
+        description:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Description
+          description: New token description
+      type: object
+      title: MCPTokenUpdateRequest
+      description: Request to update token metadata.
     MCPTokenCreateResponse:
       properties:
         id:
@@ -317,6 +359,44 @@ components:
       - token
       title: MCPTokenCreateResponse
       description: Response when creating a new token (includes full token ONCE).
+    MCPTokenCreateRequest:
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Name
+          description: User-friendly token name (e.g., 'Claude Desktop - MacBook Pro')
+          examples:
+          - Claude Desktop - MacBook Pro
+          - CI/CD Pipeline
+          - Development Server
+        description:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Description
+          description: Optional description for the token
+          examples:
+          - Personal development machine
+          - Production deployment token
+        expires_days:
+          type: integer
+          maximum: 730.0
+          minimum: 1.0
+          title: Expires Days
+          description: Token validity in days (1-730 days)
+          default: 365
+          examples:
+          - 30
+          - 90
+          - 365
+      type: object
+      required:
+      - name
+      title: MCPTokenCreateRequest
+      description: Request to create a new MCP token.
     MCPTokenResponse:
       properties:
         id:
@@ -391,104 +471,24 @@ components:
       - is_expired
       title: MCPTokenResponse
       description: Response for token metadata (without sensitive data).
-    ErrorSchema:
+    ErrorBody:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    MCPTokenCreateRequest:
-      properties:
-        name:
-          type: string
-          maxLength: 100
-          minLength: 1
-          title: Name
-          description: User-friendly token name (e.g., 'Claude Desktop - MacBook Pro')
-          examples:
-          - Claude Desktop - MacBook Pro
-          - CI/CD Pipeline
-          - Development Server
-        description:
-          anyOf:
-          - type: string
-            maxLength: 500
-          - type: 'null'
-          title: Description
-          description: Optional description for the token
-          examples:
-          - Personal development machine
-          - Production deployment token
-        expires_days:
-          type: integer
-          maximum: 730.0
-          minimum: 1.0
-          title: Expires Days
-          description: Token validity in days (1-730 days)
-          default: 365
-          examples:
-          - 30
-          - 90
-          - 365
-      type: object
-      required:
-      - name
-      title: MCPTokenCreateRequest
-      description: Request to create a new MCP token.
-    MCPTokenUpdateRequest:
-      properties:
-        name:
-          anyOf:
-          - type: string
-            maxLength: 100
-            minLength: 1
-          - type: 'null'
-          title: Name
-          description: New token name
-        description:
-          anyOf:
-          - type: string
-            maxLength: 500
-          - type: 'null'
-          title: Description
-          description: New token description
-      type: object
-      title: MCPTokenUpdateRequest
-      description: Request to update token metadata.
-    MCPTokenRevokeResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: Token identifier
-        name:
-          type: string
-          title: Name
-          description: Token name
-        revoked_at:
-          type: string
-          format: date-time
-          title: Revoked At
-          description: When token was revoked
-        revoked_by:
-          type: string
-          title: Revoked By
-          description: User who revoked the token
         message:
           type: string
           title: Message
-          description: Success message
-          default: Token successfully revoked
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
       type: object
       required:
-      - id
-      - name
-      - revoked_at
-      - revoked_by
-      title: MCPTokenRevokeResponse
-      description: Response after revoking a token.
+      - message
+      - type
+      title: ErrorBody
   securitySchemes:
     BearerAuth:
       type: http
