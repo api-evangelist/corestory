@@ -190,17 +190,6 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    Body_clone_sample_project:
-      properties:
-        language:
-          type: string
-          maxLength: 64
-          minLength: 1
-          title: Language
-      type: object
-      required:
-      - language
-      title: Body_clone_sample_project
     SampleProjectCreate:
       properties:
         language:
@@ -216,14 +205,47 @@ components:
       - language
       - project_id
       title: SampleProjectCreate
-    ErrorSchema:
+    BasicSuccessResponse:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        detail:
+          type: string
+          title: Detail
+          default: success
+      type: object
+      title: BasicSuccessResponse
+      description: 'Use this for returns for deletes and patches.
+
+        UI ALWAYS needs some payload return. This just standarizes it.'
+    SampleProjectDetail:
+      properties:
+        language:
+          type: string
+          maxLength: 64
+          minLength: 1
+          title: Language
+        project_id:
+          type: integer
+          title: Project Id
+        id:
+          type: integer
+          title: Id
       type: object
       required:
-      - error
-      title: ErrorSchema
+      - language
+      - project_id
+      - id
+      title: SampleProjectDetail
+    Body_clone_sample_project:
+      properties:
+        language:
+          type: string
+          maxLength: 64
+          minLength: 1
+          title: Language
+      type: object
+      required:
+      - language
+      title: Body_clone_sample_project
     SampleProjectUpdate:
       properties:
         language:
@@ -258,17 +280,6 @@ components:
       - message
       - type
       title: ErrorBody
-    BasicSuccessResponse:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: success
-      type: object
-      title: BasicSuccessResponse
-      description: 'Use this for returns for deletes and patches.
-
-        UI ALWAYS needs some payload return. This just standarizes it.'
     ClonedSampleProjectResponse:
       properties:
         new_project_id:
@@ -278,25 +289,14 @@ components:
       required:
       - new_project_id
       title: ClonedSampleProjectResponse
-    SampleProjectDetail:
+    ErrorSchema:
       properties:
-        language:
-          type: string
-          maxLength: 64
-          minLength: 1
-          title: Language
-        project_id:
-          type: integer
-          title: Project Id
-        id:
-          type: integer
-          title: Id
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       type: object
       required:
-      - language
-      - project_id
-      - id
-      title: SampleProjectDetail
+      - error
+      title: ErrorSchema
   securitySchemes:
     BearerAuth:
       type: http

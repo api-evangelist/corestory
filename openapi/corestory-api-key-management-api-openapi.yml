@@ -243,143 +243,6 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    ApiKeyCreateRequest:
-      properties:
-        name:
-          type: string
-          maxLength: 100
-          minLength: 1
-          title: Name
-          description: User-friendly key name
-          examples:
-          - CI/CD Pipeline
-          - Development Server
-          - Production API
-        description:
-          anyOf:
-          - type: string
-            maxLength: 500
-          - type: 'null'
-          title: Description
-          description: Optional description for the key
-          examples:
-          - Used for automated deployments
-          - Local development testing
-        expires_days:
-          type: integer
-          maximum: 730.0
-          minimum: 1.0
-          title: Expires Days
-          description: Key validity in days (1-730 days)
-          default: 365
-          examples:
-          - 30
-          - 90
-          - 365
-        scope_type:
-          type: string
-          enum:
-          - user
-          - project
-          - organization
-          title: Scope Type
-          description: 'Scope type: ''user'' for full user permissions, ''project'' for project-scoped, ''organization'' for M2M keys'
-          default: user
-        project_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Project Id
-          description: Project ID (required when scope_type is 'project')
-      type: object
-      required:
-      - name
-      title: ApiKeyCreateRequest
-      description: Request to create a new API key.
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    ApiKeyUpdateRequest:
-      properties:
-        name:
-          anyOf:
-          - type: string
-            maxLength: 100
-            minLength: 1
-          - type: 'null'
-          title: Name
-          description: New key name
-        description:
-          anyOf:
-          - type: string
-            maxLength: 500
-          - type: 'null'
-          title: Description
-          description: New key description
-      type: object
-      title: ApiKeyUpdateRequest
-      description: Request to update key metadata.
-    ApiKeyRefreshRequest:
-      properties:
-        scope_type:
-          type: string
-          enum:
-          - user
-          - project
-          - organization
-          title: Scope Type
-          description: Scope type of the key to refresh
-        project_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Project Id
-          description: Project ID (required when scope is 'project')
-        expires_days:
-          type: integer
-          maximum: 730.0
-          minimum: 1.0
-          title: Expires Days
-          description: Validity for the new key in days (1-730 days)
-          default: 365
-      type: object
-      required:
-      - scope_type
-      title: ApiKeyRefreshRequest
-      description: Request to refresh (rotate) an API key.
-    ApiKeyListResponse:
-      properties:
-        keys:
-          items:
-            $ref: '#/components/schemas/ApiKeyResponse'
-          type: array
-          title: Keys
-          description: List of keys
-        total_count:
-          type: integer
-          title: Total Count
-          description: Total number of keys
-        active_count:
-          type: integer
-          title: Active Count
-          description: Number of active keys
-        revoked_count:
-          type: integer
-          title: Revoked Count
-          description: Number of revoked keys
-      type: object
-      required:
-      - keys
-      - total_count
-      - active_count
-      - revoked_count
-      title: ApiKeyListResponse
-      description: Response for listing keys.
     ApiKeyCreateResponse:
       properties:
         id:
@@ -620,6 +483,143 @@ components:
       - message
       - type
       title: ErrorBody
+    ApiKeyListResponse:
+      properties:
+        keys:
+          items:
+            $ref: '#/components/schemas/ApiKeyResponse'
+          type: array
+          title: Keys
+          description: List of keys
+        total_count:
+          type: integer
+          title: Total Count
+          description: Total number of keys
+        active_count:
+          type: integer
+          title: Active Count
+          description: Number of active keys
+        revoked_count:
+          type: integer
+          title: Revoked Count
+          description: Number of revoked keys
+      type: object
+      required:
+      - keys
+      - total_count
+      - active_count
+      - revoked_count
+      title: ApiKeyListResponse
+      description: Response for listing keys.
+    ApiKeyUpdateRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+            maxLength: 100
+            minLength: 1
+          - type: 'null'
+          title: Name
+          description: New key name
+        description:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Description
+          description: New key description
+      type: object
+      title: ApiKeyUpdateRequest
+      description: Request to update key metadata.
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    ApiKeyRefreshRequest:
+      properties:
+        scope_type:
+          type: string
+          enum:
+          - user
+          - project
+          - organization
+          title: Scope Type
+          description: Scope type of the key to refresh
+        project_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Project Id
+          description: Project ID (required when scope is 'project')
+        expires_days:
+          type: integer
+          maximum: 730.0
+          minimum: 1.0
+          title: Expires Days
+          description: Validity for the new key in days (1-730 days)
+          default: 365
+      type: object
+      required:
+      - scope_type
+      title: ApiKeyRefreshRequest
+      description: Request to refresh (rotate) an API key.
+    ApiKeyCreateRequest:
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Name
+          description: User-friendly key name
+          examples:
+          - CI/CD Pipeline
+          - Development Server
+          - Production API
+        description:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Description
+          description: Optional description for the key
+          examples:
+          - Used for automated deployments
+          - Local development testing
+        expires_days:
+          type: integer
+          maximum: 730.0
+          minimum: 1.0
+          title: Expires Days
+          description: Key validity in days (1-730 days)
+          default: 365
+          examples:
+          - 30
+          - 90
+          - 365
+        scope_type:
+          type: string
+          enum:
+          - user
+          - project
+          - organization
+          title: Scope Type
+          description: 'Scope type: ''user'' for full user permissions, ''project'' for project-scoped, ''organization'' for M2M keys'
+          default: user
+        project_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Project Id
+          description: Project ID (required when scope_type is 'project')
+      type: object
+      required:
+      - name
+      title: ApiKeyCreateRequest
+      description: Request to create a new API key.
   securitySchemes:
     BearerAuth:
       type: http

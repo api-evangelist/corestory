@@ -198,122 +198,6 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    CreateArtifactRequest:
-      properties:
-        source_type:
-          type: string
-          const: conversation
-          title: Source Type
-          description: Type of source entity (e.g., 'conversation')
-        source_id:
-          type: integer
-          exclusiveMinimum: 0.0
-          title: Source Id
-          description: ID of the source entity
-        mode:
-          anyOf:
-          - $ref: '#/components/schemas/Mode'
-          - type: 'null'
-          description: 'Export mode for conversation artifacts: ''transcript'' for raw messages, ''synthesized'' for AI-processed content'
-          default: transcript
-      type: object
-      required:
-      - source_type
-      - source_id
-      title: CreateArtifactRequest
-      description: 'Request model for creating an artifact.
-
-
-        This model defines the input required to generate an artifact from a source entity.
-
-        Currently supports conversations, with extensibility for future source types.'
-      examples:
-      - mode: transcript
-        source_id: 123
-        source_type: conversation
-      - mode: synthesized
-        source_id: 456
-        source_type: conversation
-    Status:
-      type: string
-      enum:
-      - not_started
-      - pending
-      - completed
-      - failed
-      title: Status
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    ArtifactItem:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: UUID of the artifact
-        title:
-          type: string
-          title: Title
-          description: Title of the artifact
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the artifact
-        source_type:
-          type: string
-          title: Source Type
-          description: Type of source entity (e.g., 'conversation')
-        source_id:
-          type: string
-          title: Source Id
-          description: ID of the source entity
-        status:
-          $ref: '#/components/schemas/Status'
-          description: Current status of the artifact
-        mode:
-          anyOf:
-          - $ref: '#/components/schemas/Mode'
-          - type: 'null'
-          description: Export mode for conversation artifacts
-        created_by:
-          type: string
-          title: Created By
-          description: UUID of the user who created the artifact
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Timestamp when the artifact was created
-      type: object
-      required:
-      - id
-      - title
-      - description
-      - source_type
-      - source_id
-      - status
-      - mode
-      - created_by
-      - created_at
-      title: ArtifactItem
-      description: Individual artifact item in the list response.
-      examples:
-      - created_at: '2025-10-21T14:30:00Z'
-        created_by: user-uuid-123
-        description: Artifact exported from conversation 123
-        id: 123e4567-e89b-12d3-a456-426614174000
-        mode: transcript
-        source_id: '123'
-        source_type: conversation
-        status: completed
-        title: My Conversation Export
     GetArtifactResponse:
       properties:
         id:
@@ -392,12 +276,6 @@ components:
         source_type: conversation
         status: completed
         title: My Conversation Export
-    Mode:
-      type: string
-      enum:
-      - synthesized
-      - transcript
-      title: Mode
     ArtifactUpdateRequest:
       properties:
         markdown_content:
@@ -424,6 +302,14 @@ components:
 
           This is the updated content of the artifact.'
         title: Updated Artifact Title
+    Status:
+      type: string
+      enum:
+      - not_started
+      - pending
+      - completed
+      - failed
+      title: Status
     ListArtifactsResponse:
       properties:
         artifacts:
@@ -472,6 +358,12 @@ components:
         page_size: 10
         total: 25
         total_pages: 3
+    Mode:
+      type: string
+      enum:
+      - synthesized
+      - transcript
+      title: Mode
     CreateArtifactResponse:
       properties:
         status:
@@ -499,6 +391,42 @@ components:
         status: completed
       - artifact_id: 456e7890-e12b-34d5-c678-625514738002
         status: failed
+    CreateArtifactRequest:
+      properties:
+        source_type:
+          type: string
+          const: conversation
+          title: Source Type
+          description: Type of source entity (e.g., 'conversation')
+        source_id:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Source Id
+          description: ID of the source entity
+        mode:
+          anyOf:
+          - $ref: '#/components/schemas/Mode'
+          - type: 'null'
+          description: 'Export mode for conversation artifacts: ''transcript'' for raw messages, ''synthesized'' for AI-processed content'
+          default: transcript
+      type: object
+      required:
+      - source_type
+      - source_id
+      title: CreateArtifactRequest
+      description: 'Request model for creating an artifact.
+
+
+        This model defines the input required to generate an artifact from a source entity.
+
+        Currently supports conversations, with extensibility for future source types.'
+      examples:
+      - mode: transcript
+        source_id: 123
+        source_type: conversation
+      - mode: synthesized
+        source_id: 456
+        source_type: conversation
     ErrorBody:
       properties:
         message:
@@ -517,6 +445,78 @@ components:
       - message
       - type
       title: ErrorBody
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    ArtifactItem:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: UUID of the artifact
+        title:
+          type: string
+          title: Title
+          description: Title of the artifact
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the artifact
+        source_type:
+          type: string
+          title: Source Type
+          description: Type of source entity (e.g., 'conversation')
+        source_id:
+          type: string
+          title: Source Id
+          description: ID of the source entity
+        status:
+          $ref: '#/components/schemas/Status'
+          description: Current status of the artifact
+        mode:
+          anyOf:
+          - $ref: '#/components/schemas/Mode'
+          - type: 'null'
+          description: Export mode for conversation artifacts
+        created_by:
+          type: string
+          title: Created By
+          description: UUID of the user who created the artifact
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Timestamp when the artifact was created
+      type: object
+      required:
+      - id
+      - title
+      - description
+      - source_type
+      - source_id
+      - status
+      - mode
+      - created_by
+      - created_at
+      title: ArtifactItem
+      description: Individual artifact item in the list response.
+      examples:
+      - created_at: '2025-10-21T14:30:00Z'
+        created_by: user-uuid-123
+        description: Artifact exported from conversation 123
+        id: 123e4567-e89b-12d3-a456-426614174000
+        mode: transcript
+        source_id: '123'
+        source_type: conversation
+        status: completed
+        title: My Conversation Export
   securitySchemes:
     BearerAuth:
       type: http

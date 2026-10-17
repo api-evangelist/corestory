@@ -95,6 +95,31 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    PRDContextResponse:
+      properties:
+        context:
+          type: string
+          title: Context
+          description: The PRD context
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: When the context was created
+      type: object
+      required:
+      - context
+      - created_at
+      title: PRDContextResponse
+      description: Response model for PRD context.
     ErrorBody:
       properties:
         message:
@@ -113,14 +138,6 @@ components:
       - message
       - type
       title: ErrorBody
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
     PRDContextRequest:
       properties:
         context:
@@ -133,23 +150,6 @@ components:
       - context
       title: PRDContextRequest
       description: Request model for setting PRD context.
-    PRDContextResponse:
-      properties:
-        context:
-          type: string
-          title: Context
-          description: The PRD context
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: When the context was created
-      type: object
-      required:
-      - context
-      - created_at
-      title: PRDContextResponse
-      description: Response model for PRD context.
   securitySchemes:
     BearerAuth:
       type: http

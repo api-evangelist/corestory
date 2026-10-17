@@ -102,36 +102,16 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    ArchitectureOverview:
+    CodeQualityOverview:
       properties:
-        pattern_id:
-          type: string
-          title: Pattern Id
-        label:
-          type: string
-          title: Label
-        score:
-          type: number
-          title: Score
-        tier:
-          type: string
-          title: Tier
-        explanation:
-          anyOf:
-          - $ref: '#/components/schemas/ArchitectureExplanation'
-          - type: 'null'
-        low_confidence_guidance:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Low Confidence Guidance
+        indicators:
+          additionalProperties: true
+          type: object
+          title: Indicators
+      additionalProperties: true
       type: object
-      required:
-      - pattern_id
-      - label
-      - score
-      - tier
-      title: ArchitectureOverview
+      title: CodeQualityOverview
+      description: Thin wrapper over code_quality_indicators from code_analysis.
     RegenerationTriggerResponse:
       properties:
         status:
@@ -157,38 +137,6 @@ components:
       - job_id
       title: RegenerationTriggerResponse
       description: Returned when regeneration is successfully triggered.
-    SIOMetadata:
-      properties:
-        generated_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Generated At
-        snapshot_fingerprint:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Snapshot Fingerprint
-          description: Commit SHA of the ingested codebase version
-        is_stale:
-          type: boolean
-          title: Is Stale
-          default: false
-        schema_version:
-          type: string
-          title: Schema Version
-          default: '1.0'
-      type: object
-      title: SIOMetadata
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
     ArchitectureAlternative:
       properties:
         pattern_id:
@@ -262,6 +210,78 @@ components:
       type: object
       title: TechStackOverview
       description: Reshaped view of language_breakdown + framework_tech_stack + infrastructure + dependencies.
+    ArchitectureOverview:
+      properties:
+        pattern_id:
+          type: string
+          title: Pattern Id
+        label:
+          type: string
+          title: Label
+        score:
+          type: number
+          title: Score
+        tier:
+          type: string
+          title: Tier
+        explanation:
+          anyOf:
+          - $ref: '#/components/schemas/ArchitectureExplanation'
+          - type: 'null'
+        low_confidence_guidance:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Low Confidence Guidance
+      type: object
+      required:
+      - pattern_id
+      - label
+      - score
+      - tier
+      title: ArchitectureOverview
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    SIOMetadata:
+      properties:
+        generated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Generated At
+        snapshot_fingerprint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Snapshot Fingerprint
+          description: Commit SHA of the ingested codebase version
+        is_stale:
+          type: boolean
+          title: Is Stale
+          default: false
+        schema_version:
+          type: string
+          title: Schema Version
+          default: '1.0'
+      type: object
+      title: SIOMetadata
     RegenerationEstimateResponse:
       properties:
         estimated_cost:
@@ -283,44 +303,6 @@ components:
       - can_regenerate
       title: RegenerationEstimateResponse
       description: CIU cost estimate for SIO regeneration.
-    ArchitectureExplanation:
-      properties:
-        summary:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Summary
-        detected_signals:
-          items:
-            type: string
-          type: array
-          title: Detected Signals
-        key_drivers:
-          items:
-            type: string
-          type: array
-          title: Key Drivers
-        alternative_interpretation:
-          anyOf:
-          - $ref: '#/components/schemas/ArchitectureAlternative'
-          - type: 'null'
-        confidence_alignment:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Confidence Alignment
-      type: object
-      title: ArchitectureExplanation
-    CodeQualityOverview:
-      properties:
-        indicators:
-          additionalProperties: true
-          type: object
-          title: Indicators
-      additionalProperties: true
-      type: object
-      title: CodeQualityOverview
-      description: Thin wrapper over code_quality_indicators from code_analysis.
     SystemOverviewResponse:
       properties:
         architecture:
@@ -361,24 +343,42 @@ components:
       - metadata
       title: SystemOverviewResponse
       description: Complete SIO payload returned when analysis is available.
-    ErrorBody:
+    ErrorSchema:
       properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       type: object
       required:
-      - message
-      - type
-      title: ErrorBody
+      - error
+      title: ErrorSchema
+    ArchitectureExplanation:
+      properties:
+        summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary
+        detected_signals:
+          items:
+            type: string
+          type: array
+          title: Detected Signals
+        key_drivers:
+          items:
+            type: string
+          type: array
+          title: Key Drivers
+        alternative_interpretation:
+          anyOf:
+          - $ref: '#/components/schemas/ArchitectureAlternative'
+          - type: 'null'
+        confidence_alignment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Confidence Alignment
+      type: object
+      title: ArchitectureExplanation
   securitySchemes:
     BearerAuth:
       type: http

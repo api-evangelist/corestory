@@ -743,83 +743,174 @@ paths:
           description: Internal server error
 components:
   schemas:
-    Body_import_vectors_stream:
+    ExportVectorsResponse:
       properties:
-        file:
+        message:
           type: string
-          contentMediaType: application/octet-stream
-          title: File
-          description: JSONL file containing vector records to import
-      type: object
-      required:
-      - file
-      title: Body_import_vectors_stream
-    FilesMetadataUpdate:
-      properties:
-        file_path:
-          type: string
-          title: File Path
-          description: Path to the file
-        extractors:
+          title: Message
+          description: Export operation status message
+        total_records:
+          type: integer
+          title: Total Records
+          description: Total number of records exported
+        records:
           items:
-            type: string
-            enum:
-            - data_models
-            - api_specifications
-            - classes_and_functions
-            - user_interfaces
-            - imports_exports
+            $ref: '#/components/schemas/VectorRecord'
           type: array
-          title: Extractors
-          description: List of extractors to update metadata for
-        comment:
+          title: Records
+          description: List of exported vector records
+        metadata:
           anyOf:
-          - type: string
+          - additionalProperties: true
+            type: object
           - type: 'null'
-          title: Comment
-          description: User provided comment for the update operation
+          title: Metadata
+          description: Additional export metadata including table info and export parameters
       type: object
       required:
-      - file_path
-      - extractors
-      title: FilesMetadataUpdate
-    Body_add_vector_documents:
+      - message
+      - total_records
+      - records
+      title: ExportVectorsResponse
+      description: Response model for exporting vectors
+    IngestResponseSchema:
       properties:
-        files:
-          items:
-            type: string
-            contentMediaType: application/octet-stream
-          type: array
-          title: Files
-          description: Documents to add to the vector store
+        message:
+          type: string
+          title: Message
+          description: Status message
+        document_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Document Count
+          description: Number of documents ingested
       type: object
       required:
-      - files
-      title: Body_add_vector_documents
-    CancelIngestionResponse:
+      - message
+      title: IngestResponseSchema
+      description: Schema for data ingestion response
+    AddDocumentsResponse:
       properties:
         message:
           type: string
           title: Message
           description: Operation status message
-        job_id:
-          type: string
-          title: Job Id
-          description: The SOTJ job id that was flipped to CANCELLED
+        document_count:
+          type: integer
+          title: Document Count
+          description: Number of documents added
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+          description: Additional operation metadata
       type: object
       required:
       - message
-      - job_id
-      title: CancelIngestionResponse
-      description: Response model for cancelling an active ingestion job.
-    ErrorSchema:
+      - document_count
+      title: AddDocumentsResponse
+      description: Response model for adding documents to vector store
+    VectorRecord:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        text:
+          type: string
+          title: Text
+          description: The text content to be stored
+        vector:
+          anyOf:
+          - items:
+              type: number
+            type: array
+          - type: 'null'
+          title: Vector
+          description: Pre-computed vector embedding. If not provided, will be computed from text using the configured embedding model
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+          description: Additional metadata to store with the vector
+        document_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Document Id
+          description: Document identifier. If not provided, a UUID will be generated
       type: object
       required:
-      - error
-      title: ErrorSchema
+      - text
+      title: VectorRecord
+      description: Model for a single vector record to be side-loaded
+    ImportStreamResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+          description: Import operation status message
+        total_lines_processed:
+          type: integer
+          title: Total Lines Processed
+          description: Total number of lines processed from the JSONL file
+        records_imported:
+          type: integer
+          title: Records Imported
+          description: Number of vector records successfully imported
+        records_failed:
+          type: integer
+          title: Records Failed
+          description: Number of records that failed to import
+        metadata_lines:
+          type: integer
+          title: Metadata Lines
+          description: Number of metadata lines encountered (non-record lines)
+        embeddings_computed:
+          type: integer
+          title: Embeddings Computed
+          description: Number of embeddings computed for records without vectors
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+          description: Additional import metadata and statistics
+      type: object
+      required:
+      - message
+      - total_lines_processed
+      - records_imported
+      - records_failed
+      - metadata_lines
+      - embeddings_computed
+      title: ImportStreamResponse
+      description: Response model for streaming import of JSONL files
+    UpdateMetadataResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+          description: Operation status message
+        records_updated:
+          type: integer
+          title: Records Updated
+          description: Number of records updated
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+          description: Additional operation metadata
+      type: object
+      required:
+      - message
+      - records_updated
+      title: UpdateMetadataResponse
+      description: Response model for updating metadata in vector store
     VectorStoreResponse:
       properties:
         message:
@@ -871,76 +962,35 @@ components:
       - embeddings_computed
       title: SideLoadResponse
       description: Response model for side-loading vectors
-    IngestResponseSchema:
+    Body_import_vectors_stream:
+      properties:
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+          description: JSONL file containing vector records to import
+      type: object
+      required:
+      - file
+      title: Body_import_vectors_stream
+    ErrorBody:
       properties:
         message:
           type: string
           title: Message
-          description: Status message
-        document_count:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Document Count
-          description: Number of documents ingested
-      type: object
-      required:
-      - message
-      title: IngestResponseSchema
-      description: Schema for data ingestion response
-    SideLoadRequest:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/VectorRecord'
-          type: array
-          title: Records
-          description: List of vector records to insert into the database
-        batch_size:
-          type: integer
-          maximum: 1000.0
-          minimum: 1.0
-          title: Batch Size
-          description: 'Number of records to process in each batch (default: 100)'
-          default: 100
-      type: object
-      required:
-      - records
-      title: SideLoadRequest
-      description: Request model for side-loading vectors directly into the database
-    SourceType:
-      type: string
-      enum:
-      - git_clone
-      - url
-      - default
-      - azure_blob
-      - repo_full_name
-      title: SourceType
-      description: Enum-like class for source types.
-    AddDocumentsResponse:
-      properties:
-        message:
+        type:
           type: string
-          title: Message
-          description: Operation status message
-        document_count:
-          type: integer
-          title: Document Count
-          description: Number of documents added
-        metadata:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Metadata
-          description: Additional operation metadata
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
       type: object
       required:
       - message
-      - document_count
-      title: AddDocumentsResponse
-      description: Response model for adding documents to vector store
+      - type
+      title: ErrorBody
     IngestRequest:
       properties:
         source_type:
@@ -1000,152 +1050,102 @@ components:
       - source_type
       title: IngestRequest
       description: "Request model for vector store ingestion.\n\nMINIMUM REQUIRED PARAMETERS EXAMPLE:\n{\n    \"source_type\": \"url\",\n    \"source\": \"https://github.com/some/path/to/repo.git\",\n}"
-    ImportStreamResponse:
+    Body_add_vector_documents:
       properties:
-        message:
-          type: string
-          title: Message
-          description: Import operation status message
-        total_lines_processed:
-          type: integer
-          title: Total Lines Processed
-          description: Total number of lines processed from the JSONL file
-        records_imported:
-          type: integer
-          title: Records Imported
-          description: Number of vector records successfully imported
-        records_failed:
-          type: integer
-          title: Records Failed
-          description: Number of records that failed to import
-        metadata_lines:
-          type: integer
-          title: Metadata Lines
-          description: Number of metadata lines encountered (non-record lines)
-        embeddings_computed:
-          type: integer
-          title: Embeddings Computed
-          description: Number of embeddings computed for records without vectors
-        metadata:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Metadata
-          description: Additional import metadata and statistics
+        files:
+          items:
+            type: string
+            contentMediaType: application/octet-stream
+          type: array
+          title: Files
+          description: Documents to add to the vector store
       type: object
       required:
-      - message
-      - total_lines_processed
-      - records_imported
-      - records_failed
-      - metadata_lines
-      - embeddings_computed
-      title: ImportStreamResponse
-      description: Response model for streaming import of JSONL files
-    VectorRecord:
+      - files
+      title: Body_add_vector_documents
+    ErrorSchema:
       properties:
-        text:
-          type: string
-          title: Text
-          description: The text content to be stored
-        vector:
-          anyOf:
-          - items:
-              type: number
-            type: array
-          - type: 'null'
-          title: Vector
-          description: Pre-computed vector embedding. If not provided, will be computed from text using the configured embedding model
-        metadata:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Metadata
-          description: Additional metadata to store with the vector
-        document_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Document Id
-          description: Document identifier. If not provided, a UUID will be generated
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       type: object
       required:
-      - text
-      title: VectorRecord
-      description: Model for a single vector record to be side-loaded
-    UpdateMetadataResponse:
+      - error
+      title: ErrorSchema
+    CancelIngestionResponse:
       properties:
         message:
           type: string
           title: Message
           description: Operation status message
-        records_updated:
-          type: integer
-          title: Records Updated
-          description: Number of records updated
-        metadata:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Metadata
-          description: Additional operation metadata
+        job_id:
+          type: string
+          title: Job Id
+          description: The SOTJ job id that was flipped to CANCELLED
       type: object
       required:
       - message
-      - records_updated
-      title: UpdateMetadataResponse
-      description: Response model for updating metadata in vector store
-    ExportVectorsResponse:
+      - job_id
+      title: CancelIngestionResponse
+      description: Response model for cancelling an active ingestion job.
+    SideLoadRequest:
       properties:
-        message:
-          type: string
-          title: Message
-          description: Export operation status message
-        total_records:
-          type: integer
-          title: Total Records
-          description: Total number of records exported
         records:
           items:
             $ref: '#/components/schemas/VectorRecord'
           type: array
           title: Records
-          description: List of exported vector records
-        metadata:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Metadata
-          description: Additional export metadata including table info and export parameters
+          description: List of vector records to insert into the database
+        batch_size:
+          type: integer
+          maximum: 1000.0
+          minimum: 1.0
+          title: Batch Size
+          description: 'Number of records to process in each batch (default: 100)'
+          default: 100
       type: object
       required:
-      - message
-      - total_records
       - records
-      title: ExportVectorsResponse
-      description: Response model for exporting vectors
-    ErrorBody:
+      title: SideLoadRequest
+      description: Request model for side-loading vectors directly into the database
+    FilesMetadataUpdate:
       properties:
-        message:
+        file_path:
           type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
+          title: File Path
+          description: Path to the file
+        extractors:
+          items:
+            type: string
+            enum:
+            - data_models
+            - api_specifications
+            - classes_and_functions
+            - user_interfaces
+            - imports_exports
+          type: array
+          title: Extractors
+          description: List of extractors to update metadata for
+        comment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Comment
+          description: User provided comment for the update operation
       type: object
       required:
-      - message
-      - type
-      title: ErrorBody
+      - file_path
+      - extractors
+      title: FilesMetadataUpdate
+    SourceType:
+      type: string
+      enum:
+      - git_clone
+      - url
+      - default
+      - azure_blob
+      - repo_full_name
+      title: SourceType
+      description: Enum-like class for source types.
   securitySchemes:
     BearerAuth:
       type: http

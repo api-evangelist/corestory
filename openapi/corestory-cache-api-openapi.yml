@@ -309,66 +309,6 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    CacheTTLUpdate:
-      properties:
-        ttl_seconds:
-          type: integer
-          exclusiveMinimum: 0.0
-          title: Ttl Seconds
-          description: New TTL value in seconds (must be positive)
-          example: 7200
-      type: object
-      required:
-      - ttl_seconds
-      title: CacheTTLUpdate
-      description: Request model for updating cache TTL
-    CacheSetRequest:
-      properties:
-        entries:
-          items:
-            $ref: '#/components/schemas/CacheEntry'
-          type: array
-          title: Entries
-          description: List of cache entries to set
-      type: object
-      required:
-      - entries
-      title: CacheSetRequest
-      description: Request model for setting cache entries
-    CacheEntryMetadata:
-      properties:
-        created_at:
-          type: number
-          title: Created At
-          description: Timestamp when the entry was created
-        ttl_seconds:
-          type: integer
-          title: Ttl Seconds
-          description: TTL in seconds
-        ttl_remaining:
-          type: number
-          title: Ttl Remaining
-          description: Remaining TTL in seconds
-        is_expired:
-          type: boolean
-          title: Is Expired
-          description: Whether the entry has expired
-      type: object
-      required:
-      - created_at
-      - ttl_seconds
-      - ttl_remaining
-      - is_expired
-      title: CacheEntryMetadata
-      description: Metadata for a cache entry
     CacheEntry:
       properties:
         cache_key:
@@ -396,6 +336,19 @@ components:
       - metadata
       title: CacheEntry
       description: Model for a single cache entry
+    CacheSetRequest:
+      properties:
+        entries:
+          items:
+            $ref: '#/components/schemas/CacheEntry'
+          type: array
+          title: Entries
+          description: List of cache entries to set
+      type: object
+      required:
+      - entries
+      title: CacheSetRequest
+      description: Request model for setting cache entries
     ErrorBody:
       properties:
         message:
@@ -414,6 +367,53 @@ components:
       - message
       - type
       title: ErrorBody
+    CacheTTLUpdate:
+      properties:
+        ttl_seconds:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Ttl Seconds
+          description: New TTL value in seconds (must be positive)
+          example: 7200
+      type: object
+      required:
+      - ttl_seconds
+      title: CacheTTLUpdate
+      description: Request model for updating cache TTL
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    CacheEntryMetadata:
+      properties:
+        created_at:
+          type: number
+          title: Created At
+          description: Timestamp when the entry was created
+        ttl_seconds:
+          type: integer
+          title: Ttl Seconds
+          description: TTL in seconds
+        ttl_remaining:
+          type: number
+          title: Ttl Remaining
+          description: Remaining TTL in seconds
+        is_expired:
+          type: boolean
+          title: Is Expired
+          description: Whether the entry has expired
+      type: object
+      required:
+      - created_at
+      - ttl_seconds
+      - ttl_remaining
+      - is_expired
+      title: CacheEntryMetadata
+      description: Metadata for a cache entry
   securitySchemes:
     BearerAuth:
       type: http

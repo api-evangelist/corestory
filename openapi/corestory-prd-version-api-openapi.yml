@@ -482,93 +482,6 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    ImportStepsRequest:
-      additionalProperties: true
-      type: object
-      title: ImportStepsRequest
-      description: 'Request body for bulk-importing PRD/TechSpec step content.
-
-
-        Accepts a flat JSON object mapping dashed step names to content.
-
-        Validates that the dict is non-empty and all keys are recognised step names.'
-    PRDVersionItemWithDiffListResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/PRDVersionItemWithDiffResponse'
-          type: array
-          title: Results
-          description: List of PRD versions
-        pagination:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Pagination
-      type: object
-      required:
-      - results
-      title: PRDVersionItemWithDiffListResponse
-      description: Response model for paginated list of versions for a PRD.
-    DocumentSectionsDashedEnum:
-      type: string
-      enum:
-      - executive-overview
-      - user-personas
-      - high-level-requirements
-      - user-stories
-      - security-requirements
-      - system-architecture
-      - data-models
-      - user-interface
-      - api-specifications
-      - interface-specifications
-      - integration-points
-      - security-considerations
-      - tech-user-stories
-      - implementation-strategy
-      title: DocumentSectionsDashedEnum
-      description: PRD + tech-spec sections only (no retriever). Use for user-facing endpoints.
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    ImportStepsResponse:
-      properties:
-        steps_created:
-          type: integer
-          title: Steps Created
-        step_names:
-          items:
-            type: string
-          type: array
-          title: Step Names
-          description: Dashed step names that were created.
-      type: object
-      required:
-      - steps_created
-      - step_names
-      title: ImportStepsResponse
-      description: Response for a successful import-steps call.
-    TechSpecStepsDashedEnum:
-      type: string
-      enum:
-      - system-architecture
-      - data-models
-      - user-interface
-      - api-specifications
-      - interface-specifications
-      - integration-points
-      - security-considerations
-      - tech-user-stories
-      - implementation-strategy
-      title: TechSpecStepsDashedEnum
-      description: All tech spec steps with dashed values.
     BasicSuccessResponse:
       properties:
         detail:
@@ -580,6 +493,25 @@ components:
       description: 'Use this for returns for deletes and patches.
 
         UI ALWAYS needs some payload return. This just standarizes it.'
+    PRDVersionItemListResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/PRDVersionItemResponse'
+          type: array
+          title: Results
+          description: List of versions for a given section
+        pagination:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Pagination
+      type: object
+      required:
+      - results
+      title: PRDVersionItemListResponse
+      description: Response model for paginated list of versions for a given section.
     PRDVersionItemResponse:
       properties:
         uid:
@@ -640,6 +572,70 @@ components:
       - version_num
       - created_at
       title: PRDVersionItemResponse
+    DocumentSectionsDashedEnum:
+      type: string
+      enum:
+      - executive-overview
+      - user-personas
+      - high-level-requirements
+      - user-stories
+      - security-requirements
+      - system-architecture
+      - data-models
+      - user-interface
+      - api-specifications
+      - interface-specifications
+      - integration-points
+      - security-considerations
+      - tech-user-stories
+      - implementation-strategy
+      title: DocumentSectionsDashedEnum
+      description: PRD + tech-spec sections only (no retriever). Use for user-facing endpoints.
+    ImportStepsRequest:
+      additionalProperties: true
+      type: object
+      title: ImportStepsRequest
+      description: 'Request body for bulk-importing PRD/TechSpec step content.
+
+
+        Accepts a flat JSON object mapping dashed step names to content.
+
+        Validates that the dict is non-empty and all keys are recognised step names.'
+    ImportStepsResponse:
+      properties:
+        steps_created:
+          type: integer
+          title: Steps Created
+        step_names:
+          items:
+            type: string
+          type: array
+          title: Step Names
+          description: Dashed step names that were created.
+      type: object
+      required:
+      - steps_created
+      - step_names
+      title: ImportStepsResponse
+      description: Response for a successful import-steps call.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
     PRDVersionItemWithDiffResponse:
       properties:
         uid:
@@ -711,25 +707,6 @@ components:
       description: 'Subclass the item fields above and add the diff''d sections from the previous version
 
         in the history of versions.'
-    PRDVersionItemListResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/PRDVersionItemResponse'
-          type: array
-          title: Results
-          description: List of versions for a given section
-        pagination:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Pagination
-      type: object
-      required:
-      - results
-      title: PRDVersionItemListResponse
-      description: Response model for paginated list of versions for a given section.
     LanguageInfo:
       properties:
         code:
@@ -746,6 +723,16 @@ components:
       - name
       title: LanguageInfo
       description: Language information with code and native display name.
+    PRDVersionDiffResponse:
+      properties:
+        changed_sections:
+          items:
+            type: string
+          type: array
+          title: Changed Sections
+          description: Section names that differ from version to version.
+      type: object
+      title: PRDVersionDiffResponse
     PRDVersionUpdateRequest:
       properties:
         title:
@@ -759,34 +746,47 @@ components:
       type: object
       title: PRDVersionUpdateRequest
       description: Allowed updatable fields on a PRD Version.
-    ErrorBody:
+    ErrorSchema:
       properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       type: object
       required:
-      - message
-      - type
-      title: ErrorBody
-    PRDVersionDiffResponse:
+      - error
+      title: ErrorSchema
+    PRDVersionItemWithDiffListResponse:
       properties:
-        changed_sections:
+        results:
           items:
-            type: string
+            $ref: '#/components/schemas/PRDVersionItemWithDiffResponse'
           type: array
-          title: Changed Sections
-          description: Section names that differ from version to version.
+          title: Results
+          description: List of PRD versions
+        pagination:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Pagination
       type: object
-      title: PRDVersionDiffResponse
+      required:
+      - results
+      title: PRDVersionItemWithDiffListResponse
+      description: Response model for paginated list of versions for a PRD.
+    TechSpecStepsDashedEnum:
+      type: string
+      enum:
+      - system-architecture
+      - data-models
+      - user-interface
+      - api-specifications
+      - interface-specifications
+      - integration-points
+      - security-considerations
+      - tech-user-stories
+      - implementation-strategy
+      title: TechSpecStepsDashedEnum
+      description: All tech spec steps with dashed values.
   securitySchemes:
     BearerAuth:
       type: http

@@ -447,37 +447,6 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    BasicSuccessResponse:
-      properties:
-        detail:
-          type: string
-          title: Detail
-          default: success
-      type: object
-      title: BasicSuccessResponse
-      description: 'Use this for returns for deletes and patches.
-
-        UI ALWAYS needs some payload return. This just standarizes it.'
-    GenerateTechSpecRequest:
-      properties:
-        custom_prompts:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/GenerateTechSpecCustomPromptItem'
-            type: array
-          - type: 'null'
-          title: Custom Prompts
-        context:
-          anyOf:
-          - $ref: '#/components/schemas/TechnicalSpecContext'
-          - type: 'null'
-        language:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Language
-      type: object
-      title: GenerateTechSpecRequest
     GenerateAllRequest:
       properties:
         language:
@@ -487,6 +456,145 @@ components:
           title: Language
       type: object
       title: GenerateAllRequest
+    GeneratePRDSectionRequest:
+      properties:
+        custom_prompt:
+          anyOf:
+          - $ref: '#/components/schemas/PRDCustomPromptRequest'
+          - type: 'null'
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+      type: object
+      title: GeneratePRDSectionRequest
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    PRDCustomPromptRequest:
+      properties:
+        prompt:
+          type: string
+          title: Prompt
+        replacement:
+          type: boolean
+          title: Replacement
+      type: object
+      required:
+      - prompt
+      - replacement
+      title: PRDCustomPromptRequest
+    JobStatusSummary:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Current job status
+        progress:
+          type: number
+          title: Progress
+          description: Progress percentage (0-100)
+          default: 0.0
+        created_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created By
+          description: User ID who triggered this job
+        failure_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Failure Type
+          description: Short categorical failure tag set only when the job is FAILED. Lets the UI render category-specific guidance without parsing the message. See `app.orchestrations.ingestion.failure_handler.classify_failure` for the authoritative set of values.
+        failure_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Failure Reason
+          description: Human-readable failure message safe to show in the UI. Set only when the job is FAILED.
+      type: object
+      required:
+      - status
+      title: JobStatusSummary
+      description: Lightweight status + progress for a single job type (ingestion, PRD generation, etc.).
+    PRDGenerateResponse:
+      properties:
+        content:
+          title: Content
+          description: The generated document content (dict for JSON format, str for markdown format)
+        format:
+          type: string
+          title: Format
+          description: The format of the document (json or markdown)
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+          description: Additional metadata about the document
+      type: object
+      required:
+      - content
+      - format
+      - metadata
+      title: PRDGenerateResponse
+      description: Response model for PRD generation
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
+    TechnicalRequirements:
+      properties:
+        requirement:
+          type: string
+          title: Requirement
+          description: Technical requirements for the user story.
+        uml_diagram:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Uml Diagram
+          description: UML diagram for the user story.
+          default: ''
+        sequence_diagram:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sequence Diagram
+          description: Sequence diagram for the user story.
+          default: ''
+        reference:
+          items:
+            $ref: '#/components/schemas/Reference'
+          type: array
+          title: Reference
+          description: Reference to the file where the technical requirements were found.
+      additionalProperties: false
+      type: object
+      required:
+      - requirement
+      - reference
+      title: TechnicalRequirements
     TechSpecSectionsResponse:
       properties:
         system_architecture:
@@ -608,6 +716,103 @@ components:
       - prd_id
       - created_at
       title: TechSpecSectionsResponse
+    Reference:
+      properties:
+        file_name:
+          type: string
+          title: File Name
+          description: Name of the file where the reference was found (just the filename, e.g., 'COCRDLIC.cbl').
+        line_number:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Line Number
+          description: Line number where the reference was found in the code.
+        reference_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reference Text
+          description: Textual content of the reference. Class, method name, or other relevant information.
+        file_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: File Path
+          description: 'Full relative path to the file from repository root (e.g., ''app/cbl/COCRDLIC.cbl''). Extract from the Source: lines in the context if available.'
+      type: object
+      required:
+      - file_name
+      title: Reference
+    BasicSuccessResponse:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: success
+      type: object
+      title: BasicSuccessResponse
+      description: 'Use this for returns for deletes and patches.
+
+        UI ALWAYS needs some payload return. This just standarizes it.'
+    TechnicalSpecContext:
+      properties:
+        features:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Feature-Input'
+            type: array
+          - type: 'null'
+          title: Features
+          description: Optional list of features to use for generation
+        user_stories:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/UserStory'
+            type: array
+          - type: 'null'
+          title: User Stories
+          description: Optional list of user stories to generate code from
+      type: object
+      title: TechnicalSpecContext
+      description: Context model for technical specification generation.
+    LanguageInfo:
+      properties:
+        code:
+          type: string
+          title: Code
+          description: BCP-47 language code (ja, es, fr-CA).
+        name:
+          type: string
+          title: Name
+          description: Language name in its native script (English, français (Canada)).
+      type: object
+      required:
+      - code
+      - name
+      title: LanguageInfo
+      description: Language information with code and native display name.
+    PaginationMeta:
+      properties:
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        size:
+          type: integer
+          title: Size
+        pages:
+          type: integer
+          title: Pages
+      type: object
+      required:
+      - total
+      - page
+      - size
+      - pages
+      title: PaginationMeta
     Feature-Input:
       properties:
         name:
@@ -684,20 +889,6 @@ components:
       - references
       - user_persona
       title: UserStory
-    TechSpecStepsDashedEnum:
-      type: string
-      enum:
-      - system-architecture
-      - data-models
-      - user-interface
-      - api-specifications
-      - interface-specifications
-      - integration-points
-      - security-considerations
-      - tech-user-stories
-      - implementation-strategy
-      title: TechSpecStepsDashedEnum
-      description: All tech spec steps with dashed values.
     TechSpecSingleSectionResponse:
       properties:
         prd_id:
@@ -821,40 +1012,22 @@ components:
         Only 1 section is ever output, endpoint sets "don''t output None".
 
         # AKA: Only output the property if it exists.'
-    TechnicalSpecContext:
+    GenerateTechSpecCustomPromptItem:
       properties:
-        features:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/Feature-Input'
-            type: array
-          - type: 'null'
-          title: Features
-          description: Optional list of features to use for generation
-        user_stories:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/UserStory'
-            type: array
-          - type: 'null'
-          title: User Stories
-          description: Optional list of user stories to generate code from
+        section_name:
+          $ref: '#/components/schemas/TechSpecStepsDashedEnum'
+        prompt:
+          type: string
+          title: Prompt
+        replacement:
+          type: boolean
+          title: Replacement
+          default: false
       type: object
-      title: TechnicalSpecContext
-      description: Context model for technical specification generation.
-    GeneratePRDSectionRequest:
-      properties:
-        custom_prompt:
-          anyOf:
-          - $ref: '#/components/schemas/PRDCustomPromptRequest'
-          - type: 'null'
-        language:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Language
-      type: object
-      title: GeneratePRDSectionRequest
+      required:
+      - section_name
+      - prompt
+      title: GenerateTechSpecCustomPromptItem
     NewReference:
       properties:
         file_name:
@@ -878,213 +1051,40 @@ components:
       required:
       - file_name
       title: NewReference
-    TechnicalRequirements:
+    TechSpecStepsDashedEnum:
+      type: string
+      enum:
+      - system-architecture
+      - data-models
+      - user-interface
+      - api-specifications
+      - interface-specifications
+      - integration-points
+      - security-considerations
+      - tech-user-stories
+      - implementation-strategy
+      title: TechSpecStepsDashedEnum
+      description: All tech spec steps with dashed values.
+    GenerateTechSpecRequest:
       properties:
-        requirement:
-          type: string
-          title: Requirement
-          description: Technical requirements for the user story.
-        uml_diagram:
+        custom_prompts:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/GenerateTechSpecCustomPromptItem'
+            type: array
+          - type: 'null'
+          title: Custom Prompts
+        context:
+          anyOf:
+          - $ref: '#/components/schemas/TechnicalSpecContext'
+          - type: 'null'
+        language:
           anyOf:
           - type: string
           - type: 'null'
-          title: Uml Diagram
-          description: UML diagram for the user story.
-          default: ''
-        sequence_diagram:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Sequence Diagram
-          description: Sequence diagram for the user story.
-          default: ''
-        reference:
-          items:
-            $ref: '#/components/schemas/Reference'
-          type: array
-          title: Reference
-          description: Reference to the file where the technical requirements were found.
-      additionalProperties: false
+          title: Language
       type: object
-      required:
-      - requirement
-      - reference
-      title: TechnicalRequirements
-    PRDGenerateResponse:
-      properties:
-        content:
-          title: Content
-          description: The generated document content (dict for JSON format, str for markdown format)
-        format:
-          type: string
-          title: Format
-          description: The format of the document (json or markdown)
-        metadata:
-          additionalProperties: true
-          type: object
-          title: Metadata
-          description: Additional metadata about the document
-      type: object
-      required:
-      - content
-      - format
-      - metadata
-      title: PRDGenerateResponse
-      description: Response model for PRD generation
-    PaginationMeta:
-      properties:
-        total:
-          type: integer
-          title: Total
-        page:
-          type: integer
-          title: Page
-        size:
-          type: integer
-          title: Size
-        pages:
-          type: integer
-          title: Pages
-      type: object
-      required:
-      - total
-      - page
-      - size
-      - pages
-      title: PaginationMeta
-    PRDCustomPromptRequest:
-      properties:
-        prompt:
-          type: string
-          title: Prompt
-        replacement:
-          type: boolean
-          title: Replacement
-      type: object
-      required:
-      - prompt
-      - replacement
-      title: PRDCustomPromptRequest
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    Reference:
-      properties:
-        file_name:
-          type: string
-          title: File Name
-          description: Name of the file where the reference was found (just the filename, e.g., 'COCRDLIC.cbl').
-        line_number:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Line Number
-          description: Line number where the reference was found in the code.
-        reference_text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Reference Text
-          description: Textual content of the reference. Class, method name, or other relevant information.
-        file_path:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: File Path
-          description: 'Full relative path to the file from repository root (e.g., ''app/cbl/COCRDLIC.cbl''). Extract from the Source: lines in the context if available.'
-      type: object
-      required:
-      - file_name
-      title: Reference
-    JobStatusSummary:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: Current job status
-        progress:
-          type: number
-          title: Progress
-          description: Progress percentage (0-100)
-          default: 0.0
-        created_by:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Created By
-          description: User ID who triggered this job
-        failure_type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Failure Type
-          description: Short categorical failure tag set only when the job is FAILED. Lets the UI render category-specific guidance without parsing the message. See `app.orchestrations.ingestion.failure_handler.classify_failure` for the authoritative set of values.
-        failure_reason:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Failure Reason
-          description: Human-readable failure message safe to show in the UI. Set only when the job is FAILED.
-      type: object
-      required:
-      - status
-      title: JobStatusSummary
-      description: Lightweight status + progress for a single job type (ingestion, PRD generation, etc.).
-    GenerateTechSpecCustomPromptItem:
-      properties:
-        section_name:
-          $ref: '#/components/schemas/TechSpecStepsDashedEnum'
-        prompt:
-          type: string
-          title: Prompt
-        replacement:
-          type: boolean
-          title: Replacement
-          default: false
-      type: object
-      required:
-      - section_name
-      - prompt
-      title: GenerateTechSpecCustomPromptItem
-    LanguageInfo:
-      properties:
-        code:
-          type: string
-          title: Code
-          description: BCP-47 language code (ja, es, fr-CA).
-        name:
-          type: string
-          title: Name
-          description: Language name in its native script (English, français (Canada)).
-      type: object
-      required:
-      - code
-      - name
-      title: LanguageInfo
-      description: Language information with code and native display name.
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
+      title: GenerateTechSpecRequest
   securitySchemes:
     BearerAuth:
       type: http

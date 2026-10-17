@@ -89,65 +89,6 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    UsageDataResponse:
-      properties:
-        period_start:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Period Start
-          description: Start of the usage period. Null when no date filter was applied.
-        period_end:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Period End
-          description: End of the usage period. Null when no date filter was applied.
-        token_usage:
-          type: integer
-          title: Token Usage
-          description: Total tokens consumed (input + output)
-        input_tokens:
-          type: integer
-          title: Input Tokens
-          description: Total input/prompt tokens consumed. Sentinel value -1 when the usage provider does not expose a prompt/completion split.
-        output_tokens:
-          type: integer
-          title: Output Tokens
-          description: Total output/completion tokens consumed. Sentinel value -1 when the usage provider does not expose a prompt/completion split.
-        total_projects:
-          type: integer
-          title: Total Projects
-          description: Number of projects in the organization
-        total_users:
-          type: integer
-          title: Total Users
-          description: Number of active users in the organization
-        token_cost:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Token Cost
-          description: Token cost in USD (if available)
-      type: object
-      required:
-      - token_usage
-      - input_tokens
-      - output_tokens
-      - total_projects
-      - total_users
-      title: UsageDataResponse
-      description: Response model for organization usage data.
     SubscriptionStatusResponse:
       properties:
         status:
@@ -253,6 +194,57 @@ components:
       - status
       title: SubscriptionStatusResponse
       description: Response model for organization subscription status.
+    UsageDataResponse:
+      properties:
+        period_start:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Period Start
+          description: Start of the usage period. Null when no date filter was applied.
+        period_end:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Period End
+          description: End of the usage period. Null when no date filter was applied.
+        token_usage:
+          type: integer
+          title: Token Usage
+          description: Total tokens consumed (input + output)
+        input_tokens:
+          type: integer
+          title: Input Tokens
+          description: Total input/prompt tokens consumed. Sentinel value -1 when the usage provider does not expose a prompt/completion split.
+        output_tokens:
+          type: integer
+          title: Output Tokens
+          description: Total output/completion tokens consumed. Sentinel value -1 when the usage provider does not expose a prompt/completion split.
+        total_projects:
+          type: integer
+          title: Total Projects
+          description: Number of projects in the organization
+        total_users:
+          type: integer
+          title: Total Users
+          description: Number of active users in the organization
+        token_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Token Cost
+          description: Token cost in USD (if available)
+      type: object
+      required:
+      - token_usage
+      - input_tokens
+      - output_tokens
+      - total_projects
+      - total_users
+      title: UsageDataResponse
+      description: Response model for organization usage data.
     ErrorBody:
       properties:
         message:
@@ -278,6 +270,14 @@ components:
       - stripe
       title: SubscriptionProvider
       description: Subscription provider enum.
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
   securitySchemes:
     BearerAuth:
       type: http

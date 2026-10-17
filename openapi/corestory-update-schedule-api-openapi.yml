@@ -68,14 +68,59 @@ paths:
           description: Not found
 components:
   schemas:
-    ErrorSchema:
+    UpdateScheduleUpsert:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        cadence:
+          $ref: '#/components/schemas/ScheduleCadence'
+        day_of_week:
+          anyOf:
+          - type: integer
+            maximum: 6.0
+            minimum: 0.0
+          - type: 'null'
+          title: Day Of Week
+          description: 0=Monday..6=Sunday. Required when weekly.
+        day_of_month:
+          anyOf:
+          - type: integer
+            maximum: 28.0
+            minimum: 1.0
+          - type: 'null'
+          title: Day Of Month
+          description: 1-28. Required when monthly.
+        time:
+          type: string
+          pattern: ^([01]\d|2[0-3]):(00|30)$
+          title: Time
+          description: HH:MM in 24h format. Must be on a 30-minute boundary (e.g. 09:00, 09:30).
+        doc_sync:
+          type: boolean
+          title: Doc Sync
+          default: true
       type: object
       required:
-      - error
-      title: ErrorSchema
+      - cadence
+      - time
+      title: UpdateScheduleUpsert
+      description: Create or update an org update schedule. Single atomic operation.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
     ScheduleCadence:
       type: string
       enum:
@@ -84,6 +129,14 @@ components:
       - monthly
       title: ScheduleCadence
       description: How frequently the org schedule runs.
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
     UpdateScheduleResponse:
       properties:
         id:
@@ -163,59 +216,6 @@ components:
       - updated_at
       title: UpdateScheduleResponse
       description: Response for org update schedule, includes computed fields.
-    UpdateScheduleUpsert:
-      properties:
-        cadence:
-          $ref: '#/components/schemas/ScheduleCadence'
-        day_of_week:
-          anyOf:
-          - type: integer
-            maximum: 6.0
-            minimum: 0.0
-          - type: 'null'
-          title: Day Of Week
-          description: 0=Monday..6=Sunday. Required when weekly.
-        day_of_month:
-          anyOf:
-          - type: integer
-            maximum: 28.0
-            minimum: 1.0
-          - type: 'null'
-          title: Day Of Month
-          description: 1-28. Required when monthly.
-        time:
-          type: string
-          pattern: ^([01]\d|2[0-3]):(00|30)$
-          title: Time
-          description: HH:MM in 24h format. Must be on a 30-minute boundary (e.g. 09:00, 09:30).
-        doc_sync:
-          type: boolean
-          title: Doc Sync
-          default: true
-      type: object
-      required:
-      - cadence
-      - time
-      title: UpdateScheduleUpsert
-      description: Create or update an org update schedule. Single atomic operation.
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
   securitySchemes:
     BearerAuth:
       type: http

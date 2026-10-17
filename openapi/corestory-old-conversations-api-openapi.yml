@@ -311,14 +311,47 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    ErrorSchema:
+    ConversationCreateRequest:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        title:
+          type: string
+          title: Title
+        context:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Context
+        persona:
+          anyOf:
+          - $ref: '#/components/schemas/ChatPersona'
+          - type: 'null'
+        context_scope:
+          anyOf:
+          - $ref: '#/components/schemas/ContextScope'
+          - type: 'null'
       type: object
       required:
-      - error
-      title: ErrorSchema
+      - title
+      title: ConversationCreateRequest
+      description: Request model for creating a conversation
+    FeedbackType:
+      type: string
+      enum:
+      - thumbs_up
+      - thumbs_down
+      title: FeedbackType
+      description: Types of user feedback
+    ImportStatus:
+      type: string
+      enum:
+      - original
+      - pending
+      - in_progress
+      - completed
+      - failed
+      title: ImportStatus
     ConversationMeta:
       properties:
         message_count:
@@ -342,17 +375,31 @@ components:
       type: object
       title: ConversationMeta
       description: Metadata about conversation messages.
-    ChatPersona:
+    ConversationOrigin:
       type: string
       enum:
-      - general
-      - developer
-      - business_analyst
-      - product_manager
-      - project_manager
-      - designer
-      title: ChatPersona
-      description: Personas for chat behavior customization
+      - ui
+      - mcp
+      title: ConversationOrigin
+      description: Origin source of conversation creation
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
     ChatMessageResponse:
       properties:
         id:
@@ -441,6 +488,63 @@ components:
       required:
       - query
       title: QueryRequest
+    ConversationSettingsResponse:
+      properties:
+        conversation_id:
+          type: integer
+          title: Conversation Id
+        persona:
+          $ref: '#/components/schemas/ChatPersona'
+        context_scope:
+          $ref: '#/components/schemas/ContextScope'
+        created_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created At
+        updated_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Updated At
+      type: object
+      required:
+      - conversation_id
+      - persona
+      - context_scope
+      - created_at
+      - updated_at
+      title: ConversationSettingsResponse
+      description: 'Response model for conversation settings (deprecated: settings now in ConversationResponse)'
+    ContextScope:
+      type: string
+      enum:
+      - automatic
+      - artifacts
+      - code
+      title: ContextScope
+      description: Context scope for knowledge retrieval
+    ConversationSettingsRequest:
+      properties:
+        persona:
+          anyOf:
+          - $ref: '#/components/schemas/ChatPersona'
+          - type: 'null'
+        context_scope:
+          anyOf:
+          - $ref: '#/components/schemas/ContextScope'
+          - type: 'null'
+      type: object
+      title: ConversationSettingsRequest
+      description: 'Request model for updating conversation settings (deprecated: use UpdateConversationRequest)'
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
     ConversationResponse:
       properties:
         id:
@@ -526,6 +630,17 @@ components:
       - is_read_only
       title: ConversationResponse
       description: Response model for conversation data with settings and metadata
+    ChatPersona:
+      type: string
+      enum:
+      - general
+      - developer
+      - business_analyst
+      - product_manager
+      - project_manager
+      - designer
+      title: ChatPersona
+      description: Personas for chat behavior customization
     PaginatedConversationListResponse:
       properties:
         results:
@@ -554,121 +669,6 @@ components:
       - offset
       title: PaginatedConversationListResponse
       description: Response model for paginated conversation list
-    ConversationSettingsRequest:
-      properties:
-        persona:
-          anyOf:
-          - $ref: '#/components/schemas/ChatPersona'
-          - type: 'null'
-        context_scope:
-          anyOf:
-          - $ref: '#/components/schemas/ContextScope'
-          - type: 'null'
-      type: object
-      title: ConversationSettingsRequest
-      description: 'Request model for updating conversation settings (deprecated: use UpdateConversationRequest)'
-    ConversationSettingsResponse:
-      properties:
-        conversation_id:
-          type: integer
-          title: Conversation Id
-        persona:
-          $ref: '#/components/schemas/ChatPersona'
-        context_scope:
-          $ref: '#/components/schemas/ContextScope'
-        created_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Created At
-        updated_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Updated At
-      type: object
-      required:
-      - conversation_id
-      - persona
-      - context_scope
-      - created_at
-      - updated_at
-      title: ConversationSettingsResponse
-      description: 'Response model for conversation settings (deprecated: settings now in ConversationResponse)'
-    FeedbackType:
-      type: string
-      enum:
-      - thumbs_up
-      - thumbs_down
-      title: FeedbackType
-      description: Types of user feedback
-    ConversationOrigin:
-      type: string
-      enum:
-      - ui
-      - mcp
-      title: ConversationOrigin
-      description: Origin source of conversation creation
-    ContextScope:
-      type: string
-      enum:
-      - automatic
-      - artifacts
-      - code
-      title: ContextScope
-      description: Context scope for knowledge retrieval
-    ImportStatus:
-      type: string
-      enum:
-      - original
-      - pending
-      - in_progress
-      - completed
-      - failed
-      title: ImportStatus
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
-    ConversationCreateRequest:
-      properties:
-        title:
-          type: string
-          title: Title
-        context:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Context
-        persona:
-          anyOf:
-          - $ref: '#/components/schemas/ChatPersona'
-          - type: 'null'
-        context_scope:
-          anyOf:
-          - $ref: '#/components/schemas/ContextScope'
-          - type: 'null'
-      type: object
-      required:
-      - title
-      title: ConversationCreateRequest
-      description: Request model for creating a conversation
   securitySchemes:
     BearerAuth:
       type: http

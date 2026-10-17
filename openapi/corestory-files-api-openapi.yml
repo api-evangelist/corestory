@@ -179,12 +179,67 @@ paths:
           description: File or vector store not found
 components:
   schemas:
-    ClassInfo:
+    InterfaceInfo:
       properties:
         name:
           type: string
           title: Name
-          description: Class name
+          description: Interface type (mainframe, desktop, web, mobile, terminal, api)
+        summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary
+          description: Technology used
+      type: object
+      required:
+      - name
+      title: InterfaceInfo
+      description: Interface name and summary.
+    FileManifestResponse:
+      properties:
+        project_id:
+          type: integer
+          title: Project Id
+          description: Project ID
+        total_files:
+          type: integer
+          title: Total Files
+          description: Total number of files in the manifest
+        included_files:
+          type: integer
+          title: Included Files
+          description: Number of included files
+        excluded_files:
+          type: integer
+          title: Excluded Files
+          description: Number of excluded files
+        ingestion_status_degraded:
+          type: boolean
+          title: Ingestion Status Degraded
+          description: True when the vector store lookup failed and ingestion status could not be determined
+          default: false
+        files:
+          items:
+            $ref: '#/components/schemas/FileManifestItem'
+          type: array
+          title: Files
+          description: List of file manifest entries
+      type: object
+      required:
+      - project_id
+      - total_files
+      - included_files
+      - excluded_files
+      - files
+      title: FileManifestResponse
+      description: Complete file manifest for a project.
+    FunctionInfo:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Function name
         summary:
           anyOf:
           - type: string
@@ -194,8 +249,55 @@ components:
       type: object
       required:
       - name
-      title: ClassInfo
-      description: Class name and summary.
+      title: FunctionInfo
+      description: Function name and summary.
+    PRDReferenceContext:
+      properties:
+        section_name:
+          type: string
+          title: Section Name
+          description: Section name in dashed format (e.g. 'executive-overview', 'user-stories')
+        reference_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reference Text
+          description: Short description of what this file contributes to the section
+        line_number:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Line Number
+          description: Line number in the file that was referenced
+        index_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Index Id
+          description: Array index of the entity within the section (e.g. user story index)
+      type: object
+      required:
+      - section_name
+      title: PRDReferenceContext
+      description: A PRD section that references this file.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
     ErrorSchema:
       properties:
         error:
@@ -263,61 +365,6 @@ components:
       - ingested
       title: FileManifestItem
       description: A single file entry in the project file manifest.
-    FileManifestResponse:
-      properties:
-        project_id:
-          type: integer
-          title: Project Id
-          description: Project ID
-        total_files:
-          type: integer
-          title: Total Files
-          description: Total number of files in the manifest
-        included_files:
-          type: integer
-          title: Included Files
-          description: Number of included files
-        excluded_files:
-          type: integer
-          title: Excluded Files
-          description: Number of excluded files
-        ingestion_status_degraded:
-          type: boolean
-          title: Ingestion Status Degraded
-          description: True when the vector store lookup failed and ingestion status could not be determined
-          default: false
-        files:
-          items:
-            $ref: '#/components/schemas/FileManifestItem'
-          type: array
-          title: Files
-          description: List of file manifest entries
-      type: object
-      required:
-      - project_id
-      - total_files
-      - included_files
-      - excluded_files
-      - files
-      title: FileManifestResponse
-      description: Complete file manifest for a project.
-    FunctionInfo:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Function name
-        summary:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Summary
-          description: AI-generated summary
-      type: object
-      required:
-      - name
-      title: FunctionInfo
-      description: Function name and summary.
     FileContentMetadata:
       properties:
         file_path:
@@ -412,70 +459,23 @@ components:
       - file_name
       title: FileContentMetadata
       description: Metadata response for file content retrieval.
-    InterfaceInfo:
+    ClassInfo:
       properties:
         name:
           type: string
           title: Name
-          description: Interface type (mainframe, desktop, web, mobile, terminal, api)
+          description: Class name
         summary:
           anyOf:
           - type: string
           - type: 'null'
           title: Summary
-          description: Technology used
+          description: AI-generated summary
       type: object
       required:
       - name
-      title: InterfaceInfo
-      description: Interface name and summary.
-    PRDReferenceContext:
-      properties:
-        section_name:
-          type: string
-          title: Section Name
-          description: Section name in dashed format (e.g. 'executive-overview', 'user-stories')
-        reference_text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Reference Text
-          description: Short description of what this file contributes to the section
-        line_number:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Line Number
-          description: Line number in the file that was referenced
-        index_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Index Id
-          description: Array index of the entity within the section (e.g. user story index)
-      type: object
-      required:
-      - section_name
-      title: PRDReferenceContext
-      description: A PRD section that references this file.
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
+      title: ClassInfo
+      description: Class name and summary.
   securitySchemes:
     BearerAuth:
       type: http

@@ -692,23 +692,6 @@ components:
 
 
           This is markdown content from an artifact download.'
-    PDFJobStatus:
-      type: string
-      enum:
-      - pending
-      - processing
-      - completed
-      - failed
-      title: PDFJobStatus
-      description: Status of a PDF generation job.
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
     AllPRDStepsDashedEnum:
       type: string
       enum:
@@ -733,6 +716,64 @@ components:
       - retriever-summary
       title: AllPRDStepsDashedEnum
       description: All PRD steps with dashed values.
+    TableOfContentsRequest:
+      properties:
+        markdown:
+          type: string
+          title: Markdown
+          description: The markdown content to generate table of contents from
+      type: object
+      required:
+      - markdown
+      title: TableOfContentsRequest
+      description: Request model for table of contents generation.
+    DocumentFormatResponse:
+      properties:
+        markdown:
+          type: string
+          title: Markdown
+          description: The formatted document in markdown format
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+          description: Additional metadata about the formatting operation
+      type: object
+      required:
+      - markdown
+      - metadata
+      title: DocumentFormatResponse
+      description: Response model for document formatting.
+    app__models__enums__DocumentType:
+      type: string
+      enum:
+      - prd
+      - technical-spec
+      - document-section
+      title: DocumentType
+      description: Enum for document types.
+    DocxOutputRequest:
+      properties:
+        markdown:
+          type: string
+          title: Markdown
+          description: Markdown content to convert
+        project_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Project Id
+          description: Optional project ID for cache namespacing
+      type: object
+      required:
+      - markdown
+      title: DocxOutputRequest
+      description: Request model for Word document (.docx) output from markdown input.
+      examples:
+      - markdown: '# My Document
+
+
+          This is markdown content to export as Word.'
     ErrorBody:
       properties:
         message:
@@ -751,14 +792,15 @@ components:
       - message
       - type
       title: ErrorBody
-    app__models__enums__DocumentType:
+    PDFJobStatus:
       type: string
       enum:
-      - prd
-      - technical-spec
-      - document-section
-      title: DocumentType
-      description: Enum for document types.
+      - pending
+      - processing
+      - completed
+      - failed
+      title: PDFJobStatus
+      description: Status of a PDF generation job.
     PDFAsyncResponse:
       properties:
         job_id:
@@ -790,56 +832,14 @@ components:
       - stream_url
       title: PDFAsyncResponse
       description: Response for async PDF generation initiation.
-    TableOfContentsRequest:
+    ErrorSchema:
       properties:
-        markdown:
-          type: string
-          title: Markdown
-          description: The markdown content to generate table of contents from
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       type: object
       required:
-      - markdown
-      title: TableOfContentsRequest
-      description: Request model for table of contents generation.
-    DocxOutputRequest:
-      properties:
-        markdown:
-          type: string
-          title: Markdown
-          description: Markdown content to convert
-        project_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Project Id
-          description: Optional project ID for cache namespacing
-      type: object
-      required:
-      - markdown
-      title: DocxOutputRequest
-      description: Request model for Word document (.docx) output from markdown input.
-      examples:
-      - markdown: '# My Document
-
-
-          This is markdown content to export as Word.'
-    DocumentFormatResponse:
-      properties:
-        markdown:
-          type: string
-          title: Markdown
-          description: The formatted document in markdown format
-        metadata:
-          additionalProperties: true
-          type: object
-          title: Metadata
-          description: Additional metadata about the formatting operation
-      type: object
-      required:
-      - markdown
-      - metadata
-      title: DocumentFormatResponse
-      description: Response model for document formatting.
+      - error
+      title: ErrorSchema
   securitySchemes:
     BearerAuth:
       type: http

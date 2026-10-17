@@ -404,81 +404,195 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
-    PreIngestionStatus:
-      type: string
-      enum:
-      - started
-      - cloning
-      - parsing
-      - analyzed
-      - completed
-      - failed
-      title: PreIngestionStatus
-      description: PreIngestion status enumeration
-    ReingestionAnalysisCoverageResponse:
+    FileChangeSummary:
       properties:
-        total_files:
+        added_count:
           type: integer
-          title: Total Files
-        total_directories:
+          title: Added Count
+          default: 0
+        modified_count:
           type: integer
-          title: Total Directories
-        file_coverage:
-          type: number
-          title: File Coverage
-          description: Percentage of files that will be ingested
-        included_count:
-          additionalProperties: true
-          type: object
-          title: Included Count
-          description: File types included with counts
-        excluded_count:
-          additionalProperties: true
-          type: object
-          title: Excluded Count
-          description: File types excluded with counts
-        exclusion_reasons:
-          additionalProperties: true
-          type: object
-          title: Exclusion Reasons
-          description: Breakdown by exclusion reason
-        files:
-          anyOf:
-          - $ref: '#/components/schemas/FileChanges'
-          - type: 'null'
-          description: Files added/modified/removed since last ingestion
-        summary:
-          anyOf:
-          - $ref: '#/components/schemas/FileChangeSummary'
-          - type: 'null'
-          description: Counts of added/modified/removed files
-        last_synced_commit:
+          title: Modified Count
+          default: 0
+        removed_count:
+          type: integer
+          title: Removed Count
+          default: 0
+      type: object
+      title: FileChangeSummary
+      description: Summary counts of file changes between last ingestion and latest commit.
+    FileChanges:
+      properties:
+        added:
+          items:
+            type: string
+          type: array
+          title: Added
+        modified:
+          items:
+            type: string
+          type: array
+          title: Modified
+        removed:
+          items:
+            type: string
+          type: array
+          title: Removed
+      type: object
+      title: FileChanges
+      description: Categorized file paths changed between last ingestion and latest commit.
+    ReingestionTriggerRequest:
+      properties:
+        regenerate_docs:
+          type: boolean
+          title: Regenerate Docs
+          description: Whether to regenerate PRD/TechSpec after ingestion
+          default: false
+        application_context:
           anyOf:
           - type: string
           - type: 'null'
-          title: Last Synced Commit
-          description: Commit SHA of last ingestion
-        latest_commit:
+          title: Application Context
+          description: Update project application context before reingestion
+        language:
           anyOf:
           - type: string
           - type: 'null'
-          title: Latest Commit
-          description: HEAD commit SHA of the repo
-        estimated_cius:
-          anyOf:
-          - $ref: '#/components/schemas/CIUEstimate'
-          - type: 'null'
-          description: Estimated CIU cost range for reingestion
+          title: Language
+          description: BCP-47 language code for document generation (ja, es, fr-CA).
+        force:
+          type: boolean
+          title: Force
+          description: Force re-ingestion of every document instead of skipping ones already in the vector store. Use this after extractor/schema changes when existing chunks need to be re-processed.
+          default: false
+      type: object
+      title: ReingestionTriggerRequest
+      description: Request to trigger reingestion
+    PaginatedResponse_IngestionEventResponse_:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/IngestionEventResponse'
+          type: array
+          title: Items
+          description: List of items
+        pagination:
+          $ref: '#/components/schemas/PaginationMeta'
+          description: Pagination metadata
       type: object
       required:
-      - total_files
-      - total_directories
-      - file_coverage
-      - included_count
-      - excluded_count
-      - exclusion_reasons
-      title: ReingestionAnalysisCoverageResponse
-      description: Coverage results from analysis, including file change summary and CIU estimate.
+      - items
+      - pagination
+      title: PaginatedResponse[IngestionEventResponse]
+    ReingestionTriggerResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        project_id:
+          type: integer
+          title: Project Id
+        status:
+          type: string
+          title: Status
+          default: started
+        regenerate_docs:
+          type: boolean
+          title: Regenerate Docs
+          description: Whether document regeneration was requested
+          default: false
+        force:
+          type: boolean
+          title: Force
+          description: Whether force re-ingestion was requested
+          default: false
+        prd_job_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Prd Job Id
+          description: SOTJ job ID for PRD generation (if regenerate_docs=true)
+        tech_spec_job_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tech Spec Job Id
+          description: SOTJ job ID for tech spec generation (if regenerate_docs=true)
+      type: object
+      required:
+      - message
+      - project_id
+      title: ReingestionTriggerResponse
+      description: Response when reingestion is triggered
+    DocImpactGroup:
+      properties:
+        sections_added:
+          items:
+            type: string
+          type: array
+          title: Sections Added
+          description: Sections present only in the new version.
+        sections_modified:
+          items:
+            type: string
+          type: array
+          title: Sections Modified
+          description: Sections whose content changed.
+        sections_removed:
+          items:
+            type: string
+          type: array
+          title: Sections Removed
+          description: Sections present only in the old version.
+      type: object
+      title: DocImpactGroup
+      description: Section-level changes for a single document (PRD or Tech Spec).
+    PaginatedFilePathResponse:
+      properties:
+        results:
+          items:
+            type: string
+          type: array
+          title: Results
+          description: List of filepaths in pre-ingestion job
+        pagination:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Pagination
+      type: object
+      required:
+      - results
+      - pagination
+      title: PaginatedFilePathResponse
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
+    DocImpact:
+      properties:
+        prd:
+          $ref: '#/components/schemas/DocImpactGroup'
+        tech_spec:
+          $ref: '#/components/schemas/DocImpactGroup'
+      type: object
+      title: DocImpact
+      description: Doc-section changes an ingestion event produced, grouped by document.
     IngestionEventResponse:
       properties:
         id:
@@ -558,155 +672,23 @@ components:
       - trigger_type
       - regenerated_docs
       title: IngestionEventResponse
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    ReingestionTriggerResponse:
-      properties:
-        message:
-          type: string
-          title: Message
-        project_id:
-          type: integer
-          title: Project Id
-        status:
-          type: string
-          title: Status
-          default: started
-        regenerate_docs:
-          type: boolean
-          title: Regenerate Docs
-          description: Whether document regeneration was requested
-          default: false
-        force:
-          type: boolean
-          title: Force
-          description: Whether force re-ingestion was requested
-          default: false
-        prd_job_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Prd Job Id
-          description: SOTJ job ID for PRD generation (if regenerate_docs=true)
-        tech_spec_job_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Tech Spec Job Id
-          description: SOTJ job ID for tech spec generation (if regenerate_docs=true)
-      type: object
-      required:
-      - message
-      - project_id
-      title: ReingestionTriggerResponse
-      description: Response when reingestion is triggered
-    DocImpactGroup:
-      properties:
-        sections_added:
-          items:
-            type: string
-          type: array
-          title: Sections Added
-          description: Sections present only in the new version.
-        sections_modified:
-          items:
-            type: string
-          type: array
-          title: Sections Modified
-          description: Sections whose content changed.
-        sections_removed:
-          items:
-            type: string
-          type: array
-          title: Sections Removed
-          description: Sections present only in the old version.
-      type: object
-      title: DocImpactGroup
-      description: Section-level changes for a single document (PRD or Tech Spec).
-    DocImpact:
-      properties:
-        prd:
-          $ref: '#/components/schemas/DocImpactGroup'
-        tech_spec:
-          $ref: '#/components/schemas/DocImpactGroup'
-      type: object
-      title: DocImpact
-      description: Doc-section changes an ingestion event produced, grouped by document.
-    PaginatedResponse_IngestionEventResponse_:
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/IngestionEventResponse'
-          type: array
-          title: Items
-          description: List of items
-        pagination:
-          $ref: '#/components/schemas/PaginationMeta'
-          description: Pagination metadata
-      type: object
-      required:
-      - items
-      - pagination
-      title: PaginatedResponse[IngestionEventResponse]
-    TriggerType:
+    PreIngestionStatus:
       type: string
       enum:
-      - manual
-      - automatic
-      title: TriggerType
-      description: How an ingestion event was triggered.
-    ReingestionTriggerRequest:
+      - started
+      - cloning
+      - parsing
+      - analyzed
+      - completed
+      - failed
+      title: PreIngestionStatus
+      description: PreIngestion status enumeration
+    DocImpactResponse:
       properties:
-        regenerate_docs:
-          type: boolean
-          title: Regenerate Docs
-          description: Whether to regenerate PRD/TechSpec after ingestion
-          default: false
-        application_context:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Application Context
-          description: Update project application context before reingestion
-        language:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Language
-          description: BCP-47 language code for document generation (ja, es, fr-CA).
-        force:
-          type: boolean
-          title: Force
-          description: Force re-ingestion of every document instead of skipping ones already in the vector store. Use this after extractor/schema changes when existing chunks need to be re-processed.
-          default: false
+        doc_impact:
+          $ref: '#/components/schemas/DocImpact'
       type: object
-      title: ReingestionTriggerRequest
-      description: Request to trigger reingestion
-    PaginatedFilePathResponse:
-      properties:
-        results:
-          items:
-            type: string
-          type: array
-          title: Results
-          description: List of filepaths in pre-ingestion job
-        pagination:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Pagination
-      type: object
-      required:
-      - results
-      - pagination
-      title: PaginatedFilePathResponse
+      title: DocImpactResponse
     ReingestionAnalysisResponse:
       properties:
         job_id:
@@ -737,6 +719,13 @@ components:
       - status
       title: ReingestionAnalysisResponse
       description: Response for pre-reingestion analysis
+    TriggerType:
+      type: string
+      enum:
+      - manual
+      - automatic
+      title: TriggerType
+      description: How an ingestion event was triggered.
     CIUEstimate:
       properties:
         min:
@@ -755,49 +744,78 @@ components:
       - max
       title: CIUEstimate
       description: Estimated CIU cost for reingestion.
-    FileChanges:
+    ErrorSchema:
       properties:
-        added:
-          items:
-            type: string
-          type: array
-          title: Added
-        modified:
-          items:
-            type: string
-          type: array
-          title: Modified
-        removed:
-          items:
-            type: string
-          type: array
-          title: Removed
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       type: object
-      title: FileChanges
-      description: Categorized file paths changed between last ingestion and latest commit.
-    DocImpactResponse:
+      required:
+      - error
+      title: ErrorSchema
+    ReingestionAnalysisCoverageResponse:
       properties:
-        doc_impact:
-          $ref: '#/components/schemas/DocImpact'
+        total_files:
+          type: integer
+          title: Total Files
+        total_directories:
+          type: integer
+          title: Total Directories
+        file_coverage:
+          type: number
+          title: File Coverage
+          description: Percentage of files that will be ingested
+        included_count:
+          additionalProperties: true
+          type: object
+          title: Included Count
+          description: File types included with counts
+        excluded_count:
+          additionalProperties: true
+          type: object
+          title: Excluded Count
+          description: File types excluded with counts
+        exclusion_reasons:
+          additionalProperties: true
+          type: object
+          title: Exclusion Reasons
+          description: Breakdown by exclusion reason
+        files:
+          anyOf:
+          - $ref: '#/components/schemas/FileChanges'
+          - type: 'null'
+          description: Files added/modified/removed since last ingestion
+        summary:
+          anyOf:
+          - $ref: '#/components/schemas/FileChangeSummary'
+          - type: 'null'
+          description: Counts of added/modified/removed files
+        last_synced_commit:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Synced Commit
+          description: Commit SHA of last ingestion
+        latest_commit:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Latest Commit
+          description: HEAD commit SHA of the repo
+        estimated_cius:
+          anyOf:
+          - $ref: '#/components/schemas/CIUEstimate'
+          - type: 'null'
+          description: Estimated CIU cost range for reingestion
       type: object
-      title: DocImpactResponse
-    FileChangeSummary:
-      properties:
-        added_count:
-          type: integer
-          title: Added Count
-          default: 0
-        modified_count:
-          type: integer
-          title: Modified Count
-          default: 0
-        removed_count:
-          type: integer
-          title: Removed Count
-          default: 0
-      type: object
-      title: FileChangeSummary
-      description: Summary counts of file changes between last ingestion and latest commit.
+      required:
+      - total_files
+      - total_directories
+      - file_coverage
+      - included_count
+      - excluded_count
+      - exclusion_reasons
+      title: ReingestionAnalysisCoverageResponse
+      description: Coverage results from analysis, including file change summary and CIU estimate.
     PaginationMeta:
       properties:
         total:
@@ -819,24 +837,6 @@ components:
       - size
       - pages
       title: PaginationMeta
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
   securitySchemes:
     BearerAuth:
       type: http

@@ -94,6 +94,37 @@ paths:
           description: Not found
 components:
   schemas:
+    SyncStatusItem:
+      properties:
+        project_id:
+          type: integer
+          title: Project Id
+          description: Project ID
+        name:
+          type: string
+          title: Name
+          description: Project name
+        sync_mode:
+          $ref: '#/components/schemas/SyncMode'
+          description: Manual or Auto
+        status:
+          $ref: '#/components/schemas/ProjectSyncStatus'
+          description: Current sync/processing status
+        last_ingested_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Ingested At
+          description: Last successful ingestion timestamp
+      type: object
+      required:
+      - project_id
+      - name
+      - sync_mode
+      - status
+      title: SyncStatusItem
+      description: A single project row in the org project sync-status list.
     SyncStatusResponse:
       properties:
         items:
@@ -115,14 +146,6 @@ components:
       - summary
       title: SyncStatusResponse
       description: Paginated project sync-status list with org-wide summary aggregates.
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
     SyncMode:
       type: string
       enum:
@@ -166,37 +189,32 @@ components:
       - couldnt_process
       title: ProjectSyncStatus
       description: Sync/processing status for a project in the org roster.
-    SyncStatusItem:
+    ErrorBody:
       properties:
-        project_id:
-          type: integer
-          title: Project Id
-          description: Project ID
-        name:
+        message:
           type: string
-          title: Name
-          description: Project name
-        sync_mode:
-          $ref: '#/components/schemas/SyncMode'
-          description: Manual or Auto
-        status:
-          $ref: '#/components/schemas/ProjectSyncStatus'
-          description: Current sync/processing status
-        last_ingested_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Ingested At
-          description: Last successful ingestion timestamp
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
       type: object
       required:
-      - project_id
-      - name
-      - sync_mode
-      - status
-      title: SyncStatusItem
-      description: A single project row in the org project sync-status list.
+      - message
+      - type
+      title: ErrorBody
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
     PaginationMeta:
       properties:
         total:
@@ -218,24 +236,6 @@ components:
       - size
       - pages
       title: PaginationMeta
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
   securitySchemes:
     BearerAuth:
       type: http

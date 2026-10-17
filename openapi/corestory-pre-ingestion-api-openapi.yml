@@ -496,6 +496,207 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
 components:
   schemas:
+    UploadUrlRequest:
+      properties:
+        filename:
+          type: string
+          minLength: 1
+          title: Filename
+          description: Name of the file to upload (e.g. 'codebase.zip')
+        file_size_bytes:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: File Size Bytes
+          description: Size of the file in bytes
+        content_type:
+          type: string
+          title: Content Type
+          description: MIME type of the file
+          default: application/octet-stream
+      type: object
+      required:
+      - filename
+      - file_size_bytes
+      title: UploadUrlRequest
+    PreIngestionResponse:
+      properties:
+        id:
+          type: integer
+          title: Id
+        project_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Project Id
+        status:
+          $ref: '#/components/schemas/PreIngestionStatus'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+        progress:
+          type: number
+          title: Progress
+          description: Progress percentage from 0.0 to 100.0
+          default: 0.0
+        application_context:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application Context
+      type: object
+      required:
+      - id
+      - status
+      - created_at
+      - updated_at
+      title: PreIngestionResponse
+    StartFromStorageRequest:
+      properties:
+        storage_key:
+          type: string
+          minLength: 1
+          title: Storage Key
+          description: Storage key returned by the upload-url endpoint
+        app_custom_name:
+          type: string
+          minLength: 1
+          title: App Custom Name
+          description: Custom application name for the project
+        context:
+          type: string
+          title: Context
+          description: Application context for the project
+          default: ''
+      type: object
+      required:
+      - storage_key
+      - app_custom_name
+      title: StartFromStorageRequest
+    EstimateIngestionResponse:
+      properties:
+        estimated_ciu_cost:
+          type: number
+          title: Estimated Ciu Cost
+          description: Estimated CIU cost for ingesting the codebase
+        remaining_ciu_balance:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Remaining Ciu Balance
+          description: Remaining CIU balance for the organization after the estimated cost is deducted
+      type: object
+      required:
+      - estimated_ciu_cost
+      title: EstimateIngestionResponse
+    PreIngestionUpdateRequest:
+      properties:
+        application_context:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application Context
+      type: object
+      title: PreIngestionUpdateRequest
+    Body_start_pre_ingestion_from_upload:
+      properties:
+        app_custom_name:
+          type: string
+          title: App Custom Name
+          description: Custom application name for the project
+        context:
+          type: string
+          title: Context
+          description: Application context for the project
+          default: ''
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+          description: Zipped repository file to upload
+      type: object
+      required:
+      - app_custom_name
+      - file
+      title: Body_start_pre_ingestion_from_upload
+    PaginatedFilePathResponse:
+      properties:
+        results:
+          items:
+            type: string
+          type: array
+          title: Results
+          description: List of filepaths in pre-ingestion job
+        pagination:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Pagination
+      type: object
+      required:
+      - results
+      - pagination
+      title: PaginatedFilePathResponse
+    StartPreIngestionRequest:
+      properties:
+        public_repo_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Public Repo Url
+          description: Full GitHub repository URL (format 1)
+        repo_full_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Repo Full Name
+          description: Repository full name like 'owner/repo' (format 2)
+        repo_branch:
+          type: string
+          title: Repo Branch
+          description: Branch name
+          default: main
+        github_app_installation_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Github App Installation Id
+          description: GitHub App installation ID for private repository access
+        app_custom_name:
+          type: string
+          minLength: 1
+          title: App Custom Name
+          description: Custom application name for the project
+      type: object
+      required:
+      - app_custom_name
+      title: StartPreIngestionRequest
+      description: Body schema for POST /api/pre-ingestion/start.
+    ErrorBody:
+      properties:
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
+      type: object
+      required:
+      - message
+      - type
+      title: ErrorBody
     PreIngestionCoverageResponse:
       properties:
         project_id:
@@ -564,159 +765,6 @@ components:
       - failed
       title: PreIngestionStatus
       description: PreIngestion status enumeration
-    ErrorSchema:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      type: object
-      required:
-      - error
-      title: ErrorSchema
-    Body_start_pre_ingestion_from_upload:
-      properties:
-        app_custom_name:
-          type: string
-          title: App Custom Name
-          description: Custom application name for the project
-        context:
-          type: string
-          title: Context
-          description: Application context for the project
-          default: ''
-        file:
-          type: string
-          contentMediaType: application/octet-stream
-          title: File
-          description: Zipped repository file to upload
-      type: object
-      required:
-      - app_custom_name
-      - file
-      title: Body_start_pre_ingestion_from_upload
-    StartFromStorageRequest:
-      properties:
-        storage_key:
-          type: string
-          minLength: 1
-          title: Storage Key
-          description: Storage key returned by the upload-url endpoint
-        app_custom_name:
-          type: string
-          minLength: 1
-          title: App Custom Name
-          description: Custom application name for the project
-        context:
-          type: string
-          title: Context
-          description: Application context for the project
-          default: ''
-      type: object
-      required:
-      - storage_key
-      - app_custom_name
-      title: StartFromStorageRequest
-    PreIngestionUpdateRequest:
-      properties:
-        application_context:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Application Context
-      type: object
-      title: PreIngestionUpdateRequest
-    PaginatedFilePathResponse:
-      properties:
-        results:
-          items:
-            type: string
-          type: array
-          title: Results
-          description: List of filepaths in pre-ingestion job
-        pagination:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Pagination
-      type: object
-      required:
-      - results
-      - pagination
-      title: PaginatedFilePathResponse
-    PreIngestionResponse:
-      properties:
-        id:
-          type: integer
-          title: Id
-        project_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Project Id
-        status:
-          $ref: '#/components/schemas/PreIngestionStatus'
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        updated_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Updated At
-        progress:
-          type: number
-          title: Progress
-          description: Progress percentage from 0.0 to 100.0
-          default: 0.0
-        application_context:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Application Context
-      type: object
-      required:
-      - id
-      - status
-      - created_at
-      - updated_at
-      title: PreIngestionResponse
-    StartPreIngestionRequest:
-      properties:
-        public_repo_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Public Repo Url
-          description: Full GitHub repository URL (format 1)
-        repo_full_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Repo Full Name
-          description: Repository full name like 'owner/repo' (format 2)
-        repo_branch:
-          type: string
-          title: Repo Branch
-          description: Branch name
-          default: main
-        github_app_installation_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Github App Installation Id
-          description: GitHub App installation ID for private repository access
-        app_custom_name:
-          type: string
-          minLength: 1
-          title: App Custom Name
-          description: Custom application name for the project
-      type: object
-      required:
-      - app_custom_name
-      title: StartPreIngestionRequest
-      description: Body schema for POST /api/pre-ingestion/start.
     UploadUrlResponse:
       properties:
         upload_url:
@@ -738,62 +786,14 @@ components:
       - storage_key
       - expires_at
       title: UploadUrlResponse
-    UploadUrlRequest:
+    ErrorSchema:
       properties:
-        filename:
-          type: string
-          minLength: 1
-          title: Filename
-          description: Name of the file to upload (e.g. 'codebase.zip')
-        file_size_bytes:
-          type: integer
-          exclusiveMinimum: 0.0
-          title: File Size Bytes
-          description: Size of the file in bytes
-        content_type:
-          type: string
-          title: Content Type
-          description: MIME type of the file
-          default: application/octet-stream
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       type: object
       required:
-      - filename
-      - file_size_bytes
-      title: UploadUrlRequest
-    ErrorBody:
-      properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
-      type: object
-      required:
-      - message
-      - type
-      title: ErrorBody
-    EstimateIngestionResponse:
-      properties:
-        estimated_ciu_cost:
-          type: number
-          title: Estimated Ciu Cost
-          description: Estimated CIU cost for ingesting the codebase
-        remaining_ciu_balance:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Remaining Ciu Balance
-          description: Remaining CIU balance for the organization after the estimated cost is deducted
-      type: object
-      required:
-      - estimated_ciu_cost
-      title: EstimateIngestionResponse
+      - error
+      title: ErrorSchema
   securitySchemes:
     BearerAuth:
       type: http

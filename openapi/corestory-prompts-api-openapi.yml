@@ -203,29 +203,6 @@ paths:
           description: Internal server error
 components:
   schemas:
-    PaginatedPromptListResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/PromptResponse'
-          type: array
-          title: Results
-        count:
-          type: integer
-          title: Count
-        limit:
-          type: integer
-          title: Limit
-        offset:
-          type: integer
-          title: Offset
-      type: object
-      required:
-      - results
-      - count
-      - limit
-      - offset
-      title: PaginatedPromptListResponse
     PromptListResponse:
       properties:
         prompts:
@@ -268,14 +245,24 @@ components:
       - retriever_classes
       - retriever_summary
       title: AllPRDStepsEnum
-    ErrorSchema:
+    ErrorBody:
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        message:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Type
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+          description: Optional extra context for the error.
       type: object
       required:
-      - error
-      title: ErrorSchema
+      - message
+      - type
+      title: ErrorBody
     PromptResponse:
       properties:
         id:
@@ -331,24 +318,37 @@ components:
         replacement: false
         step: user_stories
         updated_at: '2025-01-01T00:00:00'
-    ErrorBody:
+    PaginatedPromptListResponse:
       properties:
-        message:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Type
-        details:
-          additionalProperties: true
-          type: object
-          title: Details
-          description: Optional extra context for the error.
+        results:
+          items:
+            $ref: '#/components/schemas/PromptResponse'
+          type: array
+          title: Results
+        count:
+          type: integer
+          title: Count
+        limit:
+          type: integer
+          title: Limit
+        offset:
+          type: integer
+          title: Offset
       type: object
       required:
-      - message
-      - type
-      title: ErrorBody
+      - results
+      - count
+      - limit
+      - offset
+      title: PaginatedPromptListResponse
+    ErrorSchema:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorSchema
   securitySchemes:
     BearerAuth:
       type: http
